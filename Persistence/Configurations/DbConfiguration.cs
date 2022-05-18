@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Persistence.Contexts;
-using Persistence.Repositories;
+using Infrastructure.Contexts;
+using Infrastructure.Repositories;
 
-namespace Persistence.Configurations;
+namespace Infrastructure.Configurations;
 
 public static class DbConfiguration
 {
