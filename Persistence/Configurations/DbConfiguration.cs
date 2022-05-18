@@ -14,10 +14,11 @@ public static class DbConfiguration
     public static void AddDbService(this IServiceCollection services)
     {
         var settings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
+        Console.WriteLine(settings);
         services.AddDbContext<ApplicationDbContext>(
             options =>
                 options.UseSqlServer(
-                    settings.Value.ConnectionStrings.DefaultConnection,
+                    "Server=localhost;Database=F-Hostel;User Id=sa;Password=2067;Trusted_Connection=True;MultipleActiveResultSets=true",
                     o => o.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName)
                 )
         );
