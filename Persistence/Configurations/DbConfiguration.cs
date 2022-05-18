@@ -18,7 +18,7 @@ public static class DbConfiguration
         services.AddDbContext<ApplicationDbContext>(
             options =>
                 options.UseSqlServer(
-                    "Server=localhost;Database=F-Hostel;User Id=sa;Password=2067;Trusted_Connection=True;MultipleActiveResultSets=true",
+                    settings.Value.ConnectionStrings.DefaultConnection,
                     o => o.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName)
                 )
         );
