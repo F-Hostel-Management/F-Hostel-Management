@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configurations
 {
-    public class AppSettings
+    public class JwtSetting
     {
-        public DbConfig ConnectionStrings { get; set; }
-        public JwtSetting JwtSetting { get; set; }
     }
 }

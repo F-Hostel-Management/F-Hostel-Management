@@ -11,6 +11,9 @@ var configuration = builder.Configuration;
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbService();
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options => { 
+        });
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddControllers(
         options =>
