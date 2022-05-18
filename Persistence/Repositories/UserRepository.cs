@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 
-namespace Persistence.Repositories;
+namespace Infrastructure.Repositories;
 
 internal class UserRepository : IUserRepository
 {
