@@ -1,20 +1,25 @@
-﻿using System.Reflection;
+﻿using System.Configuration;
+using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Persistence.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 //Add service to DI container
 {
-    builder.Services.AddDbService(configuration);
-    builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-    builder.Services.AddControllers(
+    var services = builder.Services;
+    services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+    services.AddDbService();
+    services.AddAutoMapper(Assembly.GetExecutingAssembly());
+    services.AddControllers(
         options =>
         {
             options.SuppressAsyncSuffixInActionNames = false;
         }
     );
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
 }
 
 var app = builder.Build();
