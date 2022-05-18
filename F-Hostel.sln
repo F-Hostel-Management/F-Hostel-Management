@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CDDBF80F-82C2-4ED4-8771-0C27F12F7013}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{D1550DEA-E096-45D4-9679-42965BEAE708}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Persistence\Infrastructure.csproj", "{D1550DEA-E096-45D4-9679-42965BEAE708}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4DE29110-9300-4957-8CBE-E87BA022B3C1}"
 EndProject

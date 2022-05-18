@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Persistence.Contexts;
+namespace Infrastructure.Contexts;
 
 internal class ApplicationDbContext : DbContext, IApplicationDbContext
 {
