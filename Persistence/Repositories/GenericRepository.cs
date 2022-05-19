@@ -2,10 +2,13 @@
 using Application.Interfaces.IRepository;
 using Ardalis.GuardClauses;
 using Domain.Common;
+using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,6 +55,24 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public virtual Task<T> UpdateAsync(Guid id, T entity)
     {
         throw new NotImplementedException();
+    }
+
+    public IList<T> GetItems(Expression<Func<T, bool>> predicate)
+    {
+        List<T> list;
+        var query = dbSet.AsQueryable();
+        list = query.Where(predicate).ToList<T>();
+        return list;
+    }
+
+    public IList<T> Where(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
+    {
+        List<T> list;
+        var query = dbSet.AsQueryable();
+        foreach (string navigationProperty in navigationProperties)
+            query = query.Include(navigationProperty);//got to reaffect it.
+        list = query.Where(predicate).ToList<T>();
+        return list;
     }
 
 }

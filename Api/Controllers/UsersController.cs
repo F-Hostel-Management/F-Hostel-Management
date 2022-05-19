@@ -1,16 +1,17 @@
 ﻿using Api.UserFeatures.Requests;
 using Api.UserFeatures.Responses;
-using Application.Interfaces;
-using Ardalis.GuardClauses;
+using Application.Interfaces.IRepository;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Repositories;
 
 namespace Api.Controllers;
 public class UsersController : BaseApiController
 {
-    private readonly IUserRepository _userRepository;
+    private readonly GenericRepository<UserEntity> _userRepository;
     public UsersController(
-        IUserRepository userRepository)
+        GenericRepository<UserEntity> userRepository)
     {
         _userRepository = userRepository;
     }
@@ -35,7 +36,7 @@ public class UsersController : BaseApiController
     }
 
     [HttpPost("create-user")]
-    public async Task<ActionResult> CreateUser([FromBody]CreateUserRequest request)
+    public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         var newUser = new UserEntity
         {
@@ -52,28 +53,6 @@ public class UsersController : BaseApiController
         return CreatedAtAction(nameof(CreateUser), new { Id = newUser.Id }, response);
     }
 
-    [HttpPatch("update-user/{Id}")]
-    public async Task<IActionResult> UpdateUserById(
-        [FromRoute] GetByIdRequest request,
-        [FromBody] UpdateUserRequest updateRequest
-        )
-    {
-        var newUser = new UserEntity
-        {
-            Name = updateRequest.Name,
-            Email = updateRequest.Email,
-            Phone = updateRequest.Phone,
-        };
-
-        var changedUser = await _userRepository.UpdateAsync(request.Id, newUser);
-        if (changedUser == null)
-        {
-            return NotFound();
-        }
-        var response = Mapper.Map<GetByIdResponse>(changedUser);
-        return Ok(response);
-    }
-
     [HttpDelete("delete-user/{Id}")]
     public async Task<IActionResult> DeleteUser([FromRoute] GetByIdRequest request)
     {
@@ -84,6 +63,13 @@ public class UsersController : BaseApiController
         }
         var response = Mapper.Map<GetByIdResponse>(delUser);
         return Ok(response);
+    }
+
+    [HttpGet("demo-get-tenant")]
+    public IActionResult GetTenants()
+    {
+        var test = _userRepository.Where(e => e.Role == Role.Tenant);
+        return Ok(test);
     }
 
 }
