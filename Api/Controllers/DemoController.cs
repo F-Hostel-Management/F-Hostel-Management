@@ -5,20 +5,24 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Api.Services;
+using Domain.Enums;
+using Domain.Constants;
 
 namespace Api.Controllers;
 
-public class UserController : BaseApiController
+public class DemoController : BaseApiController
 {
     private readonly JwtBuilderService jwtBuilderService;
     private readonly IUserRepository _userRepository;
 
     private List<UserEntity> _users = new List<UserEntity>()
     {
-        new UserEntity(){ Phone ="0937046839", Password = "123", Role = Domain.Enums.Role.Owner}
+        new UserEntity(){ Phone ="owner", Password = "123", Role = Role.Owner},
+        new UserEntity(){ Phone ="manager", Password = "123", Role = Role.Manager},
+        new UserEntity(){ Phone ="tenant", Password = "123", Role = Role.Tenant}
     };
 
-    public UserController(IUserRepository userRepository, JwtBuilderService jwtBuilderService)
+    public DemoController(IUserRepository userRepository, JwtBuilderService jwtBuilderService)
     {
         _userRepository = userRepository;
         this.jwtBuilderService = jwtBuilderService;
@@ -43,14 +47,38 @@ public class UserController : BaseApiController
         var user = _users.FirstOrDefault(a => a.Phone == loginRequest.PhoneNumber);
         return Ok(jwtBuilderService.GenerateJSONWebToken(user));
     }
-    [Authorize]
-    [HttpGet]
-    public ActionResult GetInfoAsync()
+
+    [Authorize(Roles = nameof(Role.Owner))]
+    [HttpGet("GetOnwerInfo")]
+    public ActionResult GetOnwerInfoAsync()
     {
         var user = HttpContext.User.FindFirst("id");
         return Ok(user.ToString());
     }
 
+    [Authorize(Roles = nameof(Role.Manager))]
+    [HttpGet("GetManagerInfo")]
+    public ActionResult GetManagerInfoAsync()
+    {
+        var user = HttpContext.User.FindFirst("id");
+        return Ok(user.ToString());
+    }
+
+    [Authorize(Roles = nameof(Role.Tenant))]
+    [HttpGet("GetTenantInfo")]
+    public ActionResult GetTenantInfoAsync()
+    {
+        var user = HttpContext.User.FindFirst("id");
+        return Ok(user.ToString());
+    }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpGet("GetBothManagerAndOnwer")]
+    public ActionResult GetBothManagerAndOnwer()
+    {
+        var user = HttpContext.User.FindFirst("id");
+        return Ok(user.ToString());
+    }
 
     [HttpPost]
     public async Task<ActionResult> CreateAsync(CreateUserRequest request)

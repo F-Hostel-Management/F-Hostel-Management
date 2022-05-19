@@ -8,6 +8,9 @@ using System.Reflection;
 using Api.Services;
 using Infrastructure.Extensions;
 using Microsoft.OpenApi.Models;
+using Domain.Constants;
+using System.Security.Claims;
+using Domain.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -26,8 +29,14 @@ var configuration = builder.Configuration;
             options.SuppressAsyncSuffixInActionNames = false;
         }
     );
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy(PolicyName.ONWER_AND_MANAGER,
+        policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, nameof(Role.Owner), nameof(Role.Manager)));
+    });
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen(option => {
+    services.AddSwaggerGen(option =>
+    {
         option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
         {
             Name = "Authorization",
@@ -64,7 +73,7 @@ var app = builder.Build();
         app.UseDeveloperExceptionPage();
         await app.Services.ApplyMigrations();
     }
-    app.UseAuthentication();    
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
     app.Run();
