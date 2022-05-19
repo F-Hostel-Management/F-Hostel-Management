@@ -24,7 +24,7 @@ namespace Api.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[] {
                 new Claim("id", user.Id.ToString()),
-                new Claim("role", user.Role.ToString())
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var token = new JwtSecurityToken(_appSettings.Value.JwtSetting.ValidIssuer,
              _appSettings.Value.JwtSetting.ValidAudience,
