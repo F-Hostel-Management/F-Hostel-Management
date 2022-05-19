@@ -14,11 +14,13 @@ using Domain.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
 //Add service to DI container
 {
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbService();
+    services.AddRepositories();
     services.AddScoped<JwtBuilderService>();
     services.AddJwtService();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());

@@ -1,11 +1,10 @@
 ﻿using System.Reflection;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Infrastructure.Contexts;
-using Infrastructure.Repositories;
+using Persistence.Repositories;
 
 namespace Infrastructure.Configurations;
 
@@ -25,7 +24,11 @@ public static class DbConfiguration
         services.AddScoped<IApplicationDbContext>(
             provider => provider.GetService<ApplicationDbContext>()
         );
-        services.AddScoped<IUserRepository, UserRepository>();
+    }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped(typeof(GenericRepository<>));
     }
 
     public static async Task ApplyMigrations(this IServiceProvider serviceProvider)
