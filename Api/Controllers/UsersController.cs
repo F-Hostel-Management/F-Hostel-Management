@@ -35,12 +35,8 @@ public class UsersController : BaseApiController
     }
 
     [HttpPost("create-user")]
-    public async Task<ActionResult> CreateUser(CreateUserRequest request)
+    public async Task<ActionResult> CreateUser([FromBody]CreateUserRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
         var newUser = new UserEntity
         {
             Id = Guid.NewGuid(),

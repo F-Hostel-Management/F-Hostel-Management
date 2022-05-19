@@ -13,7 +13,6 @@ internal class UserRepository : GenericRepository<UserEntity>, IUserRepository
 
     public override async Task<UserEntity> UpdateAsync(Guid id, UserEntity user)
     {
-        Guard.Against.NullOrEmpty(id);
         UserEntity _user = await base.FindByIdAsync(id);
         if (_user == null)
         {

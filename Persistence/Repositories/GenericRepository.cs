@@ -22,14 +22,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     }
     public virtual async Task CreateAsync(T entity)
     {
-        Guard.Against.Null(entity, nameof(entity));
         await dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
     public virtual async Task<T> DeleteAsync(Guid id)
     {
-        Guard.Against.NullOrEmpty(id, nameof(id));
         T _entity = await FindByIdAsync(id);
         if (_entity == null)
         {
@@ -42,7 +40,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public virtual async Task<T> FindByIdAsync(Guid id)
     {
-        Guard.Against.NullOrEmpty(id, nameof(id));
         T entity = await dbSet.FindAsync(id);
         return entity;
     }
