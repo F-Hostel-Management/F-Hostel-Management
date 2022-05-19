@@ -10,7 +10,7 @@ using Domain.Constants;
 
 namespace Api.Controllers;
 
-public class UserController : BaseApiController
+public class DemoController : BaseApiController
 {
     private readonly JwtBuilderService jwtBuilderService;
     private readonly IUserRepository _userRepository;
@@ -22,7 +22,7 @@ public class UserController : BaseApiController
         new UserEntity(){ Phone ="tenant", Password = "123", Role = Role.Tenant}
     };
 
-    public UserController(IUserRepository userRepository, JwtBuilderService jwtBuilderService)
+    public DemoController(IUserRepository userRepository, JwtBuilderService jwtBuilderService)
     {
         _userRepository = userRepository;
         this.jwtBuilderService = jwtBuilderService;
