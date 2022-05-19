@@ -52,7 +52,7 @@ const privateRoutes: Array<{
         path: '/home/*',
         component: Home,
         name: 'Home',
-        layout: DefaultHomeLayout,
+        layout: React.Fragment,
     },
     {
         path: '/profile',
