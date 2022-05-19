@@ -1,8 +1,13 @@
-﻿using System.Configuration;
-using System.Reflection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence.Configurations;
+using Infrastructure.Configurations;
+using System.Reflection;
+using Api.Services;
+using Infrastructure.Extensions;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -11,6 +16,8 @@ var configuration = builder.Configuration;
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbService();
+    services.AddScoped<JwtBuilderService>();
+    services.AddJwtService();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddControllers(
         options =>
@@ -19,7 +26,31 @@ var configuration = builder.Configuration;
         }
     );
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
+    services.AddSwaggerGen(option => {
+        option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
+        });
+        option.AddSecurityRequirement(new OpenApiSecurityRequirement
+ {
+     {
+           new OpenApiSecurityScheme
+             {
+                 Reference = new OpenApiReference
+                 {
+                     Type = ReferenceType.SecurityScheme,
+                     Id = "Bearer"
+                 }
+             },
+             new string[] {}
+     }
+ });
+    });
 }
 
 var app = builder.Build();
@@ -32,6 +63,7 @@ var app = builder.Build();
         app.UseDeveloperExceptionPage();
         await app.Services.ApplyMigrations();
     }
+    app.UseAuthentication();    
     app.UseAuthorization();
     app.MapControllers();
     app.Run();
