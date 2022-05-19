@@ -41,7 +41,7 @@ public class UserController : BaseApiController
     public async Task<ActionResult> LoginAsync(LoginRequest loginRequest)
     {
         var user = _users.FirstOrDefault(a => a.Phone == loginRequest.PhoneNumber);
-        return Ok(jwtBuilderService.GenerateJSONWebToken(user));    
+        return Ok(jwtBuilderService.GenerateJSONWebToken(user));
     }
     [Authorize]
     [HttpGet]

@@ -25,6 +25,10 @@ public static class DbConfiguration
         services.AddScoped<IApplicationDbContext>(
             provider => provider.GetService<ApplicationDbContext>()
         );
+    }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
         services.AddScoped<IUserRepository, UserRepository>();
     }
 

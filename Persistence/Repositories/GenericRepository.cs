@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Ardalis.GuardClauses;
 using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,15 +20,38 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context = context;
         dbSet = context.Set<T>();
     }
-    public async Task CreateAsync(T entity)
+    public virtual async Task CreateAsync(T entity)
     {
+        Guard.Against.Null(entity, nameof(entity));
         await dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<T> FindByIdAsync(Guid id)
+    public virtual async Task<T> DeleteAsync(Guid id)
     {
+        Guard.Against.NullOrEmpty(id, nameof(id));
+        T _entity = await FindByIdAsync(id);
+        Guard.Against.Null(_entity);
+        dbSet.Remove(_entity);
+        await _context.SaveChangesAsync();
+        return _entity;
+    }
+
+    public virtual async Task<T> FindByIdAsync(Guid id)
+    {
+        Guard.Against.NullOrEmpty(id);
         T entity = await dbSet.FindAsync(id);
         return entity;
     }
+
+    public virtual async Task<List<T>> ListAsync()
+    {
+        return await dbSet.ToListAsync();
+    }
+
+    public virtual async Task<T> UpdateAsync(Guid id, T entity)
+    {
+        throw new NotImplementedException();
+    }
+
 }

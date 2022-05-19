@@ -16,6 +16,7 @@ var configuration = builder.Configuration;
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbService();
+    services.AddRepositories();
     services.AddScoped<JwtBuilderService>();
     services.AddJwtService();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
