@@ -14,6 +14,7 @@ public static class DbConfiguration
     public static void AddDbService(this IServiceCollection services)
     {
         var settings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
+        Console.WriteLine(settings);
         services.AddDbContext<ApplicationDbContext>(
             options =>
                 options.UseSqlServer(
