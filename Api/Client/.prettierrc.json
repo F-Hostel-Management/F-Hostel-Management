@@ -1,0 +1,19 @@
+{
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 80,
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "arrowParens": "always",
+    "endOfLine": "auto",
+    "importOrder": [
+        "^react$",
+        "^[a-z\\-/]*$",
+        "(^@mui|components|providers)",
+        "(^[src/]*$|^[./]|^[../])",
+        ""
+    ],
+    "importOrderSeparation": true
+}
