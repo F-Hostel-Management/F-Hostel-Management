@@ -1,16 +1,10 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using Ardalis.GuardClauses;
 using Domain.Common;
-using Domain.Entities;
-using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+
 
 namespace Persistence.Repositories;
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
@@ -52,19 +46,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return await dbSet.ToListAsync();
     }
 
-    public virtual Task<T> UpdateAsync(Guid id, T entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IList<T> GetItems(Expression<Func<T, bool>> predicate)
-    {
-        List<T> list;
-        var query = dbSet.AsQueryable();
-        list = query.Where(predicate).ToList<T>();
-        return list;
-    }
-
     public IList<T> Where(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
     {
         List<T> list;
@@ -75,4 +56,33 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return list;
     }
 
+
+    public virtual async Task Update(object dto, Guid Id)
+    {
+        var current = dbSet.FirstOrDefault(x => x.Id == Id);
+
+        var dtoProp = dto.GetType().GetProperties();
+
+        foreach (var prop in dtoProp)
+        {
+            if (prop.GetValue(dto) != null)
+            {
+                SetObjectProperty(prop.Name, prop.GetValue(dto), current);
+                //Console.WriteLine(prop.GetValue(dto));
+            }
+        }
+
+        //_context.Entry(current).CurrentValues.SetValues(dto);
+        await _context.SaveChangesAsync();
+    }
+
+    private void SetObjectProperty(string propertyName, object value, object obj)
+    {
+        PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
+        // make sure object has the property we are after
+        if (propertyInfo != null)
+        {
+            propertyInfo.SetValue(obj, value, null);
+        }
+    }
 }

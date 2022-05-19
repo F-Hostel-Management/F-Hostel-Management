@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Contexts;
 
@@ -18,5 +19,15 @@ internal class ApplicationDbContext : DbContext, IApplicationDbContext
     public async Task<int> SaveChangesAsync()
     {
         return await base.SaveChangesAsync();
+    }
+
+    public DbSet<TEntity> Set<TEntity>() where TEntity : class
+    {
+        return base.Set<TEntity>();
+    }
+
+    public EntityEntry Entry(object entity)
+    {
+        return base.Entry(entity);
     }
 }

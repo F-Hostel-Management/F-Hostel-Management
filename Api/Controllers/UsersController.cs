@@ -53,6 +53,24 @@ public class UsersController : BaseApiController
         return CreatedAtAction(nameof(CreateUser), new { Id = newUser.Id }, response);
     }
 
+    [HttpPatch("update-user/{Id}")]
+    public async Task<IActionResult> UpdateUserAsync(
+        [FromRoute] GetByIdRequest requestId,
+        [FromBody] UpdateUserRequest request
+        )
+    {
+
+        try
+        {
+            await _userRepository.Update(request, requestId.Id);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+        return Ok();
+    }
+
     [HttpDelete("delete-user/{Id}")]
     public async Task<IActionResult> DeleteUser([FromRoute] GetByIdRequest request)
     {
