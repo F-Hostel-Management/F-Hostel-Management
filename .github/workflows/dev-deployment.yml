@@ -44,6 +44,6 @@ jobs:
           script: |
             cd /home/${{ secrets.USERNAME }}/app/publish
             screen -ls 2>&1 | grep '(Detached)' | grep -o 'server' | xargs -I{} -n 1 -r screen -r -S {} -X quit
-            screen -S server -dm sudo dotnet Api.dll --urls http://0.0.0.0:80
+            screen -S server -dm sudo dotnet Api.dll --urls http://0.0.0.0:${{ secrets.BACKEND_PORT }}
             sleep 5
             screen -ls 2>&1 | grep '(Detached)' | grep -F -w 'server'
