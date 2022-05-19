@@ -49,7 +49,7 @@ const privateRoutes: Array<{
     layout: React.ElementType
 }> = [
     {
-        path: '/home',
+        path: '/home/*',
         component: Home,
         name: 'Home',
         layout: DefaultHomeLayout,
