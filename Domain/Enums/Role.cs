@@ -1,8 +1,12 @@
-﻿namespace Domain.Enums;
+﻿using System.Runtime.Serialization;
+namespace Domain.Enums;
 
 public enum Role
 {
-    Tenant = 0,
-    Manager = 1,
-    Owner = 2,
+    [EnumMember(Value = "Tenant")]
+    Tenant,
+    [EnumMember(Value = "Manager")]
+    Manager,
+    [EnumMember(Value = "Owner")]
+    Owner,
 }

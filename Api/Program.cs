@@ -14,6 +14,7 @@ using Domain.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
 //Add service to DI container
 {
     var services = builder.Services;

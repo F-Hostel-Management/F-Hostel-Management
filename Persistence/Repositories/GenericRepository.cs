@@ -31,7 +31,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         Guard.Against.NullOrEmpty(id, nameof(id));
         T _entity = await FindByIdAsync(id);
-        Guard.Against.Null(_entity);
+        if (_entity == null)
+        {
+            return null;
+        }
         dbSet.Remove(_entity);
         await _context.SaveChangesAsync();
         return _entity;
@@ -39,7 +42,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public virtual async Task<T> FindByIdAsync(Guid id)
     {
-        Guard.Against.NullOrEmpty(id);
+        Guard.Against.NullOrEmpty(id, nameof(id));
         T entity = await dbSet.FindAsync(id);
         return entity;
     }
@@ -49,7 +52,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return await dbSet.ToListAsync();
     }
 
-    public virtual async Task<T> UpdateAsync(Guid id, T entity)
+    public virtual Task<T> UpdateAsync(Guid id, T entity)
     {
         throw new NotImplementedException();
     }

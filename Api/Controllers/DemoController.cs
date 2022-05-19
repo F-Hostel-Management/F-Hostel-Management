@@ -80,19 +80,4 @@ public class DemoController : BaseApiController
         return Ok(user.ToString());
     }
 
-    [HttpPost]
-    public async Task<ActionResult> CreateAsync(CreateUserRequest request)
-    {
-        var newUser = new UserEntity
-        {
-            Id = Guid.NewGuid(),
-            Name = request.Name,
-            Email = request.Email,
-            Phone = request.Phone,
-            Password = request.Password,
-            Role = request.Role,
-        };
-        await _userRepository.CreateAsync(newUser);
-        return CreatedAtAction(nameof(GetByIdAsync), new { Id = newUser.Id }, newUser);
-    }
 }
