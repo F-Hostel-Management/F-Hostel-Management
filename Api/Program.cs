@@ -24,6 +24,7 @@ var configuration = builder.Configuration;
     services.AddScoped<JwtBuilderService>();
     services.AddJwtService();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
+    services.AddControllerMapperService();
     services.AddControllers(
         options =>
         {

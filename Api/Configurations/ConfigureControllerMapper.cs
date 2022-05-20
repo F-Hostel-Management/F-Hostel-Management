@@ -1,7 +1,11 @@
-﻿namespace Api.Configurations
+﻿using Api.App.Configurations;
+using Microsoft.Extensions.Options;
+
+namespace Api.Configurations
 {
     public static class ConfigureControllerMapper
     {
+        private static string spaDevServer;
         private static void AddMappingSpa(this WebApplication app)
         {
             app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), config =>
@@ -10,7 +14,7 @@
                 {
                     config.UseSpa(spa =>
                     {
-                        spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                        spa.UseProxyToSpaDevelopmentServer(spaDevServer);
                     });
                     return;
                 }
@@ -38,6 +42,12 @@
         {
             app.AddMappingSpa();
             app.AddMappingApi();
+        }
+
+        public static void AddControllerMapperService(this IServiceCollection services)
+        {
+            var settings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
+            spaDevServer = settings.Value.SpaDevServer;
         }
     }
 }
