@@ -5,9 +5,9 @@ namespace Api.Configurations
 {
     public static class ConfigureControllerMapper
     {
-        private static string spaDevServer;
         private static void AddMappingSpa(this WebApplication app)
         {
+            var spaDevServer = app.Services.GetService<IOptions<AppSettings>>().Value.SpaDevServer;
             app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), config =>
             {
                 if (app.Environment.IsDevelopment())
@@ -42,12 +42,6 @@ namespace Api.Configurations
         {
             app.AddMappingSpa();
             app.AddMappingApi();
-        }
-
-        public static void AddControllerMapperService(this IServiceCollection services)
-        {
-            var settings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
-            spaDevServer = settings.Value.SpaDevServer;
         }
     }
 }
