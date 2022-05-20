@@ -60,15 +60,14 @@ public class UsersController : BaseApiController
         )
     {
 
-        try
+        var updatedUser = await _userRepository.Update(request, requestId.Id);
+
+        if (updatedUser == null)
         {
-            await _userRepository.Update(request, requestId.Id);
+            return NotFound();
         }
-        catch (Exception ex)
-        {
-            return NotFound(ex.Message);
-        }
-        return Ok();
+        var response = Mapper.Map<GetByIdResponse>(updatedUser);
+        return Ok(response);
     }
 
     [HttpDelete("delete-user/{Id}")]

@@ -21,12 +21,12 @@ internal class ApplicationDbContext : DbContext, IApplicationDbContext
         return await base.SaveChangesAsync();
     }
 
-    public DbSet<TEntity> Set<TEntity>() where TEntity : class
+    public override DbSet<TEntity> Set<TEntity>() where TEntity : class
     {
         return base.Set<TEntity>();
     }
 
-    public EntityEntry Entry(object entity)
+    public override EntityEntry Entry(object entity)
     {
         return base.Entry(entity);
     }

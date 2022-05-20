@@ -57,9 +57,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     }
 
 
-    public virtual async Task Update(object dto, Guid Id)
+    public virtual async Task<T> Update(object dto, Guid Id)
     {
         var current = dbSet.FirstOrDefault(x => x.Id == Id);
+
+        if (current == null)
+        {
+            return null;
+        }
 
         var dtoProp = dto.GetType().GetProperties();
 
@@ -74,6 +79,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
         //_context.Entry(current).CurrentValues.SetValues(dto);
         await _context.SaveChangesAsync();
+        return current;
     }
 
     private void SetObjectProperty(string propertyName, object value, object obj)
