@@ -1,12 +1,11 @@
-﻿using Infrastructure.Configurations;
+﻿using Api.App.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure.Extensions
+namespace Api.Configurations
 {
-    public static class AddJwtServiceExtension
+    public static class ConfigureJwtService
     {
         public static IServiceCollection AddJwtService(this IServiceCollection services)
         {
