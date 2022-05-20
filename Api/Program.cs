@@ -6,11 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Configurations;
 using System.Reflection;
 using Api.Services;
-using Infrastructure.Extensions;
 using Microsoft.OpenApi.Models;
 using Domain.Constants;
 using System.Security.Claims;
 using Domain.Enums;
+using Api.App.Configurations;
+using Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
