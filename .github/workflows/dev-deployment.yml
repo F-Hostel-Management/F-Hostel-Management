@@ -4,7 +4,30 @@ on:
     branches:
       - master
 jobs:
-  deploy_backend:
+  build_frontend:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+      - name: Set up Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install packages
+        working-directory: Api/Client
+        run: yarn
+      - name: Build
+        working-directory: Api/Client
+        run: yarn build
+      - name: Upload frontend
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend
+          path: Api/wwwroot/**
+  build_backend:
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -22,28 +45,47 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: "6.0"
-      - name: Build
-        run: dotnet build -c Release -o ./app/build F-Hostel.sln
       - name: Publish
-        run: dotnet publish -c Release -o ./app/publish
-      - name: Copy to vps
-        uses: appleboy/scp-action@master
+        run: dotnet publish -c Release -o ./backend
+      - name: Upload backend
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          source: ./app/publish/**
-          target: /home/${{ secrets.USERNAME }}/
-      - name: Run
-        uses: appleboy/ssh-action@master
+          name: backend
+          path: backend/**
+      - name: Upload Dockerfile
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          script_stop: true
-          script: |
-            cd /home/${{ secrets.USERNAME }}/app/publish
-            screen -ls 2>&1 | grep '(Detached)' | grep -o 'server' | xargs -I{} -n 1 -r screen -r -S {} -X quit
-            screen -S server -dm sudo dotnet Api.dll --urls http://0.0.0.0:${{ secrets.BACKEND_PORT }}
-            sleep 5
-            screen -ls 2>&1 | grep '(Detached)' | grep -F -w 'server'
+          name: Dockerfile
+          path: Deployment/Dockerfile
+  deploy:
+    runs-on: ubuntu-latest
+    environment: development
+    needs: [build_frontend, build_backend]
+    steps:
+      - name: Download frontend
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend
+          path: wwwroot
+      - name: Download backend
+        uses: actions/download-artifact@v3
+        with:
+          name: backend
+          path: .
+      - name: Download Dockerfile
+        uses: actions/download-artifact@v3
+        with:
+          name: Dockerfile
+          path: .
+      - name: Show structure
+        run: ls -R
+      - name: Set up Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+      - name: Link cloud project
+        run: RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT }}
+      - name: Deploy
+        run: RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} railway up
