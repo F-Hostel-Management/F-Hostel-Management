@@ -10,5 +10,6 @@ namespace Api.App.Configurations
     {
         public DbConfig ConnectionStrings { get; set; }
         public JwtSetting JwtSetting { get; set; }
+        public string SpaDevServer { get; set; }
     }
 }
