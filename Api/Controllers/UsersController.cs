@@ -69,7 +69,8 @@ public class UsersController : BaseApiController
         var updated = Mapper.Map(userDto, existing);
 
         await _userRepository.UpdateAsync(updated, existing);
-        return Ok(existing);
+        var response = Mapper.Map<GetByIdResponse>(updated);
+        return Ok(response);
     }
 
     [HttpDelete("delete-user/{Id}")]
