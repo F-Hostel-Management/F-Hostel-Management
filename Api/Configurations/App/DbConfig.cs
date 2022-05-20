@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Configurations
+namespace Api.App.Configurations
 {
     public class DbConfig
     {

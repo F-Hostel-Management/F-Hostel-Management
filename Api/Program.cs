@@ -6,19 +6,22 @@ using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Configurations;
 using System.Reflection;
 using Api.Services;
-using Infrastructure.Extensions;
 using Microsoft.OpenApi.Models;
 using Domain.Constants;
 using System.Security.Claims;
 using Domain.Enums;
+using Api.App.Configurations;
+using Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
 //Add service to DI container
 {
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbService();
+    services.AddRepositories();
     services.AddScoped<JwtBuilderService>();
     services.AddJwtService();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
