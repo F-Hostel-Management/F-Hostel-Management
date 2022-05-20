@@ -4,6 +4,7 @@ import { DataGrid } from '@mui/x-data-grid'
 
 import CustomNoRowsOverlay from './Custom/CustomNoRowsOverlay'
 import CustomPagination from './Custom/CustomPagination'
+import CustomToolbar from './Custom/CustomToolbar'
 
 interface IDataGridCustomProps {
     loading: boolean
@@ -27,7 +28,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
     rowsCount = 0,
 }) => {
     return (
-        <div style={{ height: 400, width: '80%' }}>
+        <div style={{ height: 400, width: '80%', padding: '1.5rem' }}>
             <DataGrid
                 loading={loading}
                 rows={rows}
@@ -48,7 +49,8 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 components={{
                     NoRowsOverlay: CustomNoRowsOverlay,
-                    Pagination: CustomPagination
+                    Pagination: CustomPagination,
+                    Toolbar: CustomToolbar
                 }}
             />
         </div>

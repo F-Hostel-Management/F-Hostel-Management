@@ -23,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
     --color-gray-200: #e9ecef;
     --color-gray-300: #dee2e6;
     --color-gray-400: #ced4da;
-    --color-gray-500: #adb5bd;
+    --color-gray-500: #ebebee;
     --color-gray-600: #6c757d;
     --color-gray-700: #495057;
     --color-gray-800: #343a40;
@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
 
     --bgr-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
     --text-color-dark: #212529;
-    --text-color-light: #fff;
+    --text-color-light: #5b626b;
 }
 `
 
