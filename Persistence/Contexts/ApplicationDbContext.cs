@@ -25,8 +25,7 @@ internal class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         return base.Set<TEntity>();
     }
-
-    public EntityEntry Entry(object entity)
+    public override EntityEntry Entry(object entity)
     {
         return base.Entry(entity);
     }

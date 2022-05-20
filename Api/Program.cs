@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Configurations;
+﻿using Infrastructure.Configurations;
 using System.Reflection;
 using Api.Services;
 using Infrastructure.Extensions;

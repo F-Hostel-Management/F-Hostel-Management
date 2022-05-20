@@ -1,7 +1,10 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Common;
+using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -56,33 +59,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return list;
     }
 
-
-    public virtual async Task Update(object dto, Guid Id)
+    public async Task UpdateAsync(T updated, T existing)
     {
-        var current = dbSet.FirstOrDefault(x => x.Id == Id);
-
-        var dtoProp = dto.GetType().GetProperties();
-
-        foreach (var prop in dtoProp)
-        {
-            if (prop.GetValue(dto) != null)
-            {
-                SetObjectProperty(prop.Name, prop.GetValue(dto), current);
-                //Console.WriteLine(prop.GetValue(dto));
-            }
-        }
-
-        //_context.Entry(current).CurrentValues.SetValues(dto);
+        _context.Entry(existing).CurrentValues.SetValues(updated);
         await _context.SaveChangesAsync();
-    }
-
-    private void SetObjectProperty(string propertyName, object value, object obj)
-    {
-        PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
-        // make sure object has the property we are after
-        if (propertyInfo != null)
-        {
-            propertyInfo.SetValue(obj, value, null);
-        }
     }
 }
