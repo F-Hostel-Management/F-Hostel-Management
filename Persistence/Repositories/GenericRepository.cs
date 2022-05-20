@@ -63,5 +63,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         _context.Entry(existing).CurrentValues.SetValues(updated);
         await _context.SaveChangesAsync();
+        return current;
     }
 }
