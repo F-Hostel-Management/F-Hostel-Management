@@ -29,5 +29,9 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Persistence\Infrastructure.csproj" />
   </ItemGroup>
+	
+  <ItemGroup>
+	<Content Update="Client\**" CopyToPublishDirectory="Never" />
+  </ItemGroup>
 
 </Project>
