@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Configurations;
 using System.Reflection;
 using Api.Services;
 using Microsoft.OpenApi.Models;
@@ -75,9 +74,10 @@ var app = builder.Build();
         app.UseDeveloperExceptionPage();
         await app.Services.ApplyMigrations();
     }
+    app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();
+    app.AddControllerMapper();
     app.Run();
 }
 
