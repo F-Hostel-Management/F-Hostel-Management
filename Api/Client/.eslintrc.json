@@ -46,12 +46,17 @@
                 "tsx": "never"
             }
         ],
-        "@typescript-eslint/explicit-function-return-type": "warn",
         "no-shadow": "off",
         "@typescript-eslint/no-shadow": ["off"],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/explicit-function-return-type": [
+            "error",
+            {
+                "allowExpressions": true
+            }
+        ],
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-empty-interface": "off"
     },

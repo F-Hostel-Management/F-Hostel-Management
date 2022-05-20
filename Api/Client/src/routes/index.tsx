@@ -4,6 +4,7 @@ import DefaultHomeLayout from '../components/Layout/DefaultHomeLayout'
 import DefaultLayout from '../components/Layout/DefaultLayout'
 
 import About from '../pages/About'
+import Demo from '../pages/Demo'
 import Home from '../pages/Home'
 import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
@@ -59,6 +60,12 @@ const privateRoutes: Array<{
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,
+    },
+    {
+        path: '/demo',
+        component: Demo,
+        name: 'Demo',
+        layout:  React.Fragment,
     },
 ]
 
