@@ -1,6 +1,7 @@
 ﻿using Api.UserFeatures.Requests;
 using Api.UserFeatures.Responses;
 using Application.Interfaces.IRepository;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,25 @@ public class UsersController : BaseApiController
         await _userRepository.CreateAsync(newUser);
         var response = Mapper.Map<GetByIdResponse>(newUser);
         return CreatedAtAction(nameof(CreateUser), new { Id = newUser.Id }, response);
+    }
+
+    [HttpPatch("update-user/{Id}")]
+    public async Task<IActionResult> UpdateUserAsync(
+        [FromRoute] GetByIdRequest requestId,
+        [FromBody] UpdateUserRequest userDto
+        )
+    {
+        var existing = await _userRepository.FindByIdAsync(requestId.Id);
+        if (existing == null)
+        {
+            return NotFound();
+        }
+        
+        var updated = Mapper.Map(userDto, existing);
+
+        await _userRepository.UpdateAsync(updated, existing);
+        var response = Mapper.Map<GetByIdResponse>(updated);
+        return Ok(response);
     }
 
     [HttpDelete("delete-user/{Id}")]

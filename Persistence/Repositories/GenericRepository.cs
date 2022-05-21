@@ -1,16 +1,13 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using Ardalis.GuardClauses;
 using Domain.Common;
-using Domain.Entities;
-using Domain.Enums;
+using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+
 
 namespace Persistence.Repositories;
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
@@ -52,19 +49,6 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return await dbSet.ToListAsync();
     }
 
-    public virtual Task<T> UpdateAsync(Guid id, T entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IList<T> GetItems(Expression<Func<T, bool>> predicate)
-    {
-        List<T> list;
-        var query = dbSet.AsQueryable();
-        list = query.Where(predicate).ToList<T>();
-        return list;
-    }
-
     public IList<T> Where(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
     {
         List<T> list;
@@ -75,4 +59,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return list;
     }
 
+    public async Task UpdateAsync(T updated, T existing)
+    {
+        _context.Entry(existing).CurrentValues.SetValues(updated);
+        await _context.SaveChangesAsync();
+    }
 }
