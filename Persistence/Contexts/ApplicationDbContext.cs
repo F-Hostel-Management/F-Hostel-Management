@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Entities.Room;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -11,12 +12,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        HostelModelCreating.OnModelCreating(modelBuilder);
+        HostelBuilder.OnModelCreating(modelBuilder);
+        //RoomBuilder.OnModelCreating(modelBuilder);
     }
 
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<HostelEntity> Hostels { get; set; }
     public DbSet<HostelCategory> HostelCategories { get; set; }
-    public DbSet<Hostel_HostelCategory> Hostel_HostelCategories { get; set; }
+    public DbSet<RoomEntity> Rooms { get; set; }
+    public DbSet<RoomType> RoomTypes{ get; set; }
+
 
 }

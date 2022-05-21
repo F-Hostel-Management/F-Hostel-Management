@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220521083818_RoomAdded")]
+    partial class RoomAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,32 @@ namespace Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Domain.Entities.Hostel_HostelCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("HostelId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("HostelId");
+
+                    b.ToTable("HostelClassification");
+                });
 
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
                 {
@@ -74,9 +102,6 @@ namespace Api.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("HostelCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -88,11 +113,35 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HostelCategoryId");
-
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Hostel");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Room.Room_RoomType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<Guid>("TypeId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Room_RoomType");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
@@ -106,9 +155,6 @@ namespace Api.Migrations
 
                     b.Property<int>("Height")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("HostelId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -134,19 +180,12 @@ namespace Api.Migrations
                     b.Property<string>("RoomName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoomTypeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<double>("Width")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HostelId");
-
-                    b.HasIndex("RoomTypeId");
-
-                    b.ToTable("Room");
+                    b.ToTable("RoomEntity");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomType", b =>
@@ -163,7 +202,7 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomTypes");
+                    b.ToTable("RoomType");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
@@ -195,6 +234,25 @@ namespace Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Hostel_HostelCategory", b =>
+                {
+                    b.HasOne("Domain.Entities.HostelCategory", "Category")
+                        .WithMany("HostelCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.HostelEntity", "Hostel")
+                        .WithMany("HostelCategories")
+                        .HasForeignKey("HostelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Hostel");
+                });
+
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
                 {
                     b.HasOne("Domain.Entities.HostelEntity", "Hostel")
@@ -216,57 +274,54 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
-                    b.HasOne("Domain.Entities.HostelCategory", "HostelCategory")
-                        .WithMany("Hostels")
-                        .HasForeignKey("HostelCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.UserEntity", "Owner")
                         .WithMany("Hostels")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("HostelCategory");
-
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
+            modelBuilder.Entity("Domain.Entities.Room.Room_RoomType", b =>
                 {
-                    b.HasOne("Domain.Entities.HostelEntity", "Hostel")
-                        .WithMany("Rooms")
-                        .HasForeignKey("HostelId")
+                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
+                        .WithMany("RoomTypes")
+                        .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Room.RoomType", "RoomType")
-                        .WithMany("Rooms")
-                        .HasForeignKey("RoomTypeId")
+                    b.HasOne("Domain.Entities.Room.RoomType", "Type")
+                        .WithMany("RoomTypes")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Hostel");
+                    b.Navigation("Room");
 
-                    b.Navigation("RoomType");
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
                 {
-                    b.Navigation("Hostels");
+                    b.Navigation("HostelCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
-                    b.Navigation("HostelManagements");
+                    b.Navigation("HostelCategories");
 
-                    b.Navigation("Rooms");
+                    b.Navigation("HostelManagements");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
+                {
+                    b.Navigation("RoomTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomType", b =>
                 {
-                    b.Navigation("Rooms");
+                    b.Navigation("RoomTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>

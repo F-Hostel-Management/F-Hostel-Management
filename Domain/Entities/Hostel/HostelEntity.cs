@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities.Hostel;
+using Domain.Entities.Room;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +19,8 @@ public class HostelEntity : BaseEntity
     /*navigation props*/
 
     // category 
-    public virtual ICollection<Hostel_HostelCategory> HostelCategories { get; set; }
+    public Guid HostelCategoryId { get; set; }
+    public HostelCategory HostelCategory { get; set; }
 
     // owner
     public Guid OwnerId { get; set; }
@@ -26,5 +28,8 @@ public class HostelEntity : BaseEntity
 
     // manager
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
+
+    // room
+    public virtual ICollection<RoomEntity> Rooms { get; set; }
 
 }

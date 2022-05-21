@@ -8,23 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Contexts;
-public class HostelModelCreating
+public class HostelBuilder
 {
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // hostel - category
-        {
-            modelBuilder.Entity<Hostel_HostelCategory>()
-                .HasOne(c => c.Category)
-                .WithMany(hc => hc.HostelCategories)
-                .HasForeignKey(ci => ci.CategoryId);
-
-            modelBuilder.Entity<Hostel_HostelCategory>()
-                .HasOne(h => h.Hostel)
-                .WithMany(hc => hc.HostelCategories)
-                .HasForeignKey(hi => hi.HostelId);
-        }
-
         // hostel - manager
         {
             modelBuilder.Entity<HostelManagement>()
@@ -37,6 +24,6 @@ public class HostelModelCreating
                 .HasForeignKey(mi => mi.ManagerId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
-
+        
     }
 }
