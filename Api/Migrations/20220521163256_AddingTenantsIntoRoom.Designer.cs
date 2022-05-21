@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220521163256_AddingTenantsIntoRoom")]
+    partial class AddingTenantsIntoRoom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,37 +142,6 @@ namespace Api.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Hostel");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Invoice.InvoiceEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InvoiceCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("InvoiceTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvoiceTypeId");
-
-                    b.ToTable("InvoiceEntities");
                 });
 
             modelBuilder.Entity("Domain.Entities.Invoice.InvoiceType", b =>
@@ -383,17 +354,6 @@ namespace Api.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Invoice.InvoiceEntity", b =>
-                {
-                    b.HasOne("Domain.Entities.Invoice.InvoiceType", "InvoiceType")
-                        .WithMany("InvoiceEntities")
-                        .HasForeignKey("InvoiceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InvoiceType");
-                });
-
             modelBuilder.Entity("Domain.Entities.InvoiceSchedule.InvoiceScheduleEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Invoice.InvoiceType", "InvoiceType")
@@ -454,8 +414,6 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Domain.Entities.Invoice.InvoiceType", b =>
                 {
-                    b.Navigation("InvoiceEntities");
-
                     b.Navigation("InvoiceSchedules");
                 });
 

@@ -34,4 +34,7 @@ public class RoomEntity : BaseEntity
     // facilities
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
+    // tenant
+    public virtual ICollection<UserEntity> Tenants{ get; set; }
+
 }

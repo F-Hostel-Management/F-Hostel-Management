@@ -13,7 +13,14 @@ public class RoomBuilder
 {
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {
-
+        // room - tenants
+        {
+            modelBuilder.Entity<UserEntity>()
+                .HasOne(r => r.Room)
+                .WithMany(rt => rt.Tenants)
+                .HasForeignKey(ri => ri.RoomId)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
 
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Domain.Entities.Facility;
+using Domain.Entities.Invoice;
+using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Room;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -14,7 +16,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         HostelBuilder.OnModelCreating(modelBuilder);
-        //RoomBuilder.OnModelCreating(modelBuilder);
+        RoomBuilder.OnModelCreating(modelBuilder);
     }
 
     public DbSet<UserEntity> Users { get; set; }
@@ -24,6 +26,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<FacilityEntity> Facilities { get; set; }
     public DbSet<FacilityCategory> FacilityCategories { get; set; }
-
-
+    public DbSet<InvoiceScheduleEntity> InvoiceSchedules { get; set; }
+    public DbSet<InvoiceEntity> InvoiceEntities { get; set; }
 }

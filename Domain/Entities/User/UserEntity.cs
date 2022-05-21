@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities.Hostel;
+using Domain.Entities.Room;
 using Domain.Enums;
 
 namespace Domain.Entities;
@@ -19,4 +20,8 @@ public class UserEntity : BaseEntity
 
     // manager
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
+
+    // tenant
+    public Guid RoomId { get; set; }
+    public RoomEntity Room { get; set; }
 }
