@@ -65,7 +65,7 @@ const privateRoutes: Array<{
         path: '/demo',
         component: Demo,
         name: 'Demo',
-        layout:  React.Fragment,
+        layout:  DefaultLayout,
     },
 ]
 

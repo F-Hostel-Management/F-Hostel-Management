@@ -31,7 +31,7 @@ const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = (
     }
     return (
         <Styled.Container>
-            <Typography variant="body2" style={{ paddingLeft: '8px' }}>
+            <Typography variant="caption" style={{ paddingLeft: '8px' }}>
                 Showing {(page - 1) * pageSize + 1} to{' '}
                 {page * pageSize < rowsCount ? page * pageSize : rowsCount} of{' '}
                 {rowsCount} entries
@@ -39,7 +39,7 @@ const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = (
 
             <Styled.PagingWrapper>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <p style={{ paddingRight: '8px' }}>Rows per page: </p>
+                    <Typography variant="caption" style={{ paddingRight: '8px' }}>Rows per page: </Typography>
                     <Select
                         value={pageSize}
                         onChange={handleChangePageSize}

@@ -37,6 +37,15 @@ declare module '@mui/material/IconButton' {
     }
 }
 
+declare module '@mui/material/Badge' {
+    interface BadgePropsColorOverrides {
+        purple: true
+        pink: true
+        white: true
+        gray: true
+    }
+}
+
 const theme = createTheme({
     typography: {
         fontFamily: ["'Poppins'", 'sans-serif'].join(','),

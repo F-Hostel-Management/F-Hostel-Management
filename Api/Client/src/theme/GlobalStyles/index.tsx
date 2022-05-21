@@ -32,6 +32,8 @@ const GlobalStyle = createGlobalStyle`
     --bgr-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
     --text-color-dark: #212529;
     --text-color-light: #5b626b;
+
+    --nav-height: 60px;
 }
 `
 
