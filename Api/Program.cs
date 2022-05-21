@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-﻿using Infrastructure.Configurations;
-=======
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
->>>>>>> af5703a861ff12225db14d8cde230c8b7c5b5c7c
 using System.Reflection;
 using Api.Services;
 using Microsoft.OpenApi.Models;
