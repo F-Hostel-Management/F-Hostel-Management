@@ -1,10 +1,40 @@
 import { createTheme } from '@mui/material'
+import {
+    Palette as MuiPallete,
+    PaletteOptions as MuiPaletteOptions,
+} from '@mui/material/styles/createPalette'
 
 interface PaletteColor {
     light?: string
     main: string
     dark?: string
     contrastText?: string
+}
+
+declare module '@mui/material/styles/createPalette' {
+    interface Palette {
+        purple: Palette['primary']
+        pink: Palette['primary']
+        white: Palette['primary']
+        green: Palette['primary']
+        gray: Palette['primary']
+    }
+    interface PaletteOptions {
+        purple: PaletteOptions['primary']
+        pink: PaletteOptions['primary']
+        white: PaletteOptions['primary']
+        green: PaletteOptions['primary']
+        gray: PaletteOptions['primary']
+    }
+}
+
+declare module '@mui/material/IconButton' {
+    interface IconButtonPropsColorOverrides {
+        purple: true
+        pink: true
+        white: true
+        gray: true
+    }
 }
 
 const theme = createTheme({
@@ -52,6 +82,26 @@ const theme = createTheme({
         error: {
             main: '#DC3545',
             contrastText: '#ffffff',
+        },
+        purple: {
+            main: '#6F42C1',
+            contrastText: '#ffffff',
+        },
+        pink: {
+            main: '#E83E8C',
+            contrastText: '#ffffff',
+        },
+        green: {
+            main: '#28A745',
+            contrastText: '#ffffff',
+        },
+        gray: {
+            main: '#495057',
+            contrastText: '#ffffff',
+        },
+        white: {
+            main: '#FFFF',
+            contrastText: '#212529',
         },
     },
 })

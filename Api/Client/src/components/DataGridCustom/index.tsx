@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import CustomNoRowsOverlay from './Custom/CustomNoRowsOverlay'
 import CustomPagination from './Custom/CustomPagination'
 import CustomToolbar from './Custom/CustomToolbar'
+import * as Styled from './styles'
 
 interface IDataGridCustomProps {
     loading: boolean
@@ -28,8 +29,8 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
     rowsCount = 0,
 }) => {
     return (
-        <div style={{ height: 400, width: '80%', padding: '1.5rem' }}>
-            <DataGrid
+        <Styled.DataGridContainer width="1000px" color="#F06D06">
+            <Styled.DataGrid
                 loading={loading}
                 rows={rows}
                 columns={columns}
@@ -50,10 +51,10 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
                 components={{
                     NoRowsOverlay: CustomNoRowsOverlay,
                     Pagination: CustomPagination,
-                    Toolbar: CustomToolbar
+                    Toolbar: CustomToolbar,
                 }}
             />
-        </div>
+        </Styled.DataGridContainer>
     )
 }
 

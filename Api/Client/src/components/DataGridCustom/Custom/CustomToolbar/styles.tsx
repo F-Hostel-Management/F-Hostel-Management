@@ -18,7 +18,7 @@ export const GridToolbar = styled(GridToolbarContainer)`
 export const WrapperLeft = styled.div`
     flex: 1;
     height: 100%;
-    padding: 1.6rem 3.2rem;
+    padding: 0.8rem 1.6rem;
 
     display: flex;
     align-items: center;

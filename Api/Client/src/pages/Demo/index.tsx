@@ -41,12 +41,12 @@ const columns: GridColDef[] = [
 interface IDemoProps {}
 
 const Demo: FC<IDemoProps> = (props) => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(2)
     const [rows, setRows] = useState<IData[]>([])
 
-    setTimeout(() => setLoading(false), 1)
+    setTimeout(() => setLoading(false), 2000)
 
     useEffect(() => {
         setRows(getRows(page + 1, pageSize))

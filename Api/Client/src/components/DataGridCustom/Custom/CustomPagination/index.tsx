@@ -45,7 +45,7 @@ const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = (
                         onChange={handleChangePageSize}
                         size="small"
                         style={{
-                            width: '60px',
+                            width: '70px',
                             height: '30px',
                             fontSize: '1.3rem',
                         }}

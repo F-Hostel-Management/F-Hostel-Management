@@ -1,7 +1,9 @@
 import * as React from 'react'
 
-import { Typography } from '@mui/material'
+import DownloadIcon from '@mui/icons-material/Download'
+import { IconButton, Typography } from '@mui/material'
 
+import IconButtonCustom from '../../../Button/IconButtonCustom'
 import SearchInput from '../../../Input/SearchInput'
 import * as Styled from './styles'
 
@@ -22,7 +24,16 @@ const CustomToolbar: React.FunctionComponent<ICustomToolbarProps> = ({
                 </Styled.Title>
                 <SearchInput loading={true} width="250px" height="34px" />
             </Styled.WrapperLeft>
-            <Styled.WrapperRight>{children}</Styled.WrapperRight>
+            <Styled.WrapperRight>
+                {children}
+                <IconButtonCustom
+                    textColor="#fff"
+                    bgrColor="#6F42C1"
+                    size="small"
+                >
+                    <DownloadIcon />
+                </IconButtonCustom>
+            </Styled.WrapperRight>
         </Styled.GridToolbar>
     )
 }
