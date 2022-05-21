@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Entities.Facility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,5 +30,8 @@ public class RoomEntity : BaseEntity
     // hostel
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }
+
+    // facilities
+    public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
 }

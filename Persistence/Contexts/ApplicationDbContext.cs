@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Entities.Facility;
 using Domain.Entities.Room;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -20,7 +21,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<HostelEntity> Hostels { get; set; }
     public DbSet<HostelCategory> HostelCategories { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
-    public DbSet<RoomType> RoomTypes{ get; set; }
+    public DbSet<RoomType> RoomTypes { get; set; }
+    public DbSet<FacilityEntity> Facilities { get; set; }
+    public DbSet<FacilityCategory> FacilityCategories { get; set; }
 
 
 }

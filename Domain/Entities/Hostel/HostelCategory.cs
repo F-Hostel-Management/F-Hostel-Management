@@ -12,6 +12,8 @@ public class HostelCategory : BaseEntity, Category
 {
     public string CategoryName { get; set; }
     // navigation props
+
+    // hostel
     public virtual ICollection<HostelEntity> Hostels { get; set; }
 
 }

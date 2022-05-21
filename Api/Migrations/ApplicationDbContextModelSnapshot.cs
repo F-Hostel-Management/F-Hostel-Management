@@ -22,6 +22,53 @@ namespace Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FacilityCategories");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FacilityCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacilityCategoryId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Facilities");
+                });
+
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -195,6 +242,25 @@ namespace Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.Facility.FacilityCategory", "FacilityCategory")
+                        .WithMany("Facilities")
+                        .HasForeignKey("FacilityCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
+                        .WithMany("Facilities")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FacilityCategory");
+
+                    b.Navigation("Room");
+                });
+
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
                 {
                     b.HasOne("Domain.Entities.HostelEntity", "Hostel")
@@ -252,6 +318,11 @@ namespace Api.Migrations
                     b.Navigation("RoomType");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
+                {
+                    b.Navigation("Facilities");
+                });
+
             modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
                 {
                     b.Navigation("Hostels");
@@ -262,6 +333,11 @@ namespace Api.Migrations
                     b.Navigation("HostelManagements");
 
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
+                {
+                    b.Navigation("Facilities");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomType", b =>

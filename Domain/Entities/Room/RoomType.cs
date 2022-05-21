@@ -11,6 +11,6 @@ public class RoomType : BaseEntity, Category
     public string CategoryName { get; set; }
     /*navigation props*/
     
-    // type
+    // room
     public virtual ICollection<RoomEntity> Rooms{ get; set; }
 }
