@@ -1,11 +1,20 @@
+<<<<<<< HEAD
 ﻿using Infrastructure.Configurations;
+=======
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+>>>>>>> af5703a861ff12225db14d8cde230c8b7c5b5c7c
 using System.Reflection;
 using Api.Services;
-using Infrastructure.Extensions;
 using Microsoft.OpenApi.Models;
 using Domain.Constants;
 using System.Security.Claims;
 using Domain.Enums;
+using Api.App.Configurations;
+using Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -69,9 +78,10 @@ var app = builder.Build();
         app.UseDeveloperExceptionPage();
         await app.Services.ApplyMigrations();
     }
+    app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();
+    app.AddControllerMapper();
     app.Run();
 }
 

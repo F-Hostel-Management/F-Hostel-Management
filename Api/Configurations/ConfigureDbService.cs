@@ -1,14 +1,14 @@
 ﻿using System.Reflection;
 using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Infrastructure.Contexts;
 using Persistence.Repositories;
+using Api.App.Configurations;
 
-namespace Infrastructure.Configurations;
+namespace Api.Configurations;
 
-public static class DbConfiguration
+public static class ConfigureDbService
 {
     public static void AddDbService(this IServiceCollection services)
     {
