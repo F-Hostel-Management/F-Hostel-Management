@@ -13,20 +13,5 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         base.OnModelCreating(builder);
     }
-
     public DbSet<UserEntity> Users { get; set; }
-
-    public async Task<int> SaveChangesAsync()
-    {
-        return await base.SaveChangesAsync();
-    }
-
-    public override DbSet<TEntity> Set<TEntity>() where TEntity : class
-    {
-        return base.Set<TEntity>();
-    }
-    public override EntityEntry Entry(object entity)
-    {
-        return base.Entry(entity);
-    }
 }

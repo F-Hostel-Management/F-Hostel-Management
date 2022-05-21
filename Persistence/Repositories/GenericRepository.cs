@@ -1,21 +1,18 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.IRepository;
+﻿using Application.Interfaces.IRepository;
 using Domain.Common;
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
+
 
 
 namespace Persistence.Repositories;
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 {
-    protected IApplicationDbContext _context;
+    protected ApplicationDbContext _context;
     protected DbSet<T> dbSet;
     public GenericRepository(
-        IApplicationDbContext context)
+        ApplicationDbContext context)
     {
         _context = context;
         dbSet = context.Set<T>();
