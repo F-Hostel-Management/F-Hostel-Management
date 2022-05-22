@@ -29,7 +29,11 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
     rowsCount = 0,
 }) => {
     return (
-        <Styled.DataGridContainer width="1000px" color="#F06D06">
+        <Styled.DataGridContainer
+            width="1000px"
+            color="#F06D06"
+            style={{ backgroundColor: '#FFFFFF' }}
+        >
             <Styled.DataGrid
                 loading={loading}
                 rows={rows}

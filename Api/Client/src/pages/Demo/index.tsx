@@ -1,4 +1,4 @@
-import { useState, FC, useEffect } from 'react'
+import { useState, FC, useEffect, Fragment } from 'react'
 
 import DataGridCustom from '../../components/DataGridCustom'
 import Loading from '../../components/Loading'
@@ -55,7 +55,7 @@ const Demo: FC<IDemoProps> = (props) => {
     return loading ? (
         <Loading />
     ) : (
-        <div>
+        <Fragment>
             <h1>Demo Table</h1>
             <DataGridCustom
                 loading={loading}
@@ -67,7 +67,7 @@ const Demo: FC<IDemoProps> = (props) => {
                 setPageSize={setPageSize}
                 rowsCount={9}
             />
-        </div>
+        </Fragment>
     )
 }
 
