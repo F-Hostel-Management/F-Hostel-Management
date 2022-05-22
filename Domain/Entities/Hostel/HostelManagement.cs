@@ -10,6 +10,7 @@ namespace Domain.Entities.Hostel;
 [Table("HostelManagent")]
 public class HostelManagement : BaseEntity
 {
+    // M managers - M hostels
     [Column(Order = 1)]
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }

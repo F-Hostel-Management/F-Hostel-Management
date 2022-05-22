@@ -1,12 +1,10 @@
 ﻿using Domain.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Entities.Room;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Invoice
 {
+    [Table("Invoice")]
     public class InvoiceEntity : BaseEntity
     {
         public string InvoiceCode { get; set; }
@@ -16,8 +14,19 @@ namespace Domain.Entities.Invoice
 
         /*navigation props*/
 
-        // type
+        // M invoices - 1 type
         public Guid InvoiceTypeId { get; set; }
         public InvoiceType InvoiceType { get; set; }
+
+        // 1 tenant (paid) M invoice
+        public Guid TenantPaidId { get; set; }
+        public UserEntity TenantPaid { get; set; }
+
+
+        // 1 Manager (create) M Invoices (for) 1 Room
+        public Guid ManagerId { get; set; }
+        public UserEntity Manager { get; set; }
+        public Guid RoomId { get; set; }
+        public RoomEntity Room { get; set; }
     }
 }

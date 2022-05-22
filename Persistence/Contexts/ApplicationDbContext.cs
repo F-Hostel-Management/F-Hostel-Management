@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Entities.Facility;
 using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
+using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -17,6 +18,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         HostelBuilder.OnModelCreating(modelBuilder);
         RoomBuilder.OnModelCreating(modelBuilder);
+        InvoiceBuilder.OnModelCreating(modelBuilder);
+        InvoiceScheduleBuilder.OnModelCreating(modelBuilder);
+        NotificationBuilder.OnModelCreating(modelBuilder);
     }
 
     public DbSet<UserEntity> Users { get; set; }
@@ -27,5 +31,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<FacilityEntity> Facilities { get; set; }
     public DbSet<FacilityCategory> FacilityCategories { get; set; }
     public DbSet<InvoiceScheduleEntity> InvoiceSchedules { get; set; }
-    public DbSet<InvoiceEntity> InvoiceEntities { get; set; }
+    public DbSet<InvoiceEntity> Invoices { get; set; }
+    public DbSet<InvoiceType> InvoiceTypes { get; set; }
+    public DbSet<NotificationEntity> Notifications { get; set; }
+    public DbSet<Notification_Room> RoomNotifications { get; set; }
 }

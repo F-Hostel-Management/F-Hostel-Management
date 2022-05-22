@@ -9,11 +9,11 @@ public class FacilityEntity : BaseEntity
 
     /*navigation props*/
 
-    // category
+    // 1 category - M Facilities
     public Guid FacilityCategoryId { get; set; }
     public FacilityCategory FacilityCategory { get; set; }
 
-    // room
+    // 1 Room - M Facilities
     public Guid RoomId { get; set; }
     public RoomEntity Room { get; set; }
 }

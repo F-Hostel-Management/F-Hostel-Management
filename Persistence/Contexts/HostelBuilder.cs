@@ -12,12 +12,14 @@ public class HostelBuilder
 {
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // hostel - manager
+        // M hostel - M manager
         {
             modelBuilder.Entity<HostelManagement>()
                 .HasOne(h => h.Hostel)
                 .WithMany(hm => hm.HostelManagements)
-                .HasForeignKey(hi => hi.HostelId);
+                .HasForeignKey(hi => hi.HostelId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<HostelManagement>()
                 .HasOne(m => m.Manager)
                 .WithMany(hm => hm.HostelManagements)

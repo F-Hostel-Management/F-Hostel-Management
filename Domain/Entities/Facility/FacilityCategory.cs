@@ -5,6 +5,6 @@ public class FacilityCategory : BaseEntity, Category
     public string CategoryName { get; set; }
     /*navigation props*/
 
-    // Facility
+    // 1 category - M Facilities
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 }

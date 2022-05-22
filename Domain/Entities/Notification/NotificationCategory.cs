@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities.Room;
-public class RoomType : BaseEntity, Category
+namespace Domain.Entities.Notification;
+public class NotificationCategory : BaseEntity, Category
 {
     public string CategoryName { get; set; }
+
     /*navigation props*/
-    
-    // 1 type - M rooms
-    public virtual ICollection<RoomEntity> Rooms{ get; set; }
+
+    // 1 category - M notifications
+    public virtual ICollection<NotificationEntity> Notifications { get; set; }
 }

@@ -1,5 +1,8 @@
 ﻿using Domain.Common;
 using Domain.Entities.Hostel;
+using Domain.Entities.Invoice;
+using Domain.Entities.InvoiceSchedule;
+using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Enums;
 
@@ -14,14 +17,27 @@ public class UserEntity : BaseEntity
     public Role Role { get; set; }
 
     /*navigation props*/
-    
-    // owner
+
+    // 1 owner - M hostels
     public virtual ICollection<HostelEntity> Hostels { get; set; }
 
-    // manager
+    // M manager - M hostels
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
 
-    // tenant
+    // M tenants - 1 room
     public Guid RoomId { get; set; }
     public RoomEntity Room { get; set; }
+
+    // 1 tenannt - M invoices
+    public virtual ICollection<InvoiceEntity> TenantPaidInvoices { get; set; }
+
+    // 1 Manager (create) M Invoices (for) 1 Room
+    public virtual ICollection<InvoiceEntity> ManagerCreatedInvoices { get; set; }
+
+    // 1 Manager (make) M InvoiceSchedules (for) 1 Room
+    public virtual ICollection<InvoiceScheduleEntity> ManegerCreatedInvoiceSchedules { get; set; }
+
+
+    // 1 Manager (create) M Notifications (for) M Rooms
+    public virtual ICollection<Notification_Room> ManagerCreatedRoomNotifications { get; set; }
 }

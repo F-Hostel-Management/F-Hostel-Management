@@ -1,5 +1,8 @@
 ﻿using Domain.Common;
 using Domain.Entities.Facility;
+using Domain.Entities.Invoice;
+using Domain.Entities.InvoiceSchedule;
+using Domain.Entities.Notification;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,18 +26,27 @@ public class RoomEntity : BaseEntity
     public int Height { get; set; }
     /*navigation props*/
 
-    // type
+    // 1 type - M rooms
     public Guid RoomTypeId { get; set; }
     public RoomType RoomType { get; set; }
 
-    // hostel
+    // 1 hostel - M rooms
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }
 
-    // facilities
+    // 1 room - M facilities
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
-    // tenant
+    // 1 room - M tenants
     public virtual ICollection<UserEntity> Tenants{ get; set; }
+
+    // 1 Manager (create) M Invoices (for) 1 Room
+    public virtual ICollection<InvoiceEntity> ManagerCreatedInvoices { get; set; }
+
+    // 1 Manager (make) M InvoiceSchedules (for) 1 Room
+    public virtual ICollection<InvoiceScheduleEntity> ManegerCreatedInvoiceSchedules { get; set; }
+
+    // 1 Manager (create) M Notifications (for) M Rooms
+    public virtual ICollection<Notification_Room> RoomNotifications { get; set; }
 
 }

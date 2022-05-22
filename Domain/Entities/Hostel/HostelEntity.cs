@@ -18,18 +18,18 @@ public class HostelEntity : BaseEntity
 
     /*navigation props*/
 
-    // category 
+    // 1 type - M hostels 
     public Guid HostelCategoryId { get; set; }
     public HostelCategory HostelCategory { get; set; }
 
-    // owner
+    // 1 owner - M hostels
     public Guid OwnerId { get; set; }
     public UserEntity Owner { get; set; }
 
-    // manager
+    // M managers - M hostels
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
 
-    // room
+    // 1 hostel - M rooms
     public virtual ICollection<RoomEntity> Rooms { get; set; }
 
 }

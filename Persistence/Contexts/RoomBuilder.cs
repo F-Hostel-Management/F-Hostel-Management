@@ -13,7 +13,7 @@ public class RoomBuilder
 {
     public static void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // room - tenants
+        // 1 room - M tenants
         {
             modelBuilder.Entity<UserEntity>()
                 .HasOne(r => r.Room)

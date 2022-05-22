@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220522050302_NotificationAdded")]
+    partial class NotificationAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,7 +204,7 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceTypes");
+                    b.ToTable("InvoiceType");
                 });
 
             modelBuilder.Entity("Domain.Entities.InvoiceSchedule.InvoiceScheduleEntity", b =>
@@ -244,38 +246,6 @@ namespace Api.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("InvoiceSchedules");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Notification.Notification_Room", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("ManagerId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(1);
-
-                    b.Property<Guid>("NotificationId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(3);
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ManagerId");
-
-                    b.HasIndex("NotificationId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("RoomNotification");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationCategory", b =>
@@ -452,7 +422,7 @@ namespace Api.Migrations
                     b.HasOne("Domain.Entities.HostelEntity", "Hostel")
                         .WithMany("HostelManagements")
                         .HasForeignKey("HostelId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserEntity", "Manager")
@@ -547,33 +517,6 @@ namespace Api.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Notification.Notification_Room", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntity", "Manager")
-                        .WithMany("ManagerCreatedRoomNotifications")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Notification.NotificationEntity", "Notification")
-                        .WithMany("RoomNotifications")
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
-                        .WithMany("RoomNotifications")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Manager");
-
-                    b.Navigation("Notification");
-
-                    b.Navigation("Room");
-                });
-
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
                 {
                     b.HasOne("Domain.Entities.Notification.NotificationCategory", "NotificationCategory")
@@ -644,11 +587,6 @@ namespace Api.Migrations
                     b.Navigation("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
-                {
-                    b.Navigation("RoomNotifications");
-                });
-
             modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
                 {
                     b.Navigation("Facilities");
@@ -656,8 +594,6 @@ namespace Api.Migrations
                     b.Navigation("ManagerCreatedInvoices");
 
                     b.Navigation("ManegerCreatedInvoiceSchedules");
-
-                    b.Navigation("RoomNotifications");
 
                     b.Navigation("Tenants");
                 });
@@ -674,8 +610,6 @@ namespace Api.Migrations
                     b.Navigation("Hostels");
 
                     b.Navigation("ManagerCreatedInvoices");
-
-                    b.Navigation("ManagerCreatedRoomNotifications");
 
                     b.Navigation("ManegerCreatedInvoiceSchedules");
 

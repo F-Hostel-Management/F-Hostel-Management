@@ -9,11 +9,11 @@ namespace Domain.Entities.Invoice
 
         /*navigation props*/
 
-        // InvoiceSchedule
+        // 1 type - M invoiceSchedules
         public virtual ICollection<InvoiceScheduleEntity> InvoiceSchedules { get; set; }
 
-        // Invoice
-        public virtual ICollection<InvoiceEntity> InvoiceEntities { get; set; }
+        // 1 type - M invoices
+        public virtual ICollection<InvoiceEntity> Invoices { get; set; }
 
     }
 }
