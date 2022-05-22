@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220522071746_MessageAdded")]
+    partial class MessageAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,73 +23,6 @@ namespace Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentContains", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommitmentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(1);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommitmentId");
-
-                    b.HasIndex("TenantId");
-
-                    b.ToTable("CommitmentContains");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CommitmentCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("ManagerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ManagerId")
-                        .IsUnique();
-
-                    b.HasIndex("RoomId")
-                        .IsUnique();
-
-                    b.ToTable("Commitment");
-                });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
                 {
@@ -503,20 +438,10 @@ namespace Api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("TicketTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
-
-                    b.HasIndex("TenantId");
 
                     b.HasIndex("TicketTypeId");
 
@@ -572,44 +497,6 @@ namespace Api.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentContains", b =>
-                {
-                    b.HasOne("Domain.Entities.Commitment.CommitmentEntity", "Commitment")
-                        .WithMany("CommitmentContains")
-                        .HasForeignKey("CommitmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.UserEntity", "Tenant")
-                        .WithMany("CommitmentContains")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Commitment");
-
-                    b.Navigation("Tenant");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
-                {
-                    b.HasOne("Domain.Entities.UserEntity", "Manager")
-                        .WithOne("Commitment")
-                        .HasForeignKey("Domain.Entities.Commitment.CommitmentEntity", "ManagerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
-                        .WithOne("Commitment")
-                        .HasForeignKey("Domain.Entities.Commitment.CommitmentEntity", "RoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Manager");
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
@@ -809,27 +696,11 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Domain.Entities.Ticket.TicketEntity", b =>
                 {
-                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
-                        .WithMany("Tickets")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.UserEntity", "Tenant")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Ticket.TicketType", "TicketType")
                         .WithMany("Tickets")
                         .HasForeignKey("TicketTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Room");
-
-                    b.Navigation("Tenant");
 
                     b.Navigation("TicketType");
                 });
@@ -843,11 +714,6 @@ namespace Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Room");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
-                {
-                    b.Navigation("CommitmentContains");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -886,8 +752,6 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
                 {
-                    b.Navigation("Commitment");
-
                     b.Navigation("Facilities");
 
                     b.Navigation("ManagerCreatedInvoices");
@@ -897,8 +761,6 @@ namespace Api.Migrations
                     b.Navigation("RoomNotifications");
 
                     b.Navigation("Tenants");
-
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomType", b =>
@@ -918,10 +780,6 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
                 {
-                    b.Navigation("Commitment");
-
-                    b.Navigation("CommitmentContains");
-
                     b.Navigation("HostelManagements");
 
                     b.Navigation("Hostels");
@@ -935,8 +793,6 @@ namespace Api.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("TenantPaidInvoices");
-
-                    b.Navigation("Tickets");
                 });
 #pragma warning restore 612, 618
         }

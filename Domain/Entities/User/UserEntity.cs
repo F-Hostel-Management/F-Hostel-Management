@@ -1,9 +1,12 @@
 ﻿using Domain.Common;
+using Domain.Entities.Commitment;
 using Domain.Entities.Hostel;
 using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
+using Domain.Entities.Message;
 using Domain.Entities.Notification;
 using Domain.Entities.Room;
+using Domain.Entities.Ticket;
 using Domain.Enums;
 
 namespace Domain.Entities;
@@ -40,4 +43,18 @@ public class UserEntity : BaseEntity
 
     // 1 Manager (create) M Notifications (for) M Rooms
     public virtual ICollection<Notification_Room> ManagerCreatedRoomNotifications { get; set; }
+
+    // 1 ticket - M messages
+    public virtual ICollection<MessageEntity> Messages { get; set; }
+
+    // 1 Tenant (create) M Tickets (for) 1 Room
+    public virtual ICollection<TicketEntity> Tickets { get; set; }
+
+    
+    // 1 Commitment (belong to) 1 Manager
+    public CommitmentEntity Commitment { get; set; }
+
+    // M Commitments (belong to ) M Teanants
+    public virtual ICollection<CommitmentContains> CommitmentContains { get; set; }
+
 }

@@ -1,8 +1,10 @@
 ﻿using Domain.Common;
+using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
 using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Notification;
+using Domain.Entities.Ticket;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -48,5 +50,11 @@ public class RoomEntity : BaseEntity
 
     // 1 Manager (create) M Notifications (for) M Rooms
     public virtual ICollection<Notification_Room> RoomNotifications { get; set; }
+
+    // 1 Tenant (create) M Tickets (for) 1 Room
+    public virtual ICollection<TicketEntity> Tickets { get; set; }
+
+    // 1 Commitment (belong to) 1 Room
+    public CommitmentEntity Commitment;
 
 }

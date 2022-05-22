@@ -1,10 +1,13 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
+using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
 using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
+using Domain.Entities.Message;
 using Domain.Entities.Notification;
 using Domain.Entities.Room;
+using Domain.Entities.Ticket;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -21,6 +24,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         InvoiceBuilder.OnModelCreating(modelBuilder);
         InvoiceScheduleBuilder.OnModelCreating(modelBuilder);
         NotificationBuilder.OnModelCreating(modelBuilder);
+        TicketBuilder.OnModelCreating(modelBuilder);
+        CommitmentBuilder.OnModelCreating(modelBuilder);
     }
 
     public DbSet<UserEntity> Users { get; set; }
@@ -35,4 +40,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<InvoiceType> InvoiceTypes { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<Notification_Room> RoomNotifications { get; set; }
+    public DbSet<TicketEntity> Tickets { get; set; }
+    public DbSet<TicketType> TicketTypes { get; set; }
+    public DbSet<MessageEntity> Messages { get; set; }
+    public DbSet<CommitmentEntity> Commitments { get; set; }
+    public DbSet<CommitmentContains> CommitmentContains { get; set; }
 }
