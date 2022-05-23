@@ -56,9 +56,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return list;
     }
 
-    public async Task UpdateAsync(T updated, T existing)
+    public async Task UpdateAsync(T updated)
     {
-        _context.Entry(existing).CurrentValues.SetValues(updated);
+        //_context.Entry(existing).CurrentValues.SetValues(updated);
+        _context.Entry(updated).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 }
