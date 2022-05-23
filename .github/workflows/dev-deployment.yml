@@ -78,7 +78,7 @@ jobs:
           name: Dockerfile
           path: .
       - name: Show structure
-        run: ls -R
+        run: ls -R -a
       - name: Set up Nodejs
         uses: actions/setup-node@v3
         with:

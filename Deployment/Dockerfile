@@ -6,6 +6,6 @@ ENV PORT=$PORT
 COPY . /app
 WORKDIR /app
 
-RUN ls -R
+RUN ls -R -a
 
 ENTRYPOINT ["dotnet", "Api.dll"]
