@@ -73,6 +73,10 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();
+
+    var ENV_PORT = Environment.GetEnvironmentVariable("PORT");
+    if (ENV_PORT is not null) app.Urls.Add($"http://0.0.0.0:{ENV_PORT}");
+
     app.Run();
 }
 

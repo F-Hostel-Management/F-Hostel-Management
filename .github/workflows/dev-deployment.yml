@@ -1,0 +1,91 @@
+name: Dev deployment
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+      - name: Set up Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install packages
+        working-directory: Api/Client
+        run: yarn
+      - name: Build
+        working-directory: Api/Client
+        run: yarn build
+      - name: Upload frontend
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend
+          path: Api/wwwroot/**
+  build_backend:
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+      - name: Overwrite appsettings.json
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: Api/appsettings.json
+        env:
+          AppSettings.ConnectionStrings.DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: "6.0"
+      - name: Publish
+        run: dotnet publish -c Release -o ./backend
+      - name: Upload backend
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend
+          path: backend/**
+      - name: Upload Dockerfile
+        uses: actions/upload-artifact@v3
+        with:
+          name: Dockerfile
+          path: Deployment/Dockerfile
+  deploy:
+    runs-on: ubuntu-latest
+    environment: development
+    needs: [build_frontend, build_backend]
+    steps:
+      - name: Download frontend
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend
+          path: wwwroot
+      - name: Download backend
+        uses: actions/download-artifact@v3
+        with:
+          name: backend
+          path: .
+      - name: Download Dockerfile
+        uses: actions/download-artifact@v3
+        with:
+          name: Dockerfile
+          path: .
+      - name: Show structure
+        run: ls -R -a
+      - name: Set up Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+      - name: Link cloud project
+        run: RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT }}
+      - name: Deploy
+        run: RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} railway up
