@@ -50,19 +50,19 @@ const privateRoutes: Array<{
     layout: React.ElementType
 }> = [
     {
-        path: '/home/*',
+        path: '/home',
         component: Home,
         name: 'Home',
         layout: React.Fragment,
     },
     {
-        path: '/profile',
+        path: 'home/profile',
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,
     },
     {
-        path: '/demo',
+        path: 'home/demo',
         component: Demo,
         name: 'Demo',
         layout:  DefaultLayout,

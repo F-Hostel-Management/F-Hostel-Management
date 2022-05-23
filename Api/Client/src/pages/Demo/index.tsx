@@ -49,40 +49,26 @@ const columns: GridColDef[] = [
 interface IDemoProps {}
 
 const Demo: FC<IDemoProps> = (props) => {
-    const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(0)
     const [pageSize, setPageSize] = useState(2)
     const [rows, setRows] = useState<IData[]>([])
-
-    setTimeout(() => setLoading(false), 2000)
+    const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
         setRows(getRows(page + 1, pageSize))
     }, [page, pageSize])
 
-    return loading ? (
-        <Loading />
-    ) : (
-        <Fragment>
-            <Styled.BodyHeader>
-                <Styled.BodyTitle>
-                    <Typography variant="h4">
-                        <strong>Dashboard</strong>
-                    </Typography>
-                </Styled.BodyTitle>
-                <Styled.Breadcrumb></Styled.Breadcrumb>
-            </Styled.BodyHeader>
-            <DataGridCustom
-                loading={loading}
-                rows={rows}
-                columns={columns}
-                page={page}
-                setPage={setPage}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-                rowsCount={9}
-            />
-        </Fragment>
+    return (
+        <DataGridCustom
+            loading={loading}
+            rows={rows}
+            columns={columns}
+            page={page}
+            setPage={setPage}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            rowsCount={9}
+        />
     )
 }
 

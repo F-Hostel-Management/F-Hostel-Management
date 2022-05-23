@@ -16,3 +16,16 @@ export const GridMain = styled(Grid)`
     padding: 32px;
     box-shadow: 5px 7px 26px -5px #cdd4e7;
 `
+export const BodyHeader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 16px;
+`
+export const BodyTitle = styled.div``
+export const Breadcrumb = styled.div`
+    background-color: var(--color-gray-500);
+    padding: 12px 24px;
+    border-radius: 50px;
+`
