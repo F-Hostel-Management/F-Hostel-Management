@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 
+import { up } from 'styled-breakpoints'
+import { useBreakpoint } from 'styled-breakpoints/react-styled'
+
 import { Grid, Typography } from '@mui/material'
 
 import Breadcrumb from '../../Breadcrumd'
 import Footer from '../../Footer'
 import HeaderDefault from '../../Header/HeaderDefault'
+import Loading from '../../Loading'
 import SidebarFull from '../../Sidebar/SidebarFull'
 import * as Styled from './styles'
-import Loading from '../../Loading'
 
 interface IDefaultLayoutProps {
     children: React.ReactElement
@@ -16,7 +19,9 @@ interface IDefaultLayoutProps {
 const DefaultLayout: React.FunctionComponent<IDefaultLayoutProps> = ({
     children,
 }) => {
+    const screen = useBreakpoint(up('lg'))
     const [isShownSidebar, setIsShownSidebar] = useState<boolean>(true)
+    const [isSidebarMobile, setIsSidebarMobile] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
     setTimeout(() => setLoading(false), 2000)
@@ -28,10 +33,24 @@ const DefaultLayout: React.FunctionComponent<IDefaultLayoutProps> = ({
             <HeaderDefault
                 isShownSidebar={isShownSidebar}
                 setIsShownSidebar={() => setIsShownSidebar(!isShownSidebar)}
+                setIsSidebarMobile={() => setIsSidebarMobile(!isSidebarMobile)}
             />
-            <Grid container direction="row" sx={{ zIndex: 1 }}>
+            <Grid
+                container
+                direction="row"
+                sx={{
+                    zIndex: 1,
+                    height: 'calc(100vh - 60px)',
+                    overflow: 'hidden',
+                }}
+            >
                 <Styled.GridSidebar item lg={isShownSidebar ? 2.5 : 0.5}>
-                    <SidebarFull isShownSidebar={isShownSidebar} />
+                    {isSidebarMobile || screen ? (
+                        <React.Fragment>
+                            <Styled.Overlay />
+                            <SidebarFull isShownSidebar={isShownSidebar} />
+                        </React.Fragment>
+                    ) : null}
                 </Styled.GridSidebar>
                 <Styled.GridMain
                     item
@@ -56,7 +75,6 @@ const DefaultLayout: React.FunctionComponent<IDefaultLayoutProps> = ({
                     {children}
                 </Styled.GridMain>
             </Grid>
-            <Footer />
         </React.Fragment>
     )
 }

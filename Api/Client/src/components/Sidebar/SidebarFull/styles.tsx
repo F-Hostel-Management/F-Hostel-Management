@@ -1,7 +1,14 @@
+import { down } from 'styled-breakpoints'
 import styled from 'styled-components'
 
 export const SidebarContainer = styled.div`
     box-shadow: 0 8px 10px 0 rgb(183 192 206 / 20%);
+    background-color: #fff;
+    height: 100%;
+
+    ${down('lg')} {
+        width: 320px;
+    }
 `
 
 export const ProfileWrapper = styled.div`

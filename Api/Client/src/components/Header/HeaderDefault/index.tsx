@@ -1,5 +1,8 @@
 import * as React from 'react'
 
+import { up } from 'styled-breakpoints'
+import { useBreakpoint } from 'styled-breakpoints/react-styled'
+
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import MenuIcon from '@mui/icons-material/Menu'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
@@ -13,12 +16,15 @@ import * as Styled from './styles'
 interface IHeaderDefaultProps {
     isShownSidebar: boolean
     setIsShownSidebar: any
+    setIsSidebarMobile: any
 }
 
 const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
     isShownSidebar = true,
     setIsShownSidebar = () => {},
+    setIsSidebarMobile = () => {},
 }) => {
+    const screen = useBreakpoint(up('lg'))
     return (
         <Styled.Navbar>
             <Grid container direction="row">
@@ -55,7 +61,9 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                         <IconButton
                             color="gray"
                             style={{ marginLeft: '16px' }}
-                            onClick={setIsShownSidebar}
+                            onClick={
+                                screen ? setIsShownSidebar : setIsSidebarMobile
+                            }
                         >
                             <MenuIcon />
                         </IconButton>

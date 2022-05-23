@@ -39,7 +39,9 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
     }
 
     return (
-        <Styled.SidebarContainer style={{ padding: isShownSidebar ? '16px 4px' : '8px 0px' }}>
+        <Styled.SidebarContainer
+            style={{ padding: isShownSidebar ? '16px 4px' : '8px 0px' }}
+        >
             {isShownSidebar && (
                 <React.Fragment>
                     <Styled.ProfileWrapper>
@@ -72,7 +74,7 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
                         width: '100%',
                         maxWidth: 360,
                         bgcolor: 'background.paper',
-                        margin: 'auto'
+                        margin: 'auto',
                     }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
@@ -139,7 +141,9 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
                                         {selectedIndex === index && (
                                             <ArrowRightIcon
                                                 color="primary"
-                                                style={{ fontSize: '2.4rem' }}
+                                                style={{
+                                                    fontSize: '2.4rem',
+                                                }}
                                             />
                                         )}
                                     </Grid>
