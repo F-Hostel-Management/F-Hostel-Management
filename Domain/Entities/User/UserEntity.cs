@@ -8,6 +8,8 @@ using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Entities.Ticket;
 using Domain.Enums;
+using Domain.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
@@ -17,6 +19,14 @@ public class UserEntity : BaseEntity
     public string Email { get; set; }
     public string Phone { get; set; }
     public string Password { get; set; }
+    [Column("Role")]
+    public string RoleString
+    {
+        get { return Role.ToString(); }
+        private set { Role = value.ParseEnum<Role>(); }
+    }
+
+    [NotMapped]
     public Role Role { get; set; }
 
     /*navigation props*/
@@ -50,7 +60,7 @@ public class UserEntity : BaseEntity
     // 1 Tenant (create) M Tickets (for) 1 Room
     public virtual ICollection<TicketEntity> Tickets { get; set; }
 
-    
+
     // 1 Commitment (belong to) 1 Manager
     public CommitmentEntity Commitment { get; set; }
 
