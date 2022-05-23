@@ -19,13 +19,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        HostelBuilder.OnModelCreating(modelBuilder);
-        RoomBuilder.OnModelCreating(modelBuilder);
-        InvoiceBuilder.OnModelCreating(modelBuilder);
-        InvoiceScheduleBuilder.OnModelCreating(modelBuilder);
-        NotificationBuilder.OnModelCreating(modelBuilder);
-        TicketBuilder.OnModelCreating(modelBuilder);
-        CommitmentBuilder.OnModelCreating(modelBuilder);
+        //HostelBuilder.OnModelCreating(modelBuilder);
+        //RoomBuilder.OnModelCreating(modelBuilder);
+        //InvoiceBuilder.OnModelCreating(modelBuilder);
+        //InvoiceScheduleBuilder.OnModelCreating(modelBuilder);
+        //NotificationBuilder.OnModelCreating(modelBuilder);
+        //TicketBuilder.OnModelCreating(modelBuilder);
+        //CommitmentBuilder.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(HostelManagementsEntityTypeConfiguration).Assembly);
     }
 
     public DbSet<UserEntity> Users { get; set; }

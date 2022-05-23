@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220522080250_CommitmentTenantManagerRoom")]
-    partial class CommitmentTenantManagerRoom
+    [Migration("20220523085824_Initials")]
+    partial class Initials
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -563,8 +563,9 @@ namespace Api.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleString")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Role");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
