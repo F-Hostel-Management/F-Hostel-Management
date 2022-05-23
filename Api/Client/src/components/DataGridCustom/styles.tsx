@@ -11,7 +11,7 @@ export const DataGridContainer = styled.div<IDataGridContainerProps>`
     width: ${(prop) => (prop.width ? prop.width : '100%')};
     height: ${(prop) => (prop.height ? prop.height : '600px')};
     padding: 1.5rem;
-    border: 1px solid var(--color-gray-400);
+    border-bottom: 1px solid #dee4ec;
     border-radius: 8px;
 
     margin: auto;

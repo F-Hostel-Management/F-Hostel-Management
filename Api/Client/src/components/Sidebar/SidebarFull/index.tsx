@@ -15,6 +15,7 @@ import {
     ListItemIcon,
     ListItemText,
     ListSubheader,
+    Tooltip,
     Typography,
 } from '@mui/material'
 
@@ -38,7 +39,7 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
     }
 
     return (
-        <div style={{ paddingRight: '4px' }}>
+        <Styled.SidebarContainer style={{ padding: isShownSidebar ? '16px 4px' : '8px 0px' }}>
             {isShownSidebar && (
                 <React.Fragment>
                     <Styled.ProfileWrapper>
@@ -71,6 +72,7 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
                         width: '100%',
                         maxWidth: 360,
                         bgcolor: 'background.paper',
+                        margin: 'auto'
                     }}
                     component="nav"
                     aria-labelledby="nested-list-subheader"
@@ -100,9 +102,22 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
                                         ? '12px 16px'
                                         : '10px 12px',
                                     borderRadius: '8px',
+                                    maxWidth: '32rem',
                                 }}
                             >
-                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                {isShownSidebar ? (
+                                    <ListItemIcon>{item.icon}</ListItemIcon>
+                                ) : (
+                                    <Tooltip
+                                        title={item.label}
+                                        placement="right"
+                                    >
+                                        <ListItemIcon sx={{ minWidth: 0 }}>
+                                            {item.icon}
+                                        </ListItemIcon>
+                                    </Tooltip>
+                                )}
+
                                 {isShownSidebar && (
                                     <Grid
                                         container
@@ -110,10 +125,16 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
                                         alignItems="center"
                                     >
                                         <Typography
-                                            variant="body2"
-                                            style={{ flex: 1 }}
+                                            variant="caption"
+                                            style={{
+                                                flex: 1,
+                                            }}
                                         >
-                                            {item.label}
+                                            {selectedIndex === index ? (
+                                                <strong>{item.label}</strong>
+                                            ) : (
+                                                item.label
+                                            )}
                                         </Typography>
                                         {selectedIndex === index && (
                                             <ArrowRightIcon
@@ -128,7 +149,7 @@ const SidebarFull: React.FunctionComponent<ISidebarFullProps> = ({
                     ))}
                 </List>
             ))}
-        </div>
+        </Styled.SidebarContainer>
     )
 }
 

@@ -1,5 +1,5 @@
 @import url(normalize.css);
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300&display=swap'); */
 
 html {
     /* 1rem = 10px */
@@ -11,7 +11,7 @@ html {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 1.6rem;
     line-height: 24px;
     text-rendering: optimizeSpeed;

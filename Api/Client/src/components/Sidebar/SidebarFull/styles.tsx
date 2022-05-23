@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+export const SidebarContainer = styled.div`
+    box-shadow: 0 8px 10px 0 rgb(183 192 206 / 20%);
+`
+
 export const ProfileWrapper = styled.div`
     width: 100%;
 

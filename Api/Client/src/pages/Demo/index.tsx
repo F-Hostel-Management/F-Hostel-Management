@@ -2,17 +2,25 @@ import { useState, FC, useEffect, Fragment } from 'react'
 
 import DataGridCustom from '../../components/DataGridCustom'
 import Loading from '../../components/Loading'
-import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
+import { Typography } from '@mui/material'
+import {
+    GridColDef,
+    GridColumnHeaderParams,
+    GridValueGetterParams,
+} from '@mui/x-data-grid'
 
 import { getRows, IData } from './MockData'
+import * as Styled from './styles'
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
     {
         field: 'firstName',
-        headerName: 'First name',
         width: 150,
         editable: false,
+        renderHeader: (params: GridColumnHeaderParams) => (
+            <strong>First Name</strong>
+        ),
     },
     {
         field: 'lastName',
@@ -56,7 +64,14 @@ const Demo: FC<IDemoProps> = (props) => {
         <Loading />
     ) : (
         <Fragment>
-            <h1>Demo Table</h1>
+            <Styled.BodyHeader>
+                <Styled.BodyTitle>
+                    <Typography variant="h4">
+                        <strong>Dashboard</strong>
+                    </Typography>
+                </Styled.BodyTitle>
+                <Styled.Breadcrumb></Styled.Breadcrumb>
+            </Styled.BodyHeader>
             <DataGridCustom
                 loading={loading}
                 rows={rows}

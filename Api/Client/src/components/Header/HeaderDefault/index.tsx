@@ -4,16 +4,10 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import MenuIcon from '@mui/icons-material/Menu'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import SettingsIcon from '@mui/icons-material/Settings'
-import {
-    Avatar,
-    Badge,
-    Divider,
-    Grid,
-    IconButton,
-    Typography,
-} from '@mui/material'
+import { Avatar, Badge, Grid, IconButton, Typography } from '@mui/material'
 import * as colorTheme from '@mui/material/colors'
 
+import logo from '../../../assets/images/F-Hostel-removebg.png'
 import * as Styled from './styles'
 
 interface IHeaderDefaultProps {
@@ -34,10 +28,19 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                     item
                     direction="row"
                     alignItems="center"
-                    justifyContent="space-between"
+                    justifyContent="center"
                 >
                     <Styled.NavbarLogo>
-                        <div>Logo here</div>
+                        <img src={logo} alt="logo" />
+                        {isShownSidebar && (
+                            <Typography
+                                variant="subtitle1"
+                                color="primary"
+                                sx={{ marginLeft: '4px' }}
+                            >
+                                F-Hostel
+                            </Typography>
+                        )}
                     </Styled.NavbarLogo>
                 </Styled.LogoGrid>
                 <Styled.NavbarMainGrid

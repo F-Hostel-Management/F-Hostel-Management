@@ -30,7 +30,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
 }) => {
     return (
         <Styled.DataGridContainer
-            width="1000px"
+            width="100%"
             color="#F06D06"
             style={{ backgroundColor: '#FFFFFF' }}
         >

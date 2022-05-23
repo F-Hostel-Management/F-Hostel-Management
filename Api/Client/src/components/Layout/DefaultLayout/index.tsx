@@ -5,6 +5,7 @@ import { Grid } from '@mui/material'
 import Footer from '../../Footer'
 import HeaderDefault from '../../Header/HeaderDefault'
 import SidebarFull from '../../Sidebar/SidebarFull'
+import * as Styled from './styles'
 
 interface IDefaultLayoutProps {
     children: React.ReactElement
@@ -20,20 +21,20 @@ const DefaultLayout: React.FunctionComponent<IDefaultLayoutProps> = ({
                 isShownSidebar={isShownSidebar}
                 setIsShownSidebar={() => setIsShownSidebar(!isShownSidebar)}
             />
-            <Grid container direction="row">
-                <Grid item md={isShownSidebar ? 2.5 : 0.5}>
+            <Grid container direction="row" sx={{zIndex: 1}}>
+                <Styled.GridSidebar item lg={isShownSidebar ? 2.5 : 0.5}>
                     <SidebarFull isShownSidebar={isShownSidebar} />
-                </Grid>
-                <Grid
+                </Styled.GridSidebar>
+                <Styled.GridMain
                     item
-                    md={isShownSidebar ? 9.5 : 11.5}
+                    lg={isShownSidebar ? 9.5 : 11.5}
                     direction="column"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ backgroundColor: 'var(--color-gray-500)' }}
+                    sx={{ backgroundColor: '#f0f3fb' }}
                 >
                     {children}
-                </Grid>
+                </Styled.GridMain>
             </Grid>
             <Footer />
         </div>

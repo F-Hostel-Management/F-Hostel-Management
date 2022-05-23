@@ -48,8 +48,7 @@ declare module '@mui/material/Badge' {
 
 const theme = createTheme({
     typography: {
-        fontFamily: ["'Poppins'", 'sans-serif'].join(','),
-        fontSize: 12,
+        fontSize: 14,
         htmlFontSize: 10,
         h1: {
             fontSize: '4.8rem',
