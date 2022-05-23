@@ -14,7 +14,6 @@ public class HostelManagementsEntityTypeConfiguration : IEntityTypeConfiguration
     public void Configure(EntityTypeBuilder<HostelManagement> builder)
     {
         // M hostel - M manager
-
         builder
            .HasOne(h => h.Hostel)
            .WithMany(hm => hm.HostelManagements)
