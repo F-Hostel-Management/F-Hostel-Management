@@ -68,7 +68,7 @@ public class UsersController : BaseApiController
         
         var updated = Mapper.Map(userDto, existing);
 
-        await _userRepository.UpdateAsync(updated, existing);
+        await _userRepository.UpdateAsync(updated);
         var response = Mapper.Map<GetByIdResponse>(updated);
         return Ok(response);
     }
