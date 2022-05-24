@@ -14,4 +14,5 @@ export default defineConfig({
     preview: {
         port: 3000,
     },
+    envPrefix: 'PUBLIC_',
 })
