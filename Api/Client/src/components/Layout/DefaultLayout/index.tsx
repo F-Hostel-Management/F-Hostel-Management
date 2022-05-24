@@ -58,7 +58,6 @@ const DefaultLayout: React.FunctionComponent<IDefaultLayoutProps> = ({
                     direction="column"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ backgroundColor: '#f0f3fb' }}
                 >
                     <React.Fragment>
                         <Styled.BodyHeader>

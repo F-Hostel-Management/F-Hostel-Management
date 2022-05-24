@@ -85,6 +85,7 @@ export const sidebarItemList: {
                     label: 'Facilities',
                     path: '/facilities',
                 },
+                
             ],
         },
     ],

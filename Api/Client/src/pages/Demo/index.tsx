@@ -1,8 +1,11 @@
-import { useState, FC, useEffect, Fragment } from 'react'
+import React, { useState, FC, useEffect, Fragment } from 'react'
 
+import HostelCard from '../../components/Card/HostelCard'
+import RoomCard from '../../components/Card/RoomCard'
+import StatisticCard from '../../components/Card/StatisticCard'
 import DataGridCustom from '../../components/DataGridCustom'
 import Loading from '../../components/Loading'
-import { Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import {
     GridColDef,
     GridColumnHeaderParams,
@@ -59,16 +62,34 @@ const Demo: FC<IDemoProps> = (props) => {
     }, [page, pageSize])
 
     return (
-        <DataGridCustom
-            loading={loading}
-            rows={rows}
-            columns={columns}
-            page={page}
-            setPage={setPage}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            rowsCount={9}
-        />
+        // <DataGridCustom
+        //     loading={loading}
+        //     rows={rows}
+        //     columns={columns}
+        //     page={page}
+        //     setPage={setPage}
+        //     pageSize={pageSize}
+        //     setPageSize={setPageSize}
+        //     rowsCount={9}
+        // />
+        <React.Fragment>
+            <Grid container direction="row" spacing={3}>
+                <Grid item xs={3}>
+                    <StatisticCard />
+                </Grid>
+                <Grid item xs={3}>
+                    <StatisticCard />
+                </Grid>
+                <Grid item xs={3}>
+                    <StatisticCard />
+                </Grid>
+                <Grid item xs={3}>
+                    <StatisticCard />
+                </Grid>
+            </Grid>
+            <HostelCard />
+            <RoomCard />
+        </React.Fragment>
     )
 }
 
