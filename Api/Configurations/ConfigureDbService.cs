@@ -17,8 +17,7 @@ public static class ConfigureDbService
         services.AddDbContext<ApplicationDbContext>(
             options =>
                 options.UseSqlServer(
-                    settings.Value.ConnectionStrings.DefaultConnection,
-                    o => o.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName)
+                    settings.Value.ConnectionStrings.DefaultConnection
                 )
         );
         services.AddScoped<IApplicationDbContext>(
