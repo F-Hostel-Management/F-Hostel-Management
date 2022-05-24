@@ -8,7 +8,7 @@ namespace Api.Configurations
     {
         private static class NonSpaPath
         {
-            public static readonly string Api = "/api";
+            public const string Api = "/api";
         }
 
         private static string[] GetNonSpaPaths()
