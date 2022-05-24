@@ -13,9 +13,9 @@ namespace Api.Controllers;
 [Authorize]
 public class UsersController : BaseApiController
 {
-    private readonly GenericRepository<UserEntity> _userRepository;
+    private readonly IGenericRepository<UserEntity> _userRepository;
     public UsersController(
-        GenericRepository<UserEntity> userRepository)
+        IGenericRepository<UserEntity> userRepository)
     {
         _userRepository = userRepository;
     }

@@ -29,7 +29,7 @@ namespace Api.Controllers
             var userEntity = await authenticationService.AuthenticateUser(token, loginType);
             if (userEntity is null)
             {
-                return BadRequest();
+                return BadRequest("Invalid Token!");
             }
             return Ok(authenticationService.GenerateToken(userEntity));
         }

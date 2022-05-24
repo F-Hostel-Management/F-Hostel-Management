@@ -25,6 +25,7 @@ var configuration = builder.Configuration;
             options.SuppressAsyncSuffixInActionNames = false;
         }
     );
+    services.AddJwtService();
     services.AddAuthorization(options =>
     {
         options.AddPolicy(PolicyName.ONWER_AND_MANAGER,
