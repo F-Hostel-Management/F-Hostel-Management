@@ -65,6 +65,11 @@ public static class DatabaseInitializer
         {
             await dbContext.FeedRooms();
         }
+
+        if (dbContext.Users.Any() && dbContext.Rooms.Any())
+        {
+            await dbContext.FeedTenantsToRoom();
+        }
     }
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
     {
@@ -157,6 +162,17 @@ public static class DatabaseInitializer
                     RoomType = _roomTypes[rand.Next(_roomTypes.Length)],
                     Hostel = _hostels[rand.Next(_hostels.Length)]
                 });
+        }
+        await dbContext.SaveChangesAsync();
+    }
+
+    public static async Task FeedTenantsToRoom(this ApplicationDbContext dbContext)
+    {
+        var _room = dbContext.Rooms.ToArray();
+        var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
+        foreach(var tenant in tenants)
+        {
+            tenant.Room = _room[rand.Next(_room.Length)];
         }
         await dbContext.SaveChangesAsync();
     }
