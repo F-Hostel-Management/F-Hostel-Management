@@ -9,6 +9,7 @@ using Domain.Entities.Room;
 using Domain.Entities.Ticket;
 using Domain.Enums;
 using Domain.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
@@ -17,7 +18,9 @@ public class UserEntity : BaseEntity
 {
     public string Name { get; set; }
     public string Email { get; set; }
+    [Required]
     public string Phone { get; set; }
+    [Required]
     public string Password { get; set; }
     [Column("Role")]
     public string RoleString
@@ -29,6 +32,22 @@ public class UserEntity : BaseEntity
     [NotMapped]
     public Role Role { get; set; }
 
+    public DateTime DateOfBirth { get; set; }
+
+    [Column("Gender")]
+    public string GenderString
+    {
+        get { return Gender.ToString(); }
+        private set { Gender = value.ParseEnum<Gender>(); }
+    }
+
+    [NotMapped]
+    public Gender Gender { get; set; }
+
+    public string TaxCode { get; set; }
+    public string OrganizationCode { get; set; }
+    public string Avatar { get; set; }
+
     /*navigation props*/
 
     // 1 owner - M hostels
@@ -38,7 +57,7 @@ public class UserEntity : BaseEntity
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
 
     // M tenants - 1 room
-    public Guid RoomId { get; set; }
+    public Guid? RoomId { get; set; }
     public RoomEntity Room { get; set; }
 
     // 1 tenannt - M invoices
