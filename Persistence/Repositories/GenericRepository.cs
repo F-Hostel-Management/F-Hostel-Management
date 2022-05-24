@@ -46,17 +46,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return await dbSet.ToListAsync();
     }
 
-    public IList<T> Where(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
+    public virtual async Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
     {
         List<T> list;
         var query = dbSet.AsQueryable();
         foreach (string navigationProperty in navigationProperties)
             query = query.Include(navigationProperty);//got to reaffect it.
-        list = query.Where(predicate).ToList<T>();
+
+        list = await query.Where(predicate).ToListAsync<T>();
         return list;
     }
 
-    public async Task UpdateAsync(T updated)
+    public virtual async Task UpdateAsync(T updated)
     {
         //_context.Entry(existing).CurrentValues.SetValues(updated);
         _context.Entry(updated).State = EntityState.Modified;
