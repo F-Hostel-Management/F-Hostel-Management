@@ -9,8 +9,8 @@ namespace Application.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private IGenericRepository<UserEntity> _userRepository;
-        private ITokenService _tokenService;
+        private readonly IGenericRepository<UserEntity> _userRepository;
+        private readonly ITokenService _tokenService;
 
         public AuthenticationService(IGenericRepository<UserEntity> userRepository, ITokenService tokenService)
         {
@@ -35,9 +35,13 @@ namespace Application.Services
             return _tokenService.GetToken(user);
         }
 
-        public Task<UserEntity> SignUpNewUser(string email, Role role)
+        public async Task<UserEntity> SignUpNewUser(string email, Role role)
         {
-            throw new NotImplementedException();
+            UserEntity userEntity = new UserEntity();
+            userEntity.Email = email;
+            userEntity.Role = role;
+            await _userRepository.CreateAsync(userEntity);
+            return userEntity;
         }
     }
 }

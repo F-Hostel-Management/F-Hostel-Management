@@ -1,6 +1,8 @@
 ﻿using Api.Services;
 using Application.Interfaces;
+using Application.Interfaces.IRepository;
 using Application.Services;
+using Persistence.Repositories;
 
 namespace Api.Configurations
 {

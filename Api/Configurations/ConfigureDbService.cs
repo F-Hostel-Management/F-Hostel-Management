@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Infrastructure.Contexts;
 using Persistence.Repositories;
 using Api.App.Configurations;
+using Application.Interfaces.IRepository;
 
 namespace Api.Configurations;
 
@@ -28,7 +29,7 @@ public static class ConfigureDbService
 
     public static void AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped(typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
     }
 
     public static async Task ApplyMigrations(this IServiceProvider serviceProvider)
