@@ -10,8 +10,8 @@ namespace Application.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<bool> AuthenticateUser(string firebaseToken, Role loginType);
+        Task<UserEntity> AuthenticateUser(string firebaseToken, Role loginType);
         Task<UserEntity> SignUpNewUser(string email, Role role);
-        Task<string> GenerateToken(UserEntity user);
+        string GenerateToken(UserEntity user);
     }
 }

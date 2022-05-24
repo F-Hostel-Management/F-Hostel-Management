@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Api.Services;
+using Application.Interfaces;
 using Application.Services;
 
 namespace Api.Configurations
@@ -8,6 +9,7 @@ namespace Api.Configurations
         public static void AddAppServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<ITokenService, JwtBuilderService>();
         }
     }
 }

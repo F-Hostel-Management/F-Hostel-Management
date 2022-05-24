@@ -26,13 +26,12 @@ namespace Api.Controllers
         [HttpPost("Authenticate")]
         public async Task<IActionResult> Authenticate(string token, Role loginType)
         {
-            var authenticated = await authenticationService.AuthenticateUser(token, loginType);
-         
-            if (currentUser == null)
+            var userEntity = await authenticationService.AuthenticateUser(token, loginType);
+            if (userEntity is null)
             {
-
+                return BadRequest();
             }
-            return Ok(email);
+            return Ok(authenticationService.GenerateToken(userEntity));
         }
     }
 }

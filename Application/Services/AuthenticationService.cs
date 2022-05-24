@@ -10,28 +10,29 @@ namespace Application.Services
     public class AuthenticationService : IAuthenticationService
     {
         private IGenericRepository<UserEntity> _userRepository;
+        private ITokenService _tokenService;
 
-        public AuthenticationService(IGenericRepository<UserEntity> userRepository)
+        public AuthenticationService(IGenericRepository<UserEntity> userRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
-        public async Task<bool> AuthenticateUser(string token, Role loginType)
+        public async Task<UserEntity> AuthenticateUser(string token, Role loginType)
         {
             FirebaseToken firebaseToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
             var email = firebaseToken.Claims.GetValueOrDefault("email");
-            var currentUser = _userRepository.WhereAsync(a => a.Email.Equals(email));
-            UserEntity userEntity = null;
-            if (currentUser == null)
+            UserEntity userEntity = await _userRepository.FirstOrDefaultAsync(a => a.Email.Equals(email));
+            if (userEntity is null)
             {
                  userEntity = await SignUpNewUser(email.ToString(), loginType);
             }
-            return true;
+            return userEntity;
         }
 
-        public Task<string> GenerateToken(UserEntity user)
+        public string GenerateToken(UserEntity user)
         {
-            throw new NotImplementedException();
+            return _tokenService.GetToken(user);
         }
 
         public Task<UserEntity> SignUpNewUser(string email, Role role)
