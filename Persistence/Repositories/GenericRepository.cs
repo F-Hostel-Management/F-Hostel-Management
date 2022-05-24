@@ -63,4 +63,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context.Entry(updated).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
+
+    public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+    {
+        return dbSet.AsQueryable().AsNoTracking().FirstOrDefaultAsync(predicate);
+    }
 }
