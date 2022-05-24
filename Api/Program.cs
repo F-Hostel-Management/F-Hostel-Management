@@ -18,6 +18,7 @@ var configuration = builder.Configuration;
     services.AddRepositories();
     services.AddScoped<JwtBuilderService>();
     services.AddJwtService();
+    services.AddFirebase();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddControllers(
         options =>

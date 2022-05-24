@@ -13,20 +13,16 @@ namespace Api.Configurations
                 .AddJwtBearer(options =>
                     {
                         var appSettings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
-                        var jwtSetting = appSettings.Value.JwtSetting;
-                        options.RequireHttpsMetadata = false;
-                        options.SaveToken = true;
-                        options.TokenValidationParameters = new TokenValidationParameters()
+                        var firebase = appSettings.Value.Firebase;
+                        options.Authority = appSettings.Value.Firebase.ValidIssuer;
+                        options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            ValidateIssuerSigningKey = jwtSetting.ValidateIssuerSigningKey,
-                            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSetting.IssuerSigningKey)),
-                            ValidateIssuer = jwtSetting.ValidateIssuer,
-                            ValidIssuer = jwtSetting.ValidIssuer,
-                            ValidateAudience = jwtSetting.ValidateAudience,
-                            ValidAudience = jwtSetting.ValidAudience,
-                            RequireExpirationTime = jwtSetting.RequireExpirationTime,
-                            ValidateLifetime = jwtSetting.RequireExpirationTime,
-                            ClockSkew = TimeSpan.FromDays(1),
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = firebase.ValidIssuer,
+                            ValidAudience = firebase.ValidAudience
                         };
                     });
             return services;
