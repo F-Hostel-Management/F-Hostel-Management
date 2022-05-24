@@ -85,11 +85,11 @@ public class UsersController : BaseApiController
         return Ok(response);
     }
 
-    [HttpGet("demo-get-tenant")]
-    public IActionResult GetTenants()
-    {
-        var test = _userRepository.Where(e => e.Role == Role.Tenant);
-        return Ok(test);
-    }
+    //[HttpGet("demo-get-tenant")]
+    //public IActionResult GetTenants()
+    //{
+    //    var test = _userRepository.Where(e => e.Role == Role.Tenant);
+    //    return Ok(test);
+    //}
 
 }
