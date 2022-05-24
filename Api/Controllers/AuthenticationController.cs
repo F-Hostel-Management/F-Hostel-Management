@@ -23,7 +23,7 @@ namespace Api.Controllers
         }
 
 
-        [HttpPost("Authenticate")]
+        [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(string token, Role loginType)
         {
             var userEntity = await authenticationService.AuthenticateUser(token, loginType);
@@ -33,5 +33,6 @@ namespace Api.Controllers
             }
             return Ok(authenticationService.GenerateToken(userEntity));
         }
+
     }
 }

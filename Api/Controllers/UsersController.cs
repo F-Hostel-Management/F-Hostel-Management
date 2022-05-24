@@ -21,9 +21,12 @@ public class UsersController : BaseApiController
     }
     
     [HttpGet("get-info")]
-    public IActionResult GetInfo()
+    public async Task<IActionResult> GetInfo()
     {
-        return Ok(HttpContext.User.Claims.Select(e => e.Value).ToList());
+        var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(GetUserID()));
+        GetInfoResponse infoResponse = new GetInfoResponse();
+        Mapper.Map(user, infoResponse);
+        return Ok(infoResponse);
     }
 
     [HttpPatch("update-info")]

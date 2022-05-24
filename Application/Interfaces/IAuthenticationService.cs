@@ -11,7 +11,7 @@ namespace Application.Interfaces
     public interface IAuthenticationService
     {
         Task<UserEntity> AuthenticateUser(string firebaseToken, Role loginType);
-        Task<UserEntity> SignUpNewUser(string email, Role role);
+        Task<UserEntity> SignUpNewUser(string email, string name, Role role);
         string GenerateToken(UserEntity user);
     }
 }

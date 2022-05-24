@@ -11,6 +11,13 @@ public abstract class BaseApiController : ControllerBase
     protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
 
 
-    //private Guid _userID;
-    //protected Guid UserID => _userID ??= HttpContext.User.Claims.FirstOrDefault(a => a.Type == "id")?.Value;
+    protected Guid GetUserID()
+    {
+        var userID = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "id");
+        if (userID is null)
+        {
+            return Guid.Empty;
+        }
+        return new Guid(userID.Value);
+    }
 }

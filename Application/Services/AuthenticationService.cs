@@ -22,10 +22,11 @@ namespace Application.Services
         {
             FirebaseToken firebaseToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
             var email = firebaseToken.Claims.GetValueOrDefault("email");
+            var name = firebaseToken.Claims.GetValueOrDefault("name");
             UserEntity userEntity = await _userRepository.FirstOrDefaultAsync(a => a.Email.Equals(email));
             if (userEntity is null)
             {
-                 userEntity = await SignUpNewUser(email.ToString(), loginType);
+                 userEntity = await SignUpNewUser(email.ToString(), name.ToString(), loginType);
             }
             return userEntity;
         }
@@ -35,11 +36,12 @@ namespace Application.Services
             return _tokenService.GetToken(user);
         }
 
-        public async Task<UserEntity> SignUpNewUser(string email, Role role)
+        public async Task<UserEntity> SignUpNewUser(string email, string name, Role role)
         {
             UserEntity userEntity = new UserEntity();
             userEntity.Email = email;
             userEntity.Role = role;
+            userEntity.Name = name;
             await _userRepository.CreateAsync(userEntity);
             return userEntity;
         }
