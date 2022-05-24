@@ -68,7 +68,7 @@ public class UsersController : BaseApiController
         
         var updated = Mapper.Map(userDto, existing);
 
-        await _userRepository.UpdateAsync(updated, existing);
+        await _userRepository.UpdateAsync(updated);
         var response = Mapper.Map<GetByIdResponse>(updated);
         return Ok(response);
     }
@@ -88,7 +88,7 @@ public class UsersController : BaseApiController
     [HttpGet("demo-get-tenant")]
     public async Task<IActionResult> GetTenantsAsync()
     {
-        var test = await _userRepository.WhereAsync(e => e.Role == Role.Tenant);
+        var test = await _userRepository.WhereAsync(e => e.RoleString == Role.Tenant.ToString());
         return Ok(test);
     }
 
