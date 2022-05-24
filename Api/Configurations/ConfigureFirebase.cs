@@ -1,5 +1,7 @@
-﻿using FirebaseAdmin;
+﻿using Api.App.Configurations;
+using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.Options;
 
 namespace Api.Configurations
 {
@@ -7,10 +9,11 @@ namespace Api.Configurations
     {
         public static void AddFirebase(this IServiceCollection services)
         {
+            var appSettings = services.BuildServiceProvider().GetService<IOptions<AppSettings>>();
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile(@"D:\Projects\F-Hostel-Management\Api\f-hostel-5dac2-firebase-adminsdk-v6isl-a9a2705925.json")
-            }); ;
+                Credential = GoogleCredential.FromFile(appSettings.Value.FirebaseConfigPath)
+            });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Api.Configurations.App;
+﻿
 
 
 namespace Api.App.Configurations
@@ -7,7 +7,7 @@ namespace Api.App.Configurations
     {
         public DbConfig ConnectionStrings { get; set; }
         public JwtSetting JwtSetting { get; set; }
-        public FirebaseSetting Firebase { get; set; }
         public string SpaDevServer { get; set; }
+        public string FirebaseConfigPath { get; set; }
     }
 }
