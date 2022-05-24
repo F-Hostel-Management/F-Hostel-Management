@@ -25,7 +25,7 @@ public class RoomEntity : BaseEntity
     public double Area { get; set; }
     public double Length { get; set; }
     public double Width { get; set; }
-    public int Height { get; set; }
+    public double Height { get; set; }
     /*navigation props*/
 
     // 1 type - M rooms

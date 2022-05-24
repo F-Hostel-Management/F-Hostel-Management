@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     // r
     Task<List<T>> ListAsync();
     Task<T> FindByIdAsync(Guid id);
+    Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties);
     // u
     Task UpdateAsync(T updated, T existing);
     // d

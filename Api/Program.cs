@@ -67,6 +67,7 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseDeveloperExceptionPage();
+        await app.Services.DbInitializer();
         await app.Services.ApplyMigrations();
     }
     app.UseRouting();

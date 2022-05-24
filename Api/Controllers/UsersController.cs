@@ -86,9 +86,9 @@ public class UsersController : BaseApiController
     }
 
     [HttpGet("demo-get-tenant")]
-    public IActionResult GetTenants()
+    public async Task<IActionResult> GetTenantsAsync()
     {
-        var test = _userRepository.Where(e => e.Role == Role.Tenant);
+        var test = await _userRepository.WhereAsync(e => e.Role == Role.Tenant);
         return Ok(test);
     }
 
