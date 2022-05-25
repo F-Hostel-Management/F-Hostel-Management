@@ -14,7 +14,9 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<T> FindByIdAsync(Guid id);
 
     Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties);
+    // u
     Task UpdateAsync(T updated);
+    //d
     Task<T> DeleteAsync(Guid id);
     Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
 }

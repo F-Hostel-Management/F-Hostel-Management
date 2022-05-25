@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Infrastructure.Contexts;
@@ -29,6 +28,13 @@ public static class ConfigureDbService
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+    }
+    public static async Task DbInitializer(this IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        await using ApplicationDbContext dbContext =
+            scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await DatabaseInitializer.InitializeAsync(dbContext);
     }
 
     public static async Task ApplyMigrations(this IServiceProvider serviceProvider)

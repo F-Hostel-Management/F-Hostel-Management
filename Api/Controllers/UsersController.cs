@@ -1,12 +1,10 @@
 ﻿using Api.UserFeatures.Requests;
 using Api.UserFeatures.Responses;
 using Application.Interfaces.IRepository;
-using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Persistence.Repositories;
 
 namespace Api.Controllers;
 
@@ -34,6 +32,13 @@ public class UsersController : BaseApiController
     {
 
         return Ok();
+    }
+
+    [HttpGet("demo-get-tenant")]
+    public async Task<IActionResult> GetTenantsAsync()
+    {
+        var test = await _userRepository.WhereAsync(e => e.RoleString == Role.Tenant.ToString());
+        return Ok(test);
     }
 
 }
