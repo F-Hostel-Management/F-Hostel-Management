@@ -1,24 +1,21 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Infrastructure.Configurations;
 using System.Reflection;
 using Api.Services;
-using Infrastructure.Extensions;
 using Microsoft.OpenApi.Models;
 using Domain.Constants;
 using System.Security.Claims;
 using Domain.Enums;
+using Api.App.Configurations;
+using Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
 //Add service to DI container
 {
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
     services.AddDbService();
+    services.AddRepositories();
     services.AddScoped<JwtBuilderService>();
     services.AddJwtService();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -72,9 +69,14 @@ var app = builder.Build();
         app.UseDeveloperExceptionPage();
         await app.Services.ApplyMigrations();
     }
+    app.UseRouting();
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();
+    app.AddControllerMapper();
+
+    var ENV_PORT = Environment.GetEnvironmentVariable("PORT");
+    if (ENV_PORT is not null) app.Urls.Add($"http://0.0.0.0:{ENV_PORT}");
+
     app.Run();
 }
 
