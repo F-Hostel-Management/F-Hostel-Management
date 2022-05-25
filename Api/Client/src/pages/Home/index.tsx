@@ -1,14 +1,25 @@
-import * as React from 'react';
+import * as React from 'react'
 
-interface IHomeProps {
-}
+import HostelCard from '../../components/Card/HostelCard'
+import RoomCard from '../../components/Card/RoomCard'
+import { Grid } from '@mui/material'
+
+interface IHomeProps {}
 
 const Home: React.FunctionComponent<IHomeProps> = (props) => {
-  return (
-      <div>
-          <h1>Home Page</h1>
-      </div>
-  );
-};
+    return (
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'center',
+            }}
+        >
+            <HostelCard />
+            <RoomCard />
+        </div>
+    )
+}
 
-export default Home;
+export default Home

@@ -62,6 +62,33 @@ const Demo: FC<IDemoProps> = (props) => {
     }, [page, pageSize])
 
     return (
+        <React.Fragment>
+            <Grid container direction="row" spacing={3}>
+                <Grid item xs={12} md={6} lg={3}>
+                    <StatisticCard />
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <StatisticCard />
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <StatisticCard />
+                </Grid>
+                <Grid item xs={12} md={6} lg={3}>
+                    <StatisticCard />
+                </Grid>
+            </Grid>
+            <DataGridCustom
+                loading={loading}
+                rows={rows}
+                columns={columns}
+                page={page}
+                setPage={setPage}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                rowsCount={9}
+            />
+        </React.Fragment>
+
         // <DataGridCustom
         //     loading={loading}
         //     rows={rows}
@@ -72,24 +99,24 @@ const Demo: FC<IDemoProps> = (props) => {
         //     setPageSize={setPageSize}
         //     rowsCount={9}
         // />
-        <React.Fragment>
-            <Grid container direction="row" spacing={3}>
-                <Grid item xs={3}>
-                    <StatisticCard />
-                </Grid>
-                <Grid item xs={3}>
-                    <StatisticCard />
-                </Grid>
-                <Grid item xs={3}>
-                    <StatisticCard />
-                </Grid>
-                <Grid item xs={3}>
-                    <StatisticCard />
-                </Grid>
-            </Grid>
-            <HostelCard />
-            <RoomCard />
-        </React.Fragment>
+        // <React.Fragment>
+        //     <Grid container direction="row" spacing={3}>
+        //         <Grid item xs={12} md={6} lg={3}>
+        //             <StatisticCard />
+        //         </Grid>
+        //         <Grid item xs={12} md={6} lg={3}>
+        //             <StatisticCard />
+        //         </Grid>
+        //         <Grid item xs={12} md={6} lg={3}>
+        //             <StatisticCard />
+        //         </Grid>
+        //         <Grid item xs={12} md={6} lg={3}>
+        //             <StatisticCard />
+        //         </Grid>
+        //     </Grid>
+        //     <HostelCard />
+        //     <RoomCard />
+        // </React.Fragment>
     )
 }
 
