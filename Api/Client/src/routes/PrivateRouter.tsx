@@ -6,7 +6,7 @@ interface IPrivateRouteProps {
 }
 
 const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = () => {
-    let isAuthenticated = true
+    let isAuthenticated = false
     return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
 }
 

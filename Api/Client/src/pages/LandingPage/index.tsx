@@ -1,25 +1,200 @@
+
+import { Button, Card, CardActionArea, CardContent, CardMedia, Grid, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 
-import { Button, Typography } from '@mui/material'
+import HeaderLandingPage from '../../components/Header/HeaderLandingPage'
+import * as Styled from './styles'
+import sample from '../../assets/images/sample.png'
+import serviceIcon1 from '../../assets/images/service_1.png'
+import { Link, NavLink } from 'react-router-dom'
+import './style.css'
+import { width } from '@mui/system'
 
-interface ILandingPageProps {}
+interface ILandingPageProps { }
+
+const services = [
+    { icon: serviceIcon1, title: 'Facility', description: 'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.' },
+    { icon: serviceIcon1, title: 'Facility', description: 'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.' },
+    { icon: serviceIcon1, title: 'Facility', description: 'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.' },
+    { icon: serviceIcon1, title: 'Facility', description: 'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.' },
+    { icon: serviceIcon1, title: 'Facility', description: 'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.' },
+]
 
 const LandingPage: React.FunctionComponent<ILandingPageProps> = (props) => {
     return (
-        <div>
-            <Typography variant="h1">Heading 1</Typography>
-            <Typography variant="h2">Heading 2</Typography>
-            <Typography variant="h3">Heading 3</Typography>
-            <Typography variant="h4">Heading 4</Typography>
-            <Typography variant="subtitle1">Subtitle 1</Typography>
-            <Typography variant="subtitle2">Subtitle 2</Typography>
-            <Typography variant="body1">body1</Typography>
-            <Typography variant="body2">body2</Typography>
-            <Typography variant="caption">caption</Typography>
-            <Button variant="contained" color="primary">
-                Button
-            </Button>
-        </div>
+        <React.Fragment>
+            <Styled.Main>
+                <HeaderLandingPage />
+                <Styled.ContentMain>
+                    <Typography variant='h3' sx={{
+                        mb: 2,
+                        fontWeight: 600,
+                        color: 'grey.800',
+                        textDecoration: 'none',
+                    }}>Hostel Management System</Typography>
+                    <Typography variant='body2' sx={{
+                        mb: 3,
+                        color: 'grey.600',
+                    }}>A completely new way to manage your hostel</Typography>
+                    <div>
+                        <Link to="/register" className='link'>
+                            <Button variant="outlined" size="large" sx={{
+                                mx: 1,
+                                px: 6,
+                            }}>Sign Up</Button>
+                        </Link>
+                        <Link to="/login" className='link'>
+                            <Button variant="contained" size="large" href='/login' sx={{
+                                mx: 1,
+                                px: 6,
+                            }}>Login</Button>
+                        </Link>
+
+                    </div>
+                </Styled.ContentMain>
+            </Styled.Main>
+
+            <Styled.About id='About'>
+                <Styled.ContentAbout>
+                    <Typography variant='h3' sx={{
+                        mb: 2,
+                        fontWeight: 600,
+                        color: 'grey.800',
+                        textDecoration: 'none',
+                    }}>Hostel Management System</Typography>
+                    <Typography variant='body2' sx={{
+                        mb: 3,
+                        color: 'grey.600',
+                    }}>A completely new way to manage your hostel</Typography>
+                    <div>
+                        <Link to="/register" className='link'>
+                            <Button variant="outlined" size="large" sx={{
+                                mx: 1,
+                                px: 6,
+                            }}>Sign Up</Button>
+                        </Link>
+
+                        <Link to="/login" className='link'>
+                            <Button variant="contained" size="large" href='/login' sx={{
+                                mx: 1,
+                                px: 6,
+                            }}>Login</Button>
+                        </Link>
+                    </div>
+                    <Styled.ImageAbout>
+                        <img src={sample} width='100%' height='auto' />
+                    </Styled.ImageAbout>
+                </Styled.ContentAbout>
+
+            </Styled.About>
+
+            <Styled.Services id='Services'>
+                <Styled.CardServices>
+                    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                        {services.map((service) => (
+                            <Grid item xs={12} sm={4} md={4}>
+
+                                <Card>
+                                    <CardActionArea>
+                                        <CardContent>
+                                            <img src={service.icon} />
+                                            <Typography gutterBottom variant="h5" component="div">
+                                                {service.title}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {service.description}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Styled.CardServices>
+            </Styled.Services>
+
+            <Styled.Contact id='Contacts'>
+                <Styled.ContentContact>
+                    <Grid container>
+                        <Grid item xs={12} sm={4} paddingRight={5} >
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="a"
+                                href="/"
+                                sx={{
+                                    fontFamily: 'monospace',
+                                    fontWeight: 700,
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                F-HOSTEL
+                            </Typography>
+                            <div>
+                                <Typography variant="body2" color="#c5c5c5">
+                                    Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.
+                                    Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.
+                                </Typography>
+                            </div>
+
+                        </Grid>
+
+                        <Grid item xs={12} sm={4} paddingRight={5} >
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="a"
+                                href="/"
+                                sx={{
+                                    fontFamily: 'monospace',
+                                    fontWeight: 700,
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                F-HOSTEL
+                            </Typography>
+                            <div>
+                                <Typography variant="body2" color="#c5c5c5">
+                                    Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.
+                                    Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.
+                                </Typography>
+                            </div>
+
+                        </Grid>
+                        
+                        <Grid item xs={12} sm={4} paddingRight={5} >
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="a"
+                                sx={{
+                                    fontWeight: 600,
+                                    color: 'white',
+                                    textDecoration: 'none',
+                                    mb: 1
+                                }}
+                            >
+                                Contacts
+                            </Typography>
+                            <div>
+                                <Typography variant='body2' color="#c5c5c5" paddingBottom={1}>FPT University TP.HCM, D1 Street, Long Thanh My, Thu Duc City, Ho Chi Minh City</Typography>
+                                <Typography variant='body2' color="#c5c5c5" paddingBottom={1}>849 999 9999</Typography>
+                                <Typography variant='body2' color="#c5c5c5" paddingBottom={1}>f.hostel@gmail.com</Typography>
+                            </div>
+
+                        </Grid>
+                    </Grid>
+                    <Typography variant='body2' color="#c5c5c5" sx={{
+                        textAlign: 'center',
+                        mt: 7
+                    }}>© Copyright 2022 by Fhostel.team</Typography>
+                </Styled.ContentContact>
+            </Styled.Contact>
+        </React.Fragment>
+
     )
 }
 

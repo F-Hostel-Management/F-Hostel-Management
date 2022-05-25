@@ -9,7 +9,6 @@ interface PaletteColor {
 
 const theme = createTheme({
     typography: {
-        fontFamily: ["'Poppins'", 'sans-serif'].join(','),
         fontSize: 12,
         htmlFontSize: 10,
         h1: {
