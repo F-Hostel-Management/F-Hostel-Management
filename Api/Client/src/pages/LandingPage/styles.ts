@@ -45,12 +45,4 @@ export const CardServices = styled.div`
 export const Link = styled.link`
     text-decoration: none;
 `
-export const Contact = styled.div`
-    height: auto;
-    position: relative;
-    background-color: #344258;
-`
-export const ContentContact = styled.div`
-    padding: 5% 10% 2% 10%;
-`
 
