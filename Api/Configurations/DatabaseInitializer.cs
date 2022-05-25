@@ -86,7 +86,6 @@ public static class DatabaseInitializer
                     Name = mockUser.Name,
                     Email = mockUser.Email,
                     Phone = mockUser.Phone,
-                    Password = mockUser.Password,
                     Avatar = mockUser.Avatar,
                     DateOfBirth = mockUser.DateOfBirth,
                     OrganizationCode = mockUser.OrganizationCode,
