@@ -62,9 +62,9 @@ const privateRoutes: Array<{
         layout: DefaultLayout,
     },
     {
-        path: 'home/demo',
+        path: 'home/dashboard',
         component: Demo,
-        name: 'Demo',
+        name: 'Dashboard',
         layout:  DefaultLayout,
     },
 ]
