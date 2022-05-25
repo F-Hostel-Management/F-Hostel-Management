@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from '@mui/material'
 
 import App from './App'
-import GlobalStyles from './components/GlobalStyles'
-import theme from './theme/'
+import theme from './theme/CustomMUI'
+import GlobalStyles from './theme/GlobalStyles'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
