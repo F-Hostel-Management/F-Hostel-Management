@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities.Notification;
-[Table("Notification")]
+[Table("Notifications")]
 public class NotificationEntity : BaseEntity
 {
     public string NotificationCode { get; set; }

@@ -5,6 +5,7 @@ using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Notification;
 using Domain.Entities.Ticket;
+using Microsoft.OData.ModelBuilder;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities.Room;
-[Table("Room")]
+[Table("Rooms")]
 public class RoomEntity : BaseEntity
 {
     public string RoomName { get; set; }
@@ -40,7 +41,8 @@ public class RoomEntity : BaseEntity
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
     // 1 room - M tenants
-    public virtual ICollection<UserEntity> Tenants{ get; set; }
+    [Contained]
+    public virtual ICollection<UserEntity> Tenants { get; set; }
 
     // 1 Manager (create) M Invoices (for) 1 Room
     public virtual ICollection<InvoiceEntity> ManagerCreatedInvoices { get; set; }

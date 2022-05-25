@@ -9,13 +9,13 @@ using Domain.Entities.Room;
 using Domain.Entities.Ticket;
 using Domain.Enums;
 using Domain.Extensions;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
 public class UserEntity : BaseEntity
 {
+
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
