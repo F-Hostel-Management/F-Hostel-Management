@@ -1,8 +1,10 @@
-﻿namespace Api.UserFeatures.Requests
+﻿using Domain.Enums;
+
+namespace Api.UserFeatures.Requests
 {
     public class LoginRequest
     {
-        public string PhoneNumber { get; set; }
-        public string Password { get; set; }
+        public string FirebaseToken { get; set; }
+        public Role Role; 
     }
 }

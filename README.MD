@@ -1,0 +1,1 @@
+dotnet ef database update --context ApplicationDbContext -p ./Persistence/Infrastructure.csproj -s ./Api/Api.csproj

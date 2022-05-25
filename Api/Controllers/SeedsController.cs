@@ -76,7 +76,7 @@ public class SeedsController : BaseApiController
                     Name = mockUser.Name,
                     Email = mockUser.Email,
                     Phone = mockUser.Phone,
-                    Password = mockUser.Password,
+                    //Password = mockUser.Password,
                     Avatar = mockUser.Avatar,
                     DateOfBirth = mockUser.DateOfBirth,
                     OrganizationCode = mockUser.OrganizationCode,
