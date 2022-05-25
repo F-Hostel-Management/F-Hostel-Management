@@ -1,88 +1,37 @@
 ﻿using Api.UserFeatures.Requests;
 using Api.UserFeatures.Responses;
 using Application.Interfaces.IRepository;
-using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Persistence.Repositories;
 
 namespace Api.Controllers;
+
+[Authorize]
 public class UsersController : BaseApiController
 {
-    private readonly GenericRepository<UserEntity> _userRepository;
+    private readonly IGenericRepository<UserEntity> _userRepository;
     public UsersController(
-        GenericRepository<UserEntity> userRepository)
+        IGenericRepository<UserEntity> userRepository)
     {
         _userRepository = userRepository;
     }
-
-    [HttpGet("get-all-users")]
-    public async Task<IActionResult> GetAllUsers()
+    
+    [HttpGet("get-info")]
+    public async Task<IActionResult> GetInfo()
     {
-        var users = await _userRepository.ListAsync();
-        return Ok(users);
+        var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(GetUserID()));
+        GetInfoResponse infoResponse = new GetInfoResponse();
+        Mapper.Map(user, infoResponse);
+        return Ok(infoResponse);
     }
 
-    [HttpGet("find-by-id/{Id}")]
-    public async Task<IActionResult> GetUserById([FromRoute] GetByIdRequest request)
+    [HttpPatch("update-info")]
+    public async Task<IActionResult> UpdateInfo(UpdateUserRequest updateUserRequest)
     {
-        var user = await _userRepository.FindByIdAsync(request.Id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-        var response = Mapper.Map<GetByIdResponse>(user);
-        return Ok(response);
-    }
 
-    [HttpPost("create-user")]
-    public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request)
-    {
-        var newUser = new UserEntity
-        {
-            Id = Guid.NewGuid(),
-            Name = request.Name,
-            Email = request.Email,
-            Phone = request.Phone,
-            // tmp
-            Password = request.Password,
-            Role = request.Role,
-        };
-        await _userRepository.CreateAsync(newUser);
-        var response = Mapper.Map<GetByIdResponse>(newUser);
-        return CreatedAtAction(nameof(CreateUser), new { Id = newUser.Id }, response);
-    }
-
-    [HttpPatch("update-user/{Id}")]
-    public async Task<IActionResult> UpdateUserAsync(
-        [FromRoute] GetByIdRequest requestId,
-        [FromBody] UpdateUserRequest userDto
-        )
-    {
-        var existing = await _userRepository.FindByIdAsync(requestId.Id);
-        if (existing == null)
-        {
-            return NotFound();
-        }
-        
-        var updated = Mapper.Map(userDto, existing);
-
-        await _userRepository.UpdateAsync(updated);
-        var response = Mapper.Map<GetByIdResponse>(updated);
-        return Ok(response);
-    }
-
-    [HttpDelete("delete-user/{Id}")]
-    public async Task<IActionResult> DeleteUser([FromRoute] GetByIdRequest request)
-    {
-        var delUser = await _userRepository.DeleteAsync(request.Id);
-        if (delUser == null)
-        {
-            return NotFound();
-        }
-        var response = Mapper.Map<GetByIdResponse>(delUser);
-        return Ok(response);
+        return Ok();
     }
 
     [HttpGet("demo-get-tenant")]
