@@ -1,15 +1,15 @@
 import * as React from 'react'
 
 import CardWithImage from '../../../../components/Card/CardWithImage'
-import {
-    Typography,
-    Button,
-    Chip,
-} from '@mui/material'
+import { Typography, Button, Chip } from '@mui/material'
 
-interface IRoomCardProps {}
+interface IRoomCardProps {
+    status?: boolean
+}
 
-const RoomCard: React.FunctionComponent<IRoomCardProps> = (props) => {
+const RoomCard: React.FunctionComponent<IRoomCardProps> = ({
+    status = false,
+}) => {
     return (
         <CardWithImage
             image={{
@@ -43,6 +43,17 @@ const RoomCard: React.FunctionComponent<IRoomCardProps> = (props) => {
                         </span>
                         R715, floor 7
                     </Typography>
+                    <Typography variant="body2" mb={1}>
+                        <span
+                            style={{
+                                width: '80px',
+                                display: 'inline-block',
+                            }}
+                        >
+                            Time:
+                        </span>
+                        03/07/2021 - 03/07/2022
+                    </Typography>
                     <Typography
                         variant="body2"
                         sx={{ display: 'flex', alignItems: 'center' }}
@@ -56,16 +67,16 @@ const RoomCard: React.FunctionComponent<IRoomCardProps> = (props) => {
                             Status:{' '}
                         </span>
                         <Chip
-                            label="Renting"
-                            color="success"
-                            variant="outlined"
+                            label={status ? 'Renting' : 'Finished'}
+                            color={status ? 'success' : 'gray'}
+                            sx={{ minWidth: '80px' }}
                         />
                     </Typography>
                 </React.Fragment>
             }
             actions={
                 <React.Fragment>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" disabled={!status}>
                         Details
                     </Button>
                 </React.Fragment>
