@@ -1,6 +1,5 @@
 import React, { Fragment, ElementType } from 'react'
 
-import DefaultHomeLayout from '../components/Layout/DefaultHomeLayout'
 import DefaultLayout from '../components/Layout/DefaultLayout'
 
 import About from '../pages/About'
@@ -44,15 +43,15 @@ const publicRoutes: Array<{
 
 const privateRoutes: Array<{
     path: string
-    component: React.ElementType
+    component: ElementType
     name: string
-    layout: React.ElementType
+    layout: ElementType
 }> = [
     {
         path: '/home',
         component: Home,
         name: 'Home',
-        layout: DefaultHomeLayout,
+        layout: Fragment,
     },
     {
         path: 'home/profile',
