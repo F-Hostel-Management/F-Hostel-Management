@@ -10,6 +10,6 @@ namespace Api.UserFeatures.Responses
         public string Email { get; set; }
         public string Phone { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public Role Role { get; set; }
+        public string RoleString { get; set; }
     }
 }

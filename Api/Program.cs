@@ -6,6 +6,8 @@ using System.Security.Claims;
 using Domain.Enums;
 using Api.App.Configurations;
 using Api.Configurations;
+using Microsoft.AspNetCore.OData;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -19,12 +21,11 @@ var configuration = builder.Configuration;
     services.AddFirebase();
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
-    services.AddControllers(
-        options =>
-        {
-            options.SuppressAsyncSuffixInActionNames = false;
-        }
-    );
+    services.AddOData();
+
+
+
+
     services.AddJwtService();
     services.AddAuthorization(options =>
     {
@@ -44,19 +45,19 @@ var configuration = builder.Configuration;
             Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
         });
         option.AddSecurityRequirement(new OpenApiSecurityRequirement
- {
-     {
-           new OpenApiSecurityScheme
-             {
-                 Reference = new OpenApiReference
-                 {
-                     Type = ReferenceType.SecurityScheme,
-                     Id = "Bearer"
-                 }
-             },
-             new string[] {}
-     }
- });
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+            },
+            new string[] {}
+            }
+        });
     });
 }
 

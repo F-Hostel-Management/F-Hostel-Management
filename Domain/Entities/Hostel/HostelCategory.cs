@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities;
-[Table("HostelCategory")]
+[Table("HostelCategories")]
 public class HostelCategory : BaseEntity, Category
 {
     public string CategoryName { get; set; }

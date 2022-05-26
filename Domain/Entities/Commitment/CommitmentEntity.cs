@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities.Commitment;
-[Table("Commitment")]
+[Table("Commitments")]
 public class CommitmentEntity : BaseEntity
 {
     public string CommitmentCode { get; set; }
