@@ -1,5 +1,6 @@
-﻿using Domain.Entities;
-using Infrastructure.Configurations;
+﻿using Api.App.Configurations;
+using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace Api.Services
 {
-    public class JwtBuilderService
+    public class JwtBuilderService : ITokenService
     {
         private IOptions<AppSettings> _appSettings;
 
@@ -17,14 +18,13 @@ namespace Api.Services
             this._appSettings = appSettings;
         }
 
-        //testing purpose
-        public string GenerateJSONWebToken(UserEntity user)
+        public string GetToken(UserEntity user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Value.JwtSetting.IssuerSigningKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[] {
                 new Claim("id", user.Id.ToString()),
-                new Claim("role", user.Role.ToString())
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var token = new JwtSecurityToken(_appSettings.Value.JwtSetting.ValidIssuer,
              _appSettings.Value.JwtSetting.ValidAudience,
