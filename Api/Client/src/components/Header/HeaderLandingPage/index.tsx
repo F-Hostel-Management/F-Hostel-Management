@@ -1,37 +1,30 @@
 import { AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import * as React from 'react';
-import './styles.css'
+import './styles.css';
+import { Link } from 'react-scroll';
+import logo from '../../../assets/images/logo.png';
+import { padding } from '@mui/system';
 
 interface IHeaderLandingPageProps {
 }
 
-const pages = ['About', 'Services', 'Contacts'];
-let ref = '#';
-
 const HeaderLandingPage: React.FunctionComponent<IHeaderLandingPageProps> = (props) => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [click, setClick] = React.useState<boolean>(false);
   const [navbar, setNavbar] = React.useState(false);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleClick = () => {
+    setClick(!click);
   };
 
   const changeBackgroundNav = () => {
-    console.log(window.scrollY);
     if (window.scrollY > 80) {
       setNavbar(true);
     } else {
       setNavbar(false);
     }
   }
-
-
-
   window.addEventListener('scroll', changeBackgroundNav);
 
   return (
@@ -52,50 +45,59 @@ const HeaderLandingPage: React.FunctionComponent<IHeaderLandingPageProps> = (pro
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              color: 'inherit',
+              color: 'grey.800',
               textDecoration: 'none',
-              ml: 10
+              ml: 12
             }}
           >
+            <img src={logo} alt='logo' height='30px' style={{paddingRight: '5px'}}></img>
             F-HOSTEL
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} href={ref + page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            {click ?
+
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleClick}
+                color="inherit"
+              >
+                <CloseIcon />
+              </IconButton>
+
+              :
+
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleClick}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+
+            }
+
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+              <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+                <li className='nav-item' onClick={handleClick}>
+                  <a href='#About'>About</a>
+                </li>
+                <li className='nav-item' onClick={handleClick}>
+                  <a href='#Services'>Services</a>
+                </li>
+                <li className='nav-item' onClick={handleClick}>
+                  <a href='#Contacts'>Contacts</a>
+                </li>
+              </ul>
+            </Box>
           </Box>
+
           <Typography
             variant="h5"
             noWrap
@@ -107,26 +109,25 @@ const HeaderLandingPage: React.FunctionComponent<IHeaderLandingPageProps> = (pro
               flexGrow: 1,
               fontFamily: 'monospace',
               fontWeight: 700,
-              color: 'inherit',
+              color: 'grey.800',
               textDecoration: 'none',
             }}
           >
+            <img src={logo} alt='logo' height='30px' style={{paddingRight: '5px'}}></img>
             F-HOSTEL
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end', mr: 10 }}>
-            {pages.map((page) => (
-              <div>
-                <Button
-                  key={page}
-                  href={ref + page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'grey.500', display: 'block', mx: 2 }}
-                >
-                  {page}
-                </Button>
-              </div>
-
-            ))}
+            <ul className='nav-menu'>
+              <li className='nav-item'>
+                <Link to="About" spy={true} smooth={true} offset={10} duration={500}>About</Link>
+              </li>
+              <li className='nav-item'>
+                <Link to="Services" spy={true} smooth={true} offset={5} duration={500}>Services</Link>
+              </li>
+              <li className='nav-item'>
+                <Link to="Contacts" spy={true} smooth={true} offset={5} duration={500}>Contacts</Link>
+              </li>
+            </ul>
           </Box>
         </Toolbar>
       </Container>
