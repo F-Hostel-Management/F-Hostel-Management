@@ -9,7 +9,7 @@ import logo from '../../../assets/images/logo.png';
 interface IHeaderLandingPageProps {
 }
 
-const HeaderLandingPage: React.FunctionComponent<IHeaderLandingPageProps> = (props) => {
+export const HeaderLandingPage: React.FunctionComponent<IHeaderLandingPageProps> = (props) => {
   const [click, setClick] = React.useState<boolean>(false);
   const [navbar, setNavbar] = React.useState(false);
 
