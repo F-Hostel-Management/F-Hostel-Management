@@ -5,7 +5,6 @@ import * as React from 'react';
 import './styles.css';
 import { Link } from 'react-scroll';
 import logo from '../../../assets/images/logo.png';
-import { padding } from '@mui/system';
 
 interface IHeaderLandingPageProps {
 }
