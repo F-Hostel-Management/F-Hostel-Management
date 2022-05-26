@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
 
 namespace Api.App.Configurations
 {
@@ -11,5 +8,6 @@ namespace Api.App.Configurations
         public DbConfig ConnectionStrings { get; set; }
         public JwtSetting JwtSetting { get; set; }
         public string SpaDevServer { get; set; }
+        public string FirebaseConfigPath { get; set; }
     }
 }
