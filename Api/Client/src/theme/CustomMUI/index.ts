@@ -46,6 +46,16 @@ declare module '@mui/material/Badge' {
     }
 }
 
+declare module '@mui/material/Chip' {
+    interface ChipPropsColorOverrides {
+        purple: true
+        pink: true
+        white: true
+        gray: true
+    }
+}
+
+
 const theme = createTheme({
     typography: {
         fontSize: 14,

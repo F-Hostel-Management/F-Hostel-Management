@@ -1,6 +1,7 @@
 import React, { Fragment, ElementType } from 'react'
 
 import DefaultLayout from '../components/Layout/DefaultLayout'
+import HomeLayout from '../components/Layout/HomeLayout'
 
 import About from '../pages/About'
 import Home from '../pages/Home'
@@ -51,7 +52,7 @@ const privateRoutes: Array<{
         path: '/home',
         component: Home,
         name: 'Home',
-        layout: Fragment,
+        layout: HomeLayout,
     },
     {
         path: 'home/profile',
