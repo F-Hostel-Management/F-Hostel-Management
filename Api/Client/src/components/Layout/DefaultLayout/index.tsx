@@ -27,7 +27,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
     return loading ? (
         <Loading />
     ) : (
-        <React.Fragment>
+        <Styled.Container>
             <HeaderDefault
                 isShownSidebar={isShownSidebar}
                 setIsShownSidebar={() => setIsShownSidebar(!isShownSidebar)}
@@ -72,7 +72,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
                     {children}
                 </Styled.GridMain>
             </Grid>
-        </React.Fragment>
+        </Styled.Container>
     )
 }
 
