@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React, { Fragment, ElementType } from 'react'
 
-import DefaultHomeLayout from '../components/Layout/DefaultHomeLayout'
 import DefaultLayout from '../components/Layout/DefaultLayout'
+import HomeLayout from '../components/Layout/HomeLayout'
 
 import About from '../pages/About'
 import Home from '../pages/Home'
@@ -12,15 +12,15 @@ import Register from '../pages/Register'
 
 const publicRoutes: Array<{
     path: string
-    component: React.ElementType
+    component: ElementType
     name: string
-    layout: React.ElementType
+    layout: ElementType
 }> = [
     {
         path: '/landingPage',
         component: LandingPage,
         name: 'LandingPage',
-        layout: React.Fragment,
+        layout: Fragment,
     },
     {
         path: '/about',
@@ -32,30 +32,30 @@ const publicRoutes: Array<{
         path: '/login',
         component: Login,
         name: 'Login',
-        layout: React.Fragment,
+        layout: Fragment,
     },
     {
         path: '/register',
         component: Register,
         name: 'Register',
-        layout: React.Fragment,
+        layout: Fragment,
     },
 ]
 
 const privateRoutes: Array<{
     path: string
-    component: React.ElementType
+    component: ElementType
     name: string
-    layout: React.ElementType
+    layout: ElementType
 }> = [
     {
-        path: '/home/*',
+        path: '/home',
         component: Home,
         name: 'Home',
-        layout: DefaultHomeLayout,
+        layout: HomeLayout,
     },
     {
-        path: '/profile',
+        path: 'home/profile',
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,
