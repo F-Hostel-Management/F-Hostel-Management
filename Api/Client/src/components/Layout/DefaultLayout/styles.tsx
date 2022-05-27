@@ -3,6 +3,10 @@ import styled from 'styled-components'
 
 import { Grid } from '@mui/material'
 
+export const Container = styled.div`
+    animation: var(--animation-transitionsIn) 1s;
+`
+
 export const GridSidebar = styled(Grid)`
     ${down('lg')} {
         position: absolute;
@@ -25,9 +29,10 @@ export const GridMain = styled(Grid)`
     }
 
     padding: 32px;
-    box-shadow: 5px 7px 26px -5px #cdd4e7;
     height: calc(100vh - var(--nav-height));
     background-color: #f0f3fb;
+    box-shadow: var(--bgr-shadow) inset;
+    box-shadow: 10px 8px 10px rgb(183 192 206 / 20%) inset;
 
     overflow: hidden;
     overflow-y: scroll;
