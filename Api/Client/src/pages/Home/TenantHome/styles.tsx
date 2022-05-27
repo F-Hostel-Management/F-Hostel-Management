@@ -16,12 +16,5 @@ export const ActionJoinWrapper = styled.div`
 
     margin-top: 8px;
 `
-export const Greeting = styled.div`
-    text-align: center;
-`
-export const Span = styled.span`
-    display: inline-block;
-    margin: 0 6px;
-`
 
 
