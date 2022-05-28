@@ -1,6 +1,10 @@
 import React, { FC, Fragment } from 'react'
 
 import StatisticCard from '../../../components/Card/StatisticCard'
+import DonutChart from '../../../components/Chart/DonutChart'
+import FooterLandingPage from '../../../components/Footer/FooterLandingPage'
+import ChartSurvey from '../components/ChartSurvey'
+import TenantAgeChart from '../components/TenantAgeChart'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import GroupsIcon from '@mui/icons-material/Groups'
 import HotelIcon from '@mui/icons-material/Hotel'
@@ -48,6 +52,19 @@ const OwnerDashboard: FC<IOwnerDashboardProps> = (props) => {
                         progress={70}
                         bgrColor="#0dcaf0"
                     />
+                </Grid>
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                spacing={2}
+                sx={{ marginBottom: '32px' }}
+            >
+                <Grid item lg={8} sx={{ height: '500px' }}>
+                    <ChartSurvey />
+                </Grid>
+                <Grid item lg={4} sx={{ height: '500px' }}>
+                    <TenantAgeChart />
                 </Grid>
             </Grid>
         </Fragment>
