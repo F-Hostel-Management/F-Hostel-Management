@@ -1,11 +1,13 @@
 import React, { FC } from 'react'
-import TenantHome from './TenantHome/TenantHome'
+
+import OwnerHome from './OwnerHome'
+import TenantHome from './TenantHome'
 
 interface IHomeProps {}
 
 const Home: FC<IHomeProps> = (props) => {
-    const role = 0
-    return role ? null : <TenantHome />
+    const role = 1
+    return role ? <OwnerHome /> : <TenantHome />
 }
 
 export default Home

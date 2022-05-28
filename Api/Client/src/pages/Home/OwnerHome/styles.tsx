@@ -8,13 +8,21 @@ export const HomeContainer = styled.div`
         padding: 0 16px;
     }
 `
-export const ActionJoinWrapper = styled.div`
+export const ActionWrapper = styled.div``
+export const ButtonWrapper = styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    margin-top: 8px;
+    & > button {
+        margin: 0px 16px;
+        min-width: 240px;
+    }
+
+    ${down('md')} {
+        flex-direction: column;
+        & > button {
+        margin: 4px 0;
+    }
+    }
 `
-
-
