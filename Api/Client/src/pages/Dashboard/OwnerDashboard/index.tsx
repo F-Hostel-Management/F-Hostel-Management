@@ -60,10 +60,10 @@ const OwnerDashboard: FC<IOwnerDashboardProps> = (props) => {
                 spacing={2}
                 sx={{ marginBottom: '32px' }}
             >
-                <Grid item lg={8} sx={{ height: '500px' }}>
+                <Grid item xs={12} lg={8}>
                     <ChartSurvey />
                 </Grid>
-                <Grid item lg={4} sx={{ height: '500px' }}>
+                <Grid item xs={12} lg={4}>
                     <TenantAgeChart />
                 </Grid>
             </Grid>

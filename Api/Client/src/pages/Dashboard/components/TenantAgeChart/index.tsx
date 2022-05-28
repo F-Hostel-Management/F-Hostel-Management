@@ -12,12 +12,12 @@ interface ITenantAgeChartProps {}
 const TenantAgeChart: FC<ITenantAgeChartProps> = (props) => {
     const colors = ['#adb5bd', '#0dcaf0', '#ffc107', '#dc3545']
     const labels = ['<18', '18-24', '25-40', '>40']
-    const series = [18, 95, 30, 10]
+    const series = [18, 95, 20, 10]
     return (
         <CardShorten title="Tenant Age Chart">
-            <Fragment>
+            <Styled.ChartContainer>
                 <DonutChart labels={labels} colors={colors} series={series} />
-            </Fragment>
+            </Styled.ChartContainer>
             <Styled.ChartDetails>
                 {labels.map((label, index) => {
                     return (
