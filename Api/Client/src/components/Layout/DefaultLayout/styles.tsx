@@ -9,7 +9,7 @@ export const Container = styled.div`
 
 export const GridSidebar = styled(Grid)<{ isSidebarMobile: boolean }>`
     ${down('lg')} {
-        height: max-content;
+        height: 100vh;
         position: absolute;
         z-index: 100;
         transform: ${(props) =>
