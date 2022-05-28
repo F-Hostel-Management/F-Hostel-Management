@@ -49,7 +49,9 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
                 >
                     {isSidebarMobile || screen ? (
                         <React.Fragment>
-                            <Styled.Overlay />
+                            <Styled.Overlay
+                                onClick={() => setIsSidebarMobile(false)}
+                            />
                             <Sidebar isShownSidebar={isShownSidebar} />
                         </React.Fragment>
                     ) : null}
