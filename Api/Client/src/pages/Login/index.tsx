@@ -1,9 +1,7 @@
 import { Button, Checkbox, FormControlLabel, Grid, Icon, Link, Paper, TextField, Typography } from '@mui/material';
 import { Box, fontWeight, textAlign } from '@mui/system';
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV, faCoffee } from '@fortawesome/free-solid-svg-icons';
-import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { down } from 'styled-breakpoints'
 
 import * as Styled from './styles'
 import GoogleIcon from '../../assets/images/GoogleLogo.svg'
@@ -17,15 +15,7 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
   return (
     <Styled.Login>
       <Styled.Form>
-        <Paper
-          sx={{
-            py: 8,
-            px: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
+        <Styled.PaperLogin>
 
           <Typography variant='h3' sx={{
             mb: 2,
@@ -122,7 +112,7 @@ const Login: React.FunctionComponent<ILoginProps> = (props) => {
               </Grid>
             </Grid>
           </Button>
-        </Paper>
+        </Styled.PaperLogin>
       </Styled.Form>
 
     </Styled.Login>
