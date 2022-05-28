@@ -18,7 +18,7 @@ const FooterLandingPage: React.FunctionComponent<IFooterLandingPageProps> = (pro
                             sx={{
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
-                                color: 'white',
+                                color: '#ffffff',
                                 textDecoration: 'none',
                             }}
                         >
@@ -42,7 +42,7 @@ const FooterLandingPage: React.FunctionComponent<IFooterLandingPageProps> = (pro
                             sx={{
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
-                                color: 'white',
+                                color: '#ffffff',
                                 textDecoration: 'none',
                             }}
                         >
@@ -64,7 +64,7 @@ const FooterLandingPage: React.FunctionComponent<IFooterLandingPageProps> = (pro
                             component="a"
                             sx={{
                                 fontWeight: 600,
-                                color: 'white',
+                                color: '#ffffff',
                                 textDecoration: 'none',
                                 mb: 1
                             }}
