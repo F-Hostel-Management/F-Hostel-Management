@@ -17,6 +17,7 @@ export const Form = styled.div`
     position: absolute;
     margin: 0 10%;
     width: 30%;
+    right: 0;
 
     ${down('lg')} {
         width: 60%;
@@ -24,6 +25,11 @@ export const Form = styled.div`
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+    }
+
+    ${down('sm')} {
+        width: 90%;
+        margin: 0;
     }
 `
 
