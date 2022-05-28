@@ -42,7 +42,11 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
                     overflow: 'hidden',
                 }}
             >
-                <Styled.GridSidebar item lg={isShownSidebar ? 2.5 : 0.5}>
+                <Styled.GridSidebar
+                    item
+                    lg={isShownSidebar ? 2.5 : 0.5}
+                    isSidebarMobile={isSidebarMobile}
+                >
                     {isSidebarMobile || screen ? (
                         <React.Fragment>
                             <Styled.Overlay />
