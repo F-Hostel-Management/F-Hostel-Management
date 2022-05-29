@@ -4,7 +4,7 @@ import { Button, Typography } from '@mui/material'
 
 interface ILandingPageProps {}
 
-const LandingPage: React.FunctionComponent<ILandingPageProps> = (props) => {
+const LandingPage: React.FunctionComponent<ILandingPageProps> = () => {
     return (
         <div>
             <Typography variant="h1">Heading 1</Typography>

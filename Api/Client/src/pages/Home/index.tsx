@@ -5,7 +5,7 @@ import TenantHome from './TenantHome'
 
 interface IHomeProps {}
 
-const Home: FC<IHomeProps> = (props) => {
+const Home: FC<IHomeProps> = () => {
     const role = 1
     return role ? <OwnerHome /> : <TenantHome />
 }

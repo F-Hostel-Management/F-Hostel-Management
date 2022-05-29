@@ -1,14 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 
-interface ILoginProps {
+interface ILoginProps {}
+
+const Login: React.FunctionComponent<ILoginProps> = () => {
+    return (
+        <div>
+            <h1>Login</h1>
+        </div>
+    )
 }
 
-const Login: React.FunctionComponent<ILoginProps> = (props) => {
-  return (
-      <div>
-          <h1>Login</h1>
-      </div>
-  );
-};
-
-export default Login;
+export default Login

@@ -13,7 +13,6 @@ import {
     List,
     ListItemButton,
     ListItemIcon,
-    ListItemText,
     ListSubheader,
     Tooltip,
     Typography,

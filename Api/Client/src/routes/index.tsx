@@ -1,4 +1,4 @@
-import React, { Fragment, ElementType } from 'react'
+import { Fragment, ElementType } from 'react'
 
 import DefaultLayout from '../components/Layout/DefaultLayout'
 import HomeLayout from '../components/Layout/HomeLayout'

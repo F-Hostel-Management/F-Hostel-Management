@@ -11,9 +11,9 @@ import { Role } from '../../../utils/enums'
 
 interface IOwnerHomeProps {}
 
-const role : Role = 2
+const role: Role = 2
 
-const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = (props) => {
+const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
     return (
         <Styled.HomeContainer>
             <Styled.ActionWrapper>
