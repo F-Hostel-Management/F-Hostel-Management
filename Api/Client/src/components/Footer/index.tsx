@@ -1,14 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 
-interface IFooterProps {
+interface IFooterProps {}
+
+const Footer: React.FunctionComponent<IFooterProps> = () => {
+    return (
+        <footer>
+            <p>Footer</p>
+        </footer>
+    )
 }
 
-const Footer: React.FunctionComponent<IFooterProps> = (props) => {
-  return (
-      <footer>
-          <p>Footer</p>
-      </footer>
-  );
-};
-
-export default Footer;
+export default Footer

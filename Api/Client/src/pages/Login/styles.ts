@@ -1,4 +1,4 @@
-import { Button, Paper } from '@mui/material'
+import { Paper } from '@mui/material'
 import styled from 'styled-components'
 import { down } from 'styled-breakpoints'
 import login from '../../assets/images/login.png'

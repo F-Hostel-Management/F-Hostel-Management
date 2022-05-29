@@ -27,10 +27,7 @@ const BorderLinearProgress = styled(Progress)<{ bgrColor: string }>(
             background: `linear-gradient(to right, ${LightenDarkenColor(
                 bgrColor,
                 5
-            )}, ${LightenDarkenColor(
-                bgrColor,
-                80
-            )} ) !important`,
+            )}, ${LightenDarkenColor(bgrColor, 80)} ) !important`,
         },
     })
 )

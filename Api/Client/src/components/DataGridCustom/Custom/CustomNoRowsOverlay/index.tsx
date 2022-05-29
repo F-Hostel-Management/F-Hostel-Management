@@ -31,7 +31,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 
 const CustomNoRowsOverlay: React.FunctionComponent<
     ICustomNoRowsOverlayProps
-> = (props) => {
+> = () => {
     return (
         <StyledGridOverlay>
             <svg
