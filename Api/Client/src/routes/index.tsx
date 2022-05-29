@@ -1,8 +1,10 @@
-import React, { Fragment, ElementType } from 'react'
+import { Fragment, ElementType } from 'react'
 
 import DefaultLayout from '../components/Layout/DefaultLayout'
+import HomeLayout from '../components/Layout/HomeLayout'
 
 import About from '../pages/About'
+import Dashboard from '../pages/Dashboard'
 import Home from '../pages/Home'
 import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
@@ -44,7 +46,13 @@ const privateRoutes: Array<{
         path: '/home',
         component: Home,
         name: 'Home',
-        layout: Fragment,
+        layout: HomeLayout,
+    },
+    {
+        path: '/home/dashboard',
+        component: Dashboard,
+        name: 'Dashboard',
+        layout: DefaultLayout,
     },
     {
         path: 'home/profile',

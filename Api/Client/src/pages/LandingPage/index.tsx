@@ -3,9 +3,7 @@ import {
     Card,
     CardActionArea,
     CardContent,
-    CardMedia,
     Grid,
-    Stack,
     Typography,
 } from '@mui/material'
 import * as React from 'react'
@@ -14,10 +12,9 @@ import HeaderLandingPage from '../../components/Header/HeaderLandingPage'
 import * as Styled from './styles'
 import sample from '../../assets/images/sample.png'
 import serviceIcon1 from '../../assets/images/service_1.png'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import FooterLandingPage from '../../components/Footer/FooterLandingPage'
 import './style.css'
-import { width } from '@mui/system'
 
 interface ILandingPageProps {}
 
@@ -54,7 +51,7 @@ const services = [
     },
 ]
 
-const LandingPage: React.FunctionComponent<ILandingPageProps> = (props) => {
+const LandingPage: React.FunctionComponent<ILandingPageProps> = () => {
     return (
         <React.Fragment>
             <Styled.Main>
@@ -173,8 +170,8 @@ const LandingPage: React.FunctionComponent<ILandingPageProps> = (props) => {
                         spacing={{ xs: 2, md: 3 }}
                         columns={{ xs: 4, sm: 8, md: 12 }}
                     >
-                        {services.map((service) => (
-                            <Grid item xs={12} sm={4} md={4}>
+                        {services.map((service, index) => (
+                            <Grid key={index} item xs={12} sm={4} md={4}>
                                 <Card>
                                     <CardActionArea>
                                         <CardContent>

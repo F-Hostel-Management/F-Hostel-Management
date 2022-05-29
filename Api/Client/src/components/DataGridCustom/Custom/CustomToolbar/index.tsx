@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import DownloadIcon from '@mui/icons-material/Download'
-import { IconButton, Typography } from '@mui/material'
 
 import IconButtonCustom from '../../../Button/IconButtonCustom'
 import SearchInput from '../../../Input/SearchInput'

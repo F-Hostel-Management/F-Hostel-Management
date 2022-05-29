@@ -4,9 +4,9 @@ import * as Styled from './styles'
 
 interface IFooterLandingPageProps {}
 
-const FooterLandingPage: React.FunctionComponent<IFooterLandingPageProps> = (
-    props
-) => {
+export const FooterLandingPage: React.FunctionComponent<
+    IFooterLandingPageProps
+> = () => {
     return (
         <Styled.Contact id="Contacts">
             <Styled.ContentContact>

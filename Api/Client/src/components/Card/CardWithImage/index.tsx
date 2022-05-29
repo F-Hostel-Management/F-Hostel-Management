@@ -1,9 +1,6 @@
 import React, { FC } from 'react'
 
-import {
-    CardContent,
-    CardActions,
-} from '@mui/material'
+import { CardActions } from '@mui/material'
 
 import * as Styled from './styles'
 
@@ -13,19 +10,21 @@ interface ICardWithImageProps {
         alt?: string
     }
     content: React.ReactElement
-    actions: React.ReactElement
+    actions?: React.ReactElement
+    children?: React.ReactElement
 }
 
 const CardWithImage: FC<ICardWithImageProps> = ({
     image,
     content,
     actions,
+    children,
 }) => {
     return (
         <Styled.CardContainer>
             <Styled.CardImage src={image.src} alt={image.alt} />
 
-            <CardContent sx={{ flex: 1 }}>
+            <Styled.CardContentMUI>
                 <React.Fragment>{content}</React.Fragment>
                 <CardActions
                     sx={{
@@ -36,7 +35,8 @@ const CardWithImage: FC<ICardWithImageProps> = ({
                 >
                     {actions}
                 </CardActions>
-            </CardContent>
+            </Styled.CardContentMUI>
+            {children}
         </Styled.CardContainer>
     )
 }

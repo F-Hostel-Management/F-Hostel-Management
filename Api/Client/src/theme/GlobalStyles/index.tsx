@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle, keyframes } from 'styled-components'
 
 import './GlobalStyles.css'
 
@@ -8,8 +8,21 @@ interface Props {
     children: React.ReactElement
 }
 
+const transitionsIn = keyframes`
+  from {
+    opacity: 0.2;
+    transform: rotateX(-5deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotateX(0);
+  }
+`
+
 const GlobalStyle = createGlobalStyle`
 :root {
+    // color
     --color-primary: #17A2B8;
     --color-secondary: #ADB5BD;
     --color-green: #28A745;
@@ -30,10 +43,20 @@ const GlobalStyle = createGlobalStyle`
     --color-gray-900: #212529;
 
     --bgr-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    --bgr-shadow: 0 8px 10px 0 rgb(183 192 206 / 20%);
+    --bgr-color: #f0f3fb;
+
+    // text color: ;
     --text-color-dark: #212529;
     --text-color-light: #5b626b;
-
+    
+    // height
     --nav-height: 60px;
+
+    // animation 
+    --animation-transitionsIn: ${transitionsIn};
+
+    
 }
 `
 

@@ -1,16 +1,4 @@
 import { createTheme } from '@mui/material'
-import {
-    Palette as MuiPallete,
-    PaletteOptions as MuiPaletteOptions,
-} from '@mui/material/styles/createPalette'
-
-interface PaletteColor {
-    light?: string
-    main: string
-    dark?: string
-    contrastText?: string
-}
-
 declare module '@mui/material/styles/createPalette' {
     interface Palette {
         purple: Palette['primary']
@@ -39,6 +27,15 @@ declare module '@mui/material/IconButton' {
 
 declare module '@mui/material/Badge' {
     interface BadgePropsColorOverrides {
+        purple: true
+        pink: true
+        white: true
+        gray: true
+    }
+}
+
+declare module '@mui/material/Chip' {
+    interface ChipPropsColorOverrides {
         purple: true
         pink: true
         white: true

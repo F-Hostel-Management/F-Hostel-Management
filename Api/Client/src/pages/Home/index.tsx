@@ -1,22 +1,13 @@
-import * as React from 'react'
+import React, { FC } from 'react'
 
-import { Route, Routes } from 'react-router-dom'
-
-import NotFound from '../NotFound'
-import CreateHostel from './CreateHostel'
+import OwnerHome from './OwnerHome'
+import TenantHome from './TenantHome'
 
 interface IHomeProps {}
 
-const Home: React.FunctionComponent<IHomeProps> = (props) => {
-    return (
-        <div>
-            <h1>Home</h1>
-            <Routes>
-                <Route path="/create" element={<CreateHostel />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-        </div>
-    )
+const Home: FC<IHomeProps> = () => {
+    const role = 1
+    return role ? <OwnerHome /> : <TenantHome />
 }
 
 export default Home

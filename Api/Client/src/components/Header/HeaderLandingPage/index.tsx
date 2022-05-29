@@ -1,14 +1,9 @@
 import {
     AppBar,
-    Avatar,
     Box,
-    Button,
     Container,
     IconButton,
-    Menu,
-    MenuItem,
     Toolbar,
-    Tooltip,
     Typography,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -20,9 +15,9 @@ import logo from '../../../assets/images/logo.png'
 
 interface IHeaderLandingPageProps {}
 
-const HeaderLandingPage: React.FunctionComponent<IHeaderLandingPageProps> = (
-    props
-) => {
+export const HeaderLandingPage: React.FunctionComponent<
+    IHeaderLandingPageProps
+> = () => {
     const [click, setClick] = React.useState<boolean>(false)
     const [navbar, setNavbar] = React.useState(false)
 
