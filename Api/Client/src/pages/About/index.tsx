@@ -1,14 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 
-interface IAboutProps {
+interface IAboutProps {}
+
+const About: React.FunctionComponent<IAboutProps> = () => {
+    return (
+        <div>
+            <h1>About</h1>
+        </div>
+    )
 }
 
-const About: React.FunctionComponent<IAboutProps> = (props) => {
-  return (
-    <div>
-      <h1>About</h1>
-    </div>
-  );
-};
-
-export default About;
+export default About

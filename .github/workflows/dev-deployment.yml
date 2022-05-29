@@ -1,8 +1,8 @@
 name: Dev deployment
 on:
-  pull_request:
+  push:
     branches:
-      - master
+      - dev
 jobs:
   build_frontend:
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
         with:
           node-version: 16
       - name: Install Railway CLI
-        run: npm i -g @railway/cli
+        run: yarn global add @railway/cli@1.6.0
       - name: Link cloud project
         run: RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT }}
       - name: Deploy

@@ -1,15 +1,18 @@
-import * as React from 'react'
+import React, { FC, Fragment } from 'react'
 
 import CardWithImage from '../../../../components/Card/CardWithImage'
-import { Typography, Button, Chip } from '@mui/material'
+import { Typography, Button, Rating } from '@mui/material'
 
-interface IRoomCardProps {
-    status?: boolean
+import { Role } from '../../../../utils/enums'
+import CardOptions from '../CardOptions'
+import * as Styled from './styles'
+
+interface IHostelCardProps {
+    imageSrc?: string
+    name?: string
 }
-
-const RoomCard: React.FunctionComponent<IRoomCardProps> = ({
-    status = false,
-}) => {
+const role: Role = 2
+const HostelCard: FC<IHostelCardProps> = () => {
     return (
         <CardWithImage
             image={{
@@ -24,35 +27,24 @@ const RoomCard: React.FunctionComponent<IRoomCardProps> = ({
                     <Typography variant="subtitle1" mb={1}>
                         <span
                             style={{
-                                width: '80px',
+                                width: '100px',
                                 display: 'inline-block',
                             }}
                         >
-                            Adress:{' '}
+                            Adress:
                         </span>
                         1220 S. Congress Ave., Austin, Texas
                     </Typography>
                     <Typography variant="body2" mb={1}>
                         <span
                             style={{
-                                width: '80px',
+                                width: '100px',
                                 display: 'inline-block',
                             }}
                         >
-                            Room:{' '}
+                            {role == Role.OWNER_ROLE ? ' Manager:' : 'Owner'}
                         </span>
-                        R715, floor 7
-                    </Typography>
-                    <Typography variant="body2" mb={1}>
-                        <span
-                            style={{
-                                width: '80px',
-                                display: 'inline-block',
-                            }}
-                        >
-                            Time:
-                        </span>
-                        03/07/2021 - 03/07/2022
+                        Le Xuan Dai
                     </Typography>
                     <Typography
                         variant="body2"
@@ -60,33 +52,29 @@ const RoomCard: React.FunctionComponent<IRoomCardProps> = ({
                     >
                         <span
                             style={{
-                                width: '80px',
+                                width: '100px',
                                 display: 'inline-block',
                             }}
                         >
-                            Status:{' '}
+                            Feedback:
                         </span>
-                        <Chip
-                            label={status ? 'Renting' : 'Finished'}
-                            color={status ? 'success' : 'gray'}
-                            sx={{ minWidth: '80px' }}
-                        />
+                        <Fragment>
+                            <Rating name="read-only" value={4} readOnly />
+                        </Fragment>
                     </Typography>
                 </React.Fragment>
             }
             actions={
-                <React.Fragment>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={!status}
-                    >
-                        Details
-                    </Button>
-                </React.Fragment>
+                <Button variant="contained" color="primary">
+                    Details
+                </Button>
             }
-        />
+        >
+            <Styled.OptionWrapper>
+                <CardOptions />
+            </Styled.OptionWrapper>
+        </CardWithImage>
     )
 }
 
-export default RoomCard
+export default HostelCard

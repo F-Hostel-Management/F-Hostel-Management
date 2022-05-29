@@ -15,7 +15,6 @@ let instance = axios.create({
     },
 })
 
-
 instance.interceptors.response.use(undefined, (error) => {
     if (error.message === 'Network Error' && !error.response) {
         toast.error('Network error - make sure API is running!')
@@ -47,7 +46,10 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
 
 export const ApiCaller = {
     get: (url: '', data: {}) =>
-        instance.get(url, { params: data }).then(sleep(1000)).then(responseBody),
+        instance
+            .get(url, { params: data })
+            .then(sleep(1000))
+            .then(responseBody),
     post: (url: '', data: {}) =>
         instance
             .post(url, JSON.stringify(data))
