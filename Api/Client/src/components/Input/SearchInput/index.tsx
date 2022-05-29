@@ -1,13 +1,7 @@
 import * as React from 'react'
 
 import SearchIcon from '@mui/icons-material/Search'
-import {
-    CircularProgress,
-    Divider,
-    IconButton,
-    InputBase,
-    Paper,
-} from '@mui/material'
+import { CircularProgress, Divider, IconButton, Paper } from '@mui/material'
 
 import * as Styled from './styles'
 

@@ -1,4 +1,4 @@
-import React, { FC, Fragment, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useState } from 'react'
 
 import { FooterLandingPage as Footer } from '../../Footer/FooterLandingPage'
 import { HeaderLandingPage as Header } from '../../Header/HeaderLandingPage'

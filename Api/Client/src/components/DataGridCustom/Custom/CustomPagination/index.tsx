@@ -14,9 +14,9 @@ import * as Styled from './styles'
 
 interface ICustomPaginationProps {}
 
-const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = (
-    props
-) => {
+const CustomPagination: React.FunctionComponent<
+    ICustomPaginationProps
+> = () => {
     const apiRef = useGridApiContext()
     const page = useGridSelector(apiRef, gridPageSelector) + 1
     const pageCount = useGridSelector(apiRef, gridPageCountSelector)
@@ -39,7 +39,12 @@ const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = (
 
             <Styled.PagingWrapper>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="caption" style={{ paddingRight: '8px' }}>Rows per page: </Typography>
+                    <Typography
+                        variant="caption"
+                        style={{ paddingRight: '8px' }}
+                    >
+                        Rows per page:{' '}
+                    </Typography>
                     <Select
                         value={pageSize}
                         onChange={handleChangePageSize}
