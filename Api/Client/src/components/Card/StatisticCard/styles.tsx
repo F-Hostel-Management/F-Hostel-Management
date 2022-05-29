@@ -4,8 +4,8 @@ import { Card, CardContent } from '@mui/material'
 
 export const CardContainer = styled(Card)`
     display: block;
-    padding: 0 24px 24px 24px;
-    border-radius: 8px;
+    padding: 0 16px 16px 16px;
+    border-radius: 10px;
     box-shadow: 5px 3px 10px 0 rgb(21 15 15 / 30%) !important;
 `
 
@@ -24,7 +24,7 @@ export const CardContentWrapper = styled(CardContent)`
 export const CardIcon = styled.div<{ bgrColor: string }>`
     width: 50px;
     height: 50px;
-    margin: 25px 0;
+    margin: 16px 0;
     border-radius: 8px;
 
     background-color: ${(props) => props.bgrColor};
