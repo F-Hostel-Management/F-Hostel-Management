@@ -20,7 +20,7 @@ export const FooterLandingPage: React.FunctionComponent<
                             sx={{
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
-                                color: 'white',
+                                color: '#ffffff',
                                 textDecoration: 'none',
                             }}
                         >
@@ -45,7 +45,7 @@ export const FooterLandingPage: React.FunctionComponent<
                             sx={{
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
-                                color: 'white',
+                                color: '#ffffff',
                                 textDecoration: 'none',
                             }}
                         >
@@ -68,7 +68,7 @@ export const FooterLandingPage: React.FunctionComponent<
                             component="a"
                             sx={{
                                 fontWeight: 600,
-                                color: 'white',
+                                color: '#ffffff',
                                 textDecoration: 'none',
                                 mb: 1,
                             }}

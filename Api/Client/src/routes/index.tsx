@@ -9,7 +9,6 @@ import Home from '../pages/Home'
 import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
-import Register from '../pages/Register'
 
 const publicRoutes: Array<{
     path: string
@@ -33,12 +32,6 @@ const publicRoutes: Array<{
         path: '/login',
         component: Login,
         name: 'Login',
-        layout: Fragment,
-    },
-    {
-        path: '/register',
-        component: Register,
-        name: 'Register',
         layout: Fragment,
     },
 ]
