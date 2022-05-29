@@ -9,7 +9,7 @@ import * as Styled from './styles'
 
 interface ITenantHomeProps {}
 
-const TenantHome: FC<ITenantHomeProps> = (props) => {
+const TenantHome: FC<ITenantHomeProps> = () => {
     return (
         <Styled.HomeContainer>
             <Styled.ActionJoinWrapper>
@@ -18,6 +18,7 @@ const TenantHome: FC<ITenantHomeProps> = (props) => {
                     variant="contained"
                     color="primary"
                     startIcon={<QrCodeScannerIcon />}
+                    className="hello"
                 >
                     Scan to join
                 </Button>

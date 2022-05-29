@@ -1,6 +1,4 @@
-import React, { FC, useState } from 'react'
-
-import { DataGrid } from '@mui/x-data-grid'
+import React, { FC } from 'react'
 
 import CustomNoRowsOverlay from './Custom/CustomNoRowsOverlay'
 import CustomPagination from './Custom/CustomPagination'

@@ -1,16 +1,4 @@
 import { createTheme } from '@mui/material'
-import {
-    Palette as MuiPallete,
-    PaletteOptions as MuiPaletteOptions,
-} from '@mui/material/styles/createPalette'
-
-interface PaletteColor {
-    light?: string
-    main: string
-    dark?: string
-    contrastText?: string
-}
-
 declare module '@mui/material/styles/createPalette' {
     interface Palette {
         purple: Palette['primary']
@@ -54,7 +42,6 @@ declare module '@mui/material/Chip' {
         gray: true
     }
 }
-
 
 const theme = createTheme({
     typography: {

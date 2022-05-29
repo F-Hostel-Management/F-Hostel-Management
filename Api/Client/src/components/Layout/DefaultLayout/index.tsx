@@ -6,7 +6,6 @@ import { useBreakpoint } from 'styled-breakpoints/react-styled'
 import { Grid, Typography } from '@mui/material'
 
 import Breadcrumb from '../../Breadcrumd'
-import Footer from '../../Footer'
 import HeaderDefault from '../../Header/HeaderDefault'
 import Loading from '../../Loading'
 import Sidebar from '../../Sidebar'

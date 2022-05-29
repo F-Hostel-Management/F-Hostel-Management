@@ -1,8 +1,6 @@
 import React, { FC, Fragment } from 'react'
 
 import CardWithImage from '../../../../components/Card/CardWithImage'
-import StarIcon from '@mui/icons-material/Star'
-import StarOutlineIcon from '@mui/icons-material/StarOutline'
 import { Typography, Button, Rating } from '@mui/material'
 
 import { Role } from '../../../../utils/enums'
@@ -14,7 +12,7 @@ interface IHostelCardProps {
     name?: string
 }
 const role: Role = 2
-const HostelCard: FC<IHostelCardProps> = (props) => {
+const HostelCard: FC<IHostelCardProps> = () => {
     return (
         <CardWithImage
             image={{

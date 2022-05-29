@@ -6,7 +6,7 @@ import * as Styled from './styles'
 
 interface IGreetingProps {}
 
-const Greeting: FC<IGreetingProps> = (props) => {
+const Greeting: FC<IGreetingProps> = () => {
     return (
         <Styled.Container>
             <Typography variant="h2" mb={2}>
