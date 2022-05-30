@@ -27,14 +27,7 @@ namespace Api.Configurations
                     Array.TrueForAll(nonSpaPaths, e => !ctx.Request.Path.StartsWithSegments(e)),
                 config =>
                     {
-                        if (app.Environment.IsDevelopment())
-                        {
-                            config.UseSpa(spa =>
-                            {
-                                spa.UseProxyToSpaDevelopmentServer(spaDevServer);
-                            });
-                            return;
-                        }
+                        if (app.Environment.IsDevelopment()) return;
 
                         config.UseStaticFiles();
                         config.UseEndpoints(endpoints =>

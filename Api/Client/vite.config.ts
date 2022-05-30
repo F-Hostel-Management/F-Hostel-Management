@@ -10,6 +10,10 @@ export default defineConfig({
     },
     server: {
         port: 3000,
+        https: true,
+        proxy: {
+            '/api': 'http://localhost:5177',
+        },
     },
     preview: {
         port: 3000,
