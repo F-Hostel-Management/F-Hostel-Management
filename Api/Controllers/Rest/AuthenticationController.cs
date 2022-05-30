@@ -8,12 +8,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace Api.Controllers.Rest
 {
-    [Route("api/[controller]")]
-    [ApiController]
     [AllowAnonymous]
-    public class AuthenticationController : BaseApiController
+    public class AuthenticationController : BaseRestController
     {
         private IAuthenticationService authenticationService;
 

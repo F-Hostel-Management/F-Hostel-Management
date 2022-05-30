@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Api.Configurations;
 
@@ -22,16 +23,18 @@ public static class ConfigureOData
                 options =>
                 {
                     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 }
             )
             .AddOData(
                 options =>
-                    options.AddRouteComponents("/api/ODatav1", GetEdmModel())
+                    options.AddRouteComponents("/odata", GetEdmModel())
                            .Select()
                            .Filter()
                            .OrderBy()
                            .Expand()
                            .Count()
+                           .SetMaxTop(100)
             );
     }
 
