@@ -7,11 +7,11 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
-import { Role } from '../../../utils/enums'
+import { IRole } from '../../../utils/enums'
 
 interface IOwnerHomeProps {}
 
-const role: Role = 2
+const role: IRole = 2
 
 const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
     return (
@@ -26,7 +26,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                     >
                         CREATE COMMITMENT
                     </Button>
-                    {role == Role.OWNER_ROLE && (
+                    {role == IRole.OWNER_ROLE && (
                         <Button
                             variant="contained"
                             color="primary"
