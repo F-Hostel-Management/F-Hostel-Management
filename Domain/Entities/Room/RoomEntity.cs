@@ -41,7 +41,7 @@ public class RoomEntity : BaseEntity
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
     // 1 room - M tenants
-    [Contained]
+    //[Contained]
     public virtual ICollection<UserEntity> Tenants { get; set; }
 
     // 1 Manager (create) M Invoices (for) 1 Room
@@ -56,7 +56,7 @@ public class RoomEntity : BaseEntity
     // 1 Tenant (create) M Tickets (for) 1 Room
     public virtual ICollection<TicketEntity> Tickets { get; set; }
 
-    // 1 Commitment (belong to) 1 Room
-    public CommitmentEntity Commitment;
+    // M Commitment (belong to) 1 Room
+    public virtual ICollection<CommitmentEntity> Commitments { get; set; }
 
 }
