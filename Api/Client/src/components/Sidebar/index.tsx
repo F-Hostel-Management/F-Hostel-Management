@@ -83,7 +83,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                     }
                 >
                     {group.items.map((item, index) => (
-                        <Link to={item.path} key={index}>
+                        <Link to={item.path} key={index} replace={true}>
                             <ListItemButton
                                 selected={
                                     selectedIndex === index ? true : false
