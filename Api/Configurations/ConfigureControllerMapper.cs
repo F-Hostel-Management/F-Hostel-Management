@@ -1,4 +1,4 @@
-﻿using Api.App.Configurations;
+﻿using Application.AppConfig;
 using Microsoft.Extensions.Options;
 using System.Reflection;
 

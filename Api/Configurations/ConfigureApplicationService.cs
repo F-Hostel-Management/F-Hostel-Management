@@ -12,6 +12,8 @@ namespace Api.Configurations
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ITokenService, JwtBuilderService>();
+
+            services.AddSingleton<ICloudStorage, GoogleCloudStorage>();
         }
     }
 }
