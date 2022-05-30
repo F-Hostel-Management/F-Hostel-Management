@@ -21,7 +21,7 @@ const CustomPagination: React.FunctionComponent<
     const page = useGridSelector(apiRef, gridPageSelector) + 1
     const pageCount = useGridSelector(apiRef, gridPageCountSelector)
     const rowsCount = useGridSelector(apiRef, gridRowCountSelector)
-    const rowPerPageOptions = [2, 4, 6, 100]
+    const rowPerPageOptions = [5, 10, 25, 100]
 
     const [pageSize, setPageSize] = React.useState(2)
 

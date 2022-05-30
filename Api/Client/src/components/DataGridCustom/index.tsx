@@ -41,7 +41,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
                 paginationMode="server"
                 page={page}
                 pageSize={pageSize}
-                rowsPerPageOptions={[2, 4, 6, 8]}
+                rowsPerPageOptions={[5, 10, 25, 100]}
                 rowCount={rowsCount}
                 disableColumnFilter
                 disableDensitySelector={true}
