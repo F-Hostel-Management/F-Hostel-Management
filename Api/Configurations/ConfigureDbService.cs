@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Infrastructure.Contexts;
 using Persistence.Repositories;
-using Api.App.Configurations;
 using Application.Interfaces.IRepository;
+using Application.AppConfig;
 
 namespace Api.Configurations;
 
