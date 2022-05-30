@@ -6,18 +6,12 @@ import {
     Route,
     Navigate,
 } from 'react-router-dom'
+import { IRoute } from './interface/route'
 
 import NotFound from './pages/NotFound'
 import { privateRoutes, publicRoutes } from './routes'
 import PrivateRoute from './routes/PrivateRouter'
 import PublicRoute from './routes/PublicRoute'
-
-interface IRoute {
-    path: string
-    component: React.ElementType
-    name: string
-    layout: React.ElementType
-}
 
 function App(): React.ReactElement {
     return (
@@ -27,16 +21,25 @@ function App(): React.ReactElement {
                     <Route path="/" element={<Navigate to="/landingPage" />} />
                     <Route path="/" element={<PrivateRoute />}>
                         {privateRoutes.map((route: IRoute) => {
-                            const Layout = route.layout
+                            const Layout =
+                                route.layout == null
+                                    ? React.Fragment
+                                    : route.layout
                             const Component = route.component
                             return (
                                 <Route
                                     key={route.name}
                                     path={route.path}
                                     element={
-                                        <Layout>
-                                            <Component />
-                                        </Layout>
+                                        route.layout == null ? (
+                                            <Layout>
+                                                <Component />
+                                            </Layout>
+                                        ) : (
+                                            <Layout {...route.props}>
+                                                <Component />
+                                            </Layout>
+                                        )
                                     }
                                 />
                             )
@@ -45,16 +48,25 @@ function App(): React.ReactElement {
                     <Route path="/" element={<PublicRoute />}>
                         <Route>
                             {publicRoutes.map((route: IRoute) => {
-                                const Layout = route.layout
+                                const Layout =
+                                    route.layout == null
+                                        ? React.Fragment
+                                        : route.layout
                                 const Component = route.component
                                 return (
                                     <Route
                                         key={route.name}
                                         path={route.path}
                                         element={
-                                            <Layout>
-                                                <Component />
-                                            </Layout>
+                                            route.layout == null ? (
+                                                <Layout>
+                                                    <Component />
+                                                </Layout>
+                                            ) : (
+                                                <Layout {...route.props}>
+                                                    <Component />
+                                                </Layout>
+                                            )
                                         }
                                     />
                                 )
