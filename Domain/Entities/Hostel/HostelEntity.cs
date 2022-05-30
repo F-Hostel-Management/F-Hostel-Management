@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities;
 
-[Table("Hostel")]
+[Table("Hostels")]
 public class HostelEntity : BaseEntity
 {
     public string Address { get; set; }

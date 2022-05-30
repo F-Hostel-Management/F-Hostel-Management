@@ -86,7 +86,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("RoomId")
                         .IsUnique();
 
-                    b.ToTable("Commitment");
+                    b.ToTable("Commitments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -159,7 +159,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("HostelManagent");
+                    b.ToTable("HostelManagents");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
@@ -176,7 +176,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HostelCategory");
+                    b.ToTable("HostelCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
@@ -209,7 +209,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Hostel");
+                    b.ToTable("Hostels");
                 });
 
             modelBuilder.Entity("Domain.Entities.Invoice.InvoiceEntity", b =>
@@ -255,7 +255,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantPaidId");
 
-                    b.ToTable("Invoice");
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Domain.Entities.Invoice.InvoiceType", b =>
@@ -372,7 +372,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomNotification");
+                    b.ToTable("RoomNotifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationCategory", b =>
@@ -389,7 +389,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NotificationCategory");
+                    b.ToTable("NotificationCategories");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
@@ -417,7 +417,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("NotificationCategoryId");
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
@@ -471,7 +471,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomTypeId");
 
-                    b.ToTable("Room");
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomType", b =>

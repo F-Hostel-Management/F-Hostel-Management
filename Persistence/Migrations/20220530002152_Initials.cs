@@ -23,7 +23,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HostelCategory",
+                name: "HostelCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -32,7 +32,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HostelCategory", x => x.Id);
+                    table.PrimaryKey("PK_HostelCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +49,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NotificationCategory",
+                name: "NotificationCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -58,7 +58,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NotificationCategory", x => x.Id);
+                    table.PrimaryKey("PK_NotificationCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,7 +88,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
+                name: "Notifications",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -100,32 +100,13 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notification_NotificationCategory_NotificationCategoryId",
+                        name: "FK_Notifications_NotificationCategories_NotificationCategoryId",
                         column: x => x.NotificationCategoryId,
-                        principalTable: "NotificationCategory",
+                        principalTable: "NotificationCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Commitment",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommitmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Commitment", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -140,11 +121,25 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CommitmentContains", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CommitmentContains_Commitment_CommitmentId",
-                        column: x => x.CommitmentId,
-                        principalTable: "Commitment",
-                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Commitments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CommitmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Commitments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,29 +165,44 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hostel",
+                name: "HostelManagents",
+                columns: table => new
+                {
+                    HostelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HostelManagents", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hostels",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumOfRooms = table.Column<int>(type: "int", nullable: false),
                     HostelCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hostel", x => x.Id);
+                    table.PrimaryKey("PK_Hostels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Hostel_HostelCategory_HostelCategoryId",
+                        name: "FK_Hostels_HostelCategories_HostelCategoryId",
                         column: x => x.HostelCategoryId,
-                        principalTable: "HostelCategory",
+                        principalTable: "HostelCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Room",
+                name: "Rooms",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -205,22 +215,22 @@ namespace Infrastructure.Migrations
                     Area = table.Column<double>(type: "float", nullable: false),
                     Length = table.Column<double>(type: "float", nullable: false),
                     Width = table.Column<double>(type: "float", nullable: false),
-                    Height = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<double>(type: "float", nullable: false),
                     RoomTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HostelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Room", x => x.Id);
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Room_Hostel_HostelId",
+                        name: "FK_Rooms_Hostels_HostelId",
                         column: x => x.HostelId,
-                        principalTable: "Hostel",
+                        principalTable: "Hostels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Room_RoomTypes_RoomTypeId",
+                        name: "FK_Rooms_RoomTypes_RoomTypeId",
                         column: x => x.RoomTypeId,
                         principalTable: "RoomTypes",
                         principalColumn: "Id",
@@ -234,8 +244,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -249,38 +258,14 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Room_RoomId",
+                        name: "FK_Users_Rooms_RoomId",
                         column: x => x.RoomId,
-                        principalTable: "Room",
+                        principalTable: "Rooms",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "HostelManagent",
-                columns: table => new
-                {
-                    HostelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HostelManagent", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HostelManagent_Hostel_HostelId",
-                        column: x => x.HostelId,
-                        principalTable: "Hostel",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_HostelManagent_Users_ManagerId",
-                        column: x => x.ManagerId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Invoice",
+                name: "Invoices",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -296,25 +281,25 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoice", x => x.Id);
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Invoice_InvoiceTypes_InvoiceTypeId",
+                        name: "FK_Invoices_InvoiceTypes_InvoiceTypeId",
                         column: x => x.InvoiceTypeId,
                         principalTable: "InvoiceTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Invoice_Room_RoomId",
+                        name: "FK_Invoices_Rooms_RoomId",
                         column: x => x.RoomId,
-                        principalTable: "Room",
+                        principalTable: "Rooms",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Invoice_Users_ManagerId",
+                        name: "FK_Invoices_Users_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Invoice_Users_TenantPaidId",
+                        name: "FK_Invoices_Users_TenantPaidId",
                         column: x => x.TenantPaidId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -345,9 +330,9 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_InvoiceSchedules_Room_RoomId",
+                        name: "FK_InvoiceSchedules_Rooms_RoomId",
                         column: x => x.RoomId,
-                        principalTable: "Room",
+                        principalTable: "Rooms",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_InvoiceSchedules_Users_ManagerId",
@@ -357,7 +342,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoomNotification",
+                name: "RoomNotifications",
                 columns: table => new
                 {
                     ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -368,19 +353,19 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomNotification", x => x.Id);
+                    table.PrimaryKey("PK_RoomNotifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoomNotification_Notification_NotificationId",
+                        name: "FK_RoomNotifications_Notifications_NotificationId",
                         column: x => x.NotificationId,
-                        principalTable: "Notification",
+                        principalTable: "Notifications",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_RoomNotification_Room_RoomId",
+                        name: "FK_RoomNotifications_Rooms_RoomId",
                         column: x => x.RoomId,
-                        principalTable: "Room",
+                        principalTable: "Rooms",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_RoomNotification_Users_ManagerId",
+                        name: "FK_RoomNotifications_Users_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -402,9 +387,9 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tickets_Room_RoomId",
+                        name: "FK_Tickets_Rooms_RoomId",
                         column: x => x.RoomId,
-                        principalTable: "Room",
+                        principalTable: "Rooms",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tickets_TicketTypes_TicketTypeId",
@@ -447,18 +432,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commitment_ManagerId",
-                table: "Commitment",
-                column: "ManagerId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Commitment_RoomId",
-                table: "Commitment",
-                column: "RoomId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CommitmentContains_CommitmentId",
                 table: "CommitmentContains",
                 column: "CommitmentId");
@@ -467,6 +440,18 @@ namespace Infrastructure.Migrations
                 name: "IX_CommitmentContains_TenantId",
                 table: "CommitmentContains",
                 column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commitments_ManagerId",
+                table: "Commitments",
+                column: "ManagerId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commitments_RoomId",
+                table: "Commitments",
+                column: "RoomId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Facilities_FacilityCategoryId",
@@ -479,43 +464,43 @@ namespace Infrastructure.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hostel_HostelCategoryId",
-                table: "Hostel",
-                column: "HostelCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Hostel_OwnerId",
-                table: "Hostel",
-                column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HostelManagent_HostelId",
-                table: "HostelManagent",
+                name: "IX_HostelManagents_HostelId",
+                table: "HostelManagents",
                 column: "HostelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HostelManagent_ManagerId",
-                table: "HostelManagent",
+                name: "IX_HostelManagents_ManagerId",
+                table: "HostelManagents",
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoice_InvoiceTypeId",
-                table: "Invoice",
+                name: "IX_Hostels_HostelCategoryId",
+                table: "Hostels",
+                column: "HostelCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hostels_OwnerId",
+                table: "Hostels",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invoices_InvoiceTypeId",
+                table: "Invoices",
                 column: "InvoiceTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoice_ManagerId",
-                table: "Invoice",
+                name: "IX_Invoices_ManagerId",
+                table: "Invoices",
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoice_RoomId",
-                table: "Invoice",
+                name: "IX_Invoices_RoomId",
+                table: "Invoices",
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoice_TenantPaidId",
-                table: "Invoice",
+                name: "IX_Invoices_TenantPaidId",
+                table: "Invoices",
                 column: "TenantPaidId");
 
             migrationBuilder.CreateIndex(
@@ -544,34 +529,34 @@ namespace Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_NotificationCategoryId",
-                table: "Notification",
+                name: "IX_Notifications_NotificationCategoryId",
+                table: "Notifications",
                 column: "NotificationCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Room_HostelId",
-                table: "Room",
-                column: "HostelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Room_RoomTypeId",
-                table: "Room",
-                column: "RoomTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoomNotification_ManagerId",
-                table: "RoomNotification",
+                name: "IX_RoomNotifications_ManagerId",
+                table: "RoomNotifications",
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomNotification_NotificationId",
-                table: "RoomNotification",
+                name: "IX_RoomNotifications_NotificationId",
+                table: "RoomNotifications",
                 column: "NotificationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomNotification_RoomId",
-                table: "RoomNotification",
+                name: "IX_RoomNotifications_RoomId",
+                table: "RoomNotifications",
                 column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_HostelId",
+                table: "Rooms",
+                column: "HostelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_RoomTypeId",
+                table: "Rooms",
+                column: "RoomTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_RoomId",
@@ -594,17 +579,10 @@ namespace Infrastructure.Migrations
                 column: "RoomId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Commitment_Room_RoomId",
-                table: "Commitment",
-                column: "RoomId",
-                principalTable: "Room",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Commitment_Users_ManagerId",
-                table: "Commitment",
-                column: "ManagerId",
-                principalTable: "Users",
+                name: "FK_CommitmentContains_Commitments_CommitmentId",
+                table: "CommitmentContains",
+                column: "CommitmentId",
+                principalTable: "Commitments",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
@@ -615,16 +593,44 @@ namespace Infrastructure.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Facilities_Room_RoomId",
+                name: "FK_Commitments_Rooms_RoomId",
+                table: "Commitments",
+                column: "RoomId",
+                principalTable: "Rooms",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Commitments_Users_ManagerId",
+                table: "Commitments",
+                column: "ManagerId",
+                principalTable: "Users",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Facilities_Rooms_RoomId",
                 table: "Facilities",
                 column: "RoomId",
-                principalTable: "Room",
+                principalTable: "Rooms",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Hostel_Users_OwnerId",
-                table: "Hostel",
+                name: "FK_HostelManagents_Hostels_HostelId",
+                table: "HostelManagents",
+                column: "HostelId",
+                principalTable: "Hostels",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_HostelManagents_Users_ManagerId",
+                table: "HostelManagents",
+                column: "ManagerId",
+                principalTable: "Users",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Hostels_Users_OwnerId",
+                table: "Hostels",
                 column: "OwnerId",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -634,8 +640,8 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Users_Room_RoomId",
-                table: "Users");
+                name: "FK_Hostels_Users_OwnerId",
+                table: "Hostels");
 
             migrationBuilder.DropTable(
                 name: "CommitmentContains");
@@ -644,10 +650,10 @@ namespace Infrastructure.Migrations
                 name: "Facilities");
 
             migrationBuilder.DropTable(
-                name: "HostelManagent");
+                name: "HostelManagents");
 
             migrationBuilder.DropTable(
-                name: "Invoice");
+                name: "Invoices");
 
             migrationBuilder.DropTable(
                 name: "InvoiceSchedules");
@@ -656,10 +662,10 @@ namespace Infrastructure.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "RoomNotification");
+                name: "RoomNotifications");
 
             migrationBuilder.DropTable(
-                name: "Commitment");
+                name: "Commitments");
 
             migrationBuilder.DropTable(
                 name: "FacilityCategories");
@@ -671,28 +677,28 @@ namespace Infrastructure.Migrations
                 name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Notification");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "TicketTypes");
 
             migrationBuilder.DropTable(
-                name: "NotificationCategory");
+                name: "NotificationCategories");
 
             migrationBuilder.DropTable(
-                name: "Room");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Hostel");
+                name: "Rooms");
+
+            migrationBuilder.DropTable(
+                name: "Hostels");
 
             migrationBuilder.DropTable(
                 name: "RoomTypes");
 
             migrationBuilder.DropTable(
-                name: "HostelCategory");
-
-            migrationBuilder.DropTable(
-                name: "Users");
+                name: "HostelCategories");
         }
     }
 }

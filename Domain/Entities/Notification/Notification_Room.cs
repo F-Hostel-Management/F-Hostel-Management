@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities.Notification;
-[Table("RoomNotification")]
+[Table("RoomNotifications")]
 public class Notification_Room : BaseEntity
 {
     [Column(Order = 1)]

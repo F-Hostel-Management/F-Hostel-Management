@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities.Hostel;
-[Table("HostelManagent")]
+[Table("HostelManagents")]
 public class HostelManagement : BaseEntity
 {
     // M managers - M hostels
