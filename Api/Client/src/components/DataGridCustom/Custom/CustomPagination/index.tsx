@@ -12,18 +12,21 @@ import {
 
 import * as Styled from './styles'
 
-interface ICustomPaginationProps {}
+interface ICustomPaginationProps {
+    rowsPerPageOptions: number[]
+    pageSize: number
+    setPageSize: any
+}
 
-const CustomPagination: React.FunctionComponent<
-    ICustomPaginationProps
-> = () => {
+const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = ({
+    rowsPerPageOptions,
+    pageSize,
+    setPageSize,
+}) => {
     const apiRef = useGridApiContext()
     const page = useGridSelector(apiRef, gridPageSelector) + 1
     const pageCount = useGridSelector(apiRef, gridPageCountSelector)
     const rowsCount = useGridSelector(apiRef, gridRowCountSelector)
-    const rowPerPageOptions = [5, 10, 25, 100]
-
-    const [pageSize, setPageSize] = React.useState(2)
 
     const handleChangePageSize = (event: { target: { value: any } }) => {
         setPageSize(event.target.value)
@@ -55,7 +58,7 @@ const CustomPagination: React.FunctionComponent<
                             fontSize: '1.3rem',
                         }}
                     >
-                        {rowPerPageOptions.map((option, index) => (
+                        {rowsPerPageOptions.map((option, index) => (
                             <MenuItem
                                 key={index}
                                 value={option}
