@@ -9,7 +9,7 @@ import { pathNames as pathNameLabels } from '../../utils/pathName'
 
 interface IBreadcrumbProps {}
 
-const Breadcrumb: FC<IBreadcrumbProps> = (props) => {
+const Breadcrumb: FC<IBreadcrumbProps> = () => {
     let location = useLocation()
 
     function handleClick(

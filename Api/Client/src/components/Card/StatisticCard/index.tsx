@@ -26,8 +26,8 @@ const StatisticCard: FC<IStatisticCardProps> = ({
             <Styled.CardContentWrapper>
                 <Styled.CardIcon bgrColor={bgrColor}>{icon}</Styled.CardIcon>
                 <Styled.Statistic>
-                    <Typography variant="subtitle1" mb={1}>
-                        {label}
+                    <Typography variant="subtitle2" mb={1}>
+                        <strong>{label}</strong>
                     </Typography>
                     <Typography variant="h3">
                         <strong>{count}</strong>

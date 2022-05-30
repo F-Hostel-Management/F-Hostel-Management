@@ -6,7 +6,6 @@ import { useBreakpoint } from 'styled-breakpoints/react-styled'
 import { Grid, Typography } from '@mui/material'
 
 import Breadcrumb from '../../Breadcrumd'
-import Footer from '../../Footer'
 import HeaderDefault from '../../Header/HeaderDefault'
 import Loading from '../../Loading'
 import Sidebar from '../../Sidebar'
@@ -27,7 +26,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
     return loading ? (
         <Loading />
     ) : (
-        <React.Fragment>
+        <Styled.Container>
             <HeaderDefault
                 isShownSidebar={isShownSidebar}
                 setIsShownSidebar={() => setIsShownSidebar(!isShownSidebar)}
@@ -42,10 +41,16 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
                     overflow: 'hidden',
                 }}
             >
-                <Styled.GridSidebar item lg={isShownSidebar ? 2.5 : 0.5}>
+                <Styled.GridSidebar
+                    item
+                    lg={isShownSidebar ? 2.5 : 0.5}
+                    isSidebarMobile={isSidebarMobile}
+                >
                     {isSidebarMobile || screen ? (
                         <React.Fragment>
-                            <Styled.Overlay />
+                            <Styled.Overlay
+                                onClick={() => setIsSidebarMobile(false)}
+                            />
                             <Sidebar isShownSidebar={isShownSidebar} />
                         </React.Fragment>
                     ) : null}
@@ -72,7 +77,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
                     {children}
                 </Styled.GridMain>
             </Grid>
-        </React.Fragment>
+        </Styled.Container>
     )
 }
 

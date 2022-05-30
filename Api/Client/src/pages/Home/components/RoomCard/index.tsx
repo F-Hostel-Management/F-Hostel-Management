@@ -76,7 +76,11 @@ const RoomCard: React.FunctionComponent<IRoomCardProps> = ({
             }
             actions={
                 <React.Fragment>
-                    <Button variant="contained" color="primary" disabled={!status}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={!status}
+                    >
                         Details
                     </Button>
                 </React.Fragment>
