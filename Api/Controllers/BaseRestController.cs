@@ -5,7 +5,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public abstract class BaseApiController : ControllerBase
+public abstract class BaseRestController : ControllerBase
 {
     private IMapper _mapper;
     protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();

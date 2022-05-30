@@ -9,6 +9,7 @@ namespace Api.Configurations
         private static class NonSpaPath
         {
             public const string Api = "/api";
+            public const string OData = "/odata";
         }
 
         private static string[] GetNonSpaPaths()
@@ -37,21 +38,23 @@ namespace Api.Configurations
                     });
         }
 
-        private static void AddMappingApi(this WebApplication app)
+        private static void AddMappingApiAndOData(this WebApplication app)
         {
-            app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments(NonSpaPath.Api), config =>
-            {
-                config.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-            });
+            app.MapWhen(ctx =>
+                ctx.Request.Path.StartsWithSegments(NonSpaPath.Api)
+                || ctx.Request.Path.StartsWithSegments(NonSpaPath.OData), config =>
+                    {
+                        config.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                        });
+                    });
         }
 
         public static void AddControllerMapper(this WebApplication app)
         {
             app.AddMappingSpa();
-            app.AddMappingApi();
+            app.AddMappingApiAndOData();
         }
     }
 }
