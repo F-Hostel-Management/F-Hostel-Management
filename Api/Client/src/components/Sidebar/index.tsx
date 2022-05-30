@@ -28,10 +28,7 @@ interface ISidebarProps {
 const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(0)
 
-    const handleListItemClick = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        index: number
-    ) => {
+    const handleListItemClick = (index: number) => {
         setSelectedIndex(index)
     }
     return (
@@ -88,9 +85,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                                 selected={
                                     selectedIndex === index ? true : false
                                 }
-                                onClick={(event) =>
-                                    handleListItemClick(event, index)
-                                }
+                                onClick={() => handleListItemClick(index)}
                                 sx={{
                                     margin: '8px 4px',
                                     padding: '10px 12px',
