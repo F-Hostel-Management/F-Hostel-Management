@@ -1,14 +1,13 @@
-import * as React from 'react';
+import * as React from 'react'
 
-interface IProfileProps {
+interface IProfileProps {}
+
+const Profile: React.FunctionComponent<IProfileProps> = () => {
+    return (
+        <div>
+            <h1>Profile</h1>
+        </div>
+    )
 }
 
-const Profile: React.FunctionComponent<IProfileProps> = (props) => {
-  return (
-    <div>
-      <h1>Profile</h1>
-    </div>
-  );
-};
-
-export default Profile;
+export default Profile

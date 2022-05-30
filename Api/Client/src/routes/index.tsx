@@ -1,26 +1,26 @@
-import * as React from 'react'
+import { Fragment, ElementType } from 'react'
 
-import DefaultHomeLayout from '../components/Layout/DefaultHomeLayout'
 import DefaultLayout from '../components/Layout/DefaultLayout'
+import HomeLayout from '../components/Layout/HomeLayout'
 
 import About from '../pages/About'
+import Dashboard from '../pages/Dashboard'
 import Home from '../pages/Home'
 import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
-import Register from '../pages/Register'
 
 const publicRoutes: Array<{
     path: string
-    component: React.ElementType
+    component: ElementType
     name: string
-    layout: React.ElementType
+    layout: ElementType
 }> = [
     {
         path: '/landingPage',
         component: LandingPage,
         name: 'LandingPage',
-        layout: React.Fragment,
+        layout: Fragment,
     },
     {
         path: '/about',
@@ -32,30 +32,30 @@ const publicRoutes: Array<{
         path: '/login',
         component: Login,
         name: 'Login',
-        layout: React.Fragment,
-    },
-    {
-        path: '/register',
-        component: Register,
-        name: 'Register',
-        layout: React.Fragment,
+        layout: Fragment,
     },
 ]
 
 const privateRoutes: Array<{
     path: string
-    component: React.ElementType
+    component: ElementType
     name: string
-    layout: React.ElementType
+    layout: ElementType
 }> = [
     {
-        path: '/home/*',
+        path: '/home',
         component: Home,
         name: 'Home',
-        layout: DefaultHomeLayout,
+        layout: HomeLayout,
     },
     {
-        path: '/profile',
+        path: '/home/dashboard',
+        component: Dashboard,
+        name: 'Dashboard',
+        layout: DefaultLayout,
+    },
+    {
+        path: 'home/profile',
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,
