@@ -78,11 +78,14 @@ public class UserEntity : BaseEntity
     // 1 Tenant (create) M Tickets (for) 1 Room
     public virtual ICollection<TicketEntity> Tickets { get; set; }
 
+    // 1 Owner manage M manager
+    public Guid? OwnerId { get; set; }
+    public UserEntity Owner { get; set; }
 
-    // 1 Commitment (belong to) 1 Manager
-    public CommitmentEntity Commitment { get; set; }
+    // 1 user M commitments
+    public virtual ICollection<CommitmentEntity> ManagerCommitments { get; set; }
+    public virtual ICollection<CommitmentEntity> TenantCommitments { get; set; }
+    public virtual ICollection<CommitmentEntity> OwnerCommitments { get; set; }
 
-    // M Commitments (belong to ) M Teanants
-    public virtual ICollection<CommitmentContains> CommitmentContains { get; set; }
 
 }
