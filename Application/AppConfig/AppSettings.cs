@@ -1,7 +1,7 @@
 ﻿
 
 
-namespace Api.App.Configurations
+namespace Application.AppConfig
 {
     public class AppSettings
     {
@@ -9,5 +9,6 @@ namespace Api.App.Configurations
         public JwtSetting JwtSetting { get; set; }
         public string SpaDevServer { get; set; }
         public string FirebaseConfigPath { get; set; }
+        public string GoogleCloudStorageBucket { get; set; }
     }
 }
