@@ -8,9 +8,11 @@ import ActionButtons from './components/ActionButtons'
 import CommitmentStatus from './components/CommitmentStatus'
 import { ICommitment } from '../../interface/commitment'
 import AddCircleIcon from '@mui/icons-material/AddCircle'
+import { ERole } from '../../utils/enums'
 interface ICommitmentsProps {}
 
 const Commitments: FC<ICommitmentsProps> = () => {
+    const role: ERole = 1
     const { renderCell, createColumn } = useGridData()
 
     const [pageSize, setPageSize] = useState<number>(5)
@@ -60,7 +62,9 @@ const Commitments: FC<ICommitmentsProps> = () => {
                 page={page}
                 setPage={setPage}
                 rowsCount={27}
-                toolbarChildren={<ToolbarChildren />}
+                toolbarChildren={
+                    role != ERole.TENANT_ROLE ? <ToolbarChildren /> : null
+                }
             />
         </Fragment>
     )
