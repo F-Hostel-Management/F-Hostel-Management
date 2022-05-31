@@ -83,108 +83,150 @@ const PersonalInfomation: React.FC<IPersonInformationProps> = ({
 
     return (
         <Styled.Step>
-            <Grid container>
-                <Grid item xs={12} md={6}></Grid>
-                <Grid item xs={12} md={6}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Box sx={{ width: '90%' }}>
+                    <Grid container>
+                        <Grid
+                            item
+                            xs={12}
+                            md={5}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                            }}
+                        >
+                            <Box sx={{ ml: 3, textAlign: 'center' }}>
+                                <label>
+                                    <input
+                                        type="file"
+                                        id="avatar"
+                                        accept="image/png, image/jpeg"
+                                        style={{ display: 'none' }}
+                                    ></input>
+
+                                    <Styled.UpdateAvt
+                                        src="/broken-image.jpg"
+                                        sx={{
+                                            width: '150px',
+                                            height: '150px',
+                                            mb: 2,
+                                        }}
+                                    />
+                                </label>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="fullname"
+                                label="Fullname"
+                                autoFocus
+                                size="small"
+                                value={fullName ?? ''}
+                                onChange={(e) =>
+                                    onChangeState({
+                                        ...state,
+                                        fullName: e.target.value,
+                                    })
+                                }
+                            />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="fullname"
+                                label="Birthday"
+                                size="small"
+                                type="date"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                defaultValue={birthDate ?? ''}
+                                onChange={(e) =>
+                                    onChangeState({
+                                        ...state,
+                                        birthDate: e.target.value,
+                                    })
+                                }
+                            />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="fullname"
+                                label="ID card number"
+                                size="small"
+                                type="number"
+                                value={cardNumber ?? ''}
+                                onChange={(e) =>
+                                    onChangeState({
+                                        ...state,
+                                        cardNumber: e.target.value,
+                                    })
+                                }
+                            />
+                        </Grid>
+                    </Grid>
+
                     <TextField
                         margin="normal"
                         required
                         fullWidth
                         id="fullname"
-                        label="Fullname"
-                        autoFocus
+                        label="Address"
                         size="small"
-                        value={fullName ?? ''}
+                        value={address ?? ''}
                         onChange={(e) =>
-                            onChangeState({
-                                ...state,
-                                fullName: e.target.value,
-                            })
+                            onChangeState({ ...state, address: e.target.value })
                         }
                     />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="fullname"
-                        label="Birthday"
-                        size="small"
-                        type="date"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        defaultValue={birthDate ?? ''}
-                        onChange={(e) =>
-                            onChangeState({
-                                ...state,
-                                birthDate: e.target.value,
-                            })
-                        }
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="fullname"
-                        label="ID card number"
-                        size="small"
-                        type="number"
-                        value={cardNumber ?? ''}
-                        onChange={(e) =>
-                            onChangeState({
-                                ...state,
-                                cardNumber: e.target.value,
-                            })
-                        }
-                    />
-                </Grid>
-            </Grid>
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="fullname"
-                label="Address"
-                size="small"
-                value={address ?? ''}
-                onChange={(e) =>
-                    onChangeState({ ...state, address: e.target.value })
-                }
-            />
-            <Grid container>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="fullname"
-                        label="Gender"
-                        select
-                        size="small"
-                        value={gender ?? ''}
-                        onChange={(e) =>
-                            onChangeState({ ...state, gender: e.target.value })
-                        }
-                    >
-                        {genders.map((option, index) => (
-                            <MenuItem key={index} value={option}>
-                                {option}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="fullname"
-                        label="ID card number"
-                        size="small"
-                        type="number"
-                    />
-                </Grid>
-            </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="fullname"
+                                label="Gender"
+                                select
+                                size="small"
+                                value={gender ?? ''}
+                                onChange={(e) =>
+                                    onChangeState({
+                                        ...state,
+                                        gender: e.target.value,
+                                    })
+                                }
+                            >
+                                {genders.map((option, index) => (
+                                    <MenuItem key={index} value={option}>
+                                        {option}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="fullname"
+                                label="Phone number"
+                                size="small"
+                            />
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
         </Styled.Step>
     )
 }
