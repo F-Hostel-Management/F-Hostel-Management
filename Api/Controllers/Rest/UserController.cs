@@ -24,11 +24,11 @@ namespace Api.Controllers.Rest
         [HttpPost("update-user")]
         public async Task<IActionResult> UpdateUser([FromForm] UpdateUserProfileRequest updateUserProfileRequest)
         {
-            var userID = GetUserID();
-            var avatarUrl = await _userService.UploadAvatar(userID.ToString(), updateUserProfileRequest.IdentificationImage);    
-            UpdateProfileResponse response = new UpdateProfileResponse();
-            response.AvatarUrl = avatarUrl;
-            return Ok(response);
+            //var userID = GetUserID();
+            //var avatarUrl = await _userService.UploadAvatar(userID.ToString(), updateUserProfileRequest.IdentificationImage);    
+            //UpdateProfileResponse response = new UpdateProfileResponse();
+            //response.AvatarUrl = avatarUrl;
+            return Ok();
         }
 
        
