@@ -44,7 +44,7 @@ public static class DatabaseInitializer
         dbContext.Database.EnsureCreated();
 
         await dbContext.FeedUsers();
-        await dbContext.FeedOwnerToManagers();
+        //await dbContext.FeedOwnerToManagers();
 
         await dbContext.FeedHostelCategories();
 
@@ -54,7 +54,8 @@ public static class DatabaseInitializer
 
         await dbContext.FeedRooms();
 
-        //await dbContext.FeedTenantsToRoom();
+        await dbContext.FeedTenantsToRoom();
+
     }
 
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
@@ -185,6 +186,8 @@ public static class DatabaseInitializer
     {
         if (!dbContext.Users.Any() || !dbContext.Rooms.Any()) return;
 
+        if (dbContext.Commitments.Any()) return;
+
         var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
@@ -193,8 +196,6 @@ public static class DatabaseInitializer
         {
             var room = rooms[_rand.Next(rooms.Length)];
             UserEntity owner = owners.FirstOrDefault(owner => owner.Id.Equals(dbContext.Hostels.FirstOrDefault(hostel => hostel.Id.Equals(room.HostelId)).OwnerId));
-            // tenant into room
-            tenant.Room = room;
             // create commitment
             await dbContext.Commitments.AddAsync(
                 new CommitmentEntity()
@@ -205,8 +206,16 @@ public static class DatabaseInitializer
                     Room = room,
                     CreatedDate = DateTime.Now,
                     StartDate = DateTime.Now,
-                    EndDate = DateTime.Parse("22 Jun 2023 14:20:00")
+                    EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
+                    CommitmentStatus = (CommitmentStatus)2
                 });
+
+            // tenant into room
+            tenant.Room = room;
+
+            // update room status
+            room.RoomStatus = (RoomStatus)0;
+
         }
         await dbContext.SaveChangesAsync();
     }

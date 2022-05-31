@@ -6,6 +6,8 @@ namespace Application.Interfaces
     public interface ICommitmentServices
     {
         Task CreateCommitment(CommitmentEntity commitment, RoomEntity room);
-        Task<bool> IsDuplicated(string commitmentCode);
+        Task<bool> IsExist(string commitmentCode);
+
+        Task<CommitmentEntity> GetCurrentCommitmentByRoom(Guid roomId);
     }
 }

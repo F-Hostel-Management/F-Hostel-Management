@@ -25,7 +25,16 @@ public class CommitmentServices : ICommitmentServices
         await _commitmentRepository.CreateAsync(commitment);
     }
 
-    public async Task<bool> IsDuplicated(string commitmentCode)
+    public async Task<CommitmentEntity> GetCurrentCommitmentByRoom(Guid roomId)
+    {
+        return await _commitmentRepository
+            .FirstOrDefaultAsync(com => 
+            com.RoomId.Equals(roomId)
+            && !com.Status.Equals(CommitmentStatus.Expired.ToString())
+            );
+    }
+
+    public async Task<bool> IsExist(string commitmentCode)
     {
         return await _commitmentRepository
             .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode))

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Route("api/rooms/{RoomId}/commitments")]
+[Route("api/rooms/{RoomId}/")]
 public class CommitmentsController : BaseRestController
 {
     private readonly IGenericRepository<UserEntity> _userRepository;
@@ -29,11 +29,11 @@ public class CommitmentsController : BaseRestController
         _roomServices = roomServices;
     }
 
-
-
-    [HttpPost()]
+    [HttpPost("commitments")]
     public async Task<IActionResult> CreateCommitment([FromRoute] Guid RoomId, CreateCommitmentRequest _com)
     {
+        // not check hostel owner and owner from request
+
         // check room status
         RoomEntity _room = await _roomServices.GetAvailableRoomByIdAsync(RoomId);
         if (_room == null)
@@ -41,7 +41,7 @@ public class CommitmentsController : BaseRestController
             return BadRequest("Room does not exist or already rented");
         }
 
-        bool isDuplicated = await _commitmentServices.IsDuplicated(_com.CommitmentCode);
+        bool isDuplicated = await _commitmentServices.IsExist(_com.CommitmentCode);
         if (isDuplicated)
         {
             return BadRequest("Commitment code duplicate");
@@ -56,6 +56,11 @@ public class CommitmentsController : BaseRestController
 
         return Ok(com);
     }
+
+/*    public async Task<IActionResult> OwnerApprovedCommitment([FromRoute] Guid RoomId)
+    {
+
+    }*/
 
     // owner conform commitment ==> com.status => approved
 
