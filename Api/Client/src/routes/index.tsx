@@ -9,6 +9,7 @@ import Home from '../pages/Home'
 import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
+import FillInformation from '../pages/FillInformation'
 
 const publicRoutes: Array<{
     path: string
@@ -59,6 +60,12 @@ const privateRoutes: Array<{
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,
+    },
+    {
+        path: '/fillInformation',
+        component: FillInformation,
+        name: 'FillInformation',
+        layout: Fragment,
     },
 ]
 
