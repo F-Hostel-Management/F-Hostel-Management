@@ -19,6 +19,11 @@
         "axios": "^0.27.2",
         "firebase": "^9.8.1",
         "normalize.css": "^8.0.1",
+<<<<<<< HEAD
+=======
+        "odata-fluent-query": "^2.4.1",
+        "qrcode.react": "^3.0.2",
+>>>>>>> eb1ba83 (Add QR code components)
         "react": "^18.0.0",
         "react-apexcharts": "^1.4.0",
         "react-dom": "^18.0.0",
