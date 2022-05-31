@@ -12,10 +12,11 @@ import Sidebar from '../../Sidebar'
 import * as Styled from './styles'
 
 interface IDefaultLayoutProps {
+    title: string
     children: ReactElement
 }
 
-const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
+const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
     const screen = useBreakpoint(up('lg'))
     const [isShownSidebar, setIsShownSidebar] = useState<boolean>(true)
     const [isSidebarMobile, setIsSidebarMobile] = useState<boolean>(false)
@@ -66,7 +67,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ children }) => {
                         <Styled.BodyHeader>
                             <Styled.BodyTitle>
                                 <Typography variant="h4">
-                                    <strong>Dashboard</strong>
+                                    <strong>{title}</strong>
                                 </Typography>
                             </Styled.BodyTitle>
                             <Styled.Breadcrumb>

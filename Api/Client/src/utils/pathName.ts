@@ -6,4 +6,5 @@ export const pathNames: pathName = {
     home: 'Home',
     demo: 'Demo',
     dashboard: 'Dashboard',
+    commitments: 'Commitments',
 }

@@ -11,7 +11,7 @@ export const GridToolbar = styled(GridToolbarContainer)`
     padding: 0.4rem 0;
 
     ${down('sm')} {
-        display: block;
+        flex-direction: column;
     }
 `
 
