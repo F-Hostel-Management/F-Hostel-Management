@@ -4,10 +4,10 @@ using Microsoft.OpenApi.Models;
 using Domain.Constants;
 using System.Security.Claims;
 using Domain.Enums;
-using Api.App.Configurations;
 using Api.Configurations;
 using Microsoft.AspNetCore.OData;
 using System.Text.Json;
+using Application.AppConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -69,8 +69,8 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseDeveloperExceptionPage();
-        await app.Services.DbInitializer();
         await app.Services.ApplyMigrations();
+        await app.Services.DbInitializer();
     }
     app.UseRouting();
     app.UseAuthentication();

@@ -3,7 +3,7 @@ import React, { FC, Fragment } from 'react'
 import CardWithImage from '../../../../components/Card/CardWithImage'
 import { Typography, Button, Rating } from '@mui/material'
 
-import { Role } from '../../../../utils/enums'
+import { ERole } from '../../../../utils/enums'
 import CardOptions from '../CardOptions'
 import * as Styled from './styles'
 
@@ -11,7 +11,7 @@ interface IHostelCardProps {
     imageSrc?: string
     name?: string
 }
-const role: Role = 2
+const role: ERole = 2
 const HostelCard: FC<IHostelCardProps> = () => {
     return (
         <CardWithImage
@@ -42,7 +42,7 @@ const HostelCard: FC<IHostelCardProps> = () => {
                                 display: 'inline-block',
                             }}
                         >
-                            {role == Role.OWNER_ROLE ? ' Manager:' : 'Owner'}
+                            {role == ERole.OWNER_ROLE ? ' Manager:' : 'Owner'}
                         </span>
                         Le Xuan Dai
                     </Typography>

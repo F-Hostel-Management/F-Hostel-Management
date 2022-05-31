@@ -13,6 +13,7 @@ export default defineConfig({
         https: true,
         proxy: {
             '/api': 'http://localhost:5177',
+            '/odata': 'http://localhost:5177',
         },
     },
     preview: {

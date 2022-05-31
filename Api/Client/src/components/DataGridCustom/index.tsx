@@ -7,6 +7,7 @@ import * as Styled from './styles'
 
 interface IDataGridCustomProps {
     loading: boolean
+    title: string
     rows: Array<any>
     columns: Array<any>
     pageSize: number
@@ -14,21 +15,38 @@ interface IDataGridCustomProps {
     page: number
     setPage: any
     rowsCount: number
+    rowsPerPageOptions?: number[]
+    toolbarChildren?: any
 }
 
 const DataGridCustom: FC<IDataGridCustomProps> = ({
-    loading = false,
-    rows = [],
-    columns = [],
-    pageSize = 5,
-    setPageSize = () => {},
-    page = 0,
-    setPage = () => {},
-    rowsCount = 0,
+    loading,
+    title,
+    rows,
+    columns,
+    pageSize,
+    setPageSize,
+    page,
+    setPage,
+    rowsCount,
+    rowsPerPageOptions = [5, 10, 25, 100],
+    toolbarChildren,
 }) => {
+    const Toolbar = () => (
+        <CustomToolbar title={title}>{toolbarChildren}</CustomToolbar>
+    )
+    const Pagination = () => (
+        <CustomPagination
+            rowsPerPageOptions={rowsPerPageOptions}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+        />
+    )
+
     return (
         <Styled.DataGridContainer
             width="100%"
+            height="100%"
             color="#F06D06"
             style={{ backgroundColor: '#FFFFFF' }}
         >
@@ -41,7 +59,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
                 paginationMode="server"
                 page={page}
                 pageSize={pageSize}
-                rowsPerPageOptions={[2, 4, 6, 8]}
+                rowsPerPageOptions={rowsPerPageOptions}
                 rowCount={rowsCount}
                 disableColumnFilter
                 disableDensitySelector={true}
@@ -52,9 +70,11 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 components={{
                     NoRowsOverlay: CustomNoRowsOverlay,
-                    Pagination: CustomPagination,
-                    Toolbar: CustomToolbar,
+                    Pagination: Pagination,
+                    Toolbar: Toolbar,
                 }}
+                disableSelectionOnClick
+                sx={{ fontSize: '1.4rem', cursor: 'text', minHeight: '500px' }}
             />
         </Styled.DataGridContainer>
     )
