@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Interfaces.IRepository;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,18 +13,20 @@ namespace Application.Services
     public class UserService : IUserService
     {
         private readonly ICloudStorage _cloudStorage;
+        private readonly IGenericRepository<UserEntity> _userRepository;
 
-        public UserService(ICloudStorage cloudStorage)
+        public UserService(ICloudStorage cloudStorage, IGenericRepository<UserEntity> userRepository)
         {
             _cloudStorage = cloudStorage;
+            _userRepository = userRepository;
         }
 
-        public Task UpdateProfile(UserEntity updatingEntity)
+        public Task UpdateProfileAsync(UserEntity updatingEntity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<string> UploadAvatar(string userID, IFormFile formFile)
+        public async Task<string> UploadAvatarAsync(string userID, IFormFile formFile)
         {
             string fileNameForStorage = FormFileName(userID.ToString(), formFile.FileName);
             var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
@@ -34,6 +37,12 @@ namespace Application.Services
             var fileExtension = Path.GetExtension(fileName);
             var fileNameForStorage = $"{title}-{DateTime.Now.ToString("yyyyMMddHHmmss")}{fileExtension}";
             return fileNameForStorage;
+        }
+
+        public async Task<UserEntity> SignUpUserAsync(UserEntity userEntity)
+        {
+            await _userRepository.CreateAsync(userEntity);
+            return userEntity;  
         }
     }
 }
