@@ -54,7 +54,7 @@ public static class DatabaseInitializer
 
         await dbContext.FeedRooms();
 
-        await dbContext.FeedTenantsToRoom();
+        //await dbContext.FeedTenantsToRoom();
     }
 
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
@@ -65,7 +65,7 @@ public static class DatabaseInitializer
         // create Owners
 
         int usersLength = users.Count;
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 20; i++)
         {
             var mockUser = users[_rand.Next(usersLength)];
             await dbContext.Users.AddAsync(
@@ -131,7 +131,7 @@ public static class DatabaseInitializer
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
         var hostelCategories = dbContext.HostelCategories.ToArray();
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 20; i++)
         {
             var mockHostel = hostels[_rand.Next(hostelsLength)];
             await dbContext.Hostels.AddAsync(
@@ -155,7 +155,7 @@ public static class DatabaseInitializer
         var hostels = dbContext.Hostels.ToArray();
         var _roomTypes = dbContext.RoomTypes.ToArray();
         int roomLength = rooms.Count;
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 20; i++)
         {
             var mockRoom = rooms[_rand.Next(roomLength)];
             await dbContext.Rooms.AddAsync(
@@ -172,7 +172,8 @@ public static class DatabaseInitializer
                     NumOfWindows = mockRoom.NumOfWindows,
                     Price = mockRoom.Price,
                     RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
-                    Hostel = hostels[_rand.Next(hostels.Length)]
+                    Hostel = hostels[_rand.Next(hostels.Length)],
+                    RoomStatus = (RoomStatus)1
                 });
         }
         await dbContext.SaveChangesAsync();

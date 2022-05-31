@@ -37,7 +37,8 @@ namespace Infrastructure.Contexts.EntityTypeConfigurations
                 .HasForeignKey(ti => ti.TenantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-
+            // unique commitment code
+            builder.HasIndex(c => c.CommitmentCode).IsUnique();
         }
     }
 }
