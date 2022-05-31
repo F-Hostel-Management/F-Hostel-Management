@@ -14,45 +14,55 @@ public class CommitmentsController : BaseRestController
 {
     private readonly IGenericRepository<UserEntity> _userRepository;
     private readonly IGenericRepository<RoomEntity> _roomRepository;
+    private readonly IGenericRepository<HostelEntity> _hostelRepository;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IRoomServices _roomServices;
 
     public CommitmentsController(
         IGenericRepository<UserEntity> userRepository,
         IGenericRepository<RoomEntity> roomRepository,
+        IGenericRepository<HostelEntity> hostelRepository,
         ICommitmentServices commitmentServices,
         IRoomServices roomServices)
     {
         _userRepository = userRepository;
         _roomRepository = roomRepository;
+        _hostelRepository = hostelRepository;
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
     }
 
     [HttpPost("commitments")]
-    public async Task<IActionResult> CreateCommitment([FromRoute] Guid RoomId, CreateCommitmentRequest _com)
+    public async Task<IActionResult> CreateCommitment([FromRoute] Guid RoomId, CreateCommitmentRequest comReq)
     {
-        // not check hostel owner and owner from request
-
+        
         // check room status
-        RoomEntity _room = await _roomServices.GetAvailableRoomByIdAsync(RoomId);
-        if (_room == null)
+        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(RoomId);
+        if (room == null)
         {
             return BadRequest("Room does not exist or already rented");
         }
 
-        bool isDuplicated = await _commitmentServices.IsExist(_com.CommitmentCode);
+        // not check hostel owner and owner from request
+        HostelEntity hostel = await _hostelRepository.FirstOrDefaultAsync(hostel => hostel.Id.Equals(room.HostelId));
+
+        if (!comReq.OwnerId.Equals(hostel.OwnerId))
+        {
+            return Unauthorized();
+        }
+
+            bool isDuplicated = await _commitmentServices.IsExist(comReq.CommitmentCode);
         if (isDuplicated)
         {
             return BadRequest("Commitment code duplicate");
         }
 
         // call service
-        CommitmentEntity com = Mapper.Map<CommitmentEntity>(_com);
-        await _commitmentServices.CreateCommitment(com, _room);
+        CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
+        await _commitmentServices.CreateCommitment(com, room);
 
         // update room status
-        await _roomServices.Rent(_room);
+        await _roomServices.Rent(room);
 
         return Ok(com);
     }
