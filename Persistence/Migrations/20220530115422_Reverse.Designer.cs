@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220530115422_Reverse")]
+    partial class Reverse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,15 +32,16 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("CommitmentCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("CommitmentScaffoldingId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -56,19 +59,10 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Commitment Status");
-
-                    b.Property<Guid?>("TenantId")
+                    b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommitmentCode")
-                        .IsUnique();
-
-                    b.HasIndex("CommitmentScaffoldingId");
 
                     b.HasIndex("ManagerId");
 
@@ -79,23 +73,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Commitments");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentScaffolding", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CommitmentScaffoldings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -471,10 +448,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("RoomTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Room Status");
-
                     b.Property<double>("Width")
                         .HasColumnType("float");
 
@@ -611,10 +584,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
-                    b.HasOne("Domain.Entities.Commitment.CommitmentScaffolding", "CommitmentScaffolding")
-                        .WithMany()
-                        .HasForeignKey("CommitmentScaffoldingId");
-
                     b.HasOne("Domain.Entities.UserEntity", "Manager")
                         .WithMany("ManagerCommitments")
                         .HasForeignKey("ManagerId")
@@ -635,9 +604,8 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.UserEntity", "Tenant")
                         .WithMany("TenantCommitments")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("CommitmentScaffolding");
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Manager");
 

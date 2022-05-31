@@ -5,19 +5,26 @@ using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Notification;
 using Domain.Entities.Ticket;
-using Microsoft.OData.ModelBuilder;
-using System;
-using System.Collections.Generic;
+using Domain.Enums;
+using Domain.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities.Room;
 [Table("Rooms")]
 public class RoomEntity : BaseEntity
 {
     public string RoomName { get; set; }
+
+    [Column("Room Status")]
+    public string Status
+    {
+        get { return RoomStatus.ToString(); }
+        private set { RoomStatus = value.ParseEnum<RoomStatus>(); }
+    }
+
+    [NotMapped]
+    public RoomStatus RoomStatus { get; set; }
+
     public int NumOfWindows { get; set; }
     public int NumOfDoors { get; set; }
     public int NumOfBathRooms { get; set; }

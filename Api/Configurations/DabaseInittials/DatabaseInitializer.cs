@@ -1,10 +1,11 @@
 ﻿using Api.Services;
 using Domain.Entities;
+using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
 using Infrastructure.Contexts;
 
-namespace Api.Configurations;
+namespace Api.Configurations.DabaseInittials;
 
 public static class DatabaseInitializer
 {
@@ -36,50 +37,38 @@ public static class DatabaseInitializer
         new RoomType(){ CategoryName = "Twin"},
     };
 
-    private static Random rand = new Random();
+    private static Random _rand = new Random();
 
     public static async Task InitializeAsync(ApplicationDbContext dbContext)
     {
         dbContext.Database.EnsureCreated();
-        if (!dbContext.Users.Any())
-        {
-            await dbContext.FeedUsers();
-        }
 
-        if (!dbContext.HostelCategories.Any())
-        {
-            await dbContext.FeedHostelCategories();
-        }
+        await dbContext.FeedUsers();
+        //await dbContext.FeedOwnerToManagers();
 
-        if (!dbContext.Hostels.Any())
-        {
-            await dbContext.FeedHostels();
-        }
+        await dbContext.FeedHostelCategories();
 
-        if (!dbContext.RoomTypes.Any())
-        {
-            await dbContext.FeedRoomTypes();
-        }
+        await dbContext.FeedHostels();
 
-        if (!dbContext.Rooms.Any())
-        {
-            await dbContext.FeedRooms();
-        }
+        await dbContext.FeedRoomTypes();
 
-        if (dbContext.Users.Any() && dbContext.Rooms.Any())
-        {
-            await dbContext.FeedTenantsToRoom();
-        }
+        await dbContext.FeedRooms();
+
+        await dbContext.FeedTenantsToRoom();
+
     }
+
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
     {
-        dynamic _users = SeedingServices.LoadJson("USERS_MOCK_DATA.json");
+        if (dbContext.Users.Any()) return;
+
+        dynamic users = SeedingServices.LoadJson("USERS_MOCK_DATA.json");
         // create Owners
 
-        int usersLength = _users.Count;
-        for (int i = 0; i < 100; i++)
+        int usersLength = users.Count;
+        for (int i = 0; i < 20; i++)
         {
-            var mockUser = _users[rand.Next(usersLength)];
+            var mockUser = users[_rand.Next(usersLength)];
             await dbContext.Users.AddAsync(
                 new UserEntity()
                 {
@@ -90,14 +79,33 @@ public static class DatabaseInitializer
                     DateOfBirth = mockUser.DateOfBirth,
                     OrganizationCode = mockUser.OrganizationCode,
                     TaxCode = mockUser.TaxCode,
-                    Gender = (Gender)rand.Next(3),
-                    Role = (Role)rand.Next(3),
+                    Gender = (Gender)_rand.Next(3),
+                    Role = (Role)_rand.Next(3),
                 });
+        }
+        await dbContext.SaveChangesAsync();
+    }
+
+    public static async Task FeedOwnerToManagers(this ApplicationDbContext dbContext)
+    {
+        if (!dbContext.Users.Any()) return;
+        var managers = dbContext.Users.Where(user => user.RoleString == Role.Manager.ToString()).ToArray();
+        var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
+        if (!managers.Any() || !owners.Any())
+        {
+            return;
+        }
+
+        foreach (var manager in managers)
+        {
+            manager.Owner = owners[_rand.Next(owners.Length)];
         }
         await dbContext.SaveChangesAsync();
     }
     public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
     {
+        if (dbContext.RoomTypes.Any()) return;
+
         foreach (var roomType in _roomTypes)
         {
             await dbContext.RoomTypes.AddAsync(roomType);
@@ -106,6 +114,8 @@ public static class DatabaseInitializer
     }
     public static async Task FeedHostelCategories(this ApplicationDbContext dbContext)
     {
+        if (dbContext.HostelCategories.Any()) return;
+
         foreach (var hostelCategory in _hostelCategories)
         {
             await dbContext.HostelCategories.AddAsync(hostelCategory);
@@ -115,22 +125,24 @@ public static class DatabaseInitializer
 
     public static async Task FeedHostels(this ApplicationDbContext dbContext)
     {
-        dynamic _hostels = SeedingServices.LoadJson("HOSTELS_MOCK_DATA.json");
-        int hostelsLength = _hostels.Count;
+        if (dbContext.Hostels.Any()) return;
+
+        dynamic hostels = SeedingServices.LoadJson("HOSTELS_MOCK_DATA.json");
+        int hostelsLength = hostels.Count;
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
         var hostelCategories = dbContext.HostelCategories.ToArray();
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 20; i++)
         {
-            var mockHostel = _hostels[rand.Next(hostelsLength)];
+            var mockHostel = hostels[_rand.Next(hostelsLength)];
             await dbContext.Hostels.AddAsync(
                 new HostelEntity()
                 {
                     Address = mockHostel.Address,
                     Name = mockHostel.Name,
                     NumOfRooms = mockHostel.NumOfRooms,
-                    HostelCategory = hostelCategories[rand.Next(hostelCategories.Length)],
-                    Owner = owners[rand.Next(owners.Length)],
+                    HostelCategory = hostelCategories[_rand.Next(hostelCategories.Length)],
+                    Owner = owners[_rand.Next(owners.Length)],
                 });
         }
         await dbContext.SaveChangesAsync();
@@ -138,13 +150,15 @@ public static class DatabaseInitializer
 
     public static async Task FeedRooms(this ApplicationDbContext dbContext)
     {
-        dynamic _rooms = SeedingServices.LoadJson("ROOMS_MOCK_DATA.json");
-        var _hostels = dbContext.Hostels.ToArray();
+        if (dbContext.Rooms.Any()) return;
+
+        dynamic rooms = SeedingServices.LoadJson("ROOMS_MOCK_DATA.json");
+        var hostels = dbContext.Hostels.ToArray();
         var _roomTypes = dbContext.RoomTypes.ToArray();
-        int roomLength = _rooms.Count;
-        for (int i = 0; i < 100; i++)
+        int roomLength = rooms.Count;
+        for (int i = 0; i < 20; i++)
         {
-            var mockRoom = _rooms[rand.Next(roomLength)];
+            var mockRoom = rooms[_rand.Next(roomLength)];
             await dbContext.Rooms.AddAsync(
                 new RoomEntity()
                 {
@@ -158,20 +172,50 @@ public static class DatabaseInitializer
                     NumOfWCs = mockRoom.NumOfWCs,
                     NumOfWindows = mockRoom.NumOfWindows,
                     Price = mockRoom.Price,
-                    RoomType = _roomTypes[rand.Next(_roomTypes.Length)],
-                    Hostel = _hostels[rand.Next(_hostels.Length)]
+                    RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
+                    Hostel = hostels[_rand.Next(hostels.Length)],
+                    RoomStatus = (RoomStatus)1
                 });
         }
         await dbContext.SaveChangesAsync();
     }
 
+
+
     public static async Task FeedTenantsToRoom(this ApplicationDbContext dbContext)
     {
-        var _room = dbContext.Rooms.ToArray();
+        if (!dbContext.Users.Any() || !dbContext.Rooms.Any()) return;
+
+        if (dbContext.Commitments.Any()) return;
+
+        var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
-        foreach(var tenant in tenants)
+        var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
+
+        foreach (var tenant in tenants)
         {
-            tenant.Room = _room[rand.Next(_room.Length)];
+            var room = rooms[_rand.Next(rooms.Length)];
+            UserEntity owner = owners.FirstOrDefault(owner => owner.Id.Equals(dbContext.Hostels.FirstOrDefault(hostel => hostel.Id.Equals(room.HostelId)).OwnerId));
+            // create commitment
+            await dbContext.Commitments.AddAsync(
+                new CommitmentEntity()
+                {
+                    CommitmentCode = "DNG" + _rand.Next(100),
+                    Tenant = tenant,
+                    Owner = owner,
+                    Room = room,
+                    CreatedDate = DateTime.Now,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
+                    CommitmentStatus = (CommitmentStatus)2
+                });
+
+            // tenant into room
+            tenant.Room = room;
+
+            // update room status
+            room.RoomStatus = (RoomStatus)0;
+
         }
         await dbContext.SaveChangesAsync();
     }

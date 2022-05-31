@@ -1,8 +1,8 @@
 ﻿using Api.Services;
 using Application.Interfaces;
-using Application.Interfaces.IRepository;
 using Application.Services;
-using Persistence.Repositories;
+using Application.Services.CommitmentServices;
+using Application.Services.RoomServices;
 
 namespace Api.Configurations
 {
@@ -12,8 +12,9 @@ namespace Api.Configurations
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ITokenService, JwtBuilderService>();
+            services.AddScoped<ICommitmentServices, CommitmentServices>();
+            services.AddScoped<IRoomServices, RoomServices>();
             services.AddScoped<IUserService, UserService>();
-
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Configurations
 {
-    public static class ConfigurateAuth
+    public static class ConfigureAuth
     {
         public static IServiceCollection AddJwtService(this IServiceCollection services)
         {

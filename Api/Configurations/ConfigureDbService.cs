@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Infrastructure.Contexts;
 using Persistence.Repositories;
 using Application.Interfaces.IRepository;
+using Api.Configurations.DabaseInittials;
 using Application.AppConfig;
 
 namespace Api.Configurations;

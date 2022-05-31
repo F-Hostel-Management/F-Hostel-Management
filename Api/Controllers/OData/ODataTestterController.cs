@@ -15,11 +15,21 @@ public class ODataTestterController : BaseODataController
     }
 
     [EnableQuery]
-    [HttpGet]
-    public async Task<IActionResult> GetTenantsAsync()
+    [HttpGet("tenants")]
+    public IActionResult GetTenantsAsync()
     {
         var users = _context.Users
             .Where(u => u.RoleString == Role.Tenant.ToString());
+
+        return Ok(users);
+    }
+
+    [EnableQuery]
+    [HttpGet("owners")]
+    public IActionResult GetOwnersAsync()
+    {
+        var users = _context.Users
+            .Where(u => u.RoleString == Role.Owner.ToString());
 
         return Ok(users);
     }

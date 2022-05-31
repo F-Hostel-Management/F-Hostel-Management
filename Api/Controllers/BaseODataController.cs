@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("odata/[controller]")]
+[Route("odata/")]
 public class BaseODataController : ODataController
 {
     private IMapper _mapper;

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220530095023_Change1TenantMCommitments")]
-    partial class Change1TenantMCommitments
+    [Migration("20220530142305_ChangeCommitmentContentToScaffolding")]
+    partial class ChangeCommitmentContentToScaffolding
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,10 +31,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CommitmentCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("CommitmentScaffoldingId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -62,6 +63,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CommitmentScaffoldingId");
+
                     b.HasIndex("ManagerId");
 
                     b.HasIndex("OwnerId");
@@ -71,6 +74,23 @@ namespace Infrastructure.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Commitments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentScaffolding", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommitmentScaffoldings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -582,6 +602,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.Commitment.CommitmentScaffolding", "CommitmentScaffolding")
+                        .WithMany()
+                        .HasForeignKey("CommitmentScaffoldingId");
+
                     b.HasOne("Domain.Entities.UserEntity", "Manager")
                         .WithMany("ManagerCommitments")
                         .HasForeignKey("ManagerId")
@@ -604,6 +628,8 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("CommitmentScaffolding");
 
                     b.Navigation("Manager");
 

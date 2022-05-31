@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infrastructure.Migrations
 {
-    public partial class Initials : Migration
+    public partial class Reverse : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -110,30 +110,18 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommitmentContains",
-                columns: table => new
-                {
-                    CommitmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CommitmentContains", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Commitments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommitmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CommitmentCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -252,6 +240,7 @@ namespace Infrastructure.Migrations
                     OrganizationCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -261,6 +250,11 @@ namespace Infrastructure.Migrations
                         name: "FK_Users_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Users_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -432,26 +426,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommitmentContains_CommitmentId",
-                table: "CommitmentContains",
-                column: "CommitmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommitmentContains_TenantId",
-                table: "CommitmentContains",
-                column: "TenantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Commitments_ManagerId",
                 table: "Commitments",
-                column: "ManagerId",
-                unique: true);
+                column: "ManagerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commitments_OwnerId",
+                table: "Commitments",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commitments_RoomId",
                 table: "Commitments",
-                column: "RoomId",
-                unique: true);
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commitments_TenantId",
+                table: "Commitments",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Facilities_FacilityCategoryId",
@@ -574,23 +566,14 @@ namespace Infrastructure.Migrations
                 column: "TicketTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_OwnerId",
+                table: "Users",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoomId",
                 table: "Users",
                 column: "RoomId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_CommitmentContains_Commitments_CommitmentId",
-                table: "CommitmentContains",
-                column: "CommitmentId",
-                principalTable: "Commitments",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_CommitmentContains_Users_TenantId",
-                table: "CommitmentContains",
-                column: "TenantId",
-                principalTable: "Users",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Commitments_Rooms_RoomId",
@@ -603,6 +586,20 @@ namespace Infrastructure.Migrations
                 name: "FK_Commitments_Users_ManagerId",
                 table: "Commitments",
                 column: "ManagerId",
+                principalTable: "Users",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Commitments_Users_OwnerId",
+                table: "Commitments",
+                column: "OwnerId",
+                principalTable: "Users",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Commitments_Users_TenantId",
+                table: "Commitments",
+                column: "TenantId",
                 principalTable: "Users",
                 principalColumn: "Id");
 
@@ -640,11 +637,11 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Hostels_Users_OwnerId",
-                table: "Hostels");
+                name: "FK_Users_Rooms_RoomId",
+                table: "Users");
 
             migrationBuilder.DropTable(
-                name: "CommitmentContains");
+                name: "Commitments");
 
             migrationBuilder.DropTable(
                 name: "Facilities");
@@ -665,9 +662,6 @@ namespace Infrastructure.Migrations
                 name: "RoomNotifications");
 
             migrationBuilder.DropTable(
-                name: "Commitments");
-
-            migrationBuilder.DropTable(
                 name: "FacilityCategories");
 
             migrationBuilder.DropTable(
@@ -686,9 +680,6 @@ namespace Infrastructure.Migrations
                 name: "NotificationCategories");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "Rooms");
 
             migrationBuilder.DropTable(
@@ -699,6 +690,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "HostelCategories");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
