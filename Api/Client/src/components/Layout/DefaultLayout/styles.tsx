@@ -28,21 +28,23 @@ export const GridSidebar = styled(Grid)<{ isSidebarMobile: boolean }>`
     }
 `
 export const GridMain = styled(Grid)`
-    ${down('lg')} {
-        width: 100%;
-    }
-
     padding: 32px;
     height: calc(100vh - var(--nav-height));
     background-color: #f0f3fb;
     box-shadow: var(--bgr-shadow) inset;
     box-shadow: 10px 8px 10px rgb(183 192 206 / 20%) inset;
 
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
     overflow-y: scroll;
 
     &::-webkit-scrollbar {
         display: none;
+    }
+
+    ${down('lg')} {
+        width: 100%;
     }
 `
 export const BodyHeader = styled.div`
