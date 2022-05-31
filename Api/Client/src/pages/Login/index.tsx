@@ -6,9 +6,42 @@ import GoogleIcon from '../../assets/images/GoogleLogo.svg'
 import FacebookLogo from '../../assets/images/FacebookLogo.svg'
 import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 
+import FirebaseService from '../../services/FirebaseService'
+
 interface ILoginProps {}
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
+    const onSignInGoogle = async () => {
+        const token = await FirebaseService.getInstance().signInWithGoogle()
+        if (!token) {
+            console.log('Failed to sign in Google')
+            return
+        }
+        console.log(token)
+    }
+
+    const onSignInFacebook = async () => {
+        const token = await FirebaseService.getInstance().signInWithFacebook()
+
+        if (!token) {
+            console.log('Failed to sign in Facebook')
+            return
+        }
+
+        console.log(token)
+    }
+
+    const onSignInMicrosoft = async () => {
+        const token = await FirebaseService.getInstance().signInWithMicrosoft()
+
+        if (!token) {
+            console.log('Failed to sign in Microsoft')
+            return
+        }
+
+        console.log(token)
+    }
+
     return (
         <Styled.Login>
             <Styled.Form>
@@ -35,7 +68,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
                     </Typography>
 
                     <Button
-                        type="submit"
+                        onClick={onSignInGoogle}
                         fullWidth
                         variant="contained"
                         size="large"
@@ -67,7 +100,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
                     </Button>
 
                     <Button
-                        type="submit"
+                        onClick={onSignInMicrosoft}
                         fullWidth
                         variant="contained"
                         size="large"
@@ -100,7 +133,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
                     </Button>
 
                     <Button
-                        type="submit"
+                        onClick={onSignInFacebook}
                         fullWidth
                         variant="contained"
                         size="large"
