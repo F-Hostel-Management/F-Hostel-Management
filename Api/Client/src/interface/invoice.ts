@@ -1,5 +1,5 @@
 export interface IInvoice {
-    ID: string
+    id: string
     invoiceCode: string
     type: number
     price: number

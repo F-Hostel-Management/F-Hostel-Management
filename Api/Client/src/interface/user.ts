@@ -1,8 +1,8 @@
-import { IRole } from '../utils/enums'
+import { ERole } from '../utils/enums'
 
 export interface IUser {
     id: string
-    role: IRole
+    role: ERole
     name: string
     email: string
     phone: string

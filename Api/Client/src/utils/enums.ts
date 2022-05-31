@@ -1,10 +1,10 @@
-export enum IRole {
+export enum ERole {
     TENANT_ROLE = 0,
     MANAGER_ROLE = 1,
     OWNER_ROLE = 2,
 }
 
-export enum IGender {
+export enum EGender {
     'Male',
     'Female',
     'Unknown',
