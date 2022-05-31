@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from '@mui/material'
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as Styled from './styles'
 import GoogleIcon from '../../assets/images/GoogleLogo.svg'
@@ -11,13 +12,19 @@ import FirebaseService from '../../services/FirebaseService'
 interface ILoginProps {}
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
+    const navigate = useNavigate()
+
+    const handleRedirect = () => {
+        navigate('/fillInformation')
+    }
+
     const onSignInGoogle = async () => {
         const token = await FirebaseService.getInstance().signInWithGoogle()
         if (!token) {
             console.log('Failed to sign in Google')
             return
         }
-        console.log(token)
+        handleRedirect()
     }
 
     const onSignInFacebook = async () => {
@@ -27,8 +34,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             console.log('Failed to sign in Facebook')
             return
         }
-
-        console.log(token)
+        handleRedirect()
     }
 
     const onSignInMicrosoft = async () => {
@@ -38,8 +44,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             console.log('Failed to sign in Microsoft')
             return
         }
-
-        console.log(token)
+        handleRedirect()
     }
 
     return (
