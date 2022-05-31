@@ -67,14 +67,39 @@ public class CommitmentsController : BaseRestController
         return Ok(com);
     }
 
-/*    public async Task<IActionResult> OwnerApprovedCommitment([FromRoute] Guid RoomId)
-    {
-
-    }*/
-
     // owner conform commitment ==> com.status => approved
+    [HttpPatch("commitment/owner/status")]
+    public async Task<IActionResult> OwnerApprovedCommitment
+        ([FromRoute] Guid RoomId)
+    {
+        CommitmentEntity com = 
+            await _commitmentServices.GetPendingCommitmentByRoom(RoomId);
+        if (com == null)
+        {
+            return BadRequest();
+        }
+
+        await _commitmentServices.ApprovedCommitment(com);
+        return Ok(com);
+    }
+
+
 
     // tenant into commitment ==> com.status => done
+    [HttpPatch("commitment/tenant/status")]
+    public async Task<IActionResult> TenantDoneCommitment
+    ([FromRoute] Guid RoomId)
+    {
+        CommitmentEntity com =
+            await _commitmentServices.GetApprovedCommitmentByRoom(RoomId);
+        if (com == null)
+        {
+            return BadRequest();
+        }
 
-    // commitment expired ==> com.status => expired
+        await _commitmentServices.DoneCommitment(com);
+        return Ok(com);
+    }
+
+    // commitment expired ==> com.status => expired => remove all invoice schedules
 }
