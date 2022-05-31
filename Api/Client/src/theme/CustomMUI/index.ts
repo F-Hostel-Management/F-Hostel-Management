@@ -6,6 +6,7 @@ declare module '@mui/material/styles/createPalette' {
         white: Palette['primary']
         green: Palette['primary']
         gray: Palette['primary']
+        orange: Palette['primary']
     }
     interface PaletteOptions {
         purple: PaletteOptions['primary']
@@ -13,33 +14,41 @@ declare module '@mui/material/styles/createPalette' {
         white: PaletteOptions['primary']
         green: PaletteOptions['primary']
         gray: PaletteOptions['primary']
+        orange: PaletteOptions['primary']
     }
 }
 
 declare module '@mui/material/IconButton' {
     interface IconButtonPropsColorOverrides {
         purple: true
+        green: true
         pink: true
         white: true
         gray: true
+        orange: true
     }
 }
 
 declare module '@mui/material/Badge' {
     interface BadgePropsColorOverrides {
         purple: true
+        green: true
         pink: true
         white: true
         gray: true
+        orange: true
     }
 }
 
 declare module '@mui/material/Chip' {
     interface ChipPropsColorOverrides {
         purple: true
+        green: true
         pink: true
         white: true
         gray: true
+        orange: true
+        [key: string]: true
     }
 }
 
@@ -102,6 +111,10 @@ const theme = createTheme({
         },
         gray: {
             main: '#495057',
+            contrastText: '#ffffff',
+        },
+        orange: {
+            main: '#f96332',
             contrastText: '#ffffff',
         },
         white: {

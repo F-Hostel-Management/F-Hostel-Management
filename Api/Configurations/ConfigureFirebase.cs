@@ -1,4 +1,4 @@
-﻿using Api.App.Configurations;
+﻿using Application.AppConfig;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;

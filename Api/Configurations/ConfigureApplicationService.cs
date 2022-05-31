@@ -14,6 +14,8 @@ namespace Api.Configurations
             services.AddScoped<ITokenService, JwtBuilderService>();
             services.AddScoped<ICommitmentServices, CommitmentServices>();
             services.AddScoped<IRoomServices, RoomServices>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
         }
     }
 }

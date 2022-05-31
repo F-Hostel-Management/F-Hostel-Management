@@ -1,9 +1,15 @@
+import { ERole } from '../utils/enums'
+
 export interface IUser {
-    ID: string
-    role: string
+    id: string
+    role: ERole
     name: string
     email: string
     phone: string
+    taxCode: string
+    gender: number
+    organization: string
+    avatarUrl: string
     isDeleted: boolean
 }
 
