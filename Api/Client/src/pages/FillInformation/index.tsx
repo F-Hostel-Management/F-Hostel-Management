@@ -11,31 +11,52 @@ import {
     TextField,
     MenuItem,
 } from '@mui/material'
-import * as React from 'react'
+import React, { useState } from 'react'
 
 import * as Styled from './styles'
 import Owner from '../../assets/images/ownerIcon.svg'
 import Manager from '../../assets/images/managerIcon.svg'
 import Tenant from '../../assets/images/tenantIcon.svg'
 
+interface IInformation {
+    fullName?: string
+    birthDate?: string
+    cardNumber?: string
+    address?: string
+    gender?: string
+}
+interface IRole {
+    icon: string
+    name: string
+}
+
 interface IFillInformationProps {}
+interface IPersonInformationProps {
+    state: IInformation
+    onChangeState: (state: IInformation) => void
+}
+interface ISetRoleProps {
+    onChangeState: (state: string) => void
+}
 
 const steps = ['Select your role', 'Personal information', 'Confirm']
-const role = [
+const roles: IRole[] = [
     { icon: Owner, name: 'Owner' },
     { icon: Manager, name: 'Manager' },
     { icon: Tenant, name: 'Tenant' },
 ]
-const gender = ['Male', 'Female', 'Other']
+const genders = ['Male', 'Female', 'Other']
 
-const SetRole = () => {
+const SetRole: React.FC<ISetRoleProps> = ({ onChangeState }) => {
     return (
         <Styled.Step>
             <Grid container>
-                {role.map((role, index) => (
+                {roles.map((role, index) => (
                     <Grid item key={index} xs={12} md={4}>
                         <Styled.RoleCard elevation={0} variant="outlined">
-                            <CardActionArea>
+                            <CardActionArea
+                                onClick={() => onChangeState(role.name)}
+                            >
                                 <CardContent>
                                     <Styled.ImgRole
                                         src={role.icon}
@@ -54,7 +75,12 @@ const SetRole = () => {
     )
 }
 
-const PersonalInfomation = () => {
+const PersonalInfomation: React.FC<IPersonInformationProps> = ({
+    state,
+    onChangeState,
+}) => {
+    const { fullName, birthDate, cardNumber, address, gender } = state
+
     return (
         <Styled.Step>
             <Grid container>
@@ -68,6 +94,13 @@ const PersonalInfomation = () => {
                         label="Fullname"
                         autoFocus
                         size="small"
+                        value={fullName ?? ''}
+                        onChange={(e) =>
+                            onChangeState({
+                                ...state,
+                                fullName: e.target.value,
+                            })
+                        }
                     />
                     <TextField
                         margin="normal"
@@ -75,12 +108,18 @@ const PersonalInfomation = () => {
                         fullWidth
                         id="fullname"
                         label="Birthday"
-                        defaultValue={new Date()}
                         size="small"
                         type="date"
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        defaultValue={birthDate ?? ''}
+                        onChange={(e) =>
+                            onChangeState({
+                                ...state,
+                                birthDate: e.target.value,
+                            })
+                        }
                     />
                     <TextField
                         margin="normal"
@@ -90,6 +129,13 @@ const PersonalInfomation = () => {
                         label="ID card number"
                         size="small"
                         type="number"
+                        value={cardNumber ?? ''}
+                        onChange={(e) =>
+                            onChangeState({
+                                ...state,
+                                cardNumber: e.target.value,
+                            })
+                        }
                     />
                 </Grid>
             </Grid>
@@ -100,6 +146,10 @@ const PersonalInfomation = () => {
                 id="fullname"
                 label="Address"
                 size="small"
+                value={address ?? ''}
+                onChange={(e) =>
+                    onChangeState({ ...state, address: e.target.value })
+                }
             />
             <Grid container>
                 <Grid item xs={12} md={6}>
@@ -111,8 +161,12 @@ const PersonalInfomation = () => {
                         label="Gender"
                         select
                         size="small"
+                        value={gender ?? ''}
+                        onChange={(e) =>
+                            onChangeState({ ...state, gender: e.target.value })
+                        }
                     >
-                        {gender.map((option, index) => (
+                        {genders.map((option, index) => (
                             <MenuItem key={index} value={option}>
                                 {option}
                             </MenuItem>
@@ -136,6 +190,9 @@ const PersonalInfomation = () => {
 }
 
 const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
+    const [information, setInformation] = useState<IInformation>({})
+    const [role, setRole] = useState<string>('Tenant')
+
     const [activeStep, setActiveStep] = React.useState(0)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
@@ -144,6 +201,12 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     }
 
     const handleNext = () => {
+        if (activeStep === steps.length - 1) {
+            console.log(information)
+            console.log(role)
+            return
+        }
+
         let newSkipped = skipped
         if (isStepSkipped(activeStep)) {
             newSkipped = new Set(newSkipped.values())
@@ -198,12 +261,17 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                     )
 
                                 case 0:
-                                    return <SetRole />
+                                    return <SetRole onChangeState={setRole} />
 
                                 case 1:
-                                    return <PersonalInfomation />
+                                    return (
+                                        <PersonalInfomation
+                                            state={information}
+                                            onChangeState={setInformation}
+                                        />
+                                    )
                                 default:
-                                    return <div>You are a User.</div>
+                                    return <div>You are a User ({role}).</div>
                             }
                         })()}
                     </Styled.MainStep>
