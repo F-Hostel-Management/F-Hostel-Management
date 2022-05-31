@@ -9,34 +9,6 @@ namespace Api.Configurations.DabaseInittials;
 
 public static class DatabaseInitializer
 {
-    private static List<HostelCategory> _hostelCategories = new List<HostelCategory>
-    {
-        new HostelCategory(){ CategoryName =  "Cheap Hostel"},
-        new HostelCategory(){ CategoryName =  "Regular Hostel"},
-        new HostelCategory(){ CategoryName =  "Homely Hostel"},
-        new HostelCategory(){ CategoryName =  "Family Hostel"},
-        new HostelCategory(){ CategoryName =  "Eco Hostel"},
-        new HostelCategory(){ CategoryName =  "Beach Hostel"},
-        new HostelCategory(){ CategoryName =  "Surf Hostel"},
-        new HostelCategory(){ CategoryName =  "Party Hostel"},
-        new HostelCategory(){ CategoryName =  "Luxury ⁄ Boutique ⁄ Design Hostel"},
-        new HostelCategory(){ CategoryName =  "Historic Hostel"},
-    };
-    private static List<RoomType> _roomTypes = new List<RoomType>
-    {
-        new RoomType(){ CategoryName = "Studio"},
-        new RoomType(){ CategoryName = "Library"},
-        new RoomType(){ CategoryName = "BathRoom"},
-        new RoomType(){ CategoryName = "Office"},
-        new RoomType(){ CategoryName = "Singl3"},
-        new RoomType(){ CategoryName = "Doubl3"},
-        new RoomType(){ CategoryName = "Strippl3"},
-        new RoomType(){ CategoryName = "Quad"},
-        new RoomType(){ CategoryName = "Queen"},
-        new RoomType(){ CategoryName = "King"},
-        new RoomType(){ CategoryName = "Twin"},
-    };
-
     private static Random _rand = new Random();
 
     public static async Task InitializeAsync(ApplicationDbContext dbContext)
@@ -44,7 +16,6 @@ public static class DatabaseInitializer
         dbContext.Database.EnsureCreated();
 
         await dbContext.FeedUsers();
-        //await dbContext.FeedOwnerToManagers();
 
         await dbContext.FeedHostelCategories();
 
@@ -84,6 +55,7 @@ public static class DatabaseInitializer
                 });
         }
         await dbContext.SaveChangesAsync();
+        await dbContext.FeedOwnerToManagers();
     }
 
     public static async Task FeedOwnerToManagers(this ApplicationDbContext dbContext)
@@ -106,6 +78,21 @@ public static class DatabaseInitializer
     {
         if (dbContext.RoomTypes.Any()) return;
 
+        List<RoomType> _roomTypes = new List<RoomType>
+        {
+            new RoomType(){ CategoryName = "Studio"},
+            new RoomType(){ CategoryName = "Library"},
+            new RoomType(){ CategoryName = "BathRoom"},
+            new RoomType(){ CategoryName = "Office"},
+            new RoomType(){ CategoryName = "Singl3"},
+            new RoomType(){ CategoryName = "Doubl3"},
+            new RoomType(){ CategoryName = "Strippl3"},
+            new RoomType(){ CategoryName = "Quad"},
+            new RoomType(){ CategoryName = "Queen"},
+            new RoomType(){ CategoryName = "King"},
+            new RoomType(){ CategoryName = "Twin"},
+        };
+
         foreach (var roomType in _roomTypes)
         {
             await dbContext.RoomTypes.AddAsync(roomType);
@@ -115,6 +102,19 @@ public static class DatabaseInitializer
     public static async Task FeedHostelCategories(this ApplicationDbContext dbContext)
     {
         if (dbContext.HostelCategories.Any()) return;
+        List<HostelCategory> _hostelCategories = new List<HostelCategory>()
+        {
+            new HostelCategory(){ CategoryName =  "Cheap Hostel"},
+            new HostelCategory(){ CategoryName =  "Regular Hostel"},
+            new HostelCategory(){ CategoryName =  "Homely Hostel"},
+            new HostelCategory(){ CategoryName =  "Family Hostel"},
+            new HostelCategory(){ CategoryName =  "Eco Hostel"},
+            new HostelCategory(){ CategoryName =  "Beach Hostel"},
+            new HostelCategory(){ CategoryName =  "Surf Hostel"},
+            new HostelCategory(){ CategoryName =  "Party Hostel"},
+            new HostelCategory(){ CategoryName =  "Luxury ⁄ Boutique ⁄ Design Hostel"},
+            new HostelCategory(){ CategoryName =  "Historic Hostel"},
+        };
 
         foreach (var hostelCategory in _hostelCategories)
         {
