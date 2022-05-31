@@ -1,9 +1,17 @@
 ﻿using Domain.Entities;
+using Domain.Entities.Commitment;
+using Domain.Entities.Facility;
+using Domain.Entities.Invoice;
+using Domain.Entities.InvoiceSchedule;
+using Domain.Entities.Message;
+using Domain.Entities.Notification;
 using Domain.Entities.Room;
+using Domain.Entities.Ticket;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Api.Configurations;
 
@@ -22,16 +30,18 @@ public static class ConfigureOData
                 options =>
                 {
                     options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 }
             )
             .AddOData(
                 options =>
-                    options.AddRouteComponents("/api/ODatav1", GetEdmModel())
+                    options.AddRouteComponents("/odata", GetEdmModel())
                            .Select()
                            .Filter()
                            .OrderBy()
                            .Expand()
                            .Count()
+                           .SetMaxTop(100)
             );
     }
 
@@ -43,6 +53,21 @@ public static class ConfigureOData
         builder.EntitySet<RoomEntity>("Rooms");
         builder.EntitySet<RoomType>("RoomTypes");
         builder.EntitySet<HostelCategory>("HostelCategories");
+        builder.EntitySet<FacilityEntity>("Facilities");
+        builder.EntitySet<FacilityCategory>("FacilityCategories");
+
+        builder.EntitySet<InvoiceScheduleEntity>("InvoiceSchedules");
+        builder.EntitySet<InvoiceEntity>("Invoices");
+        builder.EntitySet<InvoiceType>("InvoiceTypes");
+
+        builder.EntitySet<NotificationEntity>("Notifications");
+        builder.EntitySet<Notification_Room>("RoomNotifications");
+        
+        builder.EntitySet<TicketEntity>("Tickets");
+        builder.EntitySet<TicketType>("TicketTypes");
+
+        builder.EntitySet<MessageEntity>("Messages");
+        builder.EntitySet<CommitmentEntity>("Commitments");
 
         return builder.GetEdmModel();
     }

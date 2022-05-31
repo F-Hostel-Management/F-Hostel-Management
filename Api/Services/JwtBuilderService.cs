@@ -1,4 +1,4 @@
-﻿using Api.App.Configurations;
+﻿using Application.AppConfig;
 using Application.Interfaces;
 using Domain.Entities;
 using Microsoft.Extensions.Options;

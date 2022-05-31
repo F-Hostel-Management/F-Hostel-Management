@@ -3,8 +3,9 @@ import * as React from 'react'
 import * as Styled from './styles'
 
 interface IIconButtonCustomProps {
-    textColor: string
-    bgrColor: string
+    textColor?: string
+    bgrColor?: string
+    disabled?: boolean
     children: any
     [x: string | number | symbol]: unknown
 }
@@ -12,6 +13,7 @@ interface IIconButtonCustomProps {
 const IconButtonCustom: React.FunctionComponent<IIconButtonCustomProps> = ({
     textColor = '#fff',
     bgrColor = '#17A2B8',
+    disabled = false,
     children,
     ...others
 }) => {
@@ -19,6 +21,7 @@ const IconButtonCustom: React.FunctionComponent<IIconButtonCustomProps> = ({
         <Styled.IconButton
             textColor={textColor}
             bgrColor={bgrColor}
+            disabled={disabled}
             {...others}
         >
             {children}

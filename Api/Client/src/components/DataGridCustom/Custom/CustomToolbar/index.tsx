@@ -1,13 +1,10 @@
 import * as React from 'react'
 
-import DownloadIcon from '@mui/icons-material/Download'
-
-import IconButtonCustom from '../../../Button/IconButtonCustom'
 import SearchInput from '../../../Input/SearchInput'
 import * as Styled from './styles'
 
 interface ICustomToolbarProps {
-    children: any
+    children?: any
     title: string
 }
 
@@ -25,13 +22,13 @@ const CustomToolbar: React.FunctionComponent<ICustomToolbarProps> = ({
             </Styled.WrapperLeft>
             <Styled.WrapperRight>
                 {children}
-                <IconButtonCustom
+                {/* <IconButtonCustom
                     textColor="#fff"
                     bgrColor="#6F42C1"
                     size="small"
                 >
                     <DownloadIcon />
-                </IconButtonCustom>
+                </IconButtonCustom> */}
             </Styled.WrapperRight>
         </Styled.GridToolbar>
     )

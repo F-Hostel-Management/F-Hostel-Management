@@ -38,5 +38,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<TicketType> TicketTypes { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<CommitmentEntity> Commitments { get; set; }
-    public DbSet<CommitmentContains> CommitmentContains { get; set; }
+
+    public DbSet<CommitmentScaffolding> CommitmentScaffoldings { get; set; }
+
 }

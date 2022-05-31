@@ -22,32 +22,6 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentContains", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommitmentId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(1);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommitmentId");
-
-                    b.HasIndex("TenantId");
-
-                    b.ToTable("CommitmentContains");
-                });
-
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -55,10 +29,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CommitmentCode")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("CommitmentScaffoldingId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -69,7 +44,10 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ManagerId")
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoomId")
@@ -78,15 +56,46 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Commitment Status");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId")
+                    b.HasIndex("CommitmentCode")
                         .IsUnique();
 
-                    b.HasIndex("RoomId")
-                        .IsUnique();
+                    b.HasIndex("CommitmentScaffoldingId");
+
+                    b.HasIndex("ManagerId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Commitments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentScaffolding", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommitmentScaffoldings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -462,6 +471,10 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("RoomTypeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Room Status");
+
                     b.Property<double>("Width")
                         .HasColumnType("float");
 
@@ -571,6 +584,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("OrganizationCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
@@ -586,47 +602,50 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerId");
+
                     b.HasIndex("RoomId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentContains", b =>
-                {
-                    b.HasOne("Domain.Entities.Commitment.CommitmentEntity", "Commitment")
-                        .WithMany("CommitmentContains")
-                        .HasForeignKey("CommitmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.UserEntity", "Tenant")
-                        .WithMany("CommitmentContains")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Commitment");
-
-                    b.Navigation("Tenant");
-                });
-
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.Commitment.CommitmentScaffolding", "CommitmentScaffolding")
+                        .WithMany()
+                        .HasForeignKey("CommitmentScaffoldingId");
+
                     b.HasOne("Domain.Entities.UserEntity", "Manager")
-                        .WithOne("Commitment")
-                        .HasForeignKey("Domain.Entities.Commitment.CommitmentEntity", "ManagerId")
+                        .WithMany("ManagerCommitments")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.UserEntity", "Owner")
+                        .WithMany("OwnerCommitments")
+                        .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
-                        .WithOne("Commitment")
-                        .HasForeignKey("Domain.Entities.Commitment.CommitmentEntity", "RoomId")
+                        .WithMany("Commitments")
+                        .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserEntity", "Tenant")
+                        .WithMany("TenantCommitments")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("CommitmentScaffolding");
+
                     b.Navigation("Manager");
 
+                    b.Navigation("Owner");
+
                     b.Navigation("Room");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
@@ -853,17 +872,18 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.UserEntity", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
+
                     b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
                         .WithMany("Tenants")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("Room");
-                });
+                    b.Navigation("Owner");
 
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
-                {
-                    b.Navigation("CommitmentContains");
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -902,7 +922,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
                 {
-                    b.Navigation("Commitment");
+                    b.Navigation("Commitments");
 
                     b.Navigation("Facilities");
 
@@ -934,13 +954,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
                 {
-                    b.Navigation("Commitment");
-
-                    b.Navigation("CommitmentContains");
-
                     b.Navigation("HostelManagements");
 
                     b.Navigation("Hostels");
+
+                    b.Navigation("ManagerCommitments");
 
                     b.Navigation("ManagerCreatedInvoices");
 
@@ -949,6 +967,10 @@ namespace Infrastructure.Migrations
                     b.Navigation("ManegerCreatedInvoiceSchedules");
 
                     b.Navigation("Messages");
+
+                    b.Navigation("OwnerCommitments");
+
+                    b.Navigation("TenantCommitments");
 
                     b.Navigation("TenantPaidInvoices");
 
