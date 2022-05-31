@@ -8,5 +8,5 @@ const homeSlice = createSlice({
     reducers: {},
 })
 
-const { reducer, actions } = homeSlice
+const { reducer } = homeSlice
 export default reducer
