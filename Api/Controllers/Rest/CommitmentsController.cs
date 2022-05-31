@@ -57,5 +57,9 @@ public class CommitmentsController : BaseRestController
         return Ok(com);
     }
 
-    // tenant into commitment
+    // owner conform commitment ==> com.status => approved
+
+    // tenant into commitment ==> com.status => done
+
+    // commitment expired ==> com.status => expired
 }
