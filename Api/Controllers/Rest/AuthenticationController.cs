@@ -31,7 +31,7 @@ namespace Api.Controllers.Rest
             {
                 loginResponse.IsFirstTime = false;
                 loginResponse.Token = authenticationService.GenerateToken(user);
-                HttpContext.Response.Cookies.Append("token", loginResponse.Token);
+                HttpContext.Response.Cookies.Append("f-token", loginResponse.Token);
             }
             return Ok(loginResponse);
         }
