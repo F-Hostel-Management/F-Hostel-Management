@@ -2,22 +2,30 @@
 using AutoMapper;
 using AutoWrapper.Filters;
 using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Api.Controllers;
 
 [ApiController]
-[Route("odata/[controller]")]
+//[Route("odata/[controller]")]
 [AutoWrapIgnore]
-public class BaseODataController : ODataController
+[Authorize]
+public class BaseODataController<T> : ODataController where T : class
 {
     private IMapper _mapper;
     protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
+    protected ApplicationDbContext db;
 
-
-    private IApplicationDbContext _context;
-    protected IApplicationDbContext DbContext => _context ??= HttpContext.RequestServices.GetService<IApplicationDbContext>();
+    public BaseODataController(ApplicationDbContext db)
+    {
+        this.db = db;
+    }
+    protected Guid CurrentUserID => GetUserID();
 
     protected Guid GetUserID()
     {
@@ -27,5 +35,20 @@ public class BaseODataController : ODataController
             return Guid.Empty;
         }
         return new Guid(userID.Value);
+    }
+    protected virtual IQueryable<T> GetQuery()
+    {
+        return db.Set<T>();
+    }
+
+    [HttpGet("api/[Controller]")]
+    public virtual IQueryable Get(ODataQueryOptions<T> options)
+    {
+        return ApplyQuery(options, GetQuery());
+    }
+
+    protected IQueryable ApplyQuery<K>(ODataQueryOptions<K> options, IQueryable<K> query)
+    {
+        return options.ApplyTo(query); ;
     }
 }
