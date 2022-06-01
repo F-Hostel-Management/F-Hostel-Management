@@ -1,5 +1,3 @@
-import { Fragment } from 'react'
-
 import DefaultLayout from '../components/Layout/DefaultLayout'
 import HomeLayout from '../components/Layout/HomeLayout'
 import { IRoute } from '../interface/route'
@@ -19,21 +17,18 @@ const publicRoutes: IRoute[] = [
         component: LandingPage,
         name: 'LandingPage',
         layout: null,
-        props: {},
     },
     {
         path: '/about',
         component: About,
         name: 'About',
         layout: null,
-        props: {},
     },
     {
         path: '/login',
         component: Login,
         name: 'Login',
         layout: null,
-        props: {},
     },
 ]
 

@@ -9,5 +9,9 @@ namespace Application.Interfaces
         Task<bool> IsExist(string commitmentCode);
 
         Task<CommitmentEntity> GetCurrentCommitmentByRoom(Guid roomId);
+        Task<CommitmentEntity> GetPendingCommitmentByRoom(Guid roomId);
+        Task<CommitmentEntity> GetApprovedCommitmentByRoom(Guid roomId);
+        Task ApprovedCommitment(CommitmentEntity commitment);
+        Task DoneCommitment(CommitmentEntity commitment);
     }
 }
