@@ -8,7 +8,6 @@ import {
     StepLabel,
     Stepper,
     Typography,
-    TextField,
     MenuItem,
     Paper,
     MobileStepper,
@@ -22,6 +21,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import FileUploadIcon from '@mui/icons-material/FileUpload'
+import InputField from '../../components/Input/InputField'
 
 import * as Styled from './styles'
 import Owner from '../../assets/images/ownerIcon.svg'
@@ -29,13 +29,15 @@ import Manager from '../../assets/images/managerIcon.svg'
 import Tenant from '../../assets/images/tenantIcon.svg'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 
+type InputFieldType = React.ChangeEvent<HTMLInputElement>
+
 interface IInformation {
-    fullName?: string
-    birthDate?: string
-    cardNumber?: string
-    address?: string
-    gender?: string
-    phoneNo?: string
+    fullName: string
+    birthDate: string
+    cardNumber: string
+    address: string
+    gender: string
+    phoneNo: string
     // imgCardPre?: File
     // imgCardPos?: File
     imgCard: Map<number, File>
@@ -163,110 +165,94 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                 }}
             >
                 <Box sx={{ width: '90%' }}>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="fullname"
-                        label="Fullname"
-                        autoFocus
-                        size="small"
-                        value={fullName ?? ''}
-                        onChange={(e) =>
-                            onChangeState({
-                                ...state,
-                                fullName: e.target.value,
-                            })
-                        }
-                    />
-
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="fullname"
-                        label="Address"
-                        size="small"
-                        value={address ?? ''}
-                        onChange={(e) =>
-                            onChangeState({ ...state, address: e.target.value })
-                        }
-                    />
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="fullname"
+                            <InputField
+                                label="Fullname"
+                                name="fullame"
+                                value={fullName}
+                                onChange={(e: InputFieldType) =>
+                                    onChangeState({
+                                        ...state,
+                                        fullName: e.target.value,
+                                    })
+                                }
+                                autoFocus
+                            />
+
+                            <InputField
+                                label="Address"
+                                name="address"
+                                value={address}
+                                onChange={(e: InputFieldType) =>
+                                    onChangeState({
+                                        ...state,
+                                        address: e.target.value,
+                                    })
+                                }
+                            />
+                            <InputField
                                 label="Birthday"
-                                size="small"
-                                type="date"
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                defaultValue={birthDate ?? ''}
-                                onChange={(e) =>
+                                name="birthday"
+                                value={birthDate}
+                                onChange={(e: InputFieldType) =>
                                     onChangeState({
                                         ...state,
                                         birthDate: e.target.value,
                                     })
                                 }
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                type="date"
                             />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="fullname"
+
+                            <InputField
                                 label="Gender"
-                                select
-                                size="small"
-                                value={gender ?? ''}
-                                onChange={(e) =>
+                                name="gender"
+                                value={gender}
+                                onChange={(e: InputFieldType) =>
                                     onChangeState({
                                         ...state,
                                         gender: e.target.value,
                                     })
                                 }
+                                select
                             >
                                 {genders.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         {option}
                                     </MenuItem>
                                 ))}
-                            </TextField>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="fullname"
+                            </InputField>
+
+                            <InputField
                                 label="Phone number"
-                                size="small"
-                                value={phoneNo ?? ''}
-                                onChange={(e) =>
+                                name="phone number"
+                                value={phoneNo}
+                                onChange={(e: InputFieldType) =>
                                     onChangeState({
                                         ...state,
                                         phoneNo: e.target.value,
                                     })
                                 }
-                            />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="fullname"
-                                label="Citizen ID number"
-                                size="small"
                                 type="number"
-                                value={cardNumber ?? ''}
-                                onChange={(e) =>
+                            />
+
+                            <InputField
+                                label="Citizen ID number"
+                                name="citizenID"
+                                value={cardNumber}
+                                onChange={(e: InputFieldType) =>
                                     onChangeState({
                                         ...state,
                                         cardNumber: e.target.value,
                                     })
                                 }
+                                type="number"
                             />
                         </Grid>
+
                         {/* CCCD */}
                         <Grid item xs={12} md={6}>
                             <Box
@@ -597,6 +583,12 @@ const ConfirmInfo: React.FC<IConfirmInfoProps> = ({ stateInfo, stateRole }) => {
 
 const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const [information, setInformation] = useState<IInformation>({
+        fullName: '',
+        address: '',
+        birthDate: '',
+        cardNumber: '',
+        gender: '',
+        phoneNo: '',
         imgCard: new Map<number, File>(),
     })
     const [role, setRole] = useState<string>('Tenant')
