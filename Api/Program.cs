@@ -75,7 +75,7 @@ var app = builder.Build();
     }
     app.UseRouting();
 
-    app.UseApiResponseAndExceptionWrapper();
+    app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false});
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();
