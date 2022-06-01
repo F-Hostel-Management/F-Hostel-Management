@@ -34,19 +34,19 @@ public class CommitmentServices : ICommitmentServices
             );
     }
 
-    public async Task<CommitmentEntity> GetPendingCommitmentByRoom(Guid roomId)
+    public async Task<CommitmentEntity> GetPendingCommitmentById(Guid Id)
     {
         return await _commitmentRepository
             .FirstOrDefaultAsync(com =>
-            com.RoomId.Equals(roomId)
+            com.Id.Equals(Id)
             && com.Status.Equals(CommitmentStatus.Pending.ToString())
             );
     }
-    public async Task<CommitmentEntity> GetApprovedCommitmentByRoom(Guid roomId)
+    public async Task<CommitmentEntity> GetApprovedCommitmentById(Guid Id)
     {
         return await _commitmentRepository
             .FirstOrDefaultAsync(com =>
-            com.RoomId.Equals(roomId)
+            com.Id.Equals(Id)
             && com.Status.Equals(CommitmentStatus.Approved.ToString())
             );
     }

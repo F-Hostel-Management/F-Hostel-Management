@@ -4,8 +4,6 @@ using Application.Interfaces.IRepository;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
-using Domain.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
@@ -34,11 +32,11 @@ public class CommitmentsController : BaseRestController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCommitment([FromRoute] Guid roomId, CreateCommitmentRequest comReq)
+    public async Task<IActionResult> CreateCommitment(CreateCommitmentRequest comReq)
     {
 
         // check room status
-        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(roomId);
+        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(comReq.RoomId);
         if (room == null)
         {
             return BadRequest("Room does not exist or already rented");
@@ -74,7 +72,7 @@ public class CommitmentsController : BaseRestController
         ([FromBody] OwnerApprovedCommitmentRequest req)
     {
         CommitmentEntity com =
-            await _commitmentServices.GetPendingCommitmentByRoom(req.RoomId);
+            await _commitmentServices.GetPendingCommitmentById(req.CommitmentId);
         if (com == null)
         {
             return BadRequest();
@@ -95,6 +93,11 @@ public class CommitmentsController : BaseRestController
         JoiningCode joiningCode = await _joiningCodeServices.
             GetJoiningCodeByDigits(req.SixDigitsJoiningCode);
 
+        if (joiningCode == null)
+        {
+            return BadRequest("Joining code is not exists or expired");
+        }
+
         bool isValid = _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
         if (!isValid)
@@ -114,7 +117,7 @@ public class CommitmentsController : BaseRestController
         bool isSuccess =  await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
         if (!isSuccess)
         {
-            return BadRequest("Room exceeds the specified number of people");
+            return BadRequest("Get in to room fail");
         }
         return Ok(com);
     }

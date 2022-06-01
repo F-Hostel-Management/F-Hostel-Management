@@ -29,8 +29,19 @@ public class TenantServices : ITenantServices
     // ==> check room khong vuot qua so nguoi cho 
     public async Task<bool> GetIntoRoom(Guid roomId, Guid tenantId)
     {
+
+
         var currentTenantsInRoom = await _roomTenantRepository.WhereAsync(rt =>
             rt.RoomId.Equals(roomId));
+        
+        // check tenant is already in room?
+        var tenantInRoom = currentTenantsInRoom.FirstOrDefault(rt =>
+            rt.TenantId.Equals(tenantId));
+        if (tenantInRoom != null)
+        {
+            return false;
+        }
+
         int count = 0;
         if (currentTenantsInRoom.Any())
         {
@@ -42,7 +53,7 @@ public class TenantServices : ITenantServices
         if (room.MaximumPeople > 0 && room.MaximumPeople <= count)
         {
             return false;
-        }
+        } 
 
         await _roomTenantRepository.CreateAsync(
             new RoomTenant()

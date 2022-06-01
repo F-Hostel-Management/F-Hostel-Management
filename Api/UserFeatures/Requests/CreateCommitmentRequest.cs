@@ -7,6 +7,9 @@ namespace Api.UserFeatures.Requests;
 public class CreateCommitmentRequest : IMapTo<CommitmentEntity>
 {
     [Required]
+    public Guid RoomId { get; set; }
+
+    [Required]
     public string CommitmentCode { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime StartDate { get; set; }

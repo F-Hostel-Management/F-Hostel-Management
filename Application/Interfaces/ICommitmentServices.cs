@@ -10,8 +10,8 @@ namespace Application.Interfaces
         Task<bool> IsExist(string commitmentCode);
 
         Task<CommitmentEntity> GetCurrentCommitmentByRoom(Guid roomId);
-        Task<CommitmentEntity> GetPendingCommitmentByRoom(Guid roomId);
-        Task<CommitmentEntity> GetApprovedCommitmentByRoom(Guid roomId);
+        Task<CommitmentEntity> GetPendingCommitmentById(Guid Id);
+        Task<CommitmentEntity> GetApprovedCommitmentById(Guid Id);
         Task ApprovedCommitment(CommitmentEntity commitment);
         Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId);
 
