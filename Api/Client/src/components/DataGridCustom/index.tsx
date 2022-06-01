@@ -48,7 +48,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
             width="100%"
             height="100%"
             color="#F06D06"
-            style={{ backgroundColor: '#FFFFFF' }}
+            style={{ backgroundColor: '#FFFFFF', minHeight: '500px' }}
         >
             <Styled.DataGrid
                 loading={loading}
@@ -74,7 +74,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
                     Toolbar: Toolbar,
                 }}
                 disableSelectionOnClick
-                sx={{ fontSize: '1.4rem', cursor: 'text', minHeight: '500px' }}
+                sx={{ fontSize: '1.4rem', cursor: 'text' }}
             />
         </Styled.DataGridContainer>
     )

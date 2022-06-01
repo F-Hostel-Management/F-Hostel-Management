@@ -28,10 +28,37 @@ public class CommitmentServices : ICommitmentServices
     public async Task<CommitmentEntity> GetCurrentCommitmentByRoom(Guid roomId)
     {
         return await _commitmentRepository
-            .FirstOrDefaultAsync(com => 
+            .FirstOrDefaultAsync(com =>
             com.RoomId.Equals(roomId)
-            && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
+    }
+
+    public async Task<CommitmentEntity> GetPendingCommitmentByRoom(Guid roomId)
+    {
+        return await _commitmentRepository
+            .FirstOrDefaultAsync(com =>
+            com.RoomId.Equals(roomId)
+            && com.Status.Equals(CommitmentStatus.Pending.ToString())
+            );
+    }
+    public async Task<CommitmentEntity> GetApprovedCommitmentByRoom(Guid roomId)
+    {
+        return await _commitmentRepository
+            .FirstOrDefaultAsync(com =>
+            com.RoomId.Equals(roomId)
+            && com.Status.Equals(CommitmentStatus.Approved.ToString())
+            );
+    }
+
+    public async Task ApprovedCommitment(CommitmentEntity commitment)
+    {
+        commitment.CommitmentStatus = CommitmentStatus.Approved;
+        await _commitmentRepository.UpdateAsync(commitment);
+    }
+    public async Task DoneCommitment(CommitmentEntity commitment)
+    {
+        commitment.CommitmentStatus = CommitmentStatus.Done;
+        await _commitmentRepository.UpdateAsync(commitment);
     }
 
     public async Task<bool> IsExist(string commitmentCode)
