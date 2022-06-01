@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 namespace Api.Controllers.Rest
 {
     [Authorize]
-    public class UserController:BaseRestController
+    public class UsersController:BaseRestController
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
