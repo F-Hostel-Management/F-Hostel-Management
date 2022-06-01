@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Api.UserFeatures.Requests;
 
-public class CreateCommitmentRequest:IMapTo<CommitmentEntity>
+public class CreateCommitmentRequest : IMapTo<CommitmentEntity>
 {
     [Required]
     public string CommitmentCode { get; set; }

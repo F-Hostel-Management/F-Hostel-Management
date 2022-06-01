@@ -16,16 +16,19 @@ public class CommitmentsController : BaseRestController
     private readonly ICommitmentServices _commitmentServices;
     private readonly IRoomServices _roomServices;
     private readonly ITenantServices _tenantServices;
+    private readonly IJoiningCodeServices _joiningCodeServices;
 
 
     public CommitmentsController(
         IGenericRepository<HostelEntity> hostelRepository,
         ICommitmentServices commitmentServices,
+        IJoiningCodeServices joiningCodeServices,
         IRoomServices roomServices,
         ITenantServices tenantServices)
     {
         _tenantServices = tenantServices;
         _hostelRepository = hostelRepository;
+        _joiningCodeServices = joiningCodeServices;
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
     }
@@ -102,4 +105,20 @@ public class CommitmentsController : BaseRestController
     }
 
     // commitment expired ==> com.status => expired => remove all invoice schedules
+
+    // create joining code
+    [HttpPost("joiningCode")]
+    public async Task<IActionResult> CreateJoiningCode
+        ([FromBody] CreateJoiningCodeRequest req)
+    {
+        CommitmentEntity currentCom = await _commitmentServices.GetNotExpiredCommitmentById(req.CommitementId);
+        if (currentCom == null)
+        {
+            return BadRequest("Commitment does not exist");
+        }
+
+        JoiningCode joiningCode = Mapper.Map<JoiningCode>(req);
+        var response = await _joiningCodeServices.CreateJoiningCode(joiningCode);
+        return Ok(joiningCode);
+    }
 }

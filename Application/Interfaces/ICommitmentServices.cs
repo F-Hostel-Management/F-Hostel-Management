@@ -14,5 +14,9 @@ namespace Application.Interfaces
         Task<CommitmentEntity> GetApprovedCommitmentByRoom(Guid roomId);
         Task ApprovedCommitment(CommitmentEntity commitment);
         Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId);
+
+        // create 6 digit qr code
+        Task<CommitmentEntity> GetCommitementById(Guid commitmentId);
+        Task<CommitmentEntity> GetNotExpiredCommitmentById(Guid commitmentId);
     }
 }

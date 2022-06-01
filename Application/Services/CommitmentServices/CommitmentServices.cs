@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
@@ -69,5 +68,19 @@ public class CommitmentServices : ICommitmentServices
         return await _commitmentRepository
             .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode))
             != null;
+    }
+
+    public async Task<CommitmentEntity> GetCommitementById(Guid commitmentId)
+    {
+        return await _commitmentRepository.FindByIdAsync(commitmentId);
+    }
+
+    public async Task<CommitmentEntity> GetNotExpiredCommitmentById(Guid commitmentId)
+    {
+        return await _commitmentRepository
+            .FirstOrDefaultAsync(com =>
+            com.Id.Equals(commitmentId)
+            && !com.Status.Equals(CommitmentStatus.Expired.ToString())
+            );
     }
 }

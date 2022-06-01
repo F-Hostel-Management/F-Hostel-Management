@@ -58,4 +58,7 @@ public class CommitmentEntity : BaseEntity
     [Required]
     public Guid RoomId { get; set; }
     public RoomEntity Room { get; set; }
+
+    // 1 com - 1 joining code
+    public JoiningCode JoiningCode { get; set; }
 }

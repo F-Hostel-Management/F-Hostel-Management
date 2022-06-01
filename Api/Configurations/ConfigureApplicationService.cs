@@ -14,6 +14,7 @@ namespace Api.Configurations
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ITokenService, JwtBuilderService>();
             services.AddScoped<ICommitmentServices, CommitmentServices>();
+            services.AddScoped<IJoiningCodeServices, JoiningCodeServices>();
             services.AddScoped<IRoomServices, RoomServices>();
             services.AddScoped<ITenantServices, TenantServices>();
             services.AddScoped<IUserService, UserService>();
