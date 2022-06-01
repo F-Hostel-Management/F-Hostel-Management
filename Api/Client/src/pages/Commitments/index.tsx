@@ -3,12 +3,14 @@ import React, { FC, Fragment, useEffect, useState } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useGridData } from '../../hooks/useGridData'
 import { commitments, getData } from '../../utils/MockData'
-import { Button } from '@mui/material'
 import ActionButtons from './components/ActionButtons'
 import CommitmentStatus from './components/CommitmentStatus'
 import { ICommitment } from '../../interface/commitment'
-import AddCircleIcon from '@mui/icons-material/AddCircle'
+
 import { ERole } from '../../utils/enums'
+import { useDialog } from '../../hooks/useDialog'
+import CreateCommitmentDialog from './components/CreateCommitmentDialog'
+import ToolbarChildren from './components/ToolbarChildren'
 interface ICommitmentsProps {}
 
 const Commitments: FC<ICommitmentsProps> = () => {
@@ -19,17 +21,7 @@ const Commitments: FC<ICommitmentsProps> = () => {
     const [page, setPage] = useState<number>(0)
     const [rows, setRows] = useState<ICommitment[]>([])
     const [loading, setLoading] = useState<boolean>(true)
-
-    const ToolbarChildren: FC<{}> = () => (
-        <Button
-            variant="contained"
-            startIcon={<AddCircleIcon />}
-            size="small"
-            sx={{ margin: '0px 8px' }}
-        >
-            Create
-        </Button>
-    )
+    const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
     const columns: GridColDef[] = [
         createColumn('id', 'Code', 100),
@@ -63,9 +55,20 @@ const Commitments: FC<ICommitmentsProps> = () => {
                 setPage={setPage}
                 rowsCount={27}
                 toolbarChildren={
-                    role != ERole.TENANT_ROLE ? <ToolbarChildren /> : null
+                    role != ERole.TENANT_ROLE ? (
+                        <ToolbarChildren handleOpenCreate={handleOpenCreate} />
+                    ) : null
                 }
             />
+
+            {/* Dialog */}
+            {openCreate && (
+                <CreateCommitmentDialog
+                    openDialog={openCreate}
+                    handleOpenDialog={handleOpenCreate}
+                    handleCloseDialog={handleCloseCreate}
+                />
+            )}
         </Fragment>
     )
 }
