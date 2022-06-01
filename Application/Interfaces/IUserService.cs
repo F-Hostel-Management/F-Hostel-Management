@@ -10,7 +10,8 @@ namespace Application.Interfaces
 {
     public interface IUserService
     {
-        Task UpdateProfile(UserEntity updatingEntity);
-        Task<string> UploadAvatar(string userID, IFormFile formFile);
+        Task UpdateProfileAsync(UserEntity updatingEntity);
+        Task<string> UploadAvatarAsync(string userID, IFormFile formFile);
+        Task<UserEntity> SignUpUserAsync(UserEntity userEntity);
     }
 }
