@@ -1,11 +1,13 @@
 import axios, { AxiosResponse } from 'axios'
+import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 import odataQuery, { ODataQuery } from 'odata-fluent-query'
 
-const token = localStorage.getItem('token')
+const token = store?.getState()?.auth?.token
 const instance = axios.create({
     baseURL: '/odata',
     responseType: 'json',
+    withCredentials: true,
     headers: {
         Authorization: token ? `Bearer ${token}` : '',
         'Content-Type': 'application/json',

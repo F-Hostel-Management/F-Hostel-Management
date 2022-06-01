@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from 'axios'
+import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 
-const token = localStorage.getItem('token')
+const token = store?.getState()?.auth?.token
 const instance = axios.create({
     baseURL: '/api',
     responseType: 'json',
+    withCredentials: true,
     headers: {
         Authorization: token ? `Bearer ${token}` : '',
         'Content-Type': 'application/json',
