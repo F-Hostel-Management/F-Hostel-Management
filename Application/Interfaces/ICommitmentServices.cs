@@ -18,5 +18,7 @@ namespace Application.Interfaces
         // create 6 digit qr code
         Task<CommitmentEntity> GetCommitementById(Guid commitmentId);
         Task<CommitmentEntity> GetNotExpiredCommitmentById(Guid commitmentId);
+
+        Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
     }
 }

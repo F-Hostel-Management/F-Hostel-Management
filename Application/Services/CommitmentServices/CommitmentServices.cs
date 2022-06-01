@@ -88,4 +88,9 @@ public class CommitmentServices : ICommitmentServices
             && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
     }
+
+    public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)
+    {
+        await _commitmentRepository.UpdateAsync(updatedCommitment);
+    }
 }

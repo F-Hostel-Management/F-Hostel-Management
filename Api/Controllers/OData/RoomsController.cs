@@ -1,8 +1,6 @@
 ﻿using Domain.Enums;
-using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 

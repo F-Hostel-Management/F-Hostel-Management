@@ -162,4 +162,17 @@ public class CommitmentsController : BaseRestController
         return Ok(commitment);
     }
 
+    // update pending commitment
+    [HttpPatch("{comId}")]
+    public async Task<IActionResult> UpdatePendingCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)
+    {
+        CommitmentEntity pendingCom = await _commitmentServices.GetPendingCommitmentById(comId);
+        if (pendingCom == null)
+        {
+            return BadRequest("Cannot update");
+        }
+        CommitmentEntity updatedCommitment = Mapper.Map(uComReq, pendingCom);
+        await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
+        return Ok();
+    }
 }
