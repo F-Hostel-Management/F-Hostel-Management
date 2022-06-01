@@ -15,8 +15,19 @@ public class RoomsController : BaseODataController
     {
 
         var com = DbContext.Commitments.FirstOrDefault(com =>
-                    com.RoomId == roomId
+                    com.RoomId.Equals(roomId)
                     && !com.Status.Equals(CommitmentStatus.Expired.ToString()));
         return Ok(com);
+    }
+
+    [EnableQuery]
+    [HttpGet("{roomId}/get-all-commitments-of-room")]
+    public IActionResult GetCurrentCommitmentsByRoom([FromRoute] Guid roomId)
+    {
+
+        var res = DbContext.Commitments.Where(com =>
+                    com.RoomId.Equals(roomId)
+                    );
+        return Ok(res);
     }
 }

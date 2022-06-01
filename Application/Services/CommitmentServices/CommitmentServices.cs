@@ -31,6 +31,7 @@ public class CommitmentServices : ICommitmentServices
         return await _commitmentRepository
             .FirstOrDefaultAsync(com =>
             com.RoomId.Equals(roomId)
+            && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
     }
 
