@@ -19,8 +19,6 @@ namespace Api.Controllers.Rest
             _userService = userService;
         }
 
-
-
         [HttpPost("update-user")]
         public async Task<IActionResult> UpdateUser([FromForm] UpdateUserProfileRequest updateUserProfileRequest)
         {

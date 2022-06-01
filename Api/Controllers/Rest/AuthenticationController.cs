@@ -12,6 +12,7 @@ namespace Api.Controllers.Rest
     {
         private readonly IAuthenticationService authenticationService;
         private readonly IUserService userService;
+        private const string COOKIES_KEY = "f-code";
 
         public AuthenticationController(IAuthenticationService authenticationService, IUserService userService)
         {
@@ -31,7 +32,7 @@ namespace Api.Controllers.Rest
             {
                 loginResponse.IsFirstTime = false;
                 loginResponse.Token = authenticationService.GenerateToken(user);
-                HttpContext.Response.Cookies.Append("f-token", loginResponse.Token);
+                HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
             }
             return Ok(loginResponse);
         }
@@ -53,7 +54,7 @@ namespace Api.Controllers.Rest
             LoginResponse loginResponse = new();
             loginResponse.Token = authenticationService.GenerateToken(userEntity);
             loginResponse.IsFirstTime = true;
-            HttpContext.Response.Cookies.Append("token", loginResponse.Token);
+            HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
             return Ok(loginResponse);
         }
 
