@@ -32,6 +32,7 @@ namespace Api.Controllers.Rest
                 loginResponse.IsFirstTime = false;
                 loginResponse.Token = authenticationService.GenerateToken(user);
             }
+            HttpContext.Response.Cookies.Append("token", loginResponse.Token);
             return Ok(loginResponse);
         }
 
@@ -52,6 +53,7 @@ namespace Api.Controllers.Rest
             LoginResponse loginResponse = new();
             loginResponse.Token = authenticationService.GenerateToken(userEntity);
             loginResponse.IsFirstTime = true;
+            HttpContext.Response.Cookies.Append("token", loginResponse.Token);
             return Ok(loginResponse);
         }
 
