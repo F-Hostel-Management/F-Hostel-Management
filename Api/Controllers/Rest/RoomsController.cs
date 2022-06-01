@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Route("api/rooms")]
 public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;

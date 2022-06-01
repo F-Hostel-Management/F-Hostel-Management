@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Route("api/Rooms/{roomId}/")]
 public class CommitmentsController : BaseRestController
 {
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
@@ -31,7 +30,7 @@ public class CommitmentsController : BaseRestController
         _roomServices = roomServices;
     }
 
-    [HttpPost("commitments")]
+    [HttpPost]
     public async Task<IActionResult> CreateCommitment([FromRoute] Guid roomId, CreateCommitmentRequest comReq)
     {
 
@@ -67,12 +66,12 @@ public class CommitmentsController : BaseRestController
     }
 
     // owner conform commitment ==> com.status => approved
-    [HttpPatch("commitment/owner/status")]
+    [HttpPatch("owner/status")]
     public async Task<IActionResult> OwnerApprovedCommitment
-        ([FromRoute] Guid roomId)
+        ([FromBody] OwnerApprovedCommitmentRequest req)
     {
         CommitmentEntity com =
-            await _commitmentServices.GetPendingCommitmentByRoom(roomId);
+            await _commitmentServices.GetPendingCommitmentByRoom(req.RoomId);
         if (com == null)
         {
             return BadRequest();
@@ -85,20 +84,20 @@ public class CommitmentsController : BaseRestController
 
 
     // tenant into commitment ==> com.status => done
-    //[Authorize(nameof(Role.Tenant))]
-    [HttpPatch("commitment/tenant/{tenantId}/status")]
+    [Authorize(nameof(Role.Tenant))]
+    [HttpPatch("tenant/status")]
     public async Task<IActionResult> TenantDoneCommitment
-    ([FromRoute] Guid roomId, Guid tenantId)
+    ([FromBody] TenantDoneCommitmentRequest req)
     {
         CommitmentEntity com =
-            await _commitmentServices.GetApprovedCommitmentByRoom(roomId);
+            await _commitmentServices.GetApprovedCommitmentByRoom(req.RoomId);
         if (com == null)
         {
             return BadRequest();
         }
 
-        await _commitmentServices.DoneCommitment(com, tenantId);
-        await _tenantServices.GetIntoRoom(com.RoomId, tenantId);
+        await _commitmentServices.DoneCommitment(com, req.TenantId);
+        await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
         return Ok(com);
     }
 
