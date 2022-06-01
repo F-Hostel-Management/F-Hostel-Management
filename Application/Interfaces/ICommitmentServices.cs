@@ -13,6 +13,6 @@ namespace Application.Interfaces
         Task<CommitmentEntity> GetPendingCommitmentByRoom(Guid roomId);
         Task<CommitmentEntity> GetApprovedCommitmentByRoom(Guid roomId);
         Task ApprovedCommitment(CommitmentEntity commitment);
-        Task DoneCommitment(CommitmentEntity commitment, Guid tenantId);
+        Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId);
     }
 }

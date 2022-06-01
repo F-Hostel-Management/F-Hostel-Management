@@ -11,9 +11,15 @@ public class CreateCommitmentRequest:IMapTo<CommitmentEntity>
     public DateTime CreatedDate { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    /*public Guid? ScaffoldingId { get; set; }
-    public Guid? ManagerId { get; set; }*/
+    /*public Guid? ScaffoldingId { get; set; } */
+    public Guid? ManagerId { get; set; }
 
     [Required]
     public Guid OwnerId { get; set; }
+
+    [Required]
+    public int? DateOverdue { get; set; }
+
+    public double? Compensation { get; set; }
+
 }

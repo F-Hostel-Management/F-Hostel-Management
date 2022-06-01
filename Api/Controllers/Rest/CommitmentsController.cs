@@ -96,7 +96,7 @@ public class CommitmentsController : BaseRestController
             return BadRequest();
         }
 
-        await _commitmentServices.DoneCommitment(com, req.TenantId);
+        await _commitmentServices.ActivatedCommitment(com, req.TenantId);
         await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
         return Ok(com);
     }
