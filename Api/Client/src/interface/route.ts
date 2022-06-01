@@ -5,5 +5,5 @@ export interface IRoute {
     component: ElementType
     name: string
     layout: ElementType | null
-    props: Object
+    props?: Object
 }
