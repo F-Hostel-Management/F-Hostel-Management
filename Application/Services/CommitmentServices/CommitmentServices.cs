@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
@@ -9,6 +10,7 @@ namespace Application.Services.CommitmentServices;
 public class CommitmentServices : ICommitmentServices
 {
     public readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
+
 
     public CommitmentServices(
         IGenericRepository<CommitmentEntity> commitmentRepository

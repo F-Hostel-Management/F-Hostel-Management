@@ -1,4 +1,5 @@
-﻿using Domain.Entities.Commitment;
+﻿using Domain.Entities;
+using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 
 namespace Application.Interfaces

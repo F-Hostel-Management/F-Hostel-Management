@@ -4,40 +4,37 @@ using Application.Interfaces.IRepository;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
-using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Route("api/Rooms/{RoomId}/")]
+[Route("api/Rooms/{roomId}/")]
 public class CommitmentsController : BaseRestController
 {
-    private readonly IGenericRepository<UserEntity> _userRepository;
-    private readonly IGenericRepository<RoomEntity> _roomRepository;
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IRoomServices _roomServices;
+    private readonly ITenantServices _tenantServices;
+
 
     public CommitmentsController(
-        IGenericRepository<UserEntity> userRepository,
-        IGenericRepository<RoomEntity> roomRepository,
         IGenericRepository<HostelEntity> hostelRepository,
         ICommitmentServices commitmentServices,
-        IRoomServices roomServices)
+        IRoomServices roomServices,
+        ITenantServices tenantServices)
     {
-        _userRepository = userRepository;
-        _roomRepository = roomRepository;
+        _tenantServices = tenantServices;
         _hostelRepository = hostelRepository;
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
     }
 
     [HttpPost("commitments")]
-    public async Task<IActionResult> CreateCommitment([FromRoute] Guid RoomId, CreateCommitmentRequest comReq)
+    public async Task<IActionResult> CreateCommitment([FromRoute] Guid roomId, CreateCommitmentRequest comReq)
     {
-        
+
         // check room status
-        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(RoomId);
+        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(roomId);
         if (room == null)
         {
             return BadRequest("Room does not exist or already rented");
@@ -51,7 +48,7 @@ public class CommitmentsController : BaseRestController
             return Unauthorized();
         }
 
-            bool isDuplicated = await _commitmentServices.IsExist(comReq.CommitmentCode);
+        bool isDuplicated = await _commitmentServices.IsExist(comReq.CommitmentCode);
         if (isDuplicated)
         {
             return BadRequest("Commitment code duplicate");
@@ -70,10 +67,10 @@ public class CommitmentsController : BaseRestController
     // owner conform commitment ==> com.status => approved
     [HttpPatch("commitment/owner/status")]
     public async Task<IActionResult> OwnerApprovedCommitment
-        ([FromRoute] Guid RoomId)
+        ([FromRoute] Guid roomId)
     {
-        CommitmentEntity com = 
-            await _commitmentServices.GetPendingCommitmentByRoom(RoomId);
+        CommitmentEntity com =
+            await _commitmentServices.GetPendingCommitmentByRoom(roomId);
         if (com == null)
         {
             return BadRequest();
@@ -86,18 +83,26 @@ public class CommitmentsController : BaseRestController
 
 
     // tenant into commitment ==> com.status => done
-    [HttpPatch("commitment/tenant/status")]
+    [HttpPatch("commitment/tenant/{tenantId}/status")]
     public async Task<IActionResult> TenantDoneCommitment
-    ([FromRoute] Guid RoomId)
+    ([FromRoute] Guid roomId, Guid tenantId)
     {
         CommitmentEntity com =
-            await _commitmentServices.GetApprovedCommitmentByRoom(RoomId);
+            await _commitmentServices.GetApprovedCommitmentByRoom(roomId);
         if (com == null)
+        {
+            return BadRequest();
+        }
+        // only tenant
+        UserEntity tenant = await _tenantServices.GetTenant(tenantId);
+
+        if (tenant == null)
         {
             return BadRequest();
         }
 
         await _commitmentServices.DoneCommitment(com);
+        await _tenantServices.GetIntoRoom(com, tenant);
         return Ok(com);
     }
 

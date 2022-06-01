@@ -10,13 +10,6 @@ namespace Api.Controllers.OData;
 public class RoomsController : BaseODataController
 {
     [EnableQuery]
-    [HttpGet("get-all")]
-    public IActionResult GetRooms()
-    {
-        return Ok(DbContext.Rooms);
-    }
-
-    [EnableQuery]
     [HttpGet("{roomId}/get-current-commitment")]
     public IActionResult GetCurrentCommitmentByRoom([FromRoute] Guid roomId)
     {
