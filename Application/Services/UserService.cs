@@ -26,9 +26,9 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string> UploadAvatarAsync(string userID, IFormFile formFile)
+        public async Task<string> UploadAvatarAsync(UserEntity userEntity, IFormFile formFile)
         {
-            string fileNameForStorage = FormFileName(userID.ToString(), formFile.FileName);
+            string fileNameForStorage = FormFileName("A_" + userEntity.Id.ToString(), formFile.FileName);
             var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
             return uploadedUrl;
         }
@@ -43,6 +43,13 @@ namespace Application.Services
         {
             await _userRepository.CreateAsync(userEntity);
             return userEntity;  
+        }
+
+        public async Task<string> UploadIdentification(UserEntity userID, IFormFile formFile)
+        {
+            string fileNameForStorage = FormFileName("ID_"+userID.Id.ToString(), formFile.FileName);
+            var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
+            return uploadedUrl;
         }
     }
 }

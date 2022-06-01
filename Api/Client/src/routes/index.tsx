@@ -73,7 +73,7 @@ const privateRoutes: IRoute[] = [
         path: '/fillInformation',
         component: FillInformation,
         name: 'FillInformation',
-        layout: Fragment,
+        layout: null,
     },
 ]
 

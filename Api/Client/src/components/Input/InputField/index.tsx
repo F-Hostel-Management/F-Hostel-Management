@@ -7,6 +7,7 @@ interface IInputFieldProps {
     value?: string | number | null
     onChange?: any
     type?: string
+
     [x: string | number | symbol]: unknown
 }
 

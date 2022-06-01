@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
+using AutoWrapper.Filters;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -8,6 +9,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("odata/[controller]")]
+[AutoWrapIgnore]
 public class BaseODataController : ODataController
 {
     private IMapper _mapper;

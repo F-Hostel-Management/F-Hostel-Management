@@ -1,0 +1,99 @@
+<Box sx={{ m: 2, textAlign: 'center' }}>
+                                <Card>
+                                    <CardHeader
+                                        title={
+                                            <Typography variant="h6">
+                                                Citizen ID photo
+                                            </Typography>
+                                        }
+                                        subheader={
+                                            <Typography
+                                                variant="body2"
+                                                sx={{
+                                                    color: 'grey.600',
+                                                }}
+                                            >
+                                                Please upload your Citizen ID
+                                                photo
+                                            </Typography>
+                                        }
+                                    />
+
+                                    {!preview ? (
+                                        <CardActionArea
+                                            sx={{ height: '200px' }}
+                                        >
+                                            <label>
+                                                <input
+                                                    type="file"
+                                                    id="avatar"
+                                                    accept="image/png, image/jpeg"
+                                                    style={{ display: 'none' }}
+                                                    onChange={(e) => {
+                                                        const files =
+                                                            e.target.files
+                                                        if (!files) return
+                                                        onChangeState({
+                                                            ...state,
+                                                            imgCard: files[0],
+                                                        })
+                                                    }}
+                                                ></input>
+
+                                                <FileUploadIcon
+                                                    htmlColor="#a7a7a7"
+                                                    sx={{
+                                                        width: '20%',
+                                                        height: 'auto',
+                                                    }}
+                                                />
+                                            </label>
+
+                                            <Typography
+                                                variant="body2"
+                                                sx={{
+                                                    color: 'grey.600',
+                                                }}
+                                            >
+                                                Upload file
+                                            </Typography>
+                                        </CardActionArea>
+                                    ) : (
+                                        <CardActionArea>
+                                            <CardMedia
+                                                component="img"
+                                                height="194"
+                                                image={preview}
+                                                alt="Paella dish"
+                                            />
+                                            <label>
+                                                <input
+                                                    type="file"
+                                                    id="avatar"
+                                                    accept="image/png, image/jpeg"
+                                                    style={{ display: 'none' }}
+                                                    onChange={(e) => {
+                                                        const files =
+                                                            e.target.files
+                                                        if (!files) return
+                                                        onChangeState({
+                                                            ...state,
+                                                            imgCard: files[0],
+                                                        })
+                                                    }}
+                                                ></input>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: 'grey.600',
+                                                        p: 1,
+                                                        cursor: 'pointer',
+                                                    }}
+                                                >
+                                                    Change file
+                                                </Typography>
+                                            </label>
+                                        </CardActionArea>
+                                    )}
+                                </Card>
+                            </Box>
