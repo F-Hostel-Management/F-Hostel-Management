@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Filters;
+using Domain.Entities;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ public class BaseODataController<T> : ODataController where T : class
     {
         this.db = db;
     }
-    protected Guid CurrentUserID => GetUserID();
+    protected UserEntity CurrentUser => db.Users.FirstOrDefault(e => e.Id.Equals(GetUserID()));
 
     protected Guid GetUserID()
     {
