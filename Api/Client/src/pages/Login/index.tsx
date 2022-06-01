@@ -8,14 +8,30 @@ import FacebookLogo from '../../assets/images/FacebookLogo.svg'
 import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 
 import FirebaseService from '../../services/FirebaseService'
+import { RestCaller } from '../../utils/RestCaller'
 
 interface ILoginProps {}
+
+interface IExchangeTokenResponse {
+    isFirstTime: boolean
+    token: string
+}
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
     const navigate = useNavigate()
 
-    const handleRedirect = () => {
+    const exchangeToken = async (
+        token: string
+    ): Promise<IExchangeTokenResponse> => {
+        return RestCaller.post(`Authentication/login?firebaseToken=${token}`)
+    }
+
+    const redirectFirstTimePage = () => {
         navigate('/fillInformation')
+    }
+
+    const redirectHomePage = () => {
+        navigate('/home')
     }
 
     const onSignInGoogle = async () => {
@@ -24,7 +40,11 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             console.log('Failed to sign in Google')
             return
         }
-        handleRedirect()
+
+        const res = await exchangeToken(token)
+        if (res.isFirstTime) return redirectFirstTimePage()
+
+        redirectHomePage()
     }
 
     const onSignInFacebook = async () => {
@@ -34,7 +54,11 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             console.log('Failed to sign in Facebook')
             return
         }
-        handleRedirect()
+
+        const res = await exchangeToken(token)
+        if (res.isFirstTime) return redirectFirstTimePage()
+
+        redirectHomePage()
     }
 
     const onSignInMicrosoft = async () => {
@@ -44,7 +68,11 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             console.log('Failed to sign in Microsoft')
             return
         }
-        handleRedirect()
+
+        const res = await exchangeToken(token)
+        if (res.isFirstTime) return redirectFirstTimePage()
+
+        redirectHomePage()
     }
 
     return (
