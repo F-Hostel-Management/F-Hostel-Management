@@ -1,6 +1,7 @@
 ﻿using Api.UserFeatures.Requests;
 using Api.UserFeatures.Responses;
 using Application.Interfaces;
+using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace Api.Controllers.Rest
             this.authenticationService = authenticationService;
             this.userService = userService;
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(string firebaseToken)
         {
@@ -47,6 +49,10 @@ namespace Api.Controllers.Rest
             }
             var firebaseToken = await authenticationService.GetFirebaseTokenAsync(loginRequest.FirebaseToken);
             var email = firebaseToken.Claims.GetValueOrDefault("email");
+            if (email is null)
+            {
+                throw new ApiException($"This account cannot use to log-in, please try another account!", StatusCodes.Status400BadRequest);
+            }
             UserEntity userEntity = new UserEntity();
             userEntity.Email = email.ToString();
             Mapper.Map(loginRequest, userEntity);
@@ -57,6 +63,5 @@ namespace Api.Controllers.Rest
             HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
             return Ok(loginResponse);
         }
-
     }
 }

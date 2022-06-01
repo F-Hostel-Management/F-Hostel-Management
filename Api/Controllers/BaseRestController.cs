@@ -9,7 +9,7 @@ public abstract class BaseRestController : ControllerBase
 {
     private IMapper _mapper;
     protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
-
+    protected Guid CurrentUserID => GetUserID();
 
     protected Guid GetUserID()
     {

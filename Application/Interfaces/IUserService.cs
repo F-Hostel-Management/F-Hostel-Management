@@ -11,7 +11,8 @@ namespace Application.Interfaces
     public interface IUserService
     {
         Task UpdateProfileAsync(UserEntity updatingEntity);
-        Task<string> UploadAvatarAsync(string userID, IFormFile formFile);
+        Task<string> UploadAvatarAsync(UserEntity userEntity, IFormFile formFile);
+        Task<string> UploadIdentification(UserEntity userEntity, IFormFile formFile);
         Task<UserEntity> SignUpUserAsync(UserEntity userEntity);
     }
 }

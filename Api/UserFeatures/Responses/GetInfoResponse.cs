@@ -11,5 +11,7 @@ namespace Api.UserFeatures.Responses
         public string Phone { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string RoleString { get; set; }
+        public string Avatar { get; set; }
+        public string Identification { get; set; }
     }
 }
