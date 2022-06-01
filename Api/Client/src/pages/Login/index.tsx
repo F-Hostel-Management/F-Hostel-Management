@@ -10,6 +10,9 @@ import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
+import { useDispatch } from 'react-redux'
+import { setToken } from './authSlice'
+
 interface ILoginProps {}
 
 interface IExchangeTokenResponse {
@@ -19,6 +22,15 @@ interface IExchangeTokenResponse {
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const doLogin = async (firebaseToken: string) => {
+        const { isFirstTime, token } = await exchangeToken(firebaseToken)
+        if (isFirstTime) return redirectFirstTimePage()
+
+        dispatch(setToken(token))
+        redirectHomePage()
+    }
 
     const exchangeToken = async (
         token: string
@@ -41,10 +53,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             return
         }
 
-        const res = await exchangeToken(token)
-        if (res.isFirstTime) return redirectFirstTimePage()
-
-        redirectHomePage()
+        await doLogin(token)
     }
 
     const onSignInFacebook = async () => {
@@ -55,10 +64,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             return
         }
 
-        const res = await exchangeToken(token)
-        if (res.isFirstTime) return redirectFirstTimePage()
-
-        redirectHomePage()
+        await doLogin(token)
     }
 
     const onSignInMicrosoft = async () => {
@@ -69,10 +75,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             return
         }
 
-        const res = await exchangeToken(token)
-        if (res.isFirstTime) return redirectFirstTimePage()
-
-        redirectHomePage()
+        await doLogin(token)
     }
 
     return (
