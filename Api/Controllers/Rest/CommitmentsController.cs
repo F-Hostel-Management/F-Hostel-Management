@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Route("api/rooms/{RoomId}/")]
+[Route("api/Rooms/{RoomId}/")]
 public class CommitmentsController : BaseRestController
 {
     private readonly IGenericRepository<UserEntity> _userRepository;
