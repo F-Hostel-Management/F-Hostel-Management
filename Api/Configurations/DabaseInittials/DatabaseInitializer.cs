@@ -175,7 +175,8 @@ public static class DatabaseInitializer
                     Price = mockRoom.Price,
                     RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
                     Hostel = hostels[_rand.Next(hostels.Length)],
-                    RoomStatus = (RoomStatus)1
+                    RoomStatus = (RoomStatus)1,
+                    MaximumPeople = _rand.Next(2, 10)
                 });
         }
         await dbContext.SaveChangesAsync();

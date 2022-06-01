@@ -26,6 +26,7 @@ public class RoomEntity : BaseEntity
     [NotMapped]
     public RoomStatus RoomStatus { get; set; }
 
+    public int? MaximumPeople { get; set; }
     public int NumOfWindows { get; set; }
     public int NumOfDoors { get; set; }
     public int NumOfBathRooms { get; set; }

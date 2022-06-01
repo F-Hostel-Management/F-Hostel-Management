@@ -87,20 +87,35 @@ public class CommitmentsController : BaseRestController
 
 
     // tenant into commitment ==> com.status => done
-    [Authorize(nameof(Role.Tenant))]
+    //[Authorize(nameof(Role.Tenant))]
     [HttpPatch("tenant/status")]
     public async Task<IActionResult> TenantDoneCommitment
     ([FromBody] TenantDoneCommitmentRequest req)
     {
+        JoiningCode joiningCode = await _joiningCodeServices.
+            GetJoiningCodeByDigits(req.SixDigitsJoiningCode);
+
+        bool isValid = _joiningCodeServices.ValidateJoiningCode(joiningCode);
+
+        if (!isValid)
+        {
+            return BadRequest("Joining code is not exists or expired");
+        }
+
         CommitmentEntity com =
-            await _commitmentServices.GetApprovedCommitmentByRoom(req.RoomId);
+            await _joiningCodeServices.GetCommitmentByJoiningCode(joiningCode);
+
         if (com == null)
         {
             return BadRequest();
         }
 
         await _commitmentServices.ActivatedCommitment(com, req.TenantId);
-        await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
+        bool isSuccess =  await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
+        if (!isSuccess)
+        {
+            return BadRequest("Room exceeds the specified number of people");
+        }
         return Ok(com);
     }
 
@@ -119,6 +134,28 @@ public class CommitmentsController : BaseRestController
 
         JoiningCode joiningCode = Mapper.Map<JoiningCode>(req);
         var response = await _joiningCodeServices.CreateJoiningCode(joiningCode);
-        return Ok(joiningCode);
+        return Ok(response);
+    }
+
+    // get commitment by joining code
+    [HttpGet("joiningCode/{SixDigitsCode}")]
+    public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
+    {
+        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCodeByDigits(SixDigitsCode);
+        if (joiningCode == null)
+        {
+            return BadRequest("Joining code is not exists or expired");
+        }
+
+        bool isValid = _joiningCodeServices.ValidateJoiningCode(joiningCode);
+
+        if (!isValid)
+        {
+            return BadRequest("Joining code is not exists or expired");
+        }
+
+        CommitmentEntity commitment = await _joiningCodeServices.GetCommitmentByJoiningCode(joiningCode);
+
+        return Ok(commitment);
     }
 }

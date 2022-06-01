@@ -2,11 +2,6 @@
 using Application.Interfaces.IRepository;
 using Domain.Entities.Room;
 using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.RoomServices;
 
@@ -29,8 +24,13 @@ public class RoomServices : IRoomServices
     {
         return await _roomRepository
             .FirstOrDefaultAsync(room => 
-            room.Id == Id
-            && room.Status == RoomStatus.Available.ToString()
+            room.Id.Equals(Id)
+            && room.Status.Equals(RoomStatus.Available.ToString())
             );
+    }
+
+    public async Task<RoomEntity> GetRoomByIdAsync(Guid Id)
+    {
+        return await _roomRepository.FindByIdAsync(Id);
     }
 }

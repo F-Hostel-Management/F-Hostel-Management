@@ -58,9 +58,13 @@ public class CommitmentServices : ICommitmentServices
     }
     public async Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId)
     {
-        commitment.TenantId = tenantId;
-        commitment.CommitmentStatus = CommitmentStatus.Active;
-        await _commitmentRepository.UpdateAsync(commitment);
+        // There is no main person in the contract
+        if (commitment.Tenant == null)
+        {
+            commitment.TenantId = tenantId;
+            commitment.CommitmentStatus = CommitmentStatus.Active;
+            await _commitmentRepository.UpdateAsync(commitment);
+        }
     }
 
     public async Task<bool> IsExist(string commitmentCode)

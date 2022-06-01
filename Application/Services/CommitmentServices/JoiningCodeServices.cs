@@ -12,14 +12,17 @@ namespace Application.Services.CommitmentServices;
 public class JoiningCodeServices : IJoiningCodeServices
 {
     public readonly IGenericRepository<JoiningCode> _joiningCodeRepository;
+    public readonly IGenericRepository<CommitmentEntity> _commitmentCodeRepository;
     private readonly int Min_6_Ditgits = 100000;
     private readonly int Min_7_Ditgits = 1000000;
 
 
     public JoiningCodeServices(
-        IGenericRepository<JoiningCode> joiningCodeRepository)
+        IGenericRepository<JoiningCode> joiningCodeRepository,
+        IGenericRepository<CommitmentEntity> commitmentCodeRepository)
     {
         _joiningCodeRepository = joiningCodeRepository;
+        _commitmentCodeRepository = commitmentCodeRepository;
     }
 
 
@@ -28,18 +31,44 @@ public class JoiningCodeServices : IJoiningCodeServices
     public async Task<JoiningCode> CreateJoiningCode(JoiningCode joiningCode)
     {
         Random random = new Random();
-        /*int _6DigitCode = 0;
+        int SixDigitsCode = 0;
         JoiningCode checkedJc = null;
+
+        checkedJc = await _joiningCodeRepository.FirstOrDefaultAsync(
+                jc => jc.CommitementId.Equals(joiningCode.CommitementId));
+
+        if (checkedJc != null)
+        {
+            await _joiningCodeRepository.DeleteAsync(checkedJc.Id);
+        }
+
         do
         {
-            _6DigitCode = random.Next(Min_6_Ditgits, Min_7_Ditgits);
+            SixDigitsCode = random.Next(Min_6_Ditgits, Min_7_Ditgits);
             checkedJc = await _joiningCodeRepository.FirstOrDefaultAsync(
-                jc => jc._6DigitCode == _6DigitCode
+                jc => jc.SixDigitsCode == SixDigitsCode
             );
-        } while (checkedJc != null);*/
-        joiningCode._6DigitCode = /*_6DigitCode*/ random.Next(Min_6_Ditgits, Min_7_Ditgits);
+        } while (checkedJc != null);
+        joiningCode.SixDigitsCode = random.Next(Min_6_Ditgits, Min_7_Ditgits);
         joiningCode.CreateDate = DateTime.Now;
         await _joiningCodeRepository.CreateAsync(joiningCode);
         return joiningCode;
+    }
+
+    public async Task<JoiningCode> GetJoiningCodeByDigits(int digits)
+    {
+        return await _joiningCodeRepository.FirstOrDefaultAsync(jc =>
+        jc.SixDigitsCode == digits);
+    }
+
+    public bool ValidateJoiningCode(JoiningCode joiningCode)
+    {
+        double timeSpan = DateTime.Now.Subtract(joiningCode.CreateDate).TotalMinutes;
+        return timeSpan <= joiningCode.TimeSpan;
+    }
+
+    public async Task<CommitmentEntity> GetCommitmentByJoiningCode(JoiningCode joiningCode)
+    {
+        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitementId);
     }
 }
