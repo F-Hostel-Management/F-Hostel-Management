@@ -8,6 +8,7 @@ using Api.Configurations;
 using Microsoft.AspNetCore.OData;
 using System.Text.Json;
 using Application.AppConfig;
+using AutoWrapper;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -73,6 +74,8 @@ var app = builder.Build();
         await app.Services.DbInitializer();
     }
     app.UseRouting();
+
+    app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false});
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();
