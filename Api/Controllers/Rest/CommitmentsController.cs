@@ -4,6 +4,8 @@ using Application.Interfaces.IRepository;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
@@ -83,6 +85,7 @@ public class CommitmentsController : BaseRestController
 
 
     // tenant into commitment ==> com.status => done
+    //[Authorize(nameof(Role.Tenant))]
     [HttpPatch("commitment/tenant/{tenantId}/status")]
     public async Task<IActionResult> TenantDoneCommitment
     ([FromRoute] Guid roomId, Guid tenantId)
@@ -93,16 +96,9 @@ public class CommitmentsController : BaseRestController
         {
             return BadRequest();
         }
-        // only tenant
-        UserEntity tenant = await _tenantServices.GetTenant(tenantId);
 
-        if (tenant == null)
-        {
-            return BadRequest();
-        }
-
-        await _commitmentServices.DoneCommitment(com);
-        await _tenantServices.GetIntoRoom(com, tenant);
+        await _commitmentServices.DoneCommitment(com, tenantId);
+        await _tenantServices.GetIntoRoom(com.RoomId, tenantId);
         return Ok(com);
     }
 

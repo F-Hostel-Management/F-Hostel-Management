@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
+using Domain.Entities.User;
 using Domain.Enums;
 using Infrastructure.Contexts;
 
@@ -213,10 +214,15 @@ public static class DatabaseInitializer
                 });
 
             // tenant into room
-            tenant.Room = room;
+            await dbContext.RoomTenants.AddAsync(
+                new RoomTenant()
+                {
+                    TenantId = tenant.Id,
+                    RoomId = room.Id,
+                });
 
             // update room status
-            room.RoomStatus = (RoomStatus)0;
+            room.RoomStatus = 0;
 
         }
         await dbContext.SaveChangesAsync();

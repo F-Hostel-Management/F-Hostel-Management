@@ -5,6 +5,7 @@ using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Notification;
 using Domain.Entities.Ticket;
+using Domain.Entities.User;
 using Domain.Enums;
 using Domain.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -47,9 +48,8 @@ public class RoomEntity : BaseEntity
     // 1 room - M facilities
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
-    // 1 room - M tenants
-    //[Contained]
-    public virtual ICollection<UserEntity> Tenants { get; set; }
+    // M room - M tenants
+    public virtual ICollection<RoomTenant> RoomTenants { get; set; }
 
     // 1 Manager (create) M Invoices (for) 1 Room
     public virtual ICollection<InvoiceEntity> ManagerCreatedInvoices { get; set; }

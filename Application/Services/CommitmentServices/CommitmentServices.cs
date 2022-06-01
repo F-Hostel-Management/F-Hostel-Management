@@ -57,8 +57,9 @@ public class CommitmentServices : ICommitmentServices
         commitment.CommitmentStatus = CommitmentStatus.Approved;
         await _commitmentRepository.UpdateAsync(commitment);
     }
-    public async Task DoneCommitment(CommitmentEntity commitment)
+    public async Task DoneCommitment(CommitmentEntity commitment, Guid tenantId)
     {
+        commitment.TenantId = tenantId;
         commitment.CommitmentStatus = CommitmentStatus.Done;
         await _commitmentRepository.UpdateAsync(commitment);
     }
