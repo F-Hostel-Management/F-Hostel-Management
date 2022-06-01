@@ -10,7 +10,11 @@ import {
     Typography,
     TextField,
     MenuItem,
+    CardHeader,
+    Card,
+    CardMedia,
 } from '@mui/material'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
 import React, { useState } from 'react'
 
 import * as Styled from './styles'
@@ -24,6 +28,8 @@ interface IInformation {
     cardNumber?: string
     address?: string
     gender?: string
+    phoneNo?: string
+    imgCard?: string
 }
 interface IRole {
     icon: string
@@ -75,11 +81,25 @@ const SetRole: React.FC<ISetRoleProps> = ({ onChangeState }) => {
     )
 }
 
-const PersonalInfomation: React.FC<IPersonInformationProps> = ({
+const PersonalInformation: React.FC<IPersonInformationProps> = ({
     state,
     onChangeState,
 }) => {
-    const { fullName, birthDate, cardNumber, address, gender } = state
+    const {
+        fullName,
+        birthDate,
+        cardNumber,
+        address,
+        gender,
+        phoneNo,
+        imgCard,
+    } = state
+
+    const updateImage = (files: FileList | null) => {
+        if (files != null) {
+            console.log(files[0])
+        }
+    }
 
     return (
         <Styled.Step>
@@ -91,37 +111,7 @@ const PersonalInfomation: React.FC<IPersonInformationProps> = ({
                 }}
             >
                 <Box sx={{ width: '90%' }}>
-                    <Grid container>
-                        <Grid
-                            item
-                            xs={12}
-                            md={5}
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                            }}
-                        >
-                            <Box sx={{ ml: 3, textAlign: 'center' }}>
-                                <label>
-                                    <input
-                                        type="file"
-                                        id="avatar"
-                                        accept="image/png, image/jpeg"
-                                        style={{ display: 'none' }}
-                                    ></input>
-
-                                    <Styled.UpdateAvt
-                                        src="/broken-image.jpg"
-                                        sx={{
-                                            width: '150px',
-                                            height: '150px',
-                                            mb: 2,
-                                        }}
-                                    />
-                                </label>
-                            </Box>
-                        </Grid>
+                    <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
                             <TextField
                                 margin="normal"
@@ -139,6 +129,9 @@ const PersonalInfomation: React.FC<IPersonInformationProps> = ({
                                     })
                                 }
                             />
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
                             <TextField
                                 margin="normal"
                                 required
@@ -155,22 +148,6 @@ const PersonalInfomation: React.FC<IPersonInformationProps> = ({
                                     onChangeState({
                                         ...state,
                                         birthDate: e.target.value,
-                                    })
-                                }
-                            />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="fullname"
-                                label="ID card number"
-                                size="small"
-                                type="number"
-                                value={cardNumber ?? ''}
-                                onChange={(e) =>
-                                    onChangeState({
-                                        ...state,
-                                        cardNumber: e.target.value,
                                     })
                                 }
                             />
@@ -213,8 +190,6 @@ const PersonalInfomation: React.FC<IPersonInformationProps> = ({
                                     </MenuItem>
                                 ))}
                             </TextField>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
                             <TextField
                                 margin="normal"
                                 required
@@ -222,7 +197,107 @@ const PersonalInfomation: React.FC<IPersonInformationProps> = ({
                                 id="fullname"
                                 label="Phone number"
                                 size="small"
+                                value={phoneNo ?? ''}
+                                onChange={(e) =>
+                                    onChangeState({
+                                        ...state,
+                                        phoneNo: e.target.value,
+                                    })
+                                }
                             />
+                            <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="fullname"
+                                label="Citizen ID number"
+                                size="small"
+                                type="number"
+                                value={cardNumber ?? ''}
+                                onChange={(e) =>
+                                    onChangeState({
+                                        ...state,
+                                        cardNumber: e.target.value,
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Box sx={{ m: 2, textAlign: 'center' }}>
+                                <Card>
+                                    <CardHeader
+                                        title={
+                                            <Typography variant="h6">
+                                                Citizen ID photo
+                                            </Typography>
+                                        }
+                                        subheader={
+                                            <Typography
+                                                variant="body2"
+                                                sx={{
+                                                    color: 'grey.600',
+                                                }}
+                                            >
+                                                Please upload your Citizen ID
+                                                photo
+                                            </Typography>
+                                        }
+                                    />
+                                    <input
+                                        type="file"
+                                        id="avatar"
+                                        accept="image/png, image/jpeg"
+                                        onChange={(event) => {
+                                            updateImage(event.target.files)
+                                        }}
+                                    ></input>
+                                    {!imgCard ? (
+                                        <CardActionArea
+                                            sx={{ height: '200px' }}
+                                        >
+                                            <label>
+                                                <input
+                                                    type="file"
+                                                    id="avatar"
+                                                    accept="image/png, image/jpeg"
+                                                    style={{ display: 'none' }}
+                                                    onChange={(e) =>
+                                                        onChangeState({
+                                                            ...state,
+                                                            imgCard:
+                                                                e.target.value,
+                                                        })
+                                                    }
+                                                ></input>
+
+                                                <FileUploadIcon
+                                                    htmlColor="#a7a7a7"
+                                                    sx={{
+                                                        width: '20%',
+                                                        height: 'auto',
+                                                    }}
+                                                />
+                                            </label>
+
+                                            <Typography
+                                                variant="body2"
+                                                sx={{
+                                                    color: 'grey.600',
+                                                }}
+                                            >
+                                                Upload file
+                                            </Typography>
+                                        </CardActionArea>
+                                    ) : (
+                                        <CardMedia
+                                            component="img"
+                                            height="194"
+                                            image={imgCard}
+                                            alt="Paella dish"
+                                        />
+                                    )}
+                                </Card>
+                            </Box>
                         </Grid>
                     </Grid>
                 </Box>
@@ -307,7 +382,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
                                 case 1:
                                     return (
-                                        <PersonalInfomation
+                                        <PersonalInformation
                                             state={information}
                                             onChangeState={setInformation}
                                         />
@@ -333,7 +408,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <Box
+                            <Styled.ButtonBox
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'row',
@@ -354,7 +429,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                         ? 'Finish'
                                         : 'Next'}
                                 </Button>
-                            </Box>
+                            </Styled.ButtonBox>
                         </React.Fragment>
                     )}
                 </Box>

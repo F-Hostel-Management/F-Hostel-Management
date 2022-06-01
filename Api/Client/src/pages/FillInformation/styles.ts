@@ -1,4 +1,11 @@
-import { Avatar, Card, CardContent, Paper, Typography } from '@mui/material'
+import {
+    Avatar,
+    Box,
+    Card,
+    CardContent,
+    Paper,
+    Typography,
+} from '@mui/material'
 import styled from 'styled-components'
 import { down } from 'styled-breakpoints'
 
@@ -20,6 +27,7 @@ export const MyPaper = styled(Paper)`
     width: 85%;
     height: 90%;
     overflow-y: auto;
+    position: relative;
 `
 
 export const Step = styled.div`
@@ -84,3 +92,5 @@ export const RoleCard = styled(Card)`
 export const UpdateAvt = styled(Avatar)`
     cursor: pointer;
 `
+
+export const ButtonBox = styled(Box)``
