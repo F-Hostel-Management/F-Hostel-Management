@@ -19,3 +19,12 @@ export interface ICommitment {
     }
     status: ECommitmentStatus
 }
+
+export interface ICommitmentValues {
+    createDate: string
+    startDate: string
+    endDate: string
+    roomId: string
+    overdueDays: number
+    compensation: number
+}

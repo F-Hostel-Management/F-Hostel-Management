@@ -1,25 +1,12 @@
+import { Paper } from '@mui/material'
 import React, { FC } from 'react'
 
-interface IStep2Props {
-    createDate: string | null
-    startDate: string | null
-    endDate: string | null
-    overdueDays: number | null
-    compensation: number | null
-    roomInfo: Record<string, any> | null
-}
+interface ICommitmentDetailsProps {}
 
-const Step2: FC<IStep2Props> = ({
-    createDate,
-    startDate,
-    endDate,
-    overdueDays,
-    compensation,
-    roomInfo,
-}) => {
-    return (
-        <div style={{ width: '80%', margin: 'auto' }}>
-            <p style={{ textAlign: 'center' }}>
+const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
+    const content = (
+        <div id="divToPrint">
+            <div style={{ textAlign: 'center' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '9.0pt' }}>
@@ -27,9 +14,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '9.0pt' }}>
@@ -37,25 +24,25 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>- - - o0o - - -</span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'center' }}>&nbsp;</p>
+            <div style={{ textAlign: 'center' }}>&nbsp;</div>
 
-            <p style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>HỢP ĐỒNG </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -63,11 +50,11 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'center' }}>&nbsp;</p>
+            <div style={{ textAlign: 'center' }}>&nbsp;</div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         -{' '}
@@ -78,9 +65,9 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         -{' '}
@@ -90,9 +77,9 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         -{' '}
@@ -102,9 +89,9 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         -{' '}
@@ -114,11 +101,11 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>&nbsp;</p>
+            <div>&nbsp;</div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         H&ocirc;m nay, ng&agrave;y &hellip;&hellip; th&aacute;ng
@@ -127,19 +114,19 @@ const Step2: FC<IStep2Props> = ({
                         &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;...............................................
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         Ch&uacute;ng t&ocirc;i gồm c&oacute;:
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>&nbsp;</p>
+            <div>&nbsp;</div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -147,9 +134,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -160,9 +147,9 @@ const Step2: FC<IStep2Props> = ({
                         {}. Năm sinh: {}
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         CMND số: {},&nbsp; Ng&agrave;y cấp:
@@ -171,21 +158,21 @@ const Step2: FC<IStep2Props> = ({
                         &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..&hellip;&hellip;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>Địa chỉ: {}</span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>Điện thoại: {}</span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -193,9 +180,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -203,9 +190,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -216,29 +203,29 @@ const Step2: FC<IStep2Props> = ({
                         {}.&nbsp; Năm sinh: {}.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         CMND số: {}, Ng&agrave;y cấp: {}&nbsp;Nơi cấp: {}
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>Địa chỉ: {}</span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>Điện thoại: {}</span>
                 </span>
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -246,11 +233,11 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p>&nbsp;</p>
+            <div>&nbsp;</div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <em>
@@ -266,9 +253,9 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '9.0pt' }}>Điều I:</span>
                     <span style={{ fontSize: '9.0pt' }}>
@@ -276,9 +263,9 @@ const Step2: FC<IStep2Props> = ({
                         Đối tượng của Hợp đồng
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         Hợp đồng n&agrave;y l&agrave; sự thoả thuận giữa
@@ -290,9 +277,9 @@ const Step2: FC<IStep2Props> = ({
                         thuận trong hợp đồng. Cụ thể như sau :
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -300,33 +287,33 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         Ph&ograve;ng trọ cho thu&ecirc; c&oacute; c&aacute;c đặc
                         điểm như sau:
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         Ph&ograve;ng số: {}. Tổng diện t&iacute;ch sử dụng: {}{' '}
                         m2
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>Địa chỉ: {}</span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         B&ecirc;n A đảm bảo rằng ph&ograve;ng trọ n&oacute;i
@@ -341,9 +328,9 @@ const Step2: FC<IStep2Props> = ({
                         quyền.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -351,9 +338,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         B&ecirc;n B thu&ecirc;, đưa v&agrave;o sử dụng
@@ -362,9 +349,9 @@ const Step2: FC<IStep2Props> = ({
                         ph&aacute;p luật.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '9.0pt' }}>Điều II:</span>
                     <span style={{ fontSize: '9.0pt' }}>
@@ -373,9 +360,9 @@ const Step2: FC<IStep2Props> = ({
                         v&agrave; điều kiện thanh to&aacute;n
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -383,9 +370,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         Từ ng&agrave;y {} th&aacute;ng {} năm {}&nbsp;đến hết
@@ -393,9 +380,9 @@ const Step2: FC<IStep2Props> = ({
                         &nbsp;th&aacute;ng {}&nbsp;năm {}
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -407,15 +394,15 @@ const Step2: FC<IStep2Props> = ({
                         <strong>01/th&aacute;ng.</strong>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>(Bằng chữ: {})</span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -426,9 +413,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -436,9 +423,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -447,9 +434,9 @@ const Step2: FC<IStep2Props> = ({
                     </em>
                     <span style={{ fontSize: '10.5pt' }}> tiền VNĐ</span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -461,9 +448,9 @@ const Step2: FC<IStep2Props> = ({
                         chuyển khoản hoặc tiền mặt.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -479,11 +466,11 @@ const Step2: FC<IStep2Props> = ({
                         th&aacute;ng trước liền kề.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>&nbsp;</p>
+            <div style={{ textAlign: 'justify' }}>&nbsp;</div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '9.0pt' }}>Điều III:</span>
                     <span style={{ fontSize: '9.0pt' }}>
@@ -491,9 +478,9 @@ const Step2: FC<IStep2Props> = ({
                         Quyền v&agrave; nghĩa vụ của B&ecirc;n A
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '9.0pt' }}>
@@ -502,18 +489,18 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Nhận tiền cho thu&ecirc; ph&ograve;ng trọ theo
                         đ&uacute;ng kỳ hạn đ&atilde; thỏa thuận với B&ecirc;n B;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - C&ugrave;ng B&ecirc;n B thỏa thuận sửa đổi, bổ sung
@@ -527,18 +514,18 @@ const Step2: FC<IStep2Props> = ({
                         trị thực hiện;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Được nhận lại ph&ograve;ng trọ cho thu&ecirc; khi hết
                         hạn Hợp đồng;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Đơn phương chấm dứt Hợp đồng với B&ecirc;n B, di
@@ -551,9 +538,9 @@ const Step2: FC<IStep2Props> = ({
                         đ&acirc;y:
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -563,9 +550,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -575,9 +562,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -587,9 +574,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -601,9 +588,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -612,27 +599,27 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - B&agrave;n giao ph&ograve;ng trọ cho B&ecirc;n B
                         đ&uacute;ng thời gian đ&atilde; thoả thuận;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Cấp nguồn điện, nước ri&ecirc;ng c&oacute; c&ocirc;ng
                         tơ đo đếm cho B&ecirc;n B sử dụng;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Tạo điều kiện đảm bảo cho B&ecirc;n B sử dụng
@@ -640,9 +627,9 @@ const Step2: FC<IStep2Props> = ({
                         độc lập trong thời hạn B&ecirc;n B thu&ecirc;;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '9.0pt' }}>Điều IV:</span>
                     <span style={{ fontSize: '9.0pt' }}>
@@ -650,9 +637,9 @@ const Step2: FC<IStep2Props> = ({
                         Quyền v&agrave; nghĩa vụ của B&ecirc;n B
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -661,18 +648,18 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Nhận b&agrave;n giao ph&ograve;ng trọ thu&ecirc; theo
                         đ&uacute;ng thỏa thuận với B&ecirc;n A;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Được bố tr&iacute;, lắp đặt th&ecirc;m c&aacute;c
@@ -686,9 +673,9 @@ const Step2: FC<IStep2Props> = ({
                         khi trả ph&ograve;ng.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - C&ugrave;ng B&ecirc;n B thỏa thuận sửa đổi, bổ sung
@@ -702,9 +689,9 @@ const Step2: FC<IStep2Props> = ({
                         gi&aacute; trị thực hiện;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -713,9 +700,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Sử dụng ph&ograve;ng trọ theo đ&uacute;ng mục
@@ -723,9 +710,9 @@ const Step2: FC<IStep2Props> = ({
                         tại Hợp đồng;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Trả đủ v&agrave; đ&uacute;ng kỳ hạn tiền thu&ecirc;
@@ -733,9 +720,9 @@ const Step2: FC<IStep2Props> = ({
                         A ;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Trả tiền điện, nước, vệ sinh v&agrave; c&aacute;c chi
@@ -744,9 +731,9 @@ const Step2: FC<IStep2Props> = ({
                         số thực tế sử dụng;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Bảo quản v&agrave; giữ g&igrave;n cho B&ecirc;n A
@@ -756,9 +743,9 @@ const Step2: FC<IStep2Props> = ({
                         trường hợp hư hỏng do hao m&ograve;n tự nhi&ecirc;n);
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Chấp h&agrave;nh c&aacute;c quy định của Nh&agrave;
@@ -769,9 +756,9 @@ const Step2: FC<IStep2Props> = ({
                         tr&uacute;, tạm vắng theo quy định của ph&aacute;p luật;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Bồi thường thiệt hại cho B&ecirc;n A nếu để xảy ra
@@ -779,18 +766,18 @@ const Step2: FC<IStep2Props> = ({
                         t&agrave;i sản của B&ecirc;n A;
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - B&agrave;n giao lại ph&ograve;ng trọ cho B&ecirc;n A
                         khi hết hạn hợp đồng thu&ecirc; ph&ograve;ng trọ.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         - Khi B&ecirc;n B đơn phương chấm dứt thực hiện Hợp đồng
@@ -808,9 +795,9 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>Điều V:</span>
@@ -822,9 +809,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </strong>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         1. Hai B&ecirc;n cam kết thực hiện đ&uacute;ng v&agrave;
@@ -836,9 +823,9 @@ const Step2: FC<IStep2Props> = ({
                         xảy ra.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         2. Trong qu&aacute; tr&igrave;nh thực hiện Hợp đồng nếu
@@ -851,9 +838,9 @@ const Step2: FC<IStep2Props> = ({
                         thống ph&aacute;p luật Việt Nam.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         3. Hợp đồng c&oacute; hiệu lực kể từ ng&agrave;y
@@ -861,9 +848,9 @@ const Step2: FC<IStep2Props> = ({
                         trường hợp sau đ&acirc;y:
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         -{' '}
@@ -873,9 +860,9 @@ const Step2: FC<IStep2Props> = ({
                         </em>
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -883,9 +870,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -894,9 +881,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
                         <span style={{ fontSize: '10.5pt' }}>
@@ -905,9 +892,9 @@ const Step2: FC<IStep2Props> = ({
                         </span>
                     </em>
                 </span>
-            </p>
+            </div>
 
-            <p style={{ textAlign: 'justify' }}>
+            <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
                         4. Hợp đồng cho thu&ecirc; ph&ograve;ng trọ n&agrave;y
@@ -918,15 +905,15 @@ const Step2: FC<IStep2Props> = ({
                         b&ecirc;n giữ ........... bản để thực hiện.
                     </span>
                 </span>
-            </p>
+            </div>
 
-            <p>&nbsp;</p>
+            <div>&nbsp;</div>
 
             <table style={{ width: '525.0pt' }}>
                 <tbody>
                     <tr>
                         <td>
-                            <p style={{ textAlign: 'center' }}>
+                            <div style={{ textAlign: 'center' }}>
                                 <span
                                     style={{
                                         fontFamily:
@@ -939,9 +926,9 @@ const Step2: FC<IStep2Props> = ({
                                         </span>
                                     </strong>
                                 </span>
-                            </p>
+                            </div>
 
-                            <p style={{ textAlign: 'center' }}>
+                            <div style={{ textAlign: 'center' }}>
                                 <span
                                     style={{
                                         fontFamily:
@@ -955,12 +942,12 @@ const Step2: FC<IStep2Props> = ({
                                         </span>
                                     </em>
                                 </span>
-                            </p>
+                            </div>
 
-                            <p style={{ textAlign: 'center' }}>{}</p>
+                            <div style={{ textAlign: 'center' }}>{}</div>
                         </td>
                         <td>
-                            <p style={{ textAlign: 'center' }}>
+                            <div style={{ textAlign: 'center' }}>
                                 <span
                                     style={{
                                         fontFamily:
@@ -973,9 +960,9 @@ const Step2: FC<IStep2Props> = ({
                                         </span>
                                     </strong>
                                 </span>
-                            </p>
+                            </div>
 
-                            <p style={{ textAlign: 'center' }}>
+                            <div style={{ textAlign: 'center' }}>
                                 <span
                                     style={{
                                         fontFamily:
@@ -989,17 +976,23 @@ const Step2: FC<IStep2Props> = ({
                                         </span>
                                     </em>
                                 </span>
-                            </p>
+                            </div>
 
-                            <p style={{ textAlign: 'center' }}>{}</p>
+                            <div style={{ textAlign: 'center' }}>{}</div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <p style={{ textAlign: 'center' }}>&nbsp;</p>
-            <p>&nbsp;</p>
+            <div style={{ textAlign: 'center' }}>&nbsp;</div>
+            <div>&nbsp;</div>
         </div>
+    )
+
+    return (
+        <Paper elevation={3} sx={{ padding: '16px 32px' }}>
+            {content}
+        </Paper>
     )
 }
 
-export default Step2
+export default CommitmentDetails
