@@ -42,4 +42,13 @@ export const RestCaller = {
             .then(responseBody),
     delete: (url: string) =>
         instance.delete(url).then(sleep(1000)).then(responseBody),
+    upload: (url: string, form: FormData) =>
+        instance
+            .post(url, form, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then(sleep(10000))
+            .then(responseBody),
 }
