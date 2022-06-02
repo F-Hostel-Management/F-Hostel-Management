@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
-import { rooms } from '../../../../utils/MockData'
+import { rooms, hostels } from '../../../../utils/MockData'
 import { ICommitmentValues } from '../../../../interface/commitment'
 interface ICreateCommitmentDialogProps {
     openDialog: boolean
@@ -26,6 +26,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
     const [roomInfo, setRoomInfo] = useState<any | null>(rooms[0])
+    const [hostelInfo, setHostelInfo] = useState<any | null>(hostels[0])
 
     return (
         <DialogCustom
@@ -41,6 +42,8 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                 resetForm={resetForm}
                 roomInfo={roomInfo}
                 setRoomInfo={setRoomInfo}
+                hostelInfo={hostelInfo}
+                setHostelInfo={setHostelInfo}
             />
         </DialogCustom>
     )

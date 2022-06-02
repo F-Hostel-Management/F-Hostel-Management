@@ -24,6 +24,8 @@ interface ICommitmentStepperProps {
     resetForm: () => void
     roomInfo: Record<string, any>[]
     setRoomInfo: any
+    hostelInfo: Record<string, any>
+    setHostelInfo: any
 }
 
 const CommitmentStepper: FC<ICommitmentStepperProps> = ({
@@ -34,6 +36,8 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     resetForm,
     roomInfo,
     setRoomInfo,
+    hostelInfo,
+    setHostelInfo,
 }) => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [completed, setCompleted] = React.useState<{
@@ -51,6 +55,8 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     roomInfo={roomInfo}
                     setRoomInfo={setRoomInfo}
                     roomOptions={rooms}
+                    hostelInfo={hostelInfo}
+                    setHostelInfo={setHostelInfo}
                 />
             ),
         },

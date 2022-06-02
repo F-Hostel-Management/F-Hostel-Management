@@ -8,12 +8,15 @@ import { Button } from '@mui/material'
 
 import * as Styled from './styles'
 import { ERole } from '../../../utils/enums'
+import { useDialog } from '../../../hooks/useDialog'
+import CreateCommitmentDialog from '../../Commitments/components/CreateCommitmentDialog'
 
 interface IOwnerHomeProps {}
 
 const role: ERole = 2
 
 const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
+    const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
     return (
         <Styled.HomeContainer>
             <Styled.ActionWrapper>
@@ -23,6 +26,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                         variant="outlined"
                         color="primary"
                         startIcon={<DescriptionIcon />}
+                        onClick={handleOpenCreate}
                     >
                         CREATE COMMITMENT
                     </Button>
@@ -41,6 +45,14 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                 <HostelCard />
                 <HostelCard />
             </React.Fragment>
+
+            {openCreate && (
+                <CreateCommitmentDialog
+                    openDialog={openCreate}
+                    handleOpenDialog={handleOpenCreate}
+                    handleCloseDialog={handleCloseCreate}
+                />
+            )}
         </Styled.HomeContainer>
     )
 }
