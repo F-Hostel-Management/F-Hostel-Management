@@ -51,7 +51,6 @@ export default class FirebaseService {
         const provider = new OAuthProvider('microsoft.com')
         provider.setCustomParameters({
             prompt: 'consent',
-            // tenant: firebaseConfig.microsoftTenantId,
         })
         provider.addScope('openid email')
 
@@ -61,5 +60,9 @@ export default class FirebaseService {
 
     public async getFirebaseToken(): Promise<string | undefined> {
         return this.auth.currentUser?.getIdToken(true)
+    }
+
+    public async getCurrentUser() {
+        return this.auth.currentUser
     }
 }

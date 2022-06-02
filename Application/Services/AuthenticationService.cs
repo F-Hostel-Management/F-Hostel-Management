@@ -1,9 +1,10 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Enums;
 using FirebaseAdmin.Auth;
-
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services
 {
@@ -47,6 +48,10 @@ namespace Application.Services
             FirebaseToken firebaseToken = await GetFirebaseTokenAsync(token);
             var email = firebaseToken.Claims.GetValueOrDefault("email");
             var name = firebaseToken.Claims.GetValueOrDefault("name");
+            if (email is null)
+            {
+                throw new ApiException($"This account cannot use to log-in, please try another account!", StatusCodes.Status400BadRequest);
+            }
             UserEntity userEntity = await _userRepository.FirstOrDefaultAsync(a => a.Email.Equals(email));
             return userEntity;
         }

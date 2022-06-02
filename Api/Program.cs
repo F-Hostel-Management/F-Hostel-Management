@@ -8,6 +8,8 @@ using Api.Configurations;
 using Microsoft.AspNetCore.OData;
 using System.Text.Json;
 using Application.AppConfig;
+using AutoWrapper;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -16,6 +18,10 @@ var configuration = builder.Configuration;
 {
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+    services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.SuppressModelStateInvalidFilter = true;
+    });
     services.AddDbService();
     services.AddRepositories();
     services.AddFirebase();
@@ -64,6 +70,7 @@ var configuration = builder.Configuration;
 var app = builder.Build();
 // Add service to Http request pipeline
 {
+    
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
@@ -72,7 +79,9 @@ var app = builder.Build();
         //await app.Services.ApplyMigrations();
         await app.Services.DbInitializer();
     }
+    app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false, ShowIsErrorFlagForSuccessfulResponse = true });
     app.UseRouting();
+
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();
