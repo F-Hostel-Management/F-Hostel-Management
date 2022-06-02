@@ -8,6 +8,7 @@ namespace Api.UserFeatures.Requests
         [Required]
         [MaxFileSize(1024 * 1024 * 2)]
         public virtual IFormFile FrontIdentification { get; set; }
+
         [Required]
         [MaxFileSize(1024 * 1024 * 2)]
         public virtual IFormFile BackIdentification { get; set; }
