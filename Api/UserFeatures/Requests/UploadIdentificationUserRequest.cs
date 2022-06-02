@@ -2,10 +2,12 @@
 
 namespace Api.UserFeatures.Requests
 {
-    public class UploadAvatarUserRequest
+    public class UploadIdentificationUserRequest
     {
-        ////[Display(Name = "Image File")]
-        [MaxFileSize(1024 * 1024 * 5)]
-        public virtual IFormFile Avatar { get; set; }
+        [MaxFileSize(1024 * 1024 * 2)]
+        public virtual IFormFile FrontIdentification { get; set; }
+
+        [MaxFileSize(1024 * 1024 * 2)]
+        public virtual IFormFile BackIdentification { get; set; }
     }
 }
