@@ -24,29 +24,17 @@ import FileUploadIcon from '@mui/icons-material/FileUpload'
 import InputField from '../../components/Input/InputField'
 
 import * as Styled from './styles'
-import Owner from '../../assets/images/ownerIcon.svg'
-import Manager from '../../assets/images/managerIcon.svg'
-import Tenant from '../../assets/images/tenantIcon.svg'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
+import FirebaseService from '../../services/FirebaseService'
+import { RestCaller } from '../../utils/RestCaller'
+import { useDispatch } from 'react-redux'
+import { setToken } from '../../slices/authSlice'
+import { useNavigate } from 'react-router-dom'
+import { IFirstTimeBody, IFirstTimeResponse, IInformation } from './interfaces'
+import { GENDERS, ROLES, STEPS } from './constants'
 
+// Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
-
-interface IInformation {
-    fullName: string
-    birthDate: string
-    cardNumber: string
-    address: string
-    gender: string
-    phoneNo: string
-    // imgCardPre?: File
-    // imgCardPos?: File
-    imgCard: Map<number, File>
-}
-interface IRole {
-    icon: string
-    name: string
-}
-
 interface IFillInformationProps {}
 interface IPersonInformationProps {
     state: IInformation
@@ -55,25 +43,16 @@ interface IPersonInformationProps {
 interface ISetRoleProps {
     onChangeState: (state: string) => void
 }
-
 interface IConfirmInfoProps {
     stateRole: string
     stateInfo: IInformation
 }
 
-const steps = ['Select your role', 'Personal information', 'Confirm']
-const roles: IRole[] = [
-    { icon: Owner, name: 'Owner' },
-    { icon: Manager, name: 'Manager' },
-    { icon: Tenant, name: 'Tenant' },
-]
-const genders = ['Male', 'Female', 'Other']
-
 const SetRole: React.FC<ISetRoleProps> = ({ onChangeState }) => {
     return (
         <Styled.Step>
             <Grid container>
-                {roles.map((role, index) => (
+                {ROLES.map((role, index) => (
                     <Grid item key={index} xs={12} md={4}>
                         <Styled.RoleCard elevation={0} variant="outlined">
                             <CardActionArea
@@ -108,8 +87,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
         address,
         gender,
         phoneNo,
-        // imgCardPre,
-        // imgCardPos,
         imgCard,
     } = state
 
@@ -168,8 +145,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
                             <InputField
-                                label="Fullname"
-                                name="fullame"
+                                label="Full name"
                                 value={fullName}
                                 onChange={(e: InputFieldType) =>
                                     onChangeState({
@@ -182,7 +158,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 
                             <InputField
                                 label="Address"
-                                name="address"
                                 value={address}
                                 onChange={(e: InputFieldType) =>
                                     onChangeState({
@@ -193,7 +168,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                             />
                             <InputField
                                 label="Birthday"
-                                name="birthday"
                                 value={birthDate}
                                 onChange={(e: InputFieldType) =>
                                     onChangeState({
@@ -209,7 +183,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 
                             <InputField
                                 label="Gender"
-                                name="gender"
                                 value={gender}
                                 onChange={(e: InputFieldType) =>
                                     onChangeState({
@@ -219,7 +192,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                 }
                                 select
                             >
-                                {genders.map((option, index) => (
+                                {GENDERS.map((option, index) => (
                                     <MenuItem key={index} value={option}>
                                         {option}
                                     </MenuItem>
@@ -228,7 +201,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 
                             <InputField
                                 label="Phone number"
-                                name="phone number"
                                 value={phoneNo}
                                 onChange={(e: InputFieldType) =>
                                     onChangeState({
@@ -241,7 +213,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 
                             <InputField
                                 label="Citizen ID number"
-                                name="citizenID"
                                 value={cardNumber}
                                 onChange={(e: InputFieldType) =>
                                     onChangeState({
@@ -297,8 +268,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                                 onChange={(e) => {
                                                     const files = e.target.files
                                                     if (!files) return
-
-                                                    console.log(1)
 
                                                     const { imgCard } = state
                                                     imgCard?.set(
@@ -425,7 +394,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 const ConfirmInfo: React.FC<IConfirmInfoProps> = ({ stateInfo, stateRole }) => {
     const rows = [
         { title: 'Role', value: stateRole },
-        { title: 'Fullname', value: stateInfo.fullName },
+        { title: 'Full name', value: stateInfo.fullName },
         { title: 'Birthday', value: stateInfo.birthDate },
         { title: 'Gender', value: stateInfo.gender },
         { title: 'Address', value: stateInfo.address },
@@ -596,14 +565,66 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const isStepSkipped = (step: number) => {
         return skipped.has(step)
     }
 
+    const callApi = async () => {
+        const firebaseToken =
+            await FirebaseService.getInstance().getFirebaseToken()
+        const body: IFirstTimeBody = {
+            firebaseToken,
+            role: ROLES.findIndex((r) => r.name === role),
+            name: information.fullName,
+            address: information.address,
+            dateOfBirth: new Date(information.birthDate),
+            gender: GENDERS.findIndex(
+                (gender) => information.gender === gender
+            ),
+            phone: information.phoneNo,
+        }
+        const firstTimeRes = await RestCaller.post(
+            'Authentication/first-time-login',
+            body
+        )
+
+        if (firstTimeRes.isError) return
+
+        const firstTimeResult: IFirstTimeResponse = firstTimeRes.result
+        const { token } = firstTimeResult
+
+        console.log(token)
+
+        dispatch(setToken(token))
+
+        const uploadRes = await RestCaller.upload(
+            'Users/upload-identification-card',
+            (() => {
+                const formData = new FormData()
+                formData.append(
+                    'FrontIdentification',
+                    information.imgCard.get(0) as File
+                )
+                formData.append(
+                    'BackIdentification',
+                    information.imgCard.get(1) as File
+                )
+                return formData
+            })()
+        )
+
+        if (uploadRes.isError) return
+        navigate('/home')
+    }
+
     const handleNext = () => {
-        if (activeStep === steps.length - 1) {
-            console.log(information)
-            console.log(role)
+        if (activeStep === STEPS.length - 1) {
+            ;(async () => {
+                await callApi()
+            })()
             return
         }
 
@@ -630,7 +651,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             <Styled.MyPaper>
                 <Box sx={{ width: '100%' }}>
                     <Stepper activeStep={activeStep} alternativeLabel>
-                        {steps.map((label, index) => {
+                        {STEPS.map((label, index) => {
                             const stepProps: { completed?: boolean } = {}
                             const labelProps: {
                                 optional?: React.ReactNode
@@ -650,7 +671,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                     <Styled.MainStep>
                         {(() => {
                             switch (activeStep) {
-                                case steps.length:
+                                case STEPS.length:
                                     return (
                                         <React.Fragment>
                                             <Typography sx={{ mt: 2, mb: 1 }}>
@@ -683,7 +704,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                         })()}
                     </Styled.MainStep>
 
-                    {activeStep === steps.length ? (
+                    {activeStep === STEPS.length ? (
                         <React.Fragment>
                             <Box
                                 sx={{
@@ -715,7 +736,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                 </Button>
                                 <Box sx={{ flex: '1 1 auto' }} />
                                 <Button onClick={handleNext}>
-                                    {activeStep === steps.length - 1
+                                    {activeStep === STEPS.length - 1
                                         ? 'Finish'
                                         : 'Next'}
                                 </Button>
