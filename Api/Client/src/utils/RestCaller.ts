@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
+import { ISuccessResponse } from '../interface/serviceResponse'
 import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 
@@ -15,11 +16,11 @@ const instance = axios.create({
 
 instance.interceptors.response.use(undefined, (error) => {
     const { status } = error.response
-    console.log(typeof status)
     HttpErrorToast.show(status)
 })
 
-const responseBody = (response: AxiosResponse) => response?.data
+const responseBody = (response: AxiosResponse): ISuccessResponse =>
+    <ISuccessResponse>response?.data
 
 const sleep = (ms: number) => (response: AxiosResponse) =>
     new Promise<AxiosResponse>((resolve) =>
@@ -29,12 +30,12 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
 export const RestCaller = {
     get: (url: string) =>
         instance.get(url).then(sleep(1000)).then(responseBody),
-    post: (url: string, data?: Record<string, unknown>) =>
+    post: (url: string, data?: unknown) =>
         instance
             .post(url, JSON.stringify(data))
             .then(sleep(1000))
             .then(responseBody),
-    put: (url: string, data?: Record<string, unknown>) =>
+    put: (url: string, data?: unknown) =>
         instance
             .put(url, JSON.stringify(data))
             .then(sleep(1000))
