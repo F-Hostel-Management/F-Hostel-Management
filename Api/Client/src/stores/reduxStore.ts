@@ -1,5 +1,5 @@
 import homeReducer from '../pages/Home/homeSlice'
-import authReducer from '../pages/Login/authSlice'
+import authReducer from '../slices/authSlice'
 
 import { configureStore } from '@reduxjs/toolkit'
 
