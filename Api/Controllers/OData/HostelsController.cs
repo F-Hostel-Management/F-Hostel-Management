@@ -41,7 +41,14 @@ public class HostelsController : BaseODataController<HostelEntity>
     public HostelsController(ApplicationDbContext db) : base(db)
     {
     }
-  
+    //[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    //public override IQueryable GetData(ODataQueryOptions<HostelEntity> options)
+    //{
+    //    return base.GetData(options);
+    //}
+
+    
+
     protected override IQueryable<HostelEntity> GetQuery()
     {
         IQueryable<HostelEntity> result = base.GetQuery();
@@ -53,7 +60,7 @@ public class HostelsController : BaseODataController<HostelEntity>
         if (CurrentUser.Role == Role.Manager)
         {
             result = db.Hostels
-                        .Include(e=> e.HostelManagements)
+                        .Include(e => e.HostelManagements)
                         .ThenInclude(e => e.ManagerId.Equals(CurrentUser.Id));
         }
         return result;

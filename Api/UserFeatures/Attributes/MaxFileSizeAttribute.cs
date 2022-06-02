@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Api.UserFeatures.CustomValidationAttributes
+namespace Api.UserFeatures.Attributes
 {
     public sealed class MaxFileSizeAttribute : ValidationAttribute
     {

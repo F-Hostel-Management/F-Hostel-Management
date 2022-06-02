@@ -1,5 +1,5 @@
 ﻿using Api.Mappings;
-using Api.UserFeatures.CustomValidationAttributes;
+using Api.UserFeatures.Attributes;
 using Domain.Entities;
 using Domain.Enums;
 
@@ -16,7 +16,6 @@ namespace Api.UserFeatures.Requests
         public string TaxCode { get; set; }
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-
         [MaxFileSize(1024 * 1024 * 5)]
         public virtual IFormFile IdentificationImage { get; set; }
     }

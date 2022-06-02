@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Api.UserFeatures.Attributes;
+using Application.Interfaces;
 using AutoMapper;
 using AutoWrapper.Filters;
 using Domain.Entities;
@@ -43,6 +44,7 @@ public class BaseODataController<T> : ODataController where T : class
     }
 
     [HttpGet("odata/[Controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public virtual IQueryable GetData(ODataQueryOptions<T> options)
     {
         return ApplyQuery(options, GetQuery());

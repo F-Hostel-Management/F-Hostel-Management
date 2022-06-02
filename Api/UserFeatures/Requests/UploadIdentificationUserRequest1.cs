@@ -1,4 +1,4 @@
-﻿using Api.UserFeatures.CustomValidationAttributes;
+﻿using Api.UserFeatures.Attributes;
 
 namespace Api.UserFeatures.Requests
 {

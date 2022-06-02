@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.OData;
 using System.Text.Json;
 using Application.AppConfig;
 using AutoWrapper;
+using Api.UserFeatures.Attributes;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

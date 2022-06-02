@@ -1,5 +1,5 @@
 ﻿using Api.Mappings;
-using Api.UserFeatures.CustomValidationAttributes;
+using Api.UserFeatures.Attributes;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Http;
