@@ -3,16 +3,26 @@ import { ISuccessResponse } from '../interface/serviceResponse'
 import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 
-const token = store?.getState()?.auth?.token
 const instance = axios.create({
     baseURL: '/api',
     responseType: 'json',
     withCredentials: true,
-    headers: {
-        Authorization: token ? `Bearer ${token}` : '',
-        'Content-Type': 'application/json',
-    },
 })
+
+instance.interceptors.request.use(
+    (config) => {
+        const token = store?.getState()?.auth?.token
+        config.headers = {
+            Authorization: token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+        }
+
+        return config
+    },
+    (error) => {
+        Promise.reject(error)
+    }
+)
 
 instance.interceptors.response.use(undefined, (error) => {
     const { status } = error.response
