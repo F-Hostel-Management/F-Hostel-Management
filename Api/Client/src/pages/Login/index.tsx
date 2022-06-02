@@ -11,7 +11,7 @@ import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
 import { useDispatch } from 'react-redux'
-import { setToken } from './authSlice'
+import { setToken } from '../../slices/authSlice'
 
 interface ILoginProps {}
 
@@ -25,7 +25,10 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
     const dispatch = useDispatch()
 
     const doLogin = async (firebaseToken: string) => {
-        const { isFirstTime, token } = await exchangeToken(firebaseToken)
+        const result = await exchangeToken(firebaseToken)
+        if (!result) return
+
+        const { isFirstTime, token } = result
         if (isFirstTime) return redirectFirstTimePage()
 
         dispatch(setToken(token))
@@ -34,8 +37,14 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
 
     const exchangeToken = async (
         token: string
-    ): Promise<IExchangeTokenResponse> => {
-        return RestCaller.post(`Authentication/login?firebaseToken=${token}`)
+    ): Promise<IExchangeTokenResponse | undefined> => {
+        const res = await RestCaller.post(
+            `Authentication/login?firebaseToken=${token}`
+        )
+
+        if (res.isError) return
+
+        return res.result as IExchangeTokenResponse
     }
 
     const redirectFirstTimePage = () => {
