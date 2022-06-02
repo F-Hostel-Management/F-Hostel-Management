@@ -45,11 +45,17 @@ namespace Application.Services
             return userEntity;  
         }
 
-        public async Task<string> UploadIdentification(UserEntity userID, IFormFile formFile)
+        public async Task<IList<string>> UploadIdentification(UserEntity userEntity, IList<IFormFile> formFile)
         {
-            string fileNameForStorage = FormFileName("ID_"+userID.Id.ToString(), formFile.FileName);
-            var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
-            return uploadedUrl;
+            List<string> result = new List<string>();
+            for (int i = 0; i < formFile.Count; i++)
+            {
+                string fileNameForStorage = FormFileName($"ID{i}_" + userEntity.Id.ToString(), formFile[i].FileName);
+                var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile[i], fileNameForStorage);
+                result.Add(uploadedUrl);
+            }
+                
+            return result;
         }
     }
 }
