@@ -1,10 +1,12 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Entities.User;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.UserServices;
 
@@ -27,10 +29,8 @@ public class TenantServices : ITenantServices
 
     // check joining code con hieu luc khong
     // ==> check room khong vuot qua so nguoi cho 
-    public async Task<bool> GetIntoRoom(Guid roomId, Guid tenantId)
+    public async Task GetIntoRoom(Guid roomId, Guid tenantId)
     {
-
-
         var currentTenantsInRoom = await _roomTenantRepository.WhereAsync(rt =>
             rt.RoomId.Equals(roomId));
         
@@ -39,7 +39,7 @@ public class TenantServices : ITenantServices
             rt.TenantId.Equals(tenantId));
         if (tenantInRoom != null)
         {
-            return false;
+            throw new ApiException("Cannot Get Into Room", StatusCodes.Status400BadRequest);
         }
 
         int count = 0;
@@ -48,12 +48,12 @@ public class TenantServices : ITenantServices
            count = currentTenantsInRoom.Count();
         }
 
-        RoomEntity room = await _roomServices.GetRoomByIdAsync(roomId);
+        RoomEntity room = await _roomServices.GetRoom(roomId);
 
         if (room.MaximumPeople > 0 && room.MaximumPeople <= count)
         {
-            return false;
-        } 
+            throw new ApiException("Cannot Get Into Room", StatusCodes.Status400BadRequest);
+        }
 
         await _roomTenantRepository.CreateAsync(
             new RoomTenant()
@@ -61,16 +61,5 @@ public class TenantServices : ITenantServices
                 TenantId = tenantId,
                 RoomId = roomId
             });
-        return true;
-    }
-
-    public async Task<UserEntity> GetTenant(Guid tenantId)
-    {
-
-        UserEntity tenant =
-            await _userRepository.FirstOrDefaultAsync(user =>
-            user.Id.Equals(tenantId)
-            && user.RoleString.Equals(Role.Tenant.ToString()));
-        return tenant;
     }
 }

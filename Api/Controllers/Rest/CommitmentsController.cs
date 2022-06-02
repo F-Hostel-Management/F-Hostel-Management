@@ -1,16 +1,18 @@
 ﻿using Api.UserFeatures.Requests;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
 public class CommitmentsController : BaseRestController
 {
-    private readonly IGenericRepository<HostelEntity> _hostelRepository;
+    private readonly IHostelServices _hostelServices;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IRoomServices _roomServices;
     private readonly ITenantServices _tenantServices;
@@ -18,14 +20,14 @@ public class CommitmentsController : BaseRestController
 
 
     public CommitmentsController(
-        IGenericRepository<HostelEntity> hostelRepository,
+        IHostelServices hostelServices,
         ICommitmentServices commitmentServices,
         IJoiningCodeServices joiningCodeServices,
         IRoomServices roomServices,
         ITenantServices tenantServices)
     {
         _tenantServices = tenantServices;
-        _hostelRepository = hostelRepository;
+        _hostelServices = hostelServices;
         _joiningCodeServices = joiningCodeServices;
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
@@ -35,26 +37,20 @@ public class CommitmentsController : BaseRestController
     public async Task<IActionResult> CreateCommitment(CreateCommitmentRequest comReq)
     {
 
-        // check room status
-        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(comReq.RoomId);
-        if (room == null)
-        {
-            return BadRequest("Room does not exist or already rented");
-        }
+        // get available room
+        RoomEntity room = await _roomServices
+            .GetRoom(comReq.RoomId, RoomStatus.Available);
 
-        // not check hostel owner and owner from request
-        HostelEntity hostel = await _hostelRepository.FirstOrDefaultAsync(hostel => hostel.Id.Equals(room.HostelId));
+        // check hostel owner and owner in room commitment request
+        HostelEntity hostel = await _hostelServices.GetHostel(room);
 
         if (!comReq.OwnerId.Equals(hostel.OwnerId))
         {
-            return Unauthorized();
+            throw new ApiException("Unauthorized", StatusCodes.Status401Unauthorized);
         }
 
-        bool isDuplicated = await _commitmentServices.IsExist(comReq.CommitmentCode);
-        if (isDuplicated)
-        {
-            return BadRequest("Commitment code duplicate");
-        }
+        // continue of throw exception
+        await _commitmentServices.CheckDuplicate(comReq.CommitmentCode);
 
         // call service
         CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
@@ -71,56 +67,15 @@ public class CommitmentsController : BaseRestController
     public async Task<IActionResult> OwnerApprovedCommitment
         ([FromBody] OwnerApprovedCommitmentRequest req)
     {
+        // get pending commitment
         CommitmentEntity com =
-            await _commitmentServices.GetPendingCommitmentById(req.CommitmentId);
-        if (com == null)
-        {
-            return BadRequest();
-        }
+            await _commitmentServices.GetCommitment
+            (req.CommitmentId, CommitmentStatus.Pending);
 
         await _commitmentServices.ApprovedCommitment(com);
-        return Ok(com);
+        return Ok();
     }
 
-
-
-    // tenant into commitment ==> com.status => done
-    //[Authorize(nameof(Role.Tenant))]
-    [HttpPatch("tenant/status")]
-    public async Task<IActionResult> TenantDoneCommitment
-    ([FromBody] TenantDoneCommitmentRequest req)
-    {
-        JoiningCode joiningCode = await _joiningCodeServices.
-            GetJoiningCodeByDigits(req.SixDigitsJoiningCode);
-
-        if (joiningCode == null)
-        {
-            return BadRequest("Joining code is not exists or expired");
-        }
-
-        bool isValid = _joiningCodeServices.ValidateJoiningCode(joiningCode);
-
-        if (!isValid)
-        {
-            return BadRequest("Joining code is not exists or expired");
-        }
-
-        CommitmentEntity com =
-            await _joiningCodeServices.GetCommitmentByJoiningCode(joiningCode);
-
-        if (com == null)
-        {
-            return BadRequest();
-        }
-
-        await _commitmentServices.ActivatedCommitment(com, req.TenantId);
-        bool isSuccess =  await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
-        if (!isSuccess)
-        {
-            return BadRequest("Get in to room fail");
-        }
-        return Ok(com);
-    }
 
     // commitment expired ==> com.status => expired => remove all invoice schedules
 
@@ -129,11 +84,8 @@ public class CommitmentsController : BaseRestController
     public async Task<IActionResult> CreateJoiningCode
         ([FromBody] CreateJoiningCodeRequest req)
     {
-        CommitmentEntity currentCom = await _commitmentServices.GetNotExpiredCommitmentById(req.CommitementId);
-        if (currentCom == null)
-        {
-            return BadRequest("Commitment does not exist");
-        }
+        // check exist and not expired commitment
+        await _commitmentServices.GetNotExpiredCommitment(req.CommitementId);
 
         JoiningCode joiningCode = Mapper.Map<JoiningCode>(req);
         var response = await _joiningCodeServices.CreateJoiningCode(joiningCode);
@@ -144,33 +96,41 @@ public class CommitmentsController : BaseRestController
     [HttpGet("joiningCode/{SixDigitsCode}")]
     public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
     {
-        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCodeByDigits(SixDigitsCode);
-        if (joiningCode == null)
-        {
-            return BadRequest("Joining code is not exists or expired");
-        }
+        // validate joining code
+        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
+       _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
-        bool isValid = _joiningCodeServices.ValidateJoiningCode(joiningCode);
-
-        if (!isValid)
-        {
-            return BadRequest("Joining code is not exists or expired");
-        }
-
-        CommitmentEntity commitment = await _joiningCodeServices.GetCommitmentByJoiningCode(joiningCode);
-
+        CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
         return Ok(commitment);
+    }
+
+    // tenant into commitment ==> com.status => done
+    //[Authorize(nameof(Role.Tenant))]
+    [HttpPatch("tenant/status")]
+    public async Task<IActionResult> TenantDoneCommitment
+    ([FromBody] TenantDoneCommitmentRequest req)
+    {
+        // validate joining code
+        JoiningCode joiningCode = await _joiningCodeServices.
+            GetJoiningCode(req.SixDigitsJoiningCode);
+       _joiningCodeServices.ValidateJoiningCode(joiningCode);
+
+        CommitmentEntity com =
+            await _joiningCodeServices.GetCommitment(joiningCode);
+
+        // activate commitment
+        await _commitmentServices.ActivatedCommitment(com, req.TenantId);
+
+        // get into room
+       await _tenantServices.GetIntoRoom(com.RoomId, req.TenantId);
+        return Ok(com);
     }
 
     // update pending commitment
     [HttpPatch("{comId}")]
     public async Task<IActionResult> UpdatePendingCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)
     {
-        CommitmentEntity pendingCom = await _commitmentServices.GetPendingCommitmentById(comId);
-        if (pendingCom == null)
-        {
-            return BadRequest("Cannot update");
-        }
+        CommitmentEntity pendingCom = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Pending);
         CommitmentEntity updatedCommitment = Mapper.Map(uComReq, pendingCom);
         await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
         return Ok();

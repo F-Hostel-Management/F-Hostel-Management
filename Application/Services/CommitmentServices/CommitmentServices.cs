@@ -1,8 +1,10 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.CommitmentServices;
 
@@ -26,30 +28,26 @@ public class CommitmentServices : ICommitmentServices
         await _commitmentRepository.CreateAsync(commitment);
     }
 
-    public async Task<CommitmentEntity> GetCurrentCommitmentByRoom(Guid roomId)
+    public async Task<CommitmentEntity> GetNotExpiredCommitmentByRoom(Guid roomId)
     {
-        return await _commitmentRepository
+        CommitmentEntity com = await _commitmentRepository
             .FirstOrDefaultAsync(com =>
             com.RoomId.Equals(roomId)
             && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
+        return com ??
+           throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
     }
 
-    public async Task<CommitmentEntity> GetPendingCommitmentById(Guid Id)
+    public async Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status)
     {
-        return await _commitmentRepository
+        CommitmentEntity com = await _commitmentRepository
             .FirstOrDefaultAsync(com =>
             com.Id.Equals(Id)
-            && com.Status.Equals(CommitmentStatus.Pending.ToString())
+            && com.Status.Equals(status.ToString())
             );
-    }
-    public async Task<CommitmentEntity> GetApprovedCommitmentById(Guid Id)
-    {
-        return await _commitmentRepository
-            .FirstOrDefaultAsync(com =>
-            com.Id.Equals(Id)
-            && com.Status.Equals(CommitmentStatus.Approved.ToString())
-            );
+        return com ??
+            throw new ApiException("Commitment Not Found", StatusCodes.Status404NotFound);
     }
 
     public async Task ApprovedCommitment(CommitmentEntity commitment)
@@ -68,25 +66,32 @@ public class CommitmentServices : ICommitmentServices
         }
     }
 
-    public async Task<bool> IsExist(string commitmentCode)
+    public async Task CheckDuplicate(string commitmentCode)
     {
-        return await _commitmentRepository
-            .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode))
-            != null;
+        CommitmentEntity com = await _commitmentRepository
+            .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode));
+
+        if (com != null)
+            throw new ApiException("Duplicated Commitment Code", StatusCodes.Status400BadRequest);
     }
 
-    public async Task<CommitmentEntity> GetCommitementById(Guid commitmentId)
+    public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
     {
-        return await _commitmentRepository.FindByIdAsync(commitmentId);
+        CommitmentEntity com = await _commitmentRepository.FindByIdAsync(commitmentId);
+        return com ??
+          throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
+
     }
 
-    public async Task<CommitmentEntity> GetNotExpiredCommitmentById(Guid commitmentId)
+    public async Task<CommitmentEntity> GetNotExpiredCommitment(Guid Id)
     {
-        return await _commitmentRepository
+        CommitmentEntity com = await _commitmentRepository
             .FirstOrDefaultAsync(com =>
-            com.Id.Equals(commitmentId)
+            com.Id.Equals(Id)
             && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
+        return com ??
+           throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
     }
 
     public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)

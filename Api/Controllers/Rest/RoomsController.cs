@@ -10,13 +10,10 @@ namespace Api.Controllers.Rest;
 public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
-    private readonly ICommitmentServices _commitmentServices;
     public RoomsController(
-        IGenericRepository<RoomEntity> roomsRepository,
-        ICommitmentServices commitmentServices)
+        IGenericRepository<RoomEntity> roomsRepository)
     {
         _roomsRepository = roomsRepository;
-        _commitmentServices = commitmentServices;
     }
 
     [HttpGet()]

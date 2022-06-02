@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,19 +57,24 @@ public class JoiningCodeServices : IJoiningCodeServices
         return joiningCode;
     }
 
-    public async Task<JoiningCode> GetJoiningCodeByDigits(int digits)
+    public async Task<JoiningCode> GetJoiningCode(int digits)
     {
-        return await _joiningCodeRepository.FirstOrDefaultAsync(jc =>
+        JoiningCode jc =  await _joiningCodeRepository.FirstOrDefaultAsync(jc =>
         jc.SixDigitsCode == digits);
+        return jc ??
+            throw new ApiException("Joining code is not exists or expired", StatusCodes.Status404NotFound);
     }
 
-    public bool ValidateJoiningCode(JoiningCode joiningCode)
+    public void ValidateJoiningCode(JoiningCode joiningCode)
     {
         double timeSpan = DateTime.Now.Subtract(joiningCode.CreateDate).TotalMinutes;
-        return timeSpan <= joiningCode.TimeSpan;
+        if (timeSpan > joiningCode.TimeSpan)
+        {
+            throw new ApiException("Joining code is not exists or expired", StatusCodes.Status400BadRequest);
+        }
     }
 
-    public async Task<CommitmentEntity> GetCommitmentByJoiningCode(JoiningCode joiningCode)
+    public async Task<CommitmentEntity> GetCommitment(JoiningCode joiningCode)
     {
         return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitementId);
     }
