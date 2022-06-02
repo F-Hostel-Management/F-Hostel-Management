@@ -7,6 +7,8 @@ interface IInputFieldProps {
     value?: string | number | null
     onChange?: any
     type?: string
+    startAdornment?: any
+    endAdornment?: any
     [x: string | number | symbol]: unknown
 }
 
@@ -16,6 +18,8 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
     value,
     onChange,
     type,
+    startAdornment,
+    endAdornment,
     ...others
 }) => {
     return (
@@ -37,7 +41,14 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
                     fontSize: '1.6rem',
                     height: '3rem',
                 },
+                '& .MuiInputAdornment-root > .MuiTypography-root': {
+                    fontSize: '1.3rem',
+                },
                 margin: '16px',
+            }}
+            InputProps={{
+                startAdornment: startAdornment,
+                endAdornment: endAdornment,
             }}
             {...others}
         />
