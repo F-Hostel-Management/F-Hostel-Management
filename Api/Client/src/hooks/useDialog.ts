@@ -11,5 +11,5 @@ export function useDialog() {
         setOpenDialog(false)
     }
 
-    return [openDialog, handleOpenDialog, handleCloseDialog]
+    return [openDialog, handleOpenDialog, handleCloseDialog] as const
 }
