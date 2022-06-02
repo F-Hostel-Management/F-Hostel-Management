@@ -40,7 +40,7 @@ namespace Api.Controllers.Rest
         }
 
         [HttpPost("first-time-login")]
-        public async Task<IActionResult> FirstTimeLogin(FirstTimeRequest loginRequest)
+        public async Task<IActionResult> FirstTimeLogin([FromBody] FirstTimeRequest loginRequest)
         {
             var user = await authenticationService.GetUserByFirebaseTokenAsync(loginRequest.FirebaseToken);
             if (user is not null)
@@ -57,6 +57,7 @@ namespace Api.Controllers.Rest
             userEntity.Email = email.ToString();
             Mapper.Map(loginRequest, userEntity);
             userEntity = await userService.SignUpUserAsync(userEntity);
+
             LoginResponse loginResponse = new();
             loginResponse.Token = authenticationService.GenerateToken(userEntity);
             loginResponse.IsFirstTime = true;

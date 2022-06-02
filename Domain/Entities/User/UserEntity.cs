@@ -47,7 +47,8 @@ public class UserEntity : BaseEntity
     public string TaxCode { get; set; }
     public string OrganizationCode { get; set; }
     public string Avatar { get; set; }
-    public string Identification { get; set; }
+    public string FrontIdentification { get; set; }
+    public string BackIdentification { get; set; }
 
     /*navigation props*/
 

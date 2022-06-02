@@ -5,7 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 interface IPublicRouteProps {}
 
 const PublicRoute: React.FunctionComponent<IPublicRouteProps> = () => {
-    let isAuthenticated = false
+    let isAuthenticated = true
     return isAuthenticated ? <Navigate to="/home" /> : <Outlet />
 }
 

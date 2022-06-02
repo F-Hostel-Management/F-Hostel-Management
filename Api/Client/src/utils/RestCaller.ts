@@ -1,23 +1,36 @@
 import axios, { AxiosResponse } from 'axios'
+import { ISuccessResponse } from '../interface/serviceResponse'
+import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 
-const token = localStorage.getItem('token')
 const instance = axios.create({
     baseURL: '/api',
     responseType: 'json',
-    headers: {
-        Authorization: token ? `Bearer ${token}` : '',
-        'Content-Type': 'application/json',
-    },
+    withCredentials: true,
 })
+
+instance.interceptors.request.use(
+    (config) => {
+        const token = store?.getState()?.auth?.token
+        config.headers = {
+            Authorization: token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+        }
+
+        return config
+    },
+    (error) => {
+        Promise.reject(error)
+    }
+)
 
 instance.interceptors.response.use(undefined, (error) => {
     const { status } = error.response
-    console.log(typeof status)
     HttpErrorToast.show(status)
 })
 
-const responseBody = (response: AxiosResponse) => response?.data
+const responseBody = (response: AxiosResponse): ISuccessResponse =>
+    <ISuccessResponse>response?.data
 
 const sleep = (ms: number) => (response: AxiosResponse) =>
     new Promise<AxiosResponse>((resolve) =>
@@ -27,16 +40,25 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
 export const RestCaller = {
     get: (url: string) =>
         instance.get(url).then(sleep(1000)).then(responseBody),
-    post: (url: string, data?: Record<string, unknown>) =>
+    post: (url: string, data?: unknown) =>
         instance
             .post(url, JSON.stringify(data))
             .then(sleep(1000))
             .then(responseBody),
-    put: (url: string, data?: Record<string, unknown>) =>
+    put: (url: string, data?: unknown) =>
         instance
             .put(url, JSON.stringify(data))
             .then(sleep(1000))
             .then(responseBody),
     delete: (url: string) =>
         instance.delete(url).then(sleep(1000)).then(responseBody),
+    upload: (url: string, form: FormData) =>
+        instance
+            .post(url, form, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then(sleep(10000))
+            .then(responseBody),
 }
