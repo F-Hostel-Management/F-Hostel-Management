@@ -3,54 +3,7 @@ import * as Styled from './styles'
 import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
 import { IField } from '../../../../../interface/field'
-
-const fields: IField[] = [
-    {
-        label: 'Start Date',
-        name: 'startDate',
-        type: 'date',
-        required: true,
-    },
-    {
-        label: 'End Date',
-        name: 'endDate',
-        type: 'date',
-        required: true,
-    },
-    {
-        label: 'Allowed of days overdue',
-        name: 'overdueDays',
-        type: 'number',
-        required: true,
-    },
-    {
-        label: 'Compensation Money',
-        name: 'compensation',
-        type: 'number',
-        required: true,
-    },
-    {
-        label: 'Type',
-        name: 'type',
-        type: 'text',
-        required: false,
-        disabled: true,
-    },
-    {
-        label: 'Area',
-        name: 'area',
-        type: 'number',
-        required: false,
-        disabled: true,
-    },
-    {
-        label: 'Price',
-        name: 'price',
-        type: 'number',
-        required: false,
-        disabled: true,
-    },
-]
+import { InputAdornment } from '@mui/material'
 interface IStep1Props {
     values: any
     setValues: any
@@ -67,9 +20,63 @@ const Step1: FC<IStep1Props> = ({
     setRoomInfo,
     roomOptions,
 }) => {
+    const fields: IField[] = [
+        {
+            label: 'Start Date',
+            name: 'startDate',
+            type: 'date',
+            required: true,
+        },
+        {
+            label: 'End Date',
+            name: 'endDate',
+            type: 'date',
+            required: true,
+        },
+        {
+            label: 'Allowed of days overdue',
+            name: 'overdueDays',
+            type: 'number',
+            required: true,
+            endAdornment: <InputAdornment position="end">days</InputAdornment>,
+        },
+        {
+            label: 'Compensation Money',
+            name: 'compensation',
+            type: 'number',
+            required: true,
+            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+        },
+        {
+            label: 'Type',
+            name: 'type',
+            type: 'text',
+            required: false,
+            disabled: true,
+        },
+        {
+            label: 'Area',
+            name: 'area',
+            type: 'number',
+            required: false,
+            disabled: true,
+            endAdornment: (
+                <InputAdornment position="end">
+                    m<sup>2</sup>
+                </InputAdornment>
+            ),
+        },
+        {
+            label: 'Price',
+            name: 'price',
+            type: 'number',
+            required: false,
+            disabled: true,
+            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+        },
+    ]
+
     useEffect(() => {
-        console.log('Autocomplete: ', roomInfo)
-        console.log('Values: ', values)
         setValues({ ...values, roomId: roomInfo?.id })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomInfo])
@@ -87,6 +94,7 @@ const Step1: FC<IStep1Props> = ({
                         type={field.type}
                         required={field.required}
                         disabled={field.disabled}
+                        endAdornment={field.endAdornment}
                     />
                 ))}
             </Styled.LeftSide>
@@ -107,6 +115,7 @@ const Step1: FC<IStep1Props> = ({
                         type={field.type}
                         required={field.required}
                         disabled={field.disabled}
+                        endAdornment={field.endAdornment}
                     />
                 ))}
             </Styled.RightSide>
