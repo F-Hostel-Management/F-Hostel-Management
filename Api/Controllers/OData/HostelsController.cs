@@ -10,11 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
-
+[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
 public class HostelsController : BaseODataController<HostelEntity>
 {
-
-
     //// return room expand 
     //[EnableQuery]
     //[HttpGet("rooms/{roomId}")]
@@ -43,7 +41,7 @@ public class HostelsController : BaseODataController<HostelEntity>
     public HostelsController(ApplicationDbContext db) : base(db)
     {
     }
-    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+  
     protected override IQueryable<HostelEntity> GetQuery()
     {
         IQueryable<HostelEntity> result = base.GetQuery();
