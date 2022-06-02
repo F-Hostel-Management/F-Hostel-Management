@@ -2,6 +2,7 @@ import { ECommitmentStatus, ERoomStatus, ERoomType } from './enums'
 import { IRoom } from '../interface/room'
 import { IUser } from './../interface/user'
 import { ICommitment } from '../interface/commitment'
+import { IHostel } from '../interface/IHostel'
 export const users: IUser[] = [
     {
         id: 'aa1',
@@ -41,6 +42,22 @@ export const users: IUser[] = [
     },
 ]
 
+export const hostels: IHostel[] = [
+    {
+        id: '1',
+        address: '433/123/1 Quan 9, TH.HCM',
+        name: 'F-Code House',
+        category: '1',
+        isDeleted: false,
+    },
+    {
+        id: '2',
+        address: '3/13/112 Quan 2, TH.HCM',
+        name: 'F-Code Gang',
+        category: '1',
+        isDeleted: false,
+    },
+]
 export const rooms: IRoom[] = [
     {
         id: '1',
