@@ -1,8 +1,8 @@
 import {
     Avatar,
-    Box,
     Card,
     CardContent,
+    Grid,
     Paper,
     Typography,
 } from '@mui/material'
@@ -93,4 +93,8 @@ export const UpdateAvt = styled(Avatar)`
     cursor: pointer;
 `
 
-export const ButtonBox = styled(Box)``
+export const GridCard = styled(Grid)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
