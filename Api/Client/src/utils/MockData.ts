@@ -1,7 +1,7 @@
 import { ECommitmentStatus, ERoomStatus, ERoomType } from './enums'
-import { IRoom } from '../interface/room'
-import { IUser } from './../interface/user'
-import { ICommitment } from '../interface/commitment'
+import { IRoom } from '../interface/IRoom'
+import { IUser } from '../interface/IUser'
+import { ICommitment } from '../interface/ICommitment'
 import { IHostel } from '../interface/IHostel'
 export const users: IUser[] = [
     {

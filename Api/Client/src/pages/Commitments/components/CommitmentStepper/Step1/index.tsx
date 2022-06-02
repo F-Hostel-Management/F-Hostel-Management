@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react'
 import * as Styled from './styles'
 import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
-import { IField } from '../../../../../interface/field'
+import { IField } from '../../../../../interface/IField'
 import { InputAdornment } from '@mui/material'
 import { hostels } from '../../../../../utils/MockData'
 interface IStep1Props {

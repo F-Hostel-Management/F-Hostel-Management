@@ -1,6 +1,6 @@
 import DefaultLayout from '../components/Layout/DefaultLayout'
 import HomeLayout from '../components/Layout/HomeLayout'
-import { IRoute } from '../interface/route'
+import { IRoute } from '../interface/IRoute'
 
 import About from '../pages/About'
 import Commitments from '../pages/Commitments'

@@ -5,7 +5,7 @@ import { useGridData } from '../../hooks/useGridData'
 import { commitments, getData } from '../../utils/MockData'
 import ActionButtons from './components/ActionButtons'
 import CommitmentStatus from './components/CommitmentStatus'
-import { ICommitment } from '../../interface/commitment'
+import { ICommitment } from '../../interface/ICommitment'
 
 import { ERole } from '../../utils/enums'
 import { useDialog } from '../../hooks/useDialog'

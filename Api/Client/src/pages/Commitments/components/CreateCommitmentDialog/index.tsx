@@ -3,7 +3,7 @@ import DialogCustom from '../../../../components/DialogCustom'
 import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
 import { rooms, hostels } from '../../../../utils/MockData'
-import { ICommitmentValues } from '../../../../interface/commitment'
+import { ICommitmentValues } from '../../../../interface/ICommitment'
 interface ICreateCommitmentDialogProps {
     openDialog: boolean
     handleOpenDialog: () => void
