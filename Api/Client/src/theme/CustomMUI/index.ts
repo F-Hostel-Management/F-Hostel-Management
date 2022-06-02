@@ -52,6 +52,18 @@ declare module '@mui/material/Chip' {
     }
 }
 
+declare module '@mui/material/Button' {
+    interface ButtonPropsColorOverrides {
+        purple: true
+        green: true
+        pink: true
+        white: true
+        gray: true
+        orange: true
+        [key: string]: true
+    }
+}
+
 const theme = createTheme({
     typography: {
         fontSize: 14,
