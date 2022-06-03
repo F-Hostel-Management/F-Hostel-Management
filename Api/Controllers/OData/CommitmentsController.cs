@@ -1,19 +1,24 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities.Commitment;
+using Domain.Enums;
 using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
-public class CommitmentsController : BaseODataController
+public class CommitmentsController : BaseODataController<CommitmentEntity>
 {
-
-    [EnableQuery]
-    [HttpGet("{comId}")]
-    public async Task<IActionResult> GetCommitmentAsync([FromRoute] Guid comId)
+    public CommitmentsController(ApplicationDbContext db) : base(db)
     {
+    }
 
-        var com = await DbContext.Commitments.FindAsync(comId);
-        return Ok(com);
+    [Authorize(nameof(Role.Tenant))]
+    public IQueryable GetCommitmentByTenant(ODataQueryOptions<CommitmentEntity> options)
+    {
+        //var query = db.Commitments.Where(e)
+        //return ApplyQuery(options, )
+        return null;
     }
 }

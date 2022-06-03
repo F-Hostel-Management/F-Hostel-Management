@@ -1,5 +1,5 @@
 ﻿using Api.Mappings;
-using Api.UserFeatures.CustomValidationAttributes;
+using Api.UserFeatures.Attributes;
 using Domain.Entities;
 using Domain.Enums;
 
@@ -18,5 +18,6 @@ namespace Api.UserFeatures.Requests
         public DateTime DateOfBirth { get; set; }
 
         //public UploadIdentificationUserRequest Identification { get; set; }
+        public virtual IFormFile IdentificationImage { get; set; }
     }
 }

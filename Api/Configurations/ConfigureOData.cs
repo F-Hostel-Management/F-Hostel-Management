@@ -9,6 +9,7 @@ using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Entities.Ticket;
 using Microsoft.AspNetCore.OData;
+//using Microsoft.OData.Edm;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using System.Text.Json;
@@ -38,11 +39,11 @@ public static class ConfigureOData
             .AddOData(
                 options =>
                     options.AddRouteComponents("/odata", GetEdmModel())
-                           .Select()
                            .Filter()
                            .OrderBy()
                            .Expand()
                            .Count()
+                           .Select()
                            .SetMaxTop(100)
             );
     }

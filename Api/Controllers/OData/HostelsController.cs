@@ -1,51 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Constants;
+using Domain.Entities;
+using Domain.Enums;
+using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
-
-public class HostelsController : BaseODataController
+[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+public class HostelsController : BaseODataController<HostelEntity>
 {
-    [EnableQuery]
-    [HttpGet]
-    public IActionResult GetHotels()
+  
+    public HostelsController(ApplicationDbContext db) : base(db)
     {
-        return Ok(DbContext.Hostels);
     }
-
-    // return room expand 
-    [EnableQuery]
-    [HttpGet("rooms/{roomId}")]
-    public IActionResult GetHotelByRoomId(Guid roomId)
+   
+    protected override IQueryable<HostelEntity> GetQuery()
     {
-        var room = DbContext.Rooms
-            .Where(room => room.Id.Equals(roomId))
-            .Include(hostel => hostel.Hostel);
-        if (room == null)
+        IQueryable<HostelEntity> result = base.GetQuery();
+        if (CurrentUser.Role.Equals(Role.Owner))
         {
-            return NotFound();
+            result = db.Hostels
+                        .Where(e => e.OwnerId.Equals(CurrentUser.Id));
         }
-        return Ok(room);
+        if (CurrentUser.Role == Role.Manager)
+        {
+            result = db.Hostels
+                        .Include(e => e.HostelManagements)
+                        .ThenInclude(e => e.ManagerId.Equals(CurrentUser.Id));
+        }
+        return result;
     }
 
-    [EnableQuery]
-    [HttpGet("{hostelId}/get-all-commitments")]
-    public IActionResult GetCommitmentsByHostel([FromRoute] Guid hostelId)
-    {
-
-        var coms = DbContext.Commitments.Where(com =>
-                    com.Room.HostelId.Equals(hostelId)
-                    );
-        return Ok(coms);
-    }
-
-    [EnableQuery]
-    [HttpGet("{hostelId}/get-all-rooms")]
-    public IActionResult GetAllRooms([FromRoute] Guid hostelId)
-    {
-        var rooms = DbContext.Rooms.Where(room =>
-        room.HostelId.Equals(hostelId));
-        return Ok(rooms);
-    }
 }
