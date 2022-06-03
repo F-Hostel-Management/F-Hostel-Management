@@ -2,6 +2,7 @@
 using Api.UserFeatures.Responses;
 using Application.Interfaces;
 using AutoWrapper.Wrappers;
+using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,6 @@ namespace Api.Controllers.Rest
     {
         private readonly IAuthenticationService authenticationService;
         private readonly IUserService userService;
-        private const string COOKIES_KEY = "f-code";
 
         public AuthenticationController(IAuthenticationService authenticationService, IUserService userService)
         {
@@ -61,7 +61,7 @@ namespace Api.Controllers.Rest
             LoginResponse loginResponse = new();
             loginResponse.Token = authenticationService.GenerateToken(userEntity);
             loginResponse.IsFirstTime = true;
-            SetCookie(COOKIES_KEY, loginResponse.Token);
+            SetCookie(Constant.COOKIE_NAME, loginResponse.Token);
             return Ok(loginResponse);
         }
 
