@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220601044433_ChangeRoomTenantRelationshipToMM")]
+    partial class ChangeRoomTenantRelationshipToMM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,35 +104,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CommitmentScaffoldings");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.JoiningCode", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommitementId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("SixDigitsCode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimeSpan")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommitementId")
-                        .IsUnique();
-
-                    b.ToTable("JoiningCodes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>
@@ -485,9 +458,6 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Length")
                         .HasColumnType("float");
 
-                    b.Property<int?>("MaximumPeople")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumOfBathRooms")
                         .HasColumnType("int");
 
@@ -629,16 +599,10 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BackIdentification")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FrontIdentification")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GenderString")
@@ -711,17 +675,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Room");
 
                     b.Navigation("Tenant");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.JoiningCode", b =>
-                {
-                    b.HasOne("Domain.Entities.Commitment.CommitmentEntity", "Commitment")
-                        .WithOne("JoiningCode")
-                        .HasForeignKey("Domain.Entities.Commitment.JoiningCode", "CommitementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Commitment");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
@@ -972,11 +925,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("OwnerId");
 
                     b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
-                {
-                    b.Navigation("JoiningCode");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityCategory", b =>

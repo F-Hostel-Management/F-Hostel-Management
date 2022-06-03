@@ -65,4 +65,5 @@ public class HostelsController : BaseODataController<HostelEntity>
         }
         return result;
     }
+
 }

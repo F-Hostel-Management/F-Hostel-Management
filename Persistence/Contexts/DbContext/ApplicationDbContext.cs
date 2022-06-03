@@ -8,6 +8,7 @@ using Domain.Entities.Message;
 using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Entities.Ticket;
+using Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -23,6 +24,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
 
     public DbSet<UserEntity> Users { get; set; }
+    public DbSet<RoomTenant> RoomTenants { get; set; }
     public DbSet<HostelEntity> Hostels { get; set; }
     public DbSet<HostelCategory> HostelCategories { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
@@ -38,7 +40,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<TicketType> TicketTypes { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<CommitmentEntity> Commitments { get; set; }
-
+    public DbSet<JoiningCode> JoiningCodes { get; set; }
     public DbSet<CommitmentScaffolding> CommitmentScaffoldings { get; set; }
 
 }

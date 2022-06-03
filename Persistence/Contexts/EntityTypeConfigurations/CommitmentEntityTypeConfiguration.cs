@@ -39,6 +39,12 @@ namespace Infrastructure.Contexts.EntityTypeConfigurations
 
             // unique commitment code
             builder.HasIndex(c => c.CommitmentCode).IsUnique();
+
+            // 1 com - 1 joining code
+            builder
+                .HasOne(jc => jc.JoiningCode)
+                .WithOne(c => c.Commitment)
+                .HasForeignKey<JoiningCode>(jci => jci.CommitementId);
         }
     }
 }

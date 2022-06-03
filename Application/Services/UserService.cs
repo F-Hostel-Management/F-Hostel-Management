@@ -30,7 +30,7 @@ namespace Application.Services
         {
             string fileNameForStorage = FormFileName("A_" + userEntity.Id.ToString(), formFile.FileName);
             var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
-            return uploadedUrl;
+            return fileNameForStorage;
         }
         private static string FormFileName(string title, string fileName)
         {
@@ -47,14 +47,17 @@ namespace Application.Services
 
         public async Task<IList<string>> UploadIdentification(UserEntity userEntity, IList<IFormFile> formFile)
         {
+            if (!string.IsNullOrEmpty(userEntity.FrontIdentification))
+                _ = _cloudStorage.DeleteFileAsync(userEntity.FrontIdentification);
+            if (!string.IsNullOrEmpty(userEntity.BackIdentification))
+                _ = _cloudStorage.DeleteFileAsync(userEntity.BackIdentification);
             List<string> result = new List<string>();
             for (int i = 0; i < formFile.Count; i++)
             {
                 string fileNameForStorage = FormFileName($"ID{i}_" + userEntity.Id.ToString(), formFile[i].FileName);
-                var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile[i], fileNameForStorage);
-                result.Add(uploadedUrl);
+                await _cloudStorage.UploadFileAsync(formFile[i], fileNameForStorage);
+                result.Add(fileNameForStorage);
             }
-                
             return result;
         }
     }

@@ -5,6 +5,7 @@ export interface IInformation {
     address: string
     gender: string
     phoneNo: string
+    taxCode: string
     imgCard: Map<number, File>
 }
 
