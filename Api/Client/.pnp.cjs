@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:17.0.36"],\
             ["@types/react", "npm:18.0.9"],\
             ["@types/react-dom", "npm:18.0.5"],\
+            ["@types/react-qr-reader", "npm:2.1.4"],\
             ["@types/react-scroll", "npm:1.8.3"],\
             ["@types/styled-components", "npm:5.1.25"],\
             ["@typescript-eslint/eslint-plugin", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:5.27.0"],\
@@ -63,9 +64,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["normalize.css", "npm:8.0.1"],\
             ["odata-fluent-query", "npm:2.4.1"],\
             ["prettier", "npm:2.6.2"],\
+            ["qrcode.react", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:3.0.2"],\
             ["react", "npm:18.1.0"],\
             ["react-apexcharts", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:1.4.0"],\
             ["react-dom", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:18.1.0"],\
+            ["react-qr-reader", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:2.2.1"],\
             ["react-redux", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:8.0.2"],\
             ["react-router-dom", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:6.3.0"],\
             ["react-scroll", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:1.8.7"],\
@@ -2462,6 +2465,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/react-qr-reader", [\
+        ["npm:2.1.4", {\
+          "packageLocation": "./.yarn/cache/@types-react-qr-reader-npm-2.1.4-cb2e59e269-aa2bb2f703.zip/node_modules/@types/react-qr-reader/",\
+          "packageDependencies": [\
+            ["@types/react-qr-reader", "npm:2.1.4"],\
+            ["@types/react", "npm:18.0.9"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/react-scroll", [\
         ["npm:1.8.3", {\
           "packageLocation": "./.yarn/cache/@types-react-scroll-npm-1.8.3-66a17414ef-c3b0928b2a.zip/node_modules/@types/react-scroll/",\
@@ -4364,6 +4377,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:17.0.36"],\
             ["@types/react", "npm:18.0.9"],\
             ["@types/react-dom", "npm:18.0.5"],\
+            ["@types/react-qr-reader", "npm:2.1.4"],\
             ["@types/react-scroll", "npm:1.8.3"],\
             ["@types/styled-components", "npm:5.1.25"],\
             ["@typescript-eslint/eslint-plugin", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:5.27.0"],\
@@ -4384,9 +4398,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["normalize.css", "npm:8.0.1"],\
             ["odata-fluent-query", "npm:2.4.1"],\
             ["prettier", "npm:2.6.2"],\
+            ["qrcode.react", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:3.0.2"],\
             ["react", "npm:18.1.0"],\
             ["react-apexcharts", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:1.4.0"],\
             ["react-dom", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:18.1.0"],\
+            ["react-qr-reader", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:2.2.1"],\
             ["react-redux", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:8.0.2"],\
             ["react-router-dom", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:6.3.0"],\
             ["react-scroll", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:1.8.7"],\
@@ -5344,6 +5360,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["jsqr", [\
+        ["npm:1.4.0", {\
+          "packageLocation": "./.yarn/cache/jsqr-npm-1.4.0-bd73c752f2-7c572971f9.zip/node_modules/jsqr/",\
+          "packageDependencies": [\
+            ["jsqr", "npm:1.4.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["jsx-ast-utils", [\
         ["npm:3.3.0", {\
           "packageLocation": "./.yarn/cache/jsx-ast-utils-npm-3.3.0-2a1320dc77-e3c0667e89.zip/node_modules/jsx-ast-utils/",\
@@ -6186,6 +6211,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["qrcode.react", [\
+        ["npm:3.0.2", {\
+          "packageLocation": "./.yarn/cache/qrcode.react-npm-3.0.2-41a3603592-4102e9f416.zip/node_modules/qrcode.react/",\
+          "packageDependencies": [\
+            ["qrcode.react", "npm:3.0.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:3.0.2", {\
+          "packageLocation": "./.yarn/__virtual__/qrcode.react-virtual-91414f67c9/0/cache/qrcode.react-npm-3.0.2-41a3603592-4102e9f416.zip/node_modules/qrcode.react/",\
+          "packageDependencies": [\
+            ["qrcode.react", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:3.0.2"],\
+            ["@types/react", "npm:18.0.9"],\
+            ["react", "npm:18.1.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["queue-microtask", [\
         ["npm:1.2.3", {\
           "packageLocation": "./.yarn/cache/queue-microtask-npm-1.2.3-fcc98e4e2d-b676f8c040.zip/node_modules/queue-microtask/",\
@@ -6275,6 +6322,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-is-npm-18.1.0-6642a99f70-d206a0fe67.zip/node_modules/react-is/",\
           "packageDependencies": [\
             ["react-is", "npm:18.1.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-qr-reader", [\
+        ["npm:2.2.1", {\
+          "packageLocation": "./.yarn/cache/react-qr-reader-npm-2.2.1-fb66e98c60-a6e997fdd9.zip/node_modules/react-qr-reader/",\
+          "packageDependencies": [\
+            ["react-qr-reader", "npm:2.2.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:2.2.1", {\
+          "packageLocation": "./.yarn/__virtual__/react-qr-reader-virtual-f6fc672899/0/cache/react-qr-reader-npm-2.2.1-fb66e98c60-a6e997fdd9.zip/node_modules/react-qr-reader/",\
+          "packageDependencies": [\
+            ["react-qr-reader", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:2.2.1"],\
+            ["@types/react", "npm:18.0.9"],\
+            ["@types/react-dom", "npm:18.0.5"],\
+            ["jsqr", "npm:1.4.0"],\
+            ["prop-types", "npm:15.8.1"],\
+            ["react", "npm:18.1.0"],\
+            ["react-dom", "virtual:a097f2ef7bd6da9b275cd54f8d61da57f9279975c79ab20667fedaa65550d73d7bba5ae0c8ebd0bb5e7982670c919d4d1758c277afd48dec595fa6fc7731050d#npm:18.1.0"],\
+            ["webrtc-adapter", "npm:7.7.1"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6638,6 +6714,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["rtcpeerconnection-shim", [\
+        ["npm:1.2.15", {\
+          "packageLocation": "./.yarn/cache/rtcpeerconnection-shim-npm-1.2.15-35e45fe028-42a733d8e3.zip/node_modules/rtcpeerconnection-shim/",\
+          "packageDependencies": [\
+            ["rtcpeerconnection-shim", "npm:1.2.15"],\
+            ["sdp", "npm:2.12.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["run-parallel", [\
         ["npm:1.2.0", {\
           "packageLocation": "./.yarn/cache/run-parallel-npm-1.2.0-3f47ff2034-cb4f97ad25.zip/node_modules/run-parallel/",\
@@ -6679,6 +6765,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["scheduler", "npm:0.22.0"],\
             ["loose-envify", "npm:1.4.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["sdp", [\
+        ["npm:2.12.0", {\
+          "packageLocation": "./.yarn/cache/sdp-npm-2.12.0-51e8c6a24c-5deb20ac50.zip/node_modules/sdp/",\
+          "packageDependencies": [\
+            ["sdp", "npm:2.12.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7410,6 +7505,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/webidl-conversions-npm-3.0.1-60310f6a2b-c92a0a6ab9.zip/node_modules/webidl-conversions/",\
           "packageDependencies": [\
             ["webidl-conversions", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["webrtc-adapter", [\
+        ["npm:7.7.1", {\
+          "packageLocation": "./.yarn/cache/webrtc-adapter-npm-7.7.1-54a95f8fb1-16534a7217.zip/node_modules/webrtc-adapter/",\
+          "packageDependencies": [\
+            ["webrtc-adapter", "npm:7.7.1"],\
+            ["rtcpeerconnection-shim", "npm:1.2.15"],\
+            ["sdp", "npm:2.12.0"]\
           ],\
           "linkType": "HARD"\
         }]\
