@@ -14,11 +14,11 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
     {
     }
 
-    [Authorize(nameof(Role.Tenant))]
-    public IQueryable GetCommitmentByTenant(ODataQueryOptions<CommitmentEntity> options)
-    {
-        //var query = db.Commitments.Where(e)
-        //return ApplyQuery(options, )
-        return null;
-    }
+    //[Authorize(nameof(Role.Tenant))]
+    //public IQueryable GetCommitmentByTenant(ODataQueryOptions<CommitmentEntity> options)
+    //{
+    //    //var query = db.Commitments.Where(e)
+    //    //return ApplyQuery(options, )
+    //    return null;
+    //}
 }
