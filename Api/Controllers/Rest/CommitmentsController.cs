@@ -135,4 +135,17 @@ public class CommitmentsController : BaseRestController
         await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
         return Ok();
     }
+
+    // get commitment details for tenant
+    [HttpGet("{comId}/tenants/{tenantId}")]
+    public async Task<IActionResult> GetCommitmentDetailsForTenant
+        ([FromRoute] Guid comId, [FromRoute] Guid tenantId)
+    {
+        CommitmentEntity com = await _commitmentServices.GetCommitment(comId);
+
+        _commitmentServices.ValidateTenant(com, tenantId);
+
+        return Ok(com);
+    }
+
 }
