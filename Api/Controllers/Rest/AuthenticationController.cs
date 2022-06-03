@@ -2,6 +2,7 @@
 using Api.UserFeatures.Responses;
 using Application.Interfaces;
 using AutoWrapper.Wrappers;
+using Domain.Constants;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,6 @@ namespace Api.Controllers.Rest
     {
         private readonly IAuthenticationService authenticationService;
         private readonly IUserService userService;
-        private const string COOKIES_KEY = "f-code";
 
         public AuthenticationController(IAuthenticationService authenticationService, IUserService userService)
         {
@@ -34,9 +34,15 @@ namespace Api.Controllers.Rest
             {
                 loginResponse.IsFirstTime = false;
                 loginResponse.Token = authenticationService.GenerateToken(user);
-                HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
+                SetCookie(Constant.COOKIE_NAME, loginResponse.Token);
             }
             return Ok(loginResponse);
+        }
+        [HttpPost("log-out")]
+        public IActionResult Logout()
+        {
+            RemoveCookie(Constant.COOKIE_NAME);
+            return Ok();
         }
 
         [HttpPost("first-time-login")]
@@ -61,8 +67,19 @@ namespace Api.Controllers.Rest
             LoginResponse loginResponse = new();
             loginResponse.Token = authenticationService.GenerateToken(userEntity);
             loginResponse.IsFirstTime = true;
-            HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
+            SetCookie(Constant.COOKIE_NAME, loginResponse.Token);
             return Ok(loginResponse);
+        }
+        private void RemoveCookie(string key)
+        {
+            HttpContext.Response.Cookies.Delete(key);
+        }
+        private void SetCookie(string key, string value)
+        {
+            CookieOptions cookieOptions = new();
+            cookieOptions.HttpOnly = true;
+            cookieOptions.Expires = DateTime.Now.AddDays(2);
+            HttpContext.Response.Cookies.Append(key, value);
         }
     }
 }
