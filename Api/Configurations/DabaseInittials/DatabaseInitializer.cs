@@ -10,7 +10,7 @@ namespace Api.Configurations.DabaseInittials;
 
 public static class DatabaseInitializer
 {
-    private static Random _rand = new Random();
+    private static readonly Random _rand = new();
 
     public static async Task InitializeAsync(ApplicationDbContext dbContext)
     {

@@ -14,7 +14,7 @@ using System.Linq.Dynamic.Core;
 namespace Api.Controllers;
 
 [ApiController]
-//[Route("odata/[controller]")]
+[Route("odata/[controller]")]
 [AutoWrapIgnore]
 [Authorize]
 public class BaseODataController<T> : ODataController where T : class
@@ -52,6 +52,6 @@ public class BaseODataController<T> : ODataController where T : class
 
     protected IQueryable ApplyQuery<K>(ODataQueryOptions<K> options, IQueryable<K> query)
     {
-        return options.ApplyTo(query); ;
+        return options.ApplyTo(query);
     }
 }

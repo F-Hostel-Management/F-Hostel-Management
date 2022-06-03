@@ -14,11 +14,34 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
     {
     }
 
-    //[Authorize(nameof(Role.Tenant))]
-    //public IQueryable GetCommitmentByTenant(ODataQueryOptions<CommitmentEntity> options)
-    //{
-    //    //var query = db.Commitments.Where(e)
-    //    //return ApplyQuery(options, )
-    //    return null;
-    //}
+    /*    [ApiExplorerSettings(IgnoreApi = true)]
+        [Authorize(Roles = nameof(Role.Tenant))]
+        [HttpGet("{comId}")]
+        public IQueryable GetCommitmentByTenant(ODataQueryOptions<CommitmentEntity> options, Guid comId)
+        {
+            var query = db.Commitments.Where(com => com.Id.Equals(comId));
+            return ApplyQuery(options, query);
+        }*/
+
+    // owner manager view commitment list of hostel
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("hostels/{hostelId}")]
+    public IQueryable GetCommitmentsListOfHostel
+        (ODataQueryOptions<CommitmentEntity> options, Guid hostelId)
+    {
+        var query = db.Commitments
+            .Where(com => com.Room.HostelId.Equals(hostelId));
+        return ApplyQuery(options, query);
+    }
+
+    // owner manager view commitment list of room
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("rooms/{roomId}")]
+    public IQueryable GetCommitmentsListOfRoom
+        (ODataQueryOptions<CommitmentEntity> options, Guid roomId)
+    {
+        var query = db.Commitments
+            .Where(com => com.RoomId.Equals(roomId));
+        return ApplyQuery(options, query);
+    }
 }

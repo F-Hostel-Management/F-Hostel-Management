@@ -77,7 +77,7 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseDeveloperExceptionPage();
-        //await app.Services.ApplyMigrations();
+        await app.Services.ApplyMigrations();
         await app.Services.DbInitializer();
     }
     app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false, ShowIsErrorFlagForSuccessfulResponse = true });
