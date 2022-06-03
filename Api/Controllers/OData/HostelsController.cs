@@ -13,42 +13,11 @@ namespace Api.Controllers.OData;
 [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
 public class HostelsController : BaseODataController<HostelEntity>
 {
-    //// return room expand 
-    //[EnableQuery]
-    //[HttpGet("rooms/{roomId}")]
-    //public IActionResult GetHotelByRoomId(Guid roomId)
-    //{
-    //    var room = DbContext.Rooms
-    //        .Where(room => room.Id.Equals(roomId))
-    //        .Include(hostel => hostel.Hostel);
-    //    if (room == null)
-    //    {
-    //        return NotFound();
-    //    }
-    //    return Ok(room);
-    //}
-
-    //[EnableQuery]
-    //[HttpGet("{hostelId}/get-all-commitments")]
-    //public IActionResult GetCommitmentsByHostel([FromRoute] Guid hostelId)
-    //{
-
-    //    var coms = DbContext.Commitments.Where(com =>
-    //                com.Room.HostelId.Equals(hostelId)
-    //                );
-    //    return Ok(coms);
-    //}
+  
     public HostelsController(ApplicationDbContext db) : base(db)
     {
     }
-    //[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
-    //public override IQueryable GetData(ODataQueryOptions<HostelEntity> options)
-    //{
-    //    return base.GetData(options);
-    //}
-
-    
-
+   
     protected override IQueryable<HostelEntity> GetQuery()
     {
         IQueryable<HostelEntity> result = base.GetQuery();
