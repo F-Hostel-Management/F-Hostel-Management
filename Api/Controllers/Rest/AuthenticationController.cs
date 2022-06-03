@@ -34,7 +34,7 @@ namespace Api.Controllers.Rest
             {
                 loginResponse.IsFirstTime = false;
                 loginResponse.Token = authenticationService.GenerateToken(user);
-                HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
+                SetCookie(COOKIES_KEY, loginResponse.Token);
             }
             return Ok(loginResponse);
         }
@@ -61,8 +61,16 @@ namespace Api.Controllers.Rest
             LoginResponse loginResponse = new();
             loginResponse.Token = authenticationService.GenerateToken(userEntity);
             loginResponse.IsFirstTime = true;
-            HttpContext.Response.Cookies.Append(COOKIES_KEY, loginResponse.Token);
+            SetCookie(COOKIES_KEY, loginResponse.Token);
             return Ok(loginResponse);
+        }
+
+        private void SetCookie(string key, string value)
+        {
+            CookieOptions cookieOptions = new CookieOptions();
+            cookieOptions.HttpOnly = true;
+            cookieOptions.Expires = DateTime.Now.AddDays(2);
+            HttpContext.Response.Cookies.Append(key, value);
         }
     }
 }
