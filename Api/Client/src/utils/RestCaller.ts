@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
 import { ISuccessResponse } from '../interface/serviceResponse'
-import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 
 const instance = axios.create({
@@ -11,9 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        const token = store?.getState()?.auth?.token
         config.headers = {
-            Authorization: token ? `Bearer ${token}` : '',
             'Content-Type': 'application/json',
         }
 

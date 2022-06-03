@@ -10,9 +10,6 @@ import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
-import { useDispatch } from 'react-redux'
-import { setToken } from '../../slices/authSlice'
-
 interface ILoginProps {}
 
 interface IExchangeTokenResponse {
@@ -22,16 +19,14 @@ interface IExchangeTokenResponse {
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
 
     const doLogin = async (firebaseToken: string) => {
         const result = await exchangeToken(firebaseToken)
         if (!result) return
 
-        const { isFirstTime, token } = result
+        const { isFirstTime } = result
         if (isFirstTime) return redirectFirstTimePage()
 
-        dispatch(setToken(token))
         redirectHomePage()
     }
 

@@ -27,10 +27,8 @@ import * as Styled from './styles'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
-import { useDispatch } from 'react-redux'
-import { setToken } from '../../slices/authSlice'
 import { useNavigate } from 'react-router-dom'
-import { IFirstTimeBody, IFirstTimeResponse, IInformation } from './interfaces'
+import { IFirstTimeBody, IInformation } from './interfaces'
 import { GENDERS, ROLES, STEPS } from './constants'
 
 // Props & type
@@ -640,7 +638,6 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const isStepSkipped = (step: number) => {
@@ -660,6 +657,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                 (gender) => information.gender === gender
             ),
             phone: information.phoneNo,
+            taxCode: information.taxCode,
         }
         const firstTimeRes = await RestCaller.post(
             'Authentication/first-time-login',
@@ -667,13 +665,6 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         )
 
         if (firstTimeRes.isError) return
-
-        const firstTimeResult: IFirstTimeResponse = firstTimeRes.result
-        const { token } = firstTimeResult
-
-        console.log(token)
-
-        dispatch(setToken(token))
 
         const uploadRes = await RestCaller.upload(
             'Users/upload-identification-card',
