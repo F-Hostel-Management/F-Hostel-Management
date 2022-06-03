@@ -34,7 +34,7 @@ namespace Api.Controllers.Rest
             {
                 loginResponse.IsFirstTime = false;
                 loginResponse.Token = authenticationService.GenerateToken(user);
-                SetCookie(COOKIES_KEY, loginResponse.Token);
+                SetCookie(Constant.COOKIE_NAME, loginResponse.Token);
             }
             return Ok(loginResponse);
         }
