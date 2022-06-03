@@ -17,8 +17,14 @@ interface IDefaultLayoutProps {
 }
 
 const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
+    // breakpoints of screen
     const screen = useBreakpoint(up('lg'))
+
+    // isShownSidebar = true, show full sidebar
+    // isShowSidebar = false, show only icon
     const [isShownSidebar, setIsShownSidebar] = useState<boolean>(true)
+
+    //isSidebarMobile = true, sidebar with overlay
     const [isSidebarMobile, setIsSidebarMobile] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -30,8 +36,12 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
         <Styled.Container>
             <HeaderDefault
                 isShownSidebar={isShownSidebar}
-                setIsShownSidebar={() => setIsShownSidebar(!isShownSidebar)}
-                setIsSidebarMobile={() => setIsSidebarMobile(!isSidebarMobile)}
+                setIsShownSidebar={(state = !isShownSidebar) =>
+                    setIsShownSidebar(state)
+                }
+                setIsSidebarMobile={(state = !isSidebarMobile) =>
+                    setIsSidebarMobile(state)
+                }
             />
             <Grid
                 container
@@ -47,14 +57,14 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
                     lg={isShownSidebar ? 2.5 : 0.5}
                     isSidebarMobile={isSidebarMobile}
                 >
-                    {isSidebarMobile || screen ? (
-                        <React.Fragment>
+                    <React.Fragment>
+                        {isSidebarMobile && (
                             <Styled.Overlay
                                 onClick={() => setIsSidebarMobile(false)}
                             />
-                            <Sidebar isShownSidebar={isShownSidebar} />
-                        </React.Fragment>
-                    ) : null}
+                        )}
+                        <Sidebar isShownSidebar={isShownSidebar} />
+                    </React.Fragment>
                 </Styled.GridSidebar>
                 <Styled.GridMain item lg={isShownSidebar ? 9.5 : 11.5}>
                     <React.Fragment>
