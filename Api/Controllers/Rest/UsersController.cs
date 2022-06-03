@@ -34,13 +34,12 @@ namespace Api.Controllers.Rest
         }
 
         [HttpPost("upload-identification-card")]
-        public async Task<IActionResult> UpLoadIdentificationCard([FromForm] UploadIdentificationUserRequest uploadIdentificationUserRequest)
+        public async Task<IActionResult> UploadIdentificationCard([FromForm] UploadIdentificationUserRequest uploadIdentificationUserRequest)
         {
             var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(CurrentUserID));
             var listImage = new List<IFormFile>();
             listImage.Add(uploadIdentificationUserRequest.FrontIdentification);
             listImage.Add(uploadIdentificationUserRequest.BackIdentification);
-
             var listResult = await _userService.UploadIdentification(user, listImage);
             user.FrontIdentification = listResult[0];
             user.BackIdentification = listResult[1];

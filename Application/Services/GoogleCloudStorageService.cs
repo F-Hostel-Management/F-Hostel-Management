@@ -35,13 +35,18 @@ namespace Application.Services
 
         public async Task DeleteFileAsync(string fileNameForStorage)
         {
-            await storageClient.DeleteObjectAsync(bucketName, fileNameForStorage);
+            try
+            {
+                await storageClient.DeleteObjectAsync(bucketName, fileNameForStorage);
+            }
+            catch (Exception)
+            {
+            }
         }
       
         private string ConvertCloudStorageUrlToFirebase(string fileName)
         {
             return $"{FIREBASE_STORAGE}/{appSetting.GoogleCloudStorageBucket}/o/{fileName}";
-
         }
         public async Task<string> UploadFileAsync(IFormFile imageFile, string fileNameForStorage)
         {
