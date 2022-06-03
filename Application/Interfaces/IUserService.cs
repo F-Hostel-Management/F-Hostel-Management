@@ -12,7 +12,7 @@ namespace Application.Interfaces
     {
         Task UpdateProfileAsync(UserEntity updatingEntity);
         Task<string> UploadAvatarAsync(UserEntity userEntity, IFormFile formFile);
-        Task<string> UploadIdentification(UserEntity userEntity, IFormFile formFile);
+        Task<IList<string>> UploadIdentification(UserEntity userEntity, IList<IFormFile> formFile);
         Task<UserEntity> SignUpUserAsync(UserEntity userEntity);
     }
 }

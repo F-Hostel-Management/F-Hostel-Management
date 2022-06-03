@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Api.Filters;
+using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
 using Domain.Entities.Invoice;
@@ -25,6 +26,7 @@ public static class ConfigureOData
                 options =>
                 {
                     options.SuppressAsyncSuffixInActionNames = false;
+                    options.Filters.Add<ValidateModelStateFilter>();
                 }
             )
             .AddJsonOptions(

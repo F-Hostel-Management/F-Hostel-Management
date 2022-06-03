@@ -1,20 +1,31 @@
 import axios, { AxiosResponse } from 'axios'
+import { store } from '../stores/reduxStore'
 import { HttpErrorToast } from './HttpErrorToast'
 import odataQuery, { ODataQuery } from 'odata-fluent-query'
 
-const token = localStorage.getItem('token')
 const instance = axios.create({
     baseURL: '/odata',
     responseType: 'json',
-    headers: {
-        Authorization: token ? `Bearer ${token}` : '',
-        'Content-Type': 'application/json',
-    },
+    withCredentials: true,
 })
+
+instance.interceptors.request.use(
+    (config) => {
+        const token = store?.getState()?.auth?.token
+        config.headers = {
+            Authorization: token ? `Bearer ${token}` : '',
+            'Content-Type': 'application/json',
+        }
+
+        return config
+    },
+    (error) => {
+        Promise.reject(error)
+    }
+)
 
 instance.interceptors.response.use(undefined, (error) => {
     const { status } = error.response
-    console.log(typeof status)
     HttpErrorToast.show(status)
 })
 

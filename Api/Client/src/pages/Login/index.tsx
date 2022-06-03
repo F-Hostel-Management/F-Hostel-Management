@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from '@mui/material'
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as Styled from './styles'
 import GoogleIcon from '../../assets/images/GoogleLogo.svg'
@@ -7,17 +8,61 @@ import FacebookLogo from '../../assets/images/FacebookLogo.svg'
 import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 
 import FirebaseService from '../../services/FirebaseService'
+import { RestCaller } from '../../utils/RestCaller'
+
+import { useDispatch } from 'react-redux'
+import { setToken } from '../../slices/authSlice'
 
 interface ILoginProps {}
 
+interface IExchangeTokenResponse {
+    isFirstTime: boolean
+    token: string
+}
+
 const Login: React.FunctionComponent<ILoginProps> = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const doLogin = async (firebaseToken: string) => {
+        const result = await exchangeToken(firebaseToken)
+        if (!result) return
+
+        const { isFirstTime, token } = result
+        if (isFirstTime) return redirectFirstTimePage()
+
+        dispatch(setToken(token))
+        redirectHomePage()
+    }
+
+    const exchangeToken = async (
+        token: string
+    ): Promise<IExchangeTokenResponse | undefined> => {
+        const res = await RestCaller.post(
+            `Authentication/login?firebaseToken=${token}`
+        )
+
+        if (res.isError) return
+
+        return res.result as IExchangeTokenResponse
+    }
+
+    const redirectFirstTimePage = () => {
+        navigate('/fillInformation')
+    }
+
+    const redirectHomePage = () => {
+        navigate('/home')
+    }
+
     const onSignInGoogle = async () => {
         const token = await FirebaseService.getInstance().signInWithGoogle()
         if (!token) {
             console.log('Failed to sign in Google')
             return
         }
-        console.log(token)
+
+        await doLogin(token)
     }
 
     const onSignInFacebook = async () => {
@@ -28,7 +73,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             return
         }
 
-        console.log(token)
+        await doLogin(token)
     }
 
     const onSignInMicrosoft = async () => {
@@ -39,7 +84,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             return
         }
 
-        console.log(token)
+        await doLogin(token)
     }
 
     return (
