@@ -1,4 +1,4 @@
-import { down, up } from 'styled-breakpoints'
+import { down } from 'styled-breakpoints'
 import styled from 'styled-components'
 
 import { Grid } from '@mui/material'
@@ -40,7 +40,7 @@ export const NavbarLogo = styled.div`
     height: 100%;
 
     & > img {
-        height: 60px;
+        height: 50px;
         width: auto;
     }
 `

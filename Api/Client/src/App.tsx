@@ -6,7 +6,7 @@ import {
     Route,
     Navigate,
 } from 'react-router-dom'
-import { IRoute } from './interface/route'
+import { IRoute } from './interface/IRoute'
 
 import NotFound from './pages/NotFound'
 import { privateRoutes, publicRoutes } from './routes'

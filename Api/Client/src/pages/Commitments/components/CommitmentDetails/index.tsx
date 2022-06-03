@@ -1,5 +1,6 @@
 import { Paper } from '@mui/material'
 import React, { FC } from 'react'
+import * as ReactDOMServer from 'react-dom/server'
 
 interface ICommitmentDetailsProps {}
 
@@ -987,7 +988,8 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
             <div>&nbsp;</div>
         </div>
     )
-
+    const html = ReactDOMServer.renderToStaticMarkup(content)
+    console.log('HTML: ', html)
     return (
         <Paper elevation={3} sx={{ padding: '16px 32px' }}>
             {content}

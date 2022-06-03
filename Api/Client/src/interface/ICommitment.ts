@@ -1,6 +1,6 @@
-import { IRoom } from './room'
+import { IRoom } from './IRoom'
 import { ECommitmentStatus } from '../utils/enums'
-import { IUser } from './user'
+import { IUser } from './IUser'
 
 export interface ICommitment {
     id: string
