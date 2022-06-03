@@ -4,23 +4,23 @@ import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
 import { rooms } from '../../../../utils/MockData'
 import { ICommitmentValues } from '../../../../interface/commitment'
-interface ICreateCommitmentDialogProps {
+interface IUpdateCommitmentDialogProps {
     openDialog: boolean
     handleOpenDialog: () => void
     handleCloseDialog: () => void
 }
 
-const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
+const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
     const initialValues: ICommitmentValues = {
         createDate: new Date().toJSON(),
-        startDate: '',
-        endDate: '',
-        roomId: '',
-        overdueDays: 0,
-        compensation: 0,
+        startDate: '23/07/2001',
+        endDate: '23/07/2006',
+        roomId: '1',
+        overdueDays: 3,
+        compensation: 3000000,
     }
 
     const { values, setValues, handleInputChange, resetForm } =
@@ -46,4 +46,4 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     )
 }
 
-export default CreateCommitmentDialog
+export default UpdateCommitmentDialog

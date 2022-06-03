@@ -1,4 +1,10 @@
-import React, { FormEvent, FC, useState } from 'react'
+import React, {
+    FormEvent,
+    FC,
+    ChangeEvent,
+    Dispatch,
+    SetStateAction,
+} from 'react'
 import Box from '@mui/material/Box'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
@@ -8,41 +14,31 @@ import { StepButton } from '@mui/material'
 import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
-import { useForm } from '../../../../hooks/useForm'
 import { rooms } from '../../../../utils/MockData'
 
-interface IValues {
-    createDate: string | null
-    startDate: string | null
-    endDate: string | null
-    roomId: string | null
-    overdueDays: number | null
-    compensation: number | null
+interface ICommitmentStepperProps {
+    handleCloseDialog: () => void
+    values: Record<string, any>
+    setValues: Dispatch<SetStateAction<any>>
+    handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
+    resetForm: () => void
+    roomInfo: Record<string, any>[]
+    setRoomInfo: any
 }
 
-const initialValues: IValues = {
-    createDate: new Date().toJSON(),
-    startDate: null,
-    endDate: null,
-    roomId: null,
-    overdueDays: null,
-    compensation: null,
-}
-
-interface ICreateCommitmentStepperProps {
-    handleCloseDialog: any
-}
-
-const CreateCommitmentStepper: FC<ICreateCommitmentStepperProps> = ({
+const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     handleCloseDialog,
+    values,
+    setValues,
+    handleInputChange,
+    resetForm,
+    roomInfo,
+    setRoomInfo,
 }) => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [completed, setCompleted] = React.useState<{
         [k: number]: boolean
     }>({})
-    const { values, setValues, handleInputChange, resetForm } =
-        useForm<IValues>(initialValues)
-    const [roomInfo, setRoomInfo] = useState<any | null>(rooms[0])
 
     const steps = [
         {
@@ -180,4 +176,4 @@ const CreateCommitmentStepper: FC<ICreateCommitmentStepperProps> = ({
     )
 }
 
-export default CreateCommitmentStepper
+export default CommitmentStepper

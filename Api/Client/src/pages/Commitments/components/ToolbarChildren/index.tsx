@@ -12,7 +12,7 @@ const ToolbarChildren: FC<IToolbarChildrenProps> = ({ handleOpenCreate }) => {
             variant="contained"
             startIcon={<AddCircleIcon />}
             size="small"
-            sx={{ margin: '0px 8px' }}
+            sx={{ margin: '8px' }}
             onClick={handleOpenCreate}
         >
             Create

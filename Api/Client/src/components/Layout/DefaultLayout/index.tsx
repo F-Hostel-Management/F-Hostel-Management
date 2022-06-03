@@ -56,13 +56,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
                         </React.Fragment>
                     ) : null}
                 </Styled.GridSidebar>
-                <Styled.GridMain
-                    item
-                    lg={isShownSidebar ? 9.5 : 11.5}
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="center"
-                >
+                <Styled.GridMain item lg={isShownSidebar ? 9.5 : 11.5}>
                     <React.Fragment>
                         <Styled.BodyHeader>
                             <Styled.BodyTitle>

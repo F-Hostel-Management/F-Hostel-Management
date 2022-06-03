@@ -24,7 +24,7 @@ namespace Api.Controllers.Rest
 
 
         [HttpPost("upload-avatar")]
-        public async Task<IActionResult> UploadAvatar([FromBody] UploadAvatarUserRequest uploadAvatarUserRequest)
+        public async Task<IActionResult> UploadAvatar([FromForm] UploadAvatarUserRequest uploadAvatarUserRequest)
         {
             var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(CurrentUserID));
             var avatarUrl = await _userService.UploadAvatarAsync(user, uploadAvatarUserRequest.Avatar);
@@ -34,17 +34,22 @@ namespace Api.Controllers.Rest
         }
 
         [HttpPost("upload-identification-card")]
-        public async Task<IActionResult> UpLoadIdentificationCard([FromBody] UploadIdentificationUserRequest uploadIdentificationUserRequest)
+        public async Task<IActionResult> UpLoadIdentificationCard([FromForm] UploadIdentificationUserRequest uploadIdentificationUserRequest)
         {
             var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(CurrentUserID));
-            var identificationUrl = await _userService.UploadIdentification(user, uploadIdentificationUserRequest.Identification);
-            user.Identification = identificationUrl;
+            var listImage = new List<IFormFile>();
+            listImage.Add(uploadIdentificationUserRequest.FrontIdentification);
+            listImage.Add(uploadIdentificationUserRequest.BackIdentification);
+
+            var listResult = await _userService.UploadIdentification(user, listImage);
+            user.FrontIdentification = listResult[0];
+            user.BackIdentification = listResult[1];
             await _userRepository.UpdateAsync(user);
-            return Ok(user.Identification);
+            return Ok(listResult);
         }
 
         [HttpPatch("update-user")]
-        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserProfileRequest updateUserProfileRequest)
+        public async Task<IActionResult> UpdateUser( UpdateUserProfileRequest updateUserProfileRequest)
         {
             var userID = GetUserID();
             var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(userID));   
