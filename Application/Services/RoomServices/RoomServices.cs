@@ -1,12 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using AutoWrapper.Wrappers;
 using Domain.Entities.Room;
 using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.RoomServices;
 
@@ -25,12 +22,25 @@ public class RoomServices : IRoomServices
         await _roomRepository.UpdateAsync(room);
     }
 
-    public async Task<RoomEntity> GetAvailableRoomByIdAsync(Guid Id)
+    // return room entity
+    // not found ==> throw exception
+    public async Task<RoomEntity> GetRoom(Guid Id, RoomStatus status)
     {
-        return await _roomRepository
-            .FirstOrDefaultAsync(room => 
-            room.Id == Id
-            && room.Status == RoomStatus.Available.ToString()
+        RoomEntity room = await _roomRepository
+            .FirstOrDefaultAsync(room =>
+            room.Id.Equals(Id)
+            && room.Status.Equals(status.ToString())
             );
+
+        return room ??
+            throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+    }
+
+    public async Task<RoomEntity> GetRoom(Guid Id)
+    {
+        RoomEntity room = await _roomRepository.FindByIdAsync(Id);
+
+        return room ??
+            throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
     }
 }

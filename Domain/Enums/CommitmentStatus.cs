@@ -10,6 +10,6 @@ public enum CommitmentStatus
 {
     Pending,
     Approved,
-    Done,
+    Active,
     Expired
 }

@@ -18,6 +18,11 @@ public class CommitmentEntity : BaseEntity
     public DateTime StartDate { get; set; }
     [Required]
     public DateTime EndDate { get; set; }
+
+    public int? DateOverdue { get; set; }
+
+    public double? Compensation { get; set; }
+
     [Column("Commitment Status")]
     public string Status
     {
@@ -53,4 +58,7 @@ public class CommitmentEntity : BaseEntity
     [Required]
     public Guid RoomId { get; set; }
     public RoomEntity Room { get; set; }
+
+    // 1 com - 1 joining code
+    public JoiningCode JoiningCode { get; set; }
 }

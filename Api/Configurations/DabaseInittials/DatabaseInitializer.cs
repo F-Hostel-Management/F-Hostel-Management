@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
+using Domain.Entities.User;
 using Domain.Enums;
 using Infrastructure.Contexts;
 
@@ -174,7 +175,8 @@ public static class DatabaseInitializer
                     Price = mockRoom.Price,
                     RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
                     Hostel = hostels[_rand.Next(hostels.Length)],
-                    RoomStatus = (RoomStatus)1
+                    RoomStatus = (RoomStatus)1,
+                    MaximumPeople = _rand.Next(2, 10)
                 });
         }
         await dbContext.SaveChangesAsync();
@@ -207,14 +209,21 @@ public static class DatabaseInitializer
                     CreatedDate = DateTime.Now,
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
-                    CommitmentStatus = (CommitmentStatus)2
+                    CommitmentStatus = (CommitmentStatus)2,
+                    DateOverdue = _rand.Next(1, 6),
+                    Compensation = _rand.Next(3000, 4000),
                 });
 
             // tenant into room
-            tenant.Room = room;
+            await dbContext.RoomTenants.AddAsync(
+                new RoomTenant()
+                {
+                    TenantId = tenant.Id,
+                    RoomId = room.Id,
+                });
 
             // update room status
-            room.RoomStatus = (RoomStatus)0;
+            room.RoomStatus = 0;
 
         }
         await dbContext.SaveChangesAsync();

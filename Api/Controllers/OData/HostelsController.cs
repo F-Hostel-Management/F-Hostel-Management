@@ -39,4 +39,13 @@ public class HostelsController : BaseODataController
                     );
         return Ok(coms);
     }
+
+    [EnableQuery]
+    [HttpGet("{hostelId}/get-all-rooms")]
+    public IActionResult GetAllRooms([FromRoute] Guid hostelId)
+    {
+        var rooms = DbContext.Rooms.Where(room =>
+        room.HostelId.Equals(hostelId));
+        return Ok(rooms);
+    }
 }
