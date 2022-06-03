@@ -10,12 +10,18 @@ import {
     MenuItem,
     Typography,
 } from '@mui/material'
+import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
+import { useDialog } from '../../../../hooks/useDialog'
+import UpdateHostelDialog from '../UpdateHostelDialog'
 
 interface ICardOptionsProps {}
 
 const CardOptions: FC<ICardOptionsProps> = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
+    const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
+    const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
     }
@@ -70,19 +76,45 @@ const CardOptions: FC<ICardOptionsProps> = () => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem>
+                <MenuItem onClick={handleOpenUpdate}>
                     <ListItemIcon>
                         <EditIcon fontSize="small" />
                     </ListItemIcon>
                     <Typography variant="body2">Update</Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={handleOpenDelete}>
                     <ListItemIcon>
                         <DeleteForeverIcon fontSize="small" />
                     </ListItemIcon>
                     <Typography variant="body2">Delete</Typography>
                 </MenuItem>
             </Menu>
+
+            {openUpdate && (
+                <UpdateHostelDialog
+                    openDialog={openUpdate}
+                    handleCloseDialog={handleCloseUpdate}
+                />
+            )}
+
+            {openDelete && (
+                <ConfirmDialog
+                    title="Delete Hostel"
+                    openDialog={openDelete}
+                    handleOpenDialog={handleOpenDelete}
+                    handleCloseDialog={handleCloseDelete}
+                >
+                    <div style={{ minHeight: '100px' }}>
+                        <Typography variant="h3" mb={1}>
+                            Are you sure ?
+                        </Typography>
+                        <Typography variant="body1">
+                            Do yo really want to delete this hostel. This
+                            process can not be undone.
+                        </Typography>
+                    </div>
+                </ConfirmDialog>
+            )}
         </Fragment>
     )
 }
