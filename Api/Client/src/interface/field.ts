@@ -4,4 +4,5 @@ export interface IField {
     type: string
     required: boolean
     disabled?: boolean
+    [x: string | number | symbol]: any
 }

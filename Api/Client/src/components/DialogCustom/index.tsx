@@ -1,7 +1,6 @@
 import React, { FC, ReactNode } from 'react'
-import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
-import Dialog from '@mui/material/Dialog'
+import Dialog, { DialogProps } from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
@@ -48,35 +47,32 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 interface IDialogCustomProps {
     title: string
-    openDialog: boolean
-    handleOpenDialog: () => void
-    handleCloseDialog: () => void
+    openDialog: any
+    handleCloseDialog: any
     children: any
+    maxWidth?: DialogProps['maxWidth']
 }
 const DialogCustom: FC<IDialogCustomProps> = ({
     title,
     openDialog,
-    handleOpenDialog,
     handleCloseDialog,
     children,
+    maxWidth = 'xl',
 }) => {
     return (
         <div>
-            <Button variant="outlined" onClick={handleOpenDialog}>
-                Open dialog
-            </Button>
             <BootstrapDialog
                 onClose={handleCloseDialog}
                 aria-labelledby="customized-dialog-title"
                 open={openDialog}
                 fullWidth={true}
-                maxWidth="xl"
+                maxWidth={maxWidth}
             >
                 <BootstrapDialogTitle
                     id="customized-dialog-title"
                     onClose={handleCloseDialog}
                 >
-                    {title}
+                    <strong>{title}</strong>
                 </BootstrapDialogTitle>
                 <DialogContent dividers>{children}</DialogContent>
             </BootstrapDialog>
