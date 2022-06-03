@@ -84,6 +84,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
 
             {openDelete && (
                 <ConfirmDialog
+                    title="Delete Commitment"
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}

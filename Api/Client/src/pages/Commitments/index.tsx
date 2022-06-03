@@ -65,7 +65,6 @@ const Commitments: FC<ICommitmentsProps> = () => {
             {openCreate && (
                 <CreateCommitmentDialog
                     openDialog={openCreate}
-                    handleOpenDialog={handleOpenCreate}
                     handleCloseDialog={handleCloseCreate}
                 />
             )}

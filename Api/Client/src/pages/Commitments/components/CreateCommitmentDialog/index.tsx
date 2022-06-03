@@ -6,7 +6,6 @@ import { rooms, hostels } from '../../../../utils/MockData'
 import { ICommitmentValues } from '../../../../interface/ICommitment'
 interface ICreateCommitmentDialogProps {
     openDialog: boolean
-    handleOpenDialog: () => void
     handleCloseDialog: () => void
 }
 
