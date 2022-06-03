@@ -38,6 +38,12 @@ namespace Api.Controllers.Rest
             }
             return Ok(loginResponse);
         }
+        [HttpPost("log-out")]
+        public IActionResult Logout()
+        {
+            RemoveCookie(Constant.COOKIE_NAME);
+            return Ok();
+        }
 
         [HttpPost("first-time-login")]
         public async Task<IActionResult> FirstTimeLogin([FromBody] FirstTimeRequest loginRequest)
@@ -64,10 +70,13 @@ namespace Api.Controllers.Rest
             SetCookie(Constant.COOKIE_NAME, loginResponse.Token);
             return Ok(loginResponse);
         }
-
+        private void RemoveCookie(string key)
+        {
+            HttpContext.Response.Cookies.Delete(key);
+        }
         private void SetCookie(string key, string value)
         {
-            CookieOptions cookieOptions = new CookieOptions();
+            CookieOptions cookieOptions = new();
             cookieOptions.HttpOnly = true;
             cookieOptions.Expires = DateTime.Now.AddDays(2);
             HttpContext.Response.Cookies.Append(key, value);
