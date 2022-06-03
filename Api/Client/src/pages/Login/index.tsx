@@ -10,6 +10,9 @@ import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
+import { useDispatch } from 'react-redux'
+import { setIsAuthenticated } from '../../slices/authSlice'
+
 interface ILoginProps {}
 
 interface IExchangeTokenResponse {
@@ -19,6 +22,7 @@ interface IExchangeTokenResponse {
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const doLogin = async (firebaseToken: string) => {
         const result = await exchangeToken(firebaseToken)
@@ -27,7 +31,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
         const { isFirstTime } = result
         if (isFirstTime) return redirectFirstTimePage()
 
-        redirectHomePage()
+        dispatch(setIsAuthenticated(true))
     }
 
     const exchangeToken = async (
@@ -44,10 +48,6 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
 
     const redirectFirstTimePage = () => {
         navigate('/fillInformation')
-    }
-
-    const redirectHomePage = () => {
-        navigate('/home')
     }
 
     const onSignInGoogle = async () => {
