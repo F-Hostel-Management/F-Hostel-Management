@@ -68,4 +68,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         return dbSet.AsQueryable().AsNoTracking().FirstOrDefaultAsync(predicate);
     }
+
+    public async Task CreateRangeAsync(T[] entities)
+    {
+        await _context.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Api.UserFeatures.Requests;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
@@ -16,9 +17,29 @@ public class RoomsController : BaseRestController
         _roomsRepository = roomsRepository;
     }
 
-    [HttpGet()]
-    public async Task<IActionResult> GetRoomsAsync()
+    [HttpGet("{roomId}")]
+    public async Task<IActionResult> GetRoomsAsync(Guid roomId)
     {
-        return Ok(await _roomsRepository.ListAsync());
+        return Ok(await _roomsRepository.FindByIdAsync(roomId));
     }
+
+    [HttpPost()]
+    public async Task<IActionResult> CreateRoomsAsync(CreateRoomsRequest req)
+    {
+        if (req.Quantity == 0)
+        {
+            req.Quantity = 1;
+        }
+
+        if (req.RoomName == null)
+        {
+            req.RoomName = "Unnamed";
+        }
+        RoomEntity[] rooms = new RoomEntity[(int)req.Quantity];
+        rooms = (RoomEntity[])rooms.Select(room => new RoomEntity());
+        rooms = (RoomEntity[])rooms.Select(room => Mapper.Map(req, room));
+        await _roomsRepository.CreateRangeAsync(rooms);
+        return Ok();
+    }
+
 }
