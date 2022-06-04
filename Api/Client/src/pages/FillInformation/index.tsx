@@ -30,6 +30,8 @@ import { RestCaller } from '../../utils/RestCaller'
 import { useNavigate } from 'react-router-dom'
 import { IFirstTimeBody, IInformation } from './interfaces'
 import { GENDERS, ROLES, STEPS } from './constants'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../stores/reduxStore'
 
 // Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
@@ -711,6 +713,20 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const handleReset = () => {
         setActiveStep(0)
     }
+
+    const isAuthenticated = useSelector(
+        (state: AppState) => state.auth.isAuthenticated
+    )
+
+    React.useEffect(() => {
+        ;(async () => {
+            if (isAuthenticated) return navigate('/home')
+
+            const firebaseToken =
+                await FirebaseService.getInstance().getFirebaseToken()
+            if (!firebaseToken) return navigate('/login')
+        })()
+    }, [])
 
     return (
         <Styled.Container>

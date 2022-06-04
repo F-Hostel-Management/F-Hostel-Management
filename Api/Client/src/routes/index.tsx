@@ -30,6 +30,12 @@ const publicRoutes: IRoute[] = [
         name: 'Login',
         layout: null,
     },
+    {
+        path: '/fillInformation',
+        component: FillInformation,
+        name: 'FillInformation',
+        layout: null,
+    },
 ]
 
 const privateRoutes: IRoute[] = [
@@ -68,12 +74,6 @@ const privateRoutes: IRoute[] = [
         props: {
             title: 'Profile',
         },
-    },
-    {
-        path: '/fillInformation',
-        component: FillInformation,
-        name: 'FillInformation',
-        layout: null,
     },
 ]
 
