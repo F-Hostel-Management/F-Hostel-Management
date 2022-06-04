@@ -29,4 +29,4 @@ dist-ssr
 package-lock.json
 yarn.lock
 .yarn
-.yarnrc.*
+.yarnrc.yml
