@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IUser } from '../interface/user'
+import { IUser } from '../interface/IUser'
 
 interface AuthSliceState {
     isAuthenticated: boolean
@@ -7,7 +7,7 @@ interface AuthSliceState {
 }
 
 const initialState: AuthSliceState = {
-    isAuthenticated: false,
+    isAuthenticated: true,
 }
 
 const authSlice = createSlice({

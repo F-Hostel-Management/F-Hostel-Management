@@ -6,4 +6,5 @@ export interface IRoute {
     name: string
     layout: ElementType | null
     props?: Object
+    force?: boolean
 }
