@@ -11,12 +11,15 @@ import { ERole } from '../../../utils/enums'
 import { useDialog } from '../../../hooks/useDialog'
 import CreateCommitmentDialog from '../../Commitments/components/CreateCommitmentDialog'
 import CreateHostelDialog from '../components/CreateHostelDialog'
+import { IHostel } from '../../../interface/IHostel'
 
-interface IOwnerHomeProps {}
+interface IOwnerHomeProps {
+    hostels: IHostel[]
+}
 
 const role: ERole = 2
 
-const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
+const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
     const [openCreateCommit, handleOpenCreateCommit, handleCloseCreateCommit] =
         useDialog()
     const [openCreateHostel, handleOpenCreateHostel, handleCloseCreateHostel] =
@@ -47,8 +50,9 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                 </Styled.ButtonWrapper>
             </Styled.ActionWrapper>
             <React.Fragment>
-                <HostelCard />
-                <HostelCard />
+                {hostels.map((hostel) => (
+                    <HostelCard key={hostel?.id} hostelInfo={hostel} />
+                ))}
             </React.Fragment>
 
             {openCreateCommit && (

@@ -38,6 +38,6 @@ export const ODataCaller = {
     get: <T>(path: string, query: ODataQuery<T>) => {
         const queryString = query.toString()
         const url = path + '?' + queryString
-        return instance.get(url).then(sleep(1000)).then(responseBody)
+        return instance.get(url).then(responseBody)
     },
 }

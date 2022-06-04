@@ -4,8 +4,11 @@ export interface IHostel {
     name?: string
     numOfRooms?: number
     hostelCategoryId?: string
+    hostelCategory?: any
+    hostelManagements?: any
     ownerId?: string
-    imageSrc?: string
+    imgPath?: string
+    rooms?: any
     isDeleted?: boolean
 }
 
@@ -15,5 +18,5 @@ export interface IHostelValues {
     numOfRooms: number
     hostelCategoryId: string
     ownerId: string
-    imageSrc: string
+    imgPath: string
 }

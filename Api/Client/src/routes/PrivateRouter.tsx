@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Navigate, Outlet } from 'react-router-dom'
-import { IUser } from '../interface/user'
+import { IUser } from '../interface/IUser'
 import { setCurrentUser } from '../slices/authSlice'
 import { AppState } from '../stores/reduxStore'
 import { RestCaller } from '../utils/RestCaller'
