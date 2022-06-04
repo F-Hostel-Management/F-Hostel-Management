@@ -64,7 +64,7 @@ const privateRoutes: IRoute[] = [
         path: 'home/profile',
         component: Profile,
         name: 'Profile',
-        layout: null,
+        layout: DefaultLayout,
         props: {
             title: 'Profile',
         },
