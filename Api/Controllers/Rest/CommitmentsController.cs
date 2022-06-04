@@ -44,9 +44,11 @@ public class CommitmentsController : BaseRestController
         // check hostel owner and owner in room commitment request
         HostelEntity hostel = await _hostelServices.GetHostel(room);
 
-        if (!comReq.OwnerId.Equals(hostel.OwnerId))
+        bool isManagedByCurrentUser = await _hostelServices.IsHostelManagedBy(hostel, CurrentUserID);
+
+        if (!isManagedByCurrentUser)
         {
-            throw new ApiException("Unauthorized", StatusCodes.Status401Unauthorized);
+            return Unauthorized();
         }
 
         // continue of throw exception
@@ -54,6 +56,13 @@ public class CommitmentsController : BaseRestController
 
         // call service
         CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
+
+        if (CurrentUserRole.Equals(Role.Manager.ToString()))
+        {
+            com.ManagerId = CurrentUserID;
+        }
+        com.OwnerId = hostel.OwnerId;
+
         await _commitmentServices.CreateCommitment(com, room);
 
         // update room status

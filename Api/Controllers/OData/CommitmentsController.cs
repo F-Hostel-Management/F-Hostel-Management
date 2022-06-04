@@ -15,15 +15,6 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
     {
     }
 
-    /*    [ApiExplorerSettings(IgnoreApi = true)]
-        [Authorize(Roles = nameof(Role.Tenant))]
-        [HttpGet("{comId}")]
-        public IQueryable GetCommitmentByTenant(ODataQueryOptions<CommitmentEntity> options, Guid comId)
-        {
-            var query = db.Commitments.Where(com => com.Id.Equals(comId));
-            return ApplyQuery(options, query);
-        }*/
-
     // owner manager view commitment list of hostel
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet("get-commitments-by-hostel/{hostelId}")]
