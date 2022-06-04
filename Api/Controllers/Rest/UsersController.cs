@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 namespace Api.Controllers.Rest
 {
     [Authorize]
-    public class UsersController:BaseRestController
+    public class UsersController : BaseRestController
     {
         private readonly IUserService _userService;
         private readonly IGenericRepository<UserEntity> _userRepository;
@@ -48,10 +48,10 @@ namespace Api.Controllers.Rest
         }
 
         [HttpPatch("update-user")]
-        public async Task<IActionResult> UpdateUser( UpdateUserProfileRequest updateUserProfileRequest)
+        public async Task<IActionResult> UpdateUser(UpdateUserProfileRequest updateUserProfileRequest)
         {
             var userID = GetUserID();
-            var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(userID));   
+            var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(userID));
             Mapper.Map(updateUserProfileRequest, user);
             await _userRepository.UpdateAsync(user);
             return Ok();

@@ -25,7 +25,7 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
 
     // owner manager view commitment list of hostel
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("hostels/{hostelId}")]
+    [HttpGet("get-commitments-by-hostel/{hostelId}")]
     public IQueryable GetCommitmentsListOfHostel
         (ODataQueryOptions<CommitmentEntity> options, Guid hostelId)
     {
@@ -36,7 +36,7 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
 
     // owner manager view commitment list of room
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("rooms/{roomId}")]
+    [HttpGet("get-commitments-by-room/{roomId}")]
     public IQueryable GetCommitmentsListOfRoom
         (ODataQueryOptions<CommitmentEntity> options, Guid roomId)
     {
