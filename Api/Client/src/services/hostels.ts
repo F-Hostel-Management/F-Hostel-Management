@@ -3,7 +3,7 @@ import { ODataCaller } from '../utils/ODataCaller'
 
 const { createBuilder, get } = ODataCaller
 
-export const getListHostel = async () => {
+const getListHostel = async () => {
     const builder = createBuilder<IHostel>().select(
         'id',
         'address',
@@ -11,6 +11,18 @@ export const getListHostel = async () => {
         'numOfRooms',
         'imgPath'
     )
-    const hostels = await get('./Hostels/get-hostels-by-owner', builder)
-    return hostels
+    return await get('./Hostels/get-hostels-by-owner', builder)
 }
+
+const getHostelById = async (hostelId = '') => {
+    const builder = createBuilder<IHostel>().select(
+        'id',
+        'address',
+        'name',
+        'numOfRooms',
+        'imgPath'
+    )
+    return await get(`./Hostels/${hostelId}`, builder)
+}
+
+export { getListHostel, getHostelById }
