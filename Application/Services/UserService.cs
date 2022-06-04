@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Utilities;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -28,16 +29,11 @@ namespace Application.Services
 
         public async Task<string> UploadAvatarAsync(UserEntity userEntity, IFormFile formFile)
         {
-            string fileNameForStorage = FormFileName("A_" + userEntity.Id.ToString(), formFile.FileName);
+            string fileNameForStorage = FilePathUtil.FormFileName("A_" + userEntity.Id.ToString(), formFile.FileName);
             var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
             return fileNameForStorage;
         }
-        private static string FormFileName(string title, string fileName)
-        {
-            var fileExtension = Path.GetExtension(fileName);
-            var fileNameForStorage = $"{title}-{DateTime.Now.ToString("yyyyMMddHHmmss")}{fileExtension}";
-            return fileNameForStorage;
-        }
+        
 
         public async Task<UserEntity> SignUpUserAsync(UserEntity userEntity)
         {
@@ -54,7 +50,7 @@ namespace Application.Services
             List<string> result = new List<string>();
             for (int i = 0; i < formFile.Count; i++)
             {
-                string fileNameForStorage = FormFileName($"ID{i}_" + userEntity.Id.ToString(), formFile[i].FileName);
+                string fileNameForStorage = FilePathUtil.FormFileName($"ID{i}_" + userEntity.Id.ToString(), formFile[i].FileName);
                 await _cloudStorage.UploadFileAsync(formFile[i], fileNameForStorage);
                 result.Add(fileNameForStorage);
             }
