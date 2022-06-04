@@ -10,6 +10,7 @@ import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
 import FillInformation from '../pages/FillInformation'
+import Rooms from '../pages/Rooms'
 
 const publicRoutes: IRoute[] = [
     {
@@ -74,6 +75,15 @@ const privateRoutes: IRoute[] = [
         component: FillInformation,
         name: 'FillInformation',
         layout: null,
+    },
+    {
+        path: '/home/rooms',
+        component: Rooms,
+        name: 'Rooms',
+        layout: DefaultLayout,
+        props: {
+            title: 'Rooms',
+        },
     },
 ]
 
