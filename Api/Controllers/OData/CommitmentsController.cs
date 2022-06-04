@@ -22,7 +22,7 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
         (ODataQueryOptions<CommitmentEntity> options, Guid hostelId)
     {
         var query = db.Commitments
-            .Where(com => com.Room.HostelId.Equals(hostelId));
+            .Where(com => com.HostelId.Equals(hostelId));
         return ApplyQuery(options, query);
     }
 
@@ -31,7 +31,7 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet("get-commitments-by-room/{roomId}")]
     public IQueryable GetCommitmentsListOfRoom
-        (ODataQueryOptions<CommitmentEntity> options, Guid roomId)
+        (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid roomId)
     {
         var query = db.Commitments
             .Where(com => com.RoomId.Equals(roomId));

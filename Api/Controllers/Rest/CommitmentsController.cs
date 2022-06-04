@@ -63,6 +63,7 @@ public class CommitmentsController : BaseRestController
             com.ManagerId = CurrentUserID;
         }
         com.OwnerId = hostel.OwnerId;
+        com.HostelId = hostel.Id;
 
         await _commitmentServices.CreateCommitment(com, room);
 
@@ -98,7 +99,11 @@ public class CommitmentsController : BaseRestController
     {
         // check exist and not expired commitment
         CommitmentEntity com = await _commitmentServices.GetNotExpiredCommitment(req.CommitementId);
-        //await _hostelServices.IsHostelManagedBy(com.RoomId, CurrentUserID);
+        bool isManaged = await _hostelServices.IsHostelManagedBy(com.HostelId, CurrentUserID);
+        if (!isManaged)
+        {
+            return Forbid();
+        }
 
         JoiningCode joiningCode = Mapper.Map<JoiningCode>(req);
         var response = await _joiningCodeServices.CreateJoiningCode(joiningCode);
@@ -147,6 +152,10 @@ public class CommitmentsController : BaseRestController
     {
         CommitmentEntity pendingCom = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Pending);
         CommitmentEntity updatedCommitment = Mapper.Map(uComReq, pendingCom);
+        if (CurrentUserRole.Equals(Role.Manager.ToString()))
+        {
+            updatedCommitment.ManagerId = CurrentUserID;
+        }
         await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
         return Ok();
     }

@@ -211,7 +211,8 @@ public static class DatabaseInitializer
         var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
-
+        
+        int code = 1;
         foreach (var tenant in tenants)
         {
             var room = rooms[_rand.Next(rooms.Length)];
@@ -220,10 +221,11 @@ public static class DatabaseInitializer
             await dbContext.Commitments.AddAsync(
                 new CommitmentEntity()
                 {
-                    CommitmentCode = "DNG" + _rand.Next(100),
+                    CommitmentCode = "DNG" + code++,
                     Tenant = tenant,
                     Owner = owner,
                     Room = room,
+                    HostelId = room.HostelId,
                     CreatedDate = DateTime.Now,
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),

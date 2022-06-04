@@ -63,4 +63,6 @@ public class CommitmentEntity : BaseEntity
     public JoiningCode JoiningCode { get; set; }
 
     // 1 hostel - m com
+    public Guid HostelId { get; set; }
+    public HostelEntity Hostel { get; set; }
 }
