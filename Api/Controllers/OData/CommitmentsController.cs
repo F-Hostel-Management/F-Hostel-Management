@@ -1,13 +1,14 @@
-﻿using Domain.Entities.Commitment;
+﻿using Domain.Constants;
+using Domain.Entities.Commitment;
 using Domain.Enums;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
+[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
 public class CommitmentsController : BaseODataController<CommitmentEntity>
 {
     public CommitmentsController(ApplicationDbContext db) : base(db)
@@ -33,6 +34,7 @@ public class CommitmentsController : BaseODataController<CommitmentEntity>
             .Where(com => com.Room.HostelId.Equals(hostelId));
         return ApplyQuery(options, query);
     }
+
 
     // owner manager view commitment list of room
     [ApiExplorerSettings(IgnoreApi = true)]

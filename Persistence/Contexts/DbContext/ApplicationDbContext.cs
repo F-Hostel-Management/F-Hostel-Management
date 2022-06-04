@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
+using Domain.Entities.Hostel;
 using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Message;
@@ -26,6 +27,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<RoomTenant> RoomTenants { get; set; }
     public DbSet<HostelEntity> Hostels { get; set; }
+    public DbSet<HostelManagement> HostelManagements { get; set; }
     public DbSet<HostelCategory> HostelCategories { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }

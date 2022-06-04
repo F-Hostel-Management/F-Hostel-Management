@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
-//[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
 public class HostelsController : BaseODataController<HostelEntity>
 {
 
@@ -24,14 +24,14 @@ public class HostelsController : BaseODataController<HostelEntity>
         IQueryable<HostelEntity> result = base.GetQuery();
         if (CurrentUser.Role.Equals(Role.Owner))
         {
-            result = db.Hostels
-                        .Where(e => e.OwnerId.Equals(CurrentUser.Id));
+            result = db.Hostels.Where(hostel =>
+                    hostel.OwnerId.Equals(CurrentUser.Id));
         }
         if (CurrentUser.Role == Role.Manager)
         {
-            result = db.Hostels
-                        .Include(e => e.HostelManagements)
-                        .ThenInclude(e => e.ManagerId.Equals(CurrentUser.Id));
+            result = db.Hostels.Where(hostel =>
+                    hostel.HostelManagements.Any(hm =>
+                    hm.ManagerId.Equals(CurrentUser.Id)));
         }
         return result;
     }
@@ -48,7 +48,16 @@ public class HostelsController : BaseODataController<HostelEntity>
     [HttpGet("get-hostels-by-owner/{ownerId}")]
     public IQueryable GetAllHostelOfOwner(ODataQueryOptions<HostelEntity> options, Guid ownerId)
     {
-        var query = db.Hostels.Where(hostel => hostel.OwnerId.Equals(ownerId));
+        //var query = db.Hostels.Where(hostel => hostel.OwnerId.Equals(ownerId));
+        var query = GetQuery();
+        return ApplyQuery(options, query);
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("get-hostels-by-manager/{ownerId}")]
+    public IQueryable GetAllHostelOfManager(ODataQueryOptions<HostelEntity> options, Guid ownerId)
+    {
+        var query = GetQuery();
         return ApplyQuery(options, query);
     }
 
