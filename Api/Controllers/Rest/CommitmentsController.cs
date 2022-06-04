@@ -63,7 +63,7 @@ public class CommitmentsController : BaseRestController
     }
 
     // owner conform commitment ==> com.status => approved
-    [HttpPatch("owner/status")]
+    [HttpPatch("owner-approved-commitment/status")]
     public async Task<IActionResult> OwnerApprovedCommitment
         ([FromBody] OwnerApprovedCommitmentRequest req)
     {
@@ -93,7 +93,7 @@ public class CommitmentsController : BaseRestController
     }
 
     // get commitment by joining code
-    [HttpGet("joiningCode/{SixDigitsCode}")]
+    [HttpGet("get-commitment-by-joiningCode/{SixDigitsCode}")]
     public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
     {
         // validate joining code
@@ -106,7 +106,7 @@ public class CommitmentsController : BaseRestController
 
     // tenant into commitment ==> com.status => done
     //[Authorize(nameof(Role.Tenant))]
-    [HttpPatch("tenant/status")]
+    [HttpPatch("tenant-done-commitment/status")]
     public async Task<IActionResult> TenantDoneCommitment
     ([FromBody] TenantDoneCommitmentRequest req)
     {
@@ -135,4 +135,17 @@ public class CommitmentsController : BaseRestController
         await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
         return Ok();
     }
+
+    // get commitment details for tenant
+    [HttpGet("{comId}/get-commitment-details/{tenantId}")]
+    public async Task<IActionResult> GetCommitmentDetailsForTenant
+        ([FromRoute] Guid comId, [FromRoute] Guid tenantId)
+    {
+        CommitmentEntity com = await _commitmentServices.GetCommitment(comId);
+
+        _commitmentServices.ValidateTenant(com, tenantId);
+
+        return Ok(com);
+    }
+
 }

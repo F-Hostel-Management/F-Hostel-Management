@@ -98,4 +98,13 @@ public class CommitmentServices : ICommitmentServices
     {
         await _commitmentRepository.UpdateAsync(updatedCommitment);
     }
+
+    public void ValidateTenant(CommitmentEntity commitment, Guid TenantId)
+    {
+        bool isValid = commitment.TenantId.Equals(TenantId);
+        if (!isValid)
+        {
+            throw new ApiException("Unauthorized", StatusCodes.Status401Unauthorized);
+        }
+    }
 }

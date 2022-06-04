@@ -32,7 +32,7 @@ public class JoiningCodeServices : IJoiningCodeServices
     // datecreate, _6digit = null
     public async Task<JoiningCode> CreateJoiningCode(JoiningCode joiningCode)
     {
-        Random random = new Random();
+        Random random = new();
         int SixDigitsCode = 0;
         JoiningCode checkedJc = null;
 

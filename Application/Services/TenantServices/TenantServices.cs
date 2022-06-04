@@ -45,7 +45,7 @@ public class TenantServices : ITenantServices
         int count = 0;
         if (currentTenantsInRoom.Any())
         {
-           count = currentTenantsInRoom.Count();
+           count = currentTenantsInRoom.Count;
         }
 
         RoomEntity room = await _roomServices.GetRoom(roomId);
