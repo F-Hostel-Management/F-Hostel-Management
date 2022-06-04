@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import { Navigate, Outlet } from 'react-router-dom'
 import { AppState } from '../stores/reduxStore'
 
-interface IPublicRouteProps {}
+interface IPublicRouteProps {
+}
 
 const PublicRoute: React.FunctionComponent<IPublicRouteProps> = () => {
     const isAuthenticated = useSelector(
