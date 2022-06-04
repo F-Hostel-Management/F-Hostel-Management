@@ -47,14 +47,14 @@ export const hostels: IHostel[] = [
         id: '1',
         address: '433/123/1 Quan 9, TH.HCM',
         name: 'F-Code House',
-        category: '1',
+        hostelCategoryId: '1',
         isDeleted: false,
     },
     {
         id: '2',
         address: '3/13/112 Quan 2, TH.HCM',
         name: 'F-Code Gang',
-        category: '1',
+        hostelCategoryId: '1',
         isDeleted: false,
     },
 ]

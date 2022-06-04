@@ -1,8 +1,7 @@
 import React, { FC, Fragment } from 'react'
-
 import CardWithImage from '../../../../components/Card/CardWithImage'
 import { Typography, Button, Rating } from '@mui/material'
-
+import { useNavigate } from 'react-router-dom'
 import { ERole } from '../../../../utils/enums'
 import CardOptions from '../CardOptions'
 import * as Styled from './styles'
@@ -13,6 +12,7 @@ interface IHostelCardProps {
 }
 const role: ERole = 2
 const HostelCard: FC<IHostelCardProps> = () => {
+    let navigate = useNavigate()
     return (
         <CardWithImage
             image={{
@@ -65,7 +65,11 @@ const HostelCard: FC<IHostelCardProps> = () => {
                 </React.Fragment>
             }
             actions={
-                <Button variant="contained" color="primary">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => navigate('dashboard')}
+                >
                     Details
                 </Button>
             }
