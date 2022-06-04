@@ -1,6 +1,7 @@
 ﻿using Api.Services;
 using Domain.Entities;
 using Domain.Entities.Commitment;
+using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using Domain.Entities.User;
 using Domain.Enums;
@@ -27,7 +28,6 @@ public static class DatabaseInitializer
         await dbContext.FeedRooms();
 
         await dbContext.FeedTenantsToRoom();
-
     }
 
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
@@ -145,6 +145,24 @@ public static class DatabaseInitializer
                     HostelCategory = hostelCategories[_rand.Next(hostelCategories.Length)],
                     Owner = owners[_rand.Next(owners.Length)],
                 });
+        }
+        await dbContext.SaveChangesAsync();
+        await dbContext.FeedManagersToHostels();
+    }
+
+    public static async Task FeedManagersToHostels(this ApplicationDbContext dbContext)
+    {
+        var hostels = dbContext.Hostels.ToArray();
+        var managers = dbContext.Users.Where(user =>
+                        user.RoleString.Equals(Role.Manager.ToString())).ToArray();
+        for (int i = 0; i < 20; i++)
+        {
+            await dbContext.HostelManagements.AddAsync(
+                new HostelManagement()
+                {
+                    Hostel = hostels[_rand.Next(hostels.Length)],
+                    Manager = managers[_rand.Next(managers.Length)],
+                }); ;
         }
         await dbContext.SaveChangesAsync();
     }
