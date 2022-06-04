@@ -45,6 +45,7 @@ public class HostelsController : BaseODataController<HostelEntity>
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
+    //[EnableQuery]
     [HttpGet("get-hostels-by-owner/")]
     public IQueryable GetAllHostelOfOwner(ODataQueryOptions<HostelEntity> options)
     {

@@ -26,7 +26,7 @@ public class RoomsController : BaseRestController
     [HttpPost()]
     public async Task<IActionResult> CreateRoomsAsync(CreateRoomsRequest req)
     {
-        if (req.Quantity == 0)
+        if (req.Quantity == null)
         {
             req.Quantity = 1;
         }
@@ -35,9 +35,14 @@ public class RoomsController : BaseRestController
         {
             req.RoomName = "Unnamed";
         }
-        RoomEntity[] rooms = new RoomEntity[(int)req.Quantity];
-        rooms = (RoomEntity[])rooms.Select(room => new RoomEntity());
-        rooms = (RoomEntity[])rooms.Select(room => Mapper.Map(req, room));
+
+        List<RoomEntity> rooms = new List<RoomEntity>();
+        while (req.Quantity > 0)
+        {
+            rooms.Add(Mapper.Map<RoomEntity>(req));
+            req.Quantity--;
+        }
+
         await _roomsRepository.CreateRangeAsync(rooms);
         return Ok();
     }
