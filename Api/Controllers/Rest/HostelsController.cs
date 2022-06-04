@@ -3,13 +3,13 @@ using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Authorize(Policy =PolicyName.ONWER_AND_MANAGER)]
+
 public class HostelsController : BaseRestController
 {
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
@@ -20,6 +20,7 @@ public class HostelsController : BaseRestController
         _hostelRepository = hostelRepository;
         _hostelService = hostelServices;
     }
+    [Authorize(Roles = nameof(Role.Owner))]
     [HttpPost("create-hostel")]
     public async Task<IActionResult> CreateHostel(CreateHostelRequest createHostelRequest) {
         HostelEntity hostel = Mapper.Map<HostelEntity>(createHostelRequest);
@@ -27,6 +28,7 @@ public class HostelsController : BaseRestController
         await _hostelRepository.CreateAsync(hostel);
         return Ok(hostel);
     }
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
     {

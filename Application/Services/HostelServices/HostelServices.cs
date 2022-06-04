@@ -3,6 +3,7 @@ using Application.Interfaces.IRepository;
 using Application.Utilities;
 using AutoWrapper.Wrappers;
 using Domain.Entities;
+using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using Microsoft.AspNetCore.Http;
 
@@ -10,12 +11,16 @@ namespace Application.Services.HostelServices;
 public class HostelServices : IHostelServices
 {
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
+    private readonly IGenericRepository<HostelManagement> _hostelManagementRepository;
     private readonly ICloudStorage _cloudStorage;
 
     public HostelServices(
-        IGenericRepository<HostelEntity> hostelRepository, ICloudStorage cloudStorage)
+        IGenericRepository<HostelEntity> hostelRepository,
+        IGenericRepository<HostelManagement> hostelManagementRepository,
+        ICloudStorage cloudStorage)
     {
         _hostelRepository = hostelRepository;
+        _hostelManagementRepository = hostelManagementRepository;
         _cloudStorage = cloudStorage;
     }
     public async Task<HostelEntity> GetHostel(RoomEntity room)
@@ -34,6 +39,14 @@ public class HostelServices : IHostelServices
              e.OwnerId.Equals(userID)) && e.Id.Equals(hostelID)
             ,"HostelManagements");
         return list.Count == 1;
+    }
+
+    public async Task<bool> IsHostelManagedBy(HostelEntity hostel, Guid userId)
+    {
+        var manager = await _hostelManagementRepository.FirstOrDefaultAsync(e =>
+                        e.ManagerId.Equals(userId) && e.HostelId.Equals(hostel.Id));
+
+        return hostel.OwnerId.Equals(userId) || manager != null;
     }
 
     public async Task<HostelEntity> UploadHostelImage(HostelEntity hostel, IFormFile image)
