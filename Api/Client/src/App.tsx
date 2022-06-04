@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react'
 
 import {
     BrowserRouter as Router,
@@ -8,30 +7,14 @@ import {
     Navigate,
 } from 'react-router-dom'
 import { IRoute } from './interface/IRoute'
-import { IUser } from './interface/IUser'
 import LandingPage from './pages/LandingPage'
 
 import NotFound from './pages/NotFound'
 import { privateRoutes, publicRoutes } from './routes'
 import PrivateRoute from './routes/PrivateRouter'
 import PublicRoute from './routes/PublicRoute'
-import { setCurrentUser, setIsAuthenticated } from './slices/authSlice'
-
-import { RestCaller } from './utils/RestCaller'
 
 function App(): React.ReactElement {
-    const dispatch = useDispatch()
-    useEffect(() => {
-        const checkAuthentication = async () => {
-            const response = await RestCaller.get('Users/info')
-            if (!response || response.isError)
-                return dispatch(setIsAuthenticated(false))
-
-            const result: IUser = response.result
-            dispatch(setCurrentUser(result))
-        }
-        checkAuthentication()
-    }, [])
     return (
         <Router>
             <div className="App">
@@ -55,7 +38,7 @@ function App(): React.ReactElement {
                                                 <Component />
                                             </Layout>
                                         ) : (
-                                            <Layout {...route.props} >
+                                            <Layout {...route.props}>
                                                 <Component />
                                             </Layout>
                                         )
