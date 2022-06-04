@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220604104603_AddHostelToCommitment")]
+    partial class AddHostelToCommitment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -571,13 +573,35 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("TicketTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
                     b.HasIndex("TenantId");
 
+                    b.HasIndex("TicketTypeId");
+
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Ticket.TicketType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.User.RoomTenant", b =>
@@ -723,7 +747,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Facility.FacilityCategory", "FacilityCategory")
                         .WithMany("Facilities")
                         .HasForeignKey("FacilityCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
@@ -761,7 +785,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.HostelCategory", "HostelCategory")
                         .WithMany("Hostels")
                         .HasForeignKey("HostelCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.UserEntity", "Owner")
@@ -905,7 +929,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Room.RoomType", "RoomType")
                         .WithMany("Rooms")
                         .HasForeignKey("RoomTypeId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Hostel");
@@ -927,9 +951,17 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Ticket.TicketType", "TicketType")
+                        .WithMany("Tickets")
+                        .HasForeignKey("TicketTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Room");
 
                     b.Navigation("Tenant");
+
+                    b.Navigation("TicketType");
                 });
 
             modelBuilder.Entity("Domain.Entities.User.RoomTenant", b =>
@@ -1026,6 +1058,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Ticket.TicketEntity", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Ticket.TicketType", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>

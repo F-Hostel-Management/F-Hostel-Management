@@ -1,6 +1,5 @@
 ﻿using Api.Mappings;
 using Domain.Entities.Room;
-using Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Api.UserFeatures.Requests;

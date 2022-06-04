@@ -2,11 +2,9 @@
 using Api.UserFeatures.Responses;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace Api.Controllers.Rest
 {
