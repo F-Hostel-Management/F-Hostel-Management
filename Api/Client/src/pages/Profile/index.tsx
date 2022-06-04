@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import * as Styled from './styles'
 
 import avatarDefault from '../../assets/images/Avatar.png'
 import { Grid, Typography } from '@mui/material'
 import FormInfo from './components/FormInfo'
 import { IInformation } from './interface'
+import { useForm } from '../../hooks/useForm'
 
 interface IProfileProps {}
 
-const Profile: React.FunctionComponent<IProfileProps> = () => {
-    const [information, setInformation] = useState<IInformation>({
+const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
+    const initialValues: IInformation = {
         fullName: 'Dang Phuong Anh',
         role: 'Tenant',
         address: 'Ho Chi Minh City',
@@ -18,19 +19,21 @@ const Profile: React.FunctionComponent<IProfileProps> = () => {
         gender: 'Female',
         phoneNo: '0973997617',
         avatar: null,
-    })
+    }
+    const { values, setValues, handleInputChange, resetForm } =
+        useForm<IInformation>(initialValues)
     const [preview, setPreview] = React.useState<string>()
     useEffect(() => {
-        if (information.avatar) {
+        if (initialValues.avatar) {
             const reader = new FileReader()
             reader.onload = () => {
                 setPreview(reader.result as string)
             }
-            reader.readAsDataURL(information.avatar)
+            reader.readAsDataURL(initialValues.avatar)
         } else {
             setPreview(undefined)
         }
-    }, [information.avatar])
+    }, [initialValues.avatar])
 
     return (
         <Styled.ProfilePaper>
@@ -44,11 +47,12 @@ const Profile: React.FunctionComponent<IProfileProps> = () => {
                                     id="avatar"
                                     accept="image/png, image/jpeg"
                                     style={{ display: 'none' }}
+                                    onChange={handleInputChange}
                                 ></input>
                                 <Styled.Avatar elevation={0} square>
                                     <img
                                         src={
-                                            information.avatar === null
+                                            initialValues.avatar === null
                                                 ? avatarDefault
                                                 : preview
                                         }
@@ -67,7 +71,7 @@ const Profile: React.FunctionComponent<IProfileProps> = () => {
                                     fontWeight: 600,
                                 }}
                             >
-                                {information.fullName}
+                                {initialValues.fullName}
                             </Typography>
                             <Typography
                                 variant="body2"
@@ -76,14 +80,14 @@ const Profile: React.FunctionComponent<IProfileProps> = () => {
                                     textAlign: 'center',
                                 }}
                             >
-                                {information.role}
+                                {initialValues.role}
                             </Typography>
                         </div>
                     </Styled.ProfileHeader>
                 </Grid>
                 {/* <Divider orientation="vertical" flexItem /> */}
                 <Grid item xs={12} md={9}>
-                    <FormInfo info={information} />
+                    <FormInfo info={initialValues} />
                 </Grid>
             </Styled.GridPaper>
         </Styled.ProfilePaper>
