@@ -18,7 +18,6 @@ export const Avatar = styled(Paper)`
     width: 150px;
     height: 150px;
     overflow-y: hidden;
-    cursor: pointer;
 `
 export const GridPaper = styled(Grid)`
     padding: 4% 2%;
