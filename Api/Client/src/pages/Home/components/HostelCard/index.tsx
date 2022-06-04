@@ -6,13 +6,22 @@ import { ERole } from '../../../../utils/enums'
 import CardOptions from '../CardOptions'
 import * as Styled from './styles'
 import { IHostel } from '../../../../interface/IHostel'
-
+import { useDispatch } from 'react-redux'
+import { setCurrentHostel } from '../../../../slices/hostelSlice'
+import { setItem } from '../../../../utils/LocalStorageUtils'
 interface IHostelCardProps {
     hostelInfo: IHostel
 }
 const role: ERole = 2
 const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
     let navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleClickDetail = () => {
+        dispatch(setCurrentHostel(hostelInfo))
+        setItem('currentHostelId', hostelInfo?.id)
+        navigate('dashboard')
+    }
     return (
         <CardWithImage
             image={{
@@ -63,7 +72,7 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => navigate('dashboard')}
+                    onClick={handleClickDetail}
                 >
                     Details
                 </Button>
