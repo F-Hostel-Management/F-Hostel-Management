@@ -1,5 +1,5 @@
 export interface IHostel {
-    id: string
+    id?: string
     address?: string
     name?: string
     numOfRooms?: number
