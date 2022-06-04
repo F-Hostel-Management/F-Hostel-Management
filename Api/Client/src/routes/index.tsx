@@ -6,19 +6,12 @@ import About from '../pages/About'
 import Commitments from '../pages/Commitments'
 import Dashboard from '../pages/Dashboard'
 import Home from '../pages/Home'
-import LandingPage from '../pages/LandingPage'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
 import FillInformation from '../pages/FillInformation'
 import Rooms from '../pages/Rooms'
 
 const publicRoutes: IRoute[] = [
-    {
-        path: '/landingPage',
-        component: LandingPage,
-        name: 'LandingPage',
-        layout: null,
-    },
     {
         path: '/about',
         component: About,
@@ -29,6 +22,12 @@ const publicRoutes: IRoute[] = [
         path: '/login',
         component: Login,
         name: 'Login',
+        layout: null,
+    },
+    {
+        path: '/fillInformation',
+        component: FillInformation,
+        name: 'FillInformation',
         layout: null,
     },
 ]
