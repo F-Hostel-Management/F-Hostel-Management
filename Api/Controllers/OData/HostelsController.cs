@@ -1,5 +1,7 @@
-﻿using Domain.Constants;
+﻿using Api.Filters;
+using Domain.Constants;
 using Domain.Entities;
+using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
 using Infrastructure.Contexts;
@@ -42,6 +44,17 @@ public class HostelsController : BaseODataController<HostelEntity>
     {
         //var query = db.Hostels.Where(hostel => hostel.OwnerId.Equals(ownerId));
         var query = GetQuery();
+        return ApplyQuery(options, query);
+    }
+
+    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("{hostelId}/get-all-commitments")]
+    public IQueryable GetAllCommitmentsOfThisHostel
+        (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid hostelId)
+    {
+        var query = db.Commitments.Where(commitment =>
+                commitment.HostelId.Equals(hostelId));
         return ApplyQuery(options, query);
     }
 }

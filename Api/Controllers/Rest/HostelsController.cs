@@ -47,7 +47,7 @@ public class HostelsController : BaseRestController
         return Ok(target.ImgPath);
     }
 
-    [ServiceFilter(typeof(ValidateManagementFilter))]
+/*    [ServiceFilter(typeof(ValidateManagementFilter))]
     [HttpGet("{hostelId}")]
     public async Task<IActionResult> GetHostelById([FromRoute] Guid hostelId)
     {
@@ -61,7 +61,7 @@ public class HostelsController : BaseRestController
     {
         var rooms = await _roomRepository.WhereAsync(room => room.HostelId.Equals(hostelId));
         return Ok(rooms);
-    }
+    }*/
 
 
 }
