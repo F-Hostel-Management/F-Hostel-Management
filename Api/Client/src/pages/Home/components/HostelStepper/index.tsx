@@ -27,17 +27,18 @@ const HostelStepper: FC<IHostelStepperProps> = ({
             component: (
                 <HostelForm
                     values={values}
-                    setValues={setValues}
                     handleInputChange={handleInputChange}
                 />
             ),
-            handleNext: () => alert('Step 1'),
+            handleNext: () => {},
             action: 'Next',
         },
         {
             name: 'Upload Hostel Image',
-            component: <UploadHostelImage />,
-            handleNext: () => alert('Step 2'),
+            component: (
+                <UploadHostelImage values={values} setValues={setValues} />
+            ),
+            handleNext: handleSubmit,
             action: 'Create',
         },
     ]

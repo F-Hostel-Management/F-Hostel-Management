@@ -1,6 +1,6 @@
 import { IHostel } from '../interface/IHostel'
 import { ODataCaller } from '../utils/ODataCaller'
-
+import { RestCaller } from '../utils/RestCaller'
 const { createBuilder, get } = ODataCaller
 
 const getListHostel = async () => {
@@ -25,4 +25,11 @@ const getHostelById = async (hostelId = '') => {
     return await get(`./Hostels/${hostelId}`, builder)
 }
 
-export { getListHostel, getHostelById }
+const createHostel = async (data = {}) => {
+    return await RestCaller.post('Hostels/create-hostel', data)
+}
+
+const uploadImage = async (data = {}) => {
+    return await RestCaller.post('Hostels/upload-hostel-image', data)
+}
+export { getListHostel, getHostelById, createHostel, uploadImage }

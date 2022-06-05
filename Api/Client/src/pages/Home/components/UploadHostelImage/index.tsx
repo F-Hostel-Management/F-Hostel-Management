@@ -1,5 +1,5 @@
 import { Button, Card, CardMedia } from '@mui/material'
-import React, { FC, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction } from 'react'
 import * as Styled from './styles'
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
 import { styled } from '@mui/material/styles'
@@ -8,13 +8,17 @@ const Input = styled('input')({
     display: 'none',
 })
 
-interface IUploadHostelImageProps {}
+interface IUploadHostelImageProps {
+    values: Record<string, any>
+    setValues: Dispatch<SetStateAction<any>>
+}
 
-const UploadHostelImage: FC<IUploadHostelImageProps> = () => {
-    const [image, setImage] = useState<string>()
-
+const UploadHostelImage: FC<IUploadHostelImageProps> = ({
+    values,
+    setValues,
+}) => {
     const handleChooseImageHostel = (e: any) => {
-        setImage(URL.createObjectURL(e.target.files[0]))
+        setValues({ ...values, image: URL.createObjectURL(e.target.files[0]) })
     }
     return (
         <Styled.Wrapper>
@@ -22,7 +26,7 @@ const UploadHostelImage: FC<IUploadHostelImageProps> = () => {
                 <CardMedia
                     component="img"
                     height="300"
-                    image={image || defaultImage}
+                    image={values?.image || defaultImage}
                     alt="Hostel Image"
                 />
             </Card>

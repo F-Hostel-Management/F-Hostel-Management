@@ -1,23 +1,14 @@
-import React, { FC } from 'react'
+import React, { Dispatch, FC, SetStateAction } from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { IField } from '../../../../interface/IField'
 import * as Styled from './styles'
-import { styled } from '@mui/material/styles'
-const Input = styled('input')({
-    display: 'none',
-})
 
 interface IHostelFormProps {
-    values: any
-    setValues: any
-    handleInputChange: any
+    values: Record<string, any>
+    handleInputChange: Dispatch<SetStateAction<any>>
 }
 
-const HostelForm: FC<IHostelFormProps> = ({
-    values,
-    setValues,
-    handleInputChange,
-}) => {
+const HostelForm: FC<IHostelFormProps> = ({ values, handleInputChange }) => {
     const fields: IField[] = [
         {
             label: 'Name',
@@ -37,23 +28,46 @@ const HostelForm: FC<IHostelFormProps> = ({
             type: 'number',
             required: true,
         },
+        {
+            label: 'Hostel Category Id',
+            name: 'hostelCategoryId',
+            type: 'string',
+            required: true,
+        },
     ]
 
     return (
         <Styled.Wrapper>
-            {fields.slice(0, 3).map((field) => (
-                <InputField
-                    key={field.name}
-                    label={field.label}
-                    name={field.name}
-                    value={values[field.name]}
-                    type={field.type}
-                    required={field.required}
-                    disabled={field.disabled}
-                    endAdornment={field.endAdornment}
-                    onChange={handleInputChange}
-                />
-            ))}
+            <Styled.Side>
+                {fields.slice(0, 2).map((field) => (
+                    <InputField
+                        key={field.name}
+                        label={field.label}
+                        name={field.name}
+                        value={values[field.name]}
+                        type={field.type}
+                        required={field.required}
+                        disabled={field.disabled}
+                        endAdornment={field.endAdornment}
+                        onChange={handleInputChange}
+                    />
+                ))}
+            </Styled.Side>
+            <Styled.Side>
+                {fields.slice(2, 4).map((field) => (
+                    <InputField
+                        key={field.name}
+                        label={field.label}
+                        name={field.name}
+                        value={values[field.name]}
+                        type={field.type}
+                        required={field.required}
+                        disabled={field.disabled}
+                        endAdornment={field.endAdornment}
+                        onChange={handleInputChange}
+                    />
+                ))}
+            </Styled.Side>
         </Styled.Wrapper>
     )
 }
