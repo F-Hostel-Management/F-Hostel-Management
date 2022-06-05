@@ -1,5 +1,5 @@
-﻿using Domain.Constants;
-using Domain.Entities.Room;
+﻿using Domain.Entities.Room;
+using Domain.Enums;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.OData.Query;
 
 namespace Api.Controllers.OData;
 
-[Authorize]
+//[Authorize]
 public class RoomsController : BaseODataController<RoomEntity>
 {
     public RoomsController(ApplicationDbContext db) : base(db)
@@ -15,12 +15,13 @@ public class RoomsController : BaseODataController<RoomEntity>
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("{roomId}")]
-    public IQueryable GetRoomDetails
-    (ODataQueryOptions<RoomEntity> options, [FromRoute] Guid roomId)
+    [Authorize(Roles = nameof(Role.Tenant))]
+    [HttpGet()]
+    public IQueryable GetRoomsForTenant(ODataQueryOptions<RoomEntity> options)
     {
-        var query = db.Rooms.Where(r => r.Id.Equals(roomId));
+        var query = db.Rooms.Where(room =>
+                                   room.RoomTenants.Any(t =>
+                                                        t.TenantId.Equals(CurrentUserId)));
         return ApplyQuery(options, query);
     }
-
 }

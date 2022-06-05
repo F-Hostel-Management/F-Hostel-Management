@@ -28,6 +28,7 @@ public class BaseODataController<T> : ODataController where T : class
         this.db = db;
     }
     protected UserEntity CurrentUser => db.Users.FirstOrDefault(e => e.Id.Equals(GetUserID()));
+    protected Guid CurrentUserId => GetUserID();
 
     protected Guid GetUserID()
     {

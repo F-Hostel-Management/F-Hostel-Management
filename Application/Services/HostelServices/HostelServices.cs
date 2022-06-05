@@ -32,6 +32,15 @@ public class HostelServices : IHostelServices
             throw new ApiException($"Hostel not found", StatusCodes.Status404NotFound);
     }
 
+    public async Task<HostelEntity> GetHostel(Guid hostelId)
+    {
+        HostelEntity hostel = await _hostelRepository
+             .FirstOrDefaultAsync(hostel => hostel.Id.Equals(hostelId));
+
+        return hostel ??
+            throw new ApiException($"Hostel not found", StatusCodes.Status404NotFound);
+    }
+
     public async Task<bool> IsHostelManagedBy(Guid hostelID, Guid userID)
     {
        var list = await _hostelRepository.WhereAsync(e => 
@@ -43,10 +52,14 @@ public class HostelServices : IHostelServices
 
     public async Task<bool> IsHostelManagedBy(HostelEntity hostel, Guid userId)
     {
+        if (hostel.OwnerId.Equals(userId))
+        {
+            return true;
+        }
         var manager = await _hostelManagementRepository.FirstOrDefaultAsync(e =>
                         e.ManagerId.Equals(userId) && e.HostelId.Equals(hostel.Id));
 
-        return hostel.OwnerId.Equals(userId) || manager != null;
+        return manager != null;
     }
 
     public async Task<HostelEntity> UploadHostelImage(HostelEntity hostel, IFormFile image)
