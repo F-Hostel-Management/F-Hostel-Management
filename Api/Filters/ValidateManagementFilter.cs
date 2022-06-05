@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using AutoWrapper.Extensions;
 using AutoWrapper.Wrappers;
 using Domain.Entities.Room;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -41,7 +42,7 @@ public class ValidateManagementFilter : IAsyncActionFilter
         bool isManagedByCurrentUser = await _hostelServices.IsHostelManagedBy(hostelId, userID);
         if (!isManagedByCurrentUser)
         {
-            throw new ApiException("Forbidden", StatusCodes.Status403Forbidden);
+            throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
         }
         await next();
     }

@@ -10,6 +10,7 @@ using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Entities.Ticket;
 using Domain.Entities.User;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -22,6 +23,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(HostelManagementsEntityTypeConfiguration).Assembly);
+        modelBuilder.AddIsDeletedQueryFilter();
     }
 
     public DbSet<UserEntity> Users { get; set; }

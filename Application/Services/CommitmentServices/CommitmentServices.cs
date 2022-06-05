@@ -39,15 +39,11 @@ public class CommitmentServices : ICommitmentServices
            throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
     }
 
-    public async Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status)
+    public async Task<IList<CommitmentEntity>> GetCommitmentForTenant(Guid roomId, Guid tenantId)
     {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com =>
-            com.Id.Equals(Id)
-            && com.Status.Equals(status.ToString())
-            );
-        return com ??
-            throw new ApiException("Commitment Not Found", StatusCodes.Status404NotFound);
+        var coms = await _commitmentRepository.WhereAsync(com =>
+            com.RoomId.Equals(roomId) && com.TenantId.Equals(tenantId));
+        return coms;
     }
 
     public async Task ApprovedCommitment(CommitmentEntity commitment)
@@ -99,12 +95,14 @@ public class CommitmentServices : ICommitmentServices
         await _commitmentRepository.UpdateAsync(updatedCommitment);
     }
 
-    public void ValidateTenant(CommitmentEntity commitment, Guid TenantId)
+    public async Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status)
     {
-        bool isValid = commitment.TenantId.Equals(TenantId);
-        if (!isValid)
-        {
-            throw new ApiException("Unauthorized", StatusCodes.Status401Unauthorized);
-        }
+        CommitmentEntity com = await _commitmentRepository
+            .FirstOrDefaultAsync(com =>
+            com.Id.Equals(Id)
+            && com.Status.Equals(status.ToString())
+            );
+        return com ??
+            throw new ApiException("Commitment Not Found", StatusCodes.Status404NotFound);
     }
 }

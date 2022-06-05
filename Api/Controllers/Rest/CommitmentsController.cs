@@ -160,17 +160,4 @@ public class CommitmentsController : BaseRestController
         return Ok();
     }
 
-    // get commitment details for tenant
-    [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpGet("{comId}/get-commitment-details/{tenantId}")]
-    public async Task<IActionResult> GetCommitmentDetailsForTenant
-        ([FromRoute] Guid comId)
-    {
-        CommitmentEntity com = await _commitmentServices.GetCommitment(comId);
-
-        _commitmentServices.ValidateTenant(com, CurrentUserID);
-
-        return Ok(com);
-    }
-
 }
