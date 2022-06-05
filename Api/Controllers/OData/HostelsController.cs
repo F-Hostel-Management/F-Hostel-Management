@@ -1,5 +1,7 @@
-﻿using Domain.Constants;
+﻿using Api.Filters;
+using Domain.Constants;
 using Domain.Entities;
+using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
 using Infrastructure.Contexts;
@@ -37,27 +39,22 @@ public class HostelsController : BaseODataController<HostelEntity>
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("{hostelId}")]
-    public IQueryable GetHostelById(ODataQueryOptions<HostelEntity> options, Guid hostelId)
-    {
-        var query = db.Hostels.Where(hostel => hostel.Id.Equals(hostelId));
-        return ApplyQuery(options, query);
-    }
-
-    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet()]
-    public IQueryable GetAllHostelOfOwner(ODataQueryOptions<HostelEntity> options)
+    public IQueryable GetAllHostelByPolicy(ODataQueryOptions<HostelEntity> options)
     {
         //var query = db.Hostels.Where(hostel => hostel.OwnerId.Equals(ownerId));
         var query = GetQuery();
         return ApplyQuery(options, query);
     }
 
+    [ServiceFilter(typeof(ValidateManagementFilter))]
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("get-rooms-of-hostel/{hostelId}/rooms")]
-    public IQueryable GetAllRoomsOfHostel(ODataQueryOptions<RoomEntity> options, Guid hostelId)
+    [HttpGet("{hostelId}/get-all-commitments")]
+    public IQueryable GetAllCommitmentsOfThisHostel
+        (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid hostelId)
     {
-        var query = db.Rooms.Where(room => room.HostelId.Equals(hostelId));
+        var query = db.Commitments.Where(commitment =>
+                commitment.HostelId.Equals(hostelId));
         return ApplyQuery(options, query);
     }
 }

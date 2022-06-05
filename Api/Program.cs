@@ -1,16 +1,14 @@
-using System.Reflection;
-using Api.Services;
-using Microsoft.OpenApi.Models;
-using Domain.Constants;
-using System.Security.Claims;
-using Domain.Enums;
 using Api.Configurations;
-using Microsoft.AspNetCore.OData;
-using System.Text.Json;
+using Api.Filters;
 using Application.AppConfig;
 using AutoWrapper;
-using Api.UserFeatures.Attributes;
+using Domain.Constants;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -29,7 +27,7 @@ var configuration = builder.Configuration;
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddOData();
-
+    services.AddFilters();
 
 
 
