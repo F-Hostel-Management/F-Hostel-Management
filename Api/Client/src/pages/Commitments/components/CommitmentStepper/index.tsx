@@ -4,6 +4,7 @@ import Step2 from './Step2'
 import Step3 from './Step3'
 import { rooms } from '../../../../utils/MockData'
 import StepByStep from '../../../../components/StepByStep'
+import { IStepper } from '../../../../interface/IStepper'
 
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
@@ -28,7 +29,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     hostelInfo,
     setHostelInfo,
 }) => {
-    const steps = [
+    const steps: IStepper[] = [
         {
             name: 'Terms',
             component: (
@@ -43,6 +44,8 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     setHostelInfo={setHostelInfo}
                 />
             ),
+            handleNext: () => alert('Step 1'),
+            action: 'Next',
         },
         {
             name: 'Commitment',
@@ -56,10 +59,14 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     compensation={values?.compensation}
                 />
             ),
+            handleNext: () => alert('Step 2'),
+            action: 'Create',
         },
         {
             name: 'QR code',
             component: <Step3 />,
+            handleNext: () => alert('Step 3'),
+            action: 'Confirm',
         },
     ]
 
