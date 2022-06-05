@@ -24,7 +24,7 @@ const Rooms: FC<IRoomsProps> = () => {
 
     const columns: GridColDef[] = [
         createColumn('id', 'Code', 50),
-        createColumn('roomNumber', 'Room Number', 120),
+        createColumn('roomNumber', 'Room Name', 120),
         createColumn('type', 'Type', 100),
         createColumn('numberOfBathRoom', 'BathRoom', 100),
         createColumn('numberOfToilet', 'Toilet', 100),
