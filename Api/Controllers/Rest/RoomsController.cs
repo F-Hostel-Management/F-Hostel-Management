@@ -13,11 +13,14 @@ public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
     private readonly IHostelServices _hostelServices;
+    private readonly ICommitmentServices _commitmentServices;
     public RoomsController(
         IGenericRepository<RoomEntity> roomsRepository,
+        ICommitmentServices commitmentServices,
         IHostelServices hostelServices)
     {
         _roomsRepository = roomsRepository;
+        _commitmentServices = commitmentServices;
         _hostelServices = hostelServices;
     }
 
@@ -50,5 +53,14 @@ public class RoomsController : BaseRestController
 
         await _roomsRepository.CreateRangeAsync(rooms);
         return Ok();
+    }
+
+    [Authorize(Roles = nameof(Role.Tenant))]
+    [HttpGet("{roomId}/get-list-commitment-of-room-for-tenant")]
+    public async Task<IActionResult> GetCommitmentsForTenant
+    ([FromRoute] Guid roomId)
+    {
+        var coms = await _commitmentServices.GetCommitmentForTenant(roomId, CurrentUserID);
+        return Ok(coms);
     }
 }

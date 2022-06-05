@@ -1,4 +1,7 @@
-﻿using Domain.Entities.Room;
+﻿using Api.Filters;
+using Domain.Constants;
+using Domain.Entities.Commitment;
+using Domain.Entities.Room;
 using Domain.Enums;
 using Infrastructure.Contexts;
 using Microsoft.AspNetCore.Authorization;
@@ -23,5 +26,18 @@ public class RoomsController : BaseODataController<RoomEntity>
                                    room.RoomTenants.Any(t =>
                                                         t.TenantId.Equals(CurrentUserId)));
         return ApplyQuery(options, query);
+    }
+
+    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpGet("{roomId}/get-all-commitments")]
+    public IQueryable GetCommitmentsForRoom
+        (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid roomId)
+    {
+        var query = db.Commitments.Where(commitment =>
+                                         commitment.RoomId.Equals(roomId));
+        return ApplyQuery(options, query);
+
     }
 }
