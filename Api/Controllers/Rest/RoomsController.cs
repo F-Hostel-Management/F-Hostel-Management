@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
 using Domain.Entities.Room;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,5 +51,4 @@ public class RoomsController : BaseRestController
         await _roomsRepository.CreateRangeAsync(rooms);
         return Ok();
     }
-
 }
