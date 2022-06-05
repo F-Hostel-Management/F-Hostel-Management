@@ -10,6 +10,7 @@ interface IFormDialogProps {
     handleCloseDialog: () => void
     handleSubmit: () => void
     children: any
+    [x: string | number | symbol]: unknown
 }
 
 const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
@@ -19,12 +20,14 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
     handleCloseDialog,
     handleSubmit,
     children,
+    ...others
 }) => {
     return (
         <DialogCustom
             title={title}
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
+            {...others}
         >
             <form onSubmit={handleSubmit}>
                 <div style={{ paddingBottom: '16px' }}>{children}</div>
