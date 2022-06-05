@@ -44,7 +44,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
                             startIcon={<AddCircleIcon />}
                             onClick={handleOpenCreateHostel}
                         >
-                            CREATE ROOM
+                            CREATE HOSTEL
                         </Button>
                     )}
                 </Styled.ButtonWrapper>

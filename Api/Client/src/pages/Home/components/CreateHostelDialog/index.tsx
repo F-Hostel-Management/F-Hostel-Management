@@ -1,8 +1,8 @@
 import * as React from 'react'
-import FormDialog from '../../../../components/DialogCustom/FormDialog'
-import HostelForm from '../HostelForm'
 import { IHostelValues } from '../../../../interface/IHostel'
 import { useForm } from '../../../../hooks/useForm'
+import HostelStepper from '../HostelStepper'
+import DialogCustom from '../../../../components/DialogCustom'
 
 interface ICreateHostelDialogProps {
     openDialog: boolean
@@ -19,7 +19,7 @@ const CreateHostelDialog: React.FunctionComponent<ICreateHostelDialogProps> = ({
         numOfRooms: 0,
         hostelCategoryId: '',
         ownerId: '',
-        imageSrc: '',
+        imgPath: '',
     }
 
     const { values, setValues, handleInputChange, resetForm } =
@@ -27,19 +27,21 @@ const CreateHostelDialog: React.FunctionComponent<ICreateHostelDialogProps> = ({
 
     const handleSubmit = () => {}
     return (
-        <FormDialog
+        <DialogCustom
             title="Create Hostel"
-            action="Create"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
-            handleSubmit={handleSubmit}
+            maxWidth="lg"
         >
-            <HostelForm
+            <HostelStepper
+                handleCloseDialog={handleCloseDialog}
                 values={values}
                 setValues={setValues}
                 handleInputChange={handleInputChange}
+                resetForm={resetForm}
+                handleSubmit={handleSubmit}
             />
-        </FormDialog>
+        </DialogCustom>
     )
 }
 
