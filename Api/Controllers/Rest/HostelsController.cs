@@ -51,7 +51,7 @@ public class HostelsController : BaseRestController
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [ServiceFilter(typeof(ValidateManagementFilter))]
     [HttpGet("get-all-rooms/{hostelId}")]
-    public async Task<IActionResult> GetRooms([FromRoute] Guid hostelId)
+    public async Task<IActionResult> GetRoomsOfHostel([FromRoute] Guid hostelId)
     {
         var rooms = await _roomRepository.WhereAsync(room => room.HostelId.Equals(hostelId));
         return Ok(rooms);
