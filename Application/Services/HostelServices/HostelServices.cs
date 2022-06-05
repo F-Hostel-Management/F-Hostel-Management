@@ -32,6 +32,15 @@ public class HostelServices : IHostelServices
             throw new ApiException($"Hostel not found", StatusCodes.Status404NotFound);
     }
 
+    public async Task<HostelEntity> GetHostel(Guid hostelId)
+    {
+        HostelEntity hostel = await _hostelRepository
+             .FirstOrDefaultAsync(hostel => hostel.Id.Equals(hostelId));
+
+        return hostel ??
+            throw new ApiException($"Hostel not found", StatusCodes.Status404NotFound);
+    }
+
     public async Task<bool> IsHostelManagedBy(Guid hostelID, Guid userID)
     {
        var list = await _hostelRepository.WhereAsync(e => 

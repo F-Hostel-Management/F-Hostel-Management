@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-
+[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
 public class HostelsController : BaseRestController
 {
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
@@ -36,7 +36,6 @@ public class HostelsController : BaseRestController
         return Ok(hostel);
     }
 
-    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
     {
@@ -48,7 +47,14 @@ public class HostelsController : BaseRestController
         return Ok(target.ImgPath);
     }
 
-    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [HttpGet("{hostelId}")]
+    public async Task<IActionResult> GetHostelById([FromRoute] Guid hostelId)
+    {
+        var hostel = await _hostelService.GetHostel(hostelId);
+        return Ok(hostel);
+    }
+
     [ServiceFilter(typeof(ValidateManagementFilter))]
     [HttpGet("get-all-rooms/{hostelId}")]
     public async Task<IActionResult> GetRoomsOfHostel([FromRoute] Guid hostelId)
@@ -56,4 +62,6 @@ public class HostelsController : BaseRestController
         var rooms = await _roomRepository.WhereAsync(room => room.HostelId.Equals(hostelId));
         return Ok(rooms);
     }
+
+
 }
