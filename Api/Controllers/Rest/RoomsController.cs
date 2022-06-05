@@ -51,4 +51,7 @@ public class RoomsController : BaseRestController
         return Ok();
     }
 
+/*    [Authorize]
+    [HttpGet()]*/
+
 }

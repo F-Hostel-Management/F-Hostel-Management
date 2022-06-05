@@ -37,27 +37,11 @@ public class HostelsController : BaseODataController<HostelEntity>
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("{hostelId}")]
-    public IQueryable GetHostelById(ODataQueryOptions<HostelEntity> options, Guid hostelId)
-    {
-        var query = db.Hostels.Where(hostel => hostel.Id.Equals(hostelId));
-        return ApplyQuery(options, query);
-    }
-
-    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet()]
-    public IQueryable GetAllHostelOfOwner(ODataQueryOptions<HostelEntity> options)
+    public IQueryable GetAllHostelByPolicy(ODataQueryOptions<HostelEntity> options)
     {
         //var query = db.Hostels.Where(hostel => hostel.OwnerId.Equals(ownerId));
         var query = GetQuery();
-        return ApplyQuery(options, query);
-    }
-
-    [ApiExplorerSettings(IgnoreApi = true)]
-    [HttpGet("get-rooms-of-hostel/{hostelId}/rooms")]
-    public IQueryable GetAllRoomsOfHostel(ODataQueryOptions<RoomEntity> options, Guid hostelId)
-    {
-        var query = db.Rooms.Where(room => room.HostelId.Equals(hostelId));
         return ApplyQuery(options, query);
     }
 }
