@@ -10,7 +10,7 @@ namespace Application.Interfaces.IRepository;
 public interface IGenericRepository<T> where T : BaseEntity
 {
     Task CreateAsync(T entity);
-    Task CreateRangeAsync(T[] entities);
+    Task CreateRangeAsync(IEnumerable<T> entities);
     Task<List<T>> ListAsync();
     Task<T> FindByIdAsync(Guid id);
     Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties);

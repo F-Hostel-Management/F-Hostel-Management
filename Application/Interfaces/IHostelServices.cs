@@ -10,4 +10,5 @@ public interface IHostelServices
     Task<HostelEntity> UploadHostelImage(HostelEntity hostel, IFormFile image);
 
     Task<bool> IsHostelManagedBy(Guid hostelID, Guid userID);
+    Task<bool> IsHostelManagedBy(HostelEntity hostel, Guid userId);
 }

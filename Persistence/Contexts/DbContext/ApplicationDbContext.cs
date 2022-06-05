@@ -39,7 +39,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<Notification_Room> RoomNotifications { get; set; }
     public DbSet<TicketEntity> Tickets { get; set; }
-    public DbSet<TicketType> TicketTypes { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<CommitmentEntity> Commitments { get; set; }
     public DbSet<JoiningCode> JoiningCodes { get; set; }
