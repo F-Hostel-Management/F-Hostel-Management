@@ -70,12 +70,6 @@ const privateRoutes: IRoute[] = [
         },
     },
     {
-        path: '/fillInformation',
-        component: FillInformation,
-        name: 'FillInformation',
-        layout: null,
-    },
-    {
         path: '/home/rooms',
         component: Rooms,
         name: 'Rooms',
