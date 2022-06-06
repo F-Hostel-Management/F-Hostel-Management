@@ -10,11 +10,12 @@ namespace Application.Services.RoomServices;
 public class RoomServices : IRoomServices
 {
     private readonly IGenericRepository<RoomEntity> _roomRepository;
+    private readonly IHostelServices _hostelServices;
     public RoomServices(
-        IGenericRepository<RoomEntity> roomRepository
-        )
+        IGenericRepository<RoomEntity> roomRepository, IHostelServices hostelServices)
     {
         _roomRepository = roomRepository;
+        _hostelServices = hostelServices;
     }
     public async Task Rent(RoomEntity room)
     {
@@ -42,5 +43,14 @@ public class RoomServices : IRoomServices
 
         return room ??
             throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+    }
+
+    public async Task<bool> RoomManagedBy(Guid roomId, Guid userId)
+    {
+        var room = await _roomRepository.FindByIdAsync(roomId);
+        if (room == null) throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+
+        var hostelId = room.HostelId;
+        return await _hostelServices.IsHostelManagedBy(hostelId, userId);
     }
 }
