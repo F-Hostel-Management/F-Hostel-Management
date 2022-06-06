@@ -53,4 +53,12 @@ public class RoomServices : IRoomServices
         var hostelId = room.HostelId;
         return await _hostelServices.IsHostelManagedBy(hostelId, userId);
     }
+
+    public async Task<bool> HasTenant(Guid roomId, Guid userId)
+    {
+        var room = (await _roomRepository.WhereAsync(room => room.Id == roomId, new string[] {"RoomTenants"})).FirstOrDefault();
+        if (room == null) throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+
+        return room.RoomTenants.Any(roomTenant => roomTenant.TenantId == userId);
+    }
 }
