@@ -7,4 +7,5 @@ export interface IInformation {
     gender: string
     phoneNo: string
     avatar: File | null
+    email: string
 }

@@ -3,7 +3,6 @@ import { Grid, Paper } from '@mui/material'
 
 export const ProfilePaper = styled(Paper)`
     height: 100%;
-    width: 80%;
     overflow-y: auto;
 `
 

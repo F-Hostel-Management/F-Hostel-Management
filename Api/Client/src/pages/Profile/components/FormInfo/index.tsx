@@ -40,6 +40,13 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info }) => {
                     onChange={handleChange}
                 />
                 <InputField
+                    label="Email"
+                    value={info.email}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                <InputField
                     label="Birthday"
                     value={info.birthDate}
                     onChange={handleChange}
