@@ -656,6 +656,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             role: ROLES.findIndex((r) => r.name === role),
             name: information.fullName,
             address: information.address,
+            cardNumber: information.cardNumber,
             dateOfBirth: new Date(information.birthDate),
             gender: GENDERS.findIndex(
                 (gender) => information.gender === gender

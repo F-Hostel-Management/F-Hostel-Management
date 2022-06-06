@@ -6,7 +6,9 @@ export interface IUser {
     name: string
     email: string
     phone: string
+    cardNumber: string
     taxCode: string
+    dateOfBirth: string
     gender: number
     organization: string
     avatarUrl: string

@@ -45,6 +45,9 @@ public class UserEntity : BaseEntity
     public Gender Gender { get; set; }
 
     public string TaxCode { get; set; }
+    public string CardNumber { get; set; }
+    public string Address { get; set; }
+    
     public string OrganizationCode { get; set; }
     public string Avatar { get; set; }
     public string FrontIdentification { get; set; }
