@@ -8,8 +8,8 @@ namespace Api.Configurations
     {
         private static class NonSpaPath
         {
-            public const string Api = "/api";
-            public const string OData = "/odata";
+            public const string Api = "/server/api";
+            public const string OData = "/server/odata";
         }
 
         private static string[] GetNonSpaPaths()
