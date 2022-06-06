@@ -1,10 +1,37 @@
 import { Paper } from '@mui/material'
 import React, { FC } from 'react'
-import * as ReactDOMServer from 'react-dom/server'
+import { IHostel } from '../../../../interface/IHostel'
+import { IRoom } from '../../../../interface/IRoom'
+import { IUser } from '../../../../interface/IUser'
+import { formatDate, getDate } from '../../../../utils/FormatDate'
 
-interface ICommitmentDetailsProps {}
+interface ICommitmentDetailsProps {
+    createdDate: string
+    startDate: string
+    endDate: string
+    overdueDays: number
+    compensation: number
+    owner?: IUser
+    tenant?: IUser
+    hostelInfo?: IHostel
+    roomInfo?: IRoom
+}
 
-const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
+const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
+    createdDate,
+    startDate,
+    endDate,
+    overdueDays,
+    compensation,
+    owner,
+    tenant,
+    hostelInfo,
+    roomInfo,
+}) => {
+    const [createDay, createMonth, createYear] = getDate(createdDate)
+    const [startDay, startMonth, startYear] = getDate(startDate)
+    const [endDay, endMonth, endYear] = getDate(endDate)
+
     const content = (
         <div id="divToPrint">
             <div style={{ textAlign: 'center' }}>
@@ -109,10 +136,7 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
             <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
-                        H&ocirc;m nay, ng&agrave;y &hellip;&hellip; th&aacute;ng
-                        &hellip;&hellip; năm &hellip;&hellip;&hellip;., tại địa
-                        chỉ
-                        &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;...............................................
+                        {`Hôm nay, ngày ${createDay} tháng ${createMonth} năm ${createYear}, tại địa chỉ:  ${hostelInfo?.address}`}
                     </span>
                 </span>
             </div>
@@ -141,11 +165,13 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
-                            &Ocirc;ng (B&agrave;){' '}
+                            &Ocirc;ng (B&agrave;):
                         </span>
                     </strong>
+                    {` ${owner?.name}`}
                     <span style={{ fontSize: '10.5pt' }}>
-                        {}. Năm sinh: {}
+                        . Ngày sinh:{' '}
+                        {` ${formatDate(new Date(owner?.dateOfBirth || ''))}`}
                     </span>
                 </span>
             </div>
@@ -163,13 +189,17 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
 
             <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
-                    <span style={{ fontSize: '10.5pt' }}>Địa chỉ: {}</span>
+                    <span style={{ fontSize: '10.5pt' }}>
+                        Địa chỉ: {hostelInfo?.address}
+                    </span>
                 </span>
             </div>
 
             <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
-                    <span style={{ fontSize: '10.5pt' }}>Điện thoại: {}</span>
+                    <span style={{ fontSize: '10.5pt' }}>
+                        Điện thoại: {owner?.phone}
+                    </span>
                 </span>
             </div>
 
@@ -197,11 +227,11 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
-                            &Ocirc;ng (B&agrave;){' '}
+                            &Ocirc;ng (B&agrave;){` ${tenant?.name || ''}`}
                         </span>
                     </strong>
                     <span style={{ fontSize: '10.5pt' }}>
-                        {}.&nbsp; Năm sinh: {}.
+                        {}.&nbsp; Năm sinh: {tenant?.dateOfBirth || ''}.
                     </span>
                 </span>
             </div>
@@ -222,7 +252,9 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
 
             <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
-                    <span style={{ fontSize: '10.5pt' }}>Điện thoại: {}</span>
+                    <span style={{ fontSize: '10.5pt' }}>
+                        Điện thoại: {tenant?.phone || ''}
+                    </span>
                 </span>
             </div>
 
@@ -302,15 +334,27 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
             <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
-                        Ph&ograve;ng số: {}. Tổng diện t&iacute;ch sử dụng: {}{' '}
-                        m2
+                        Ph&ograve;ng: {roomInfo?.roomName}. Tổng diện
+                        t&iacute;ch sử dụng: {roomInfo?.area} m2, chiều dài:{' '}
+                        {roomInfo?.height}, chiều rộng: {roomInfo?.width}
+                    </span>
+                </span>
+            </div>
+            <div style={{ textAlign: 'justify' }}>
+                <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
+                    <span style={{ fontSize: '10.5pt' }}>
+                        Tiện ích: {roomInfo?.numOfDoors} cửa chính,{' '}
+                        {roomInfo?.numOfWindows} cửa sổ, {roomInfo?.numOfWCs}{' '}
+                        nhà vệ sinh, {roomInfo?.numOfBathRooms} phòng tắm.
                     </span>
                 </span>
             </div>
 
             <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
-                    <span style={{ fontSize: '10.5pt' }}>Địa chỉ: {}</span>
+                    <span style={{ fontSize: '10.5pt' }}>
+                        Địa chỉ: {hostelInfo?.address}
+                    </span>
                 </span>
             </div>
 
@@ -376,9 +420,9 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
             <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
-                        Từ ng&agrave;y {} th&aacute;ng {} năm {}&nbsp;đến hết
-                        ng&agrave;y {}
-                        &nbsp;th&aacute;ng {}&nbsp;năm {}
+                        Từ ng&agrave;y {startDay} th&aacute;ng {startMonth} năm{' '}
+                        {startYear}&nbsp;đến hết ng&agrave;y {endDay}
+                        &nbsp;th&aacute;ng {endMonth}&nbsp;năm {endYear}
                     </span>
                 </span>
             </div>
@@ -387,7 +431,7 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
-                            2. Gi&aacute; cho thu&ecirc;:{' '}
+                            2. Gi&aacute; cho thu&ecirc;:{` ${roomInfo?.price}`}
                         </span>
                     </strong>
                     <span style={{ fontSize: '10.5pt' }}>
@@ -397,12 +441,11 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                 </span>
             </div>
 
-            <div style={{ textAlign: 'justify' }}>
+            {/* <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>(Bằng chữ: {})</span>
                 </span>
-            </div>
-
+            </div> */}
             <div style={{ textAlign: 'justify' }}>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <em>
@@ -451,23 +494,26 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                 </span>
             </div>
 
-            <div style={{ textAlign: 'justify' }}>
-                <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
-                    <em>
+            {overdueDays && (
+                <div style={{ textAlign: 'justify' }}>
+                    <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
+                        <em>
+                            <span style={{ fontSize: '10.5pt' }}>
+                                - Kỳ thanh to&aacute;n:
+                            </span>
+                        </em>
+
                         <span style={{ fontSize: '10.5pt' }}>
-                            - Kỳ thanh to&aacute;n:
+                            {' '}
+                            trả {} th&aacute;ng/lần, lần đầu trả ngay sau khi
+                            k&yacute; Hợp đồng. Nộp tiền thanh to&aacute;n sử
+                            dụng ph&ograve;ng của th&aacute;ng sau v&agrave;o
+                            thời điểm kh&ocirc;ng qu&aacute; ng&agrave;y
+                            {` ${overdueDays}`} của th&aacute;ng trước liền kề.
                         </span>
-                    </em>
-                    <span style={{ fontSize: '10.5pt' }}>
-                        {' '}
-                        trả {} th&aacute;ng/lần, lần đầu trả ngay sau khi
-                        k&yacute; Hợp đồng. Nộp tiền thanh to&aacute;n sử dụng
-                        ph&ograve;ng của th&aacute;ng sau v&agrave;o thời điểm
-                        kh&ocirc;ng qu&aacute; ng&agrave;y &hellip;. của
-                        th&aacute;ng trước liền kề.
                     </span>
-                </span>
-            </div>
+                </div>
+            )}
 
             <div style={{ textAlign: 'justify' }}>&nbsp;</div>
 
@@ -785,15 +831,9 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                         kh&ocirc;ng đ&uacute;ng quy định của ph&aacute;p luật
                         hoặc kh&ocirc;ng đ&uacute;ng thỏa thuận trong Hợp đồng
                         n&agrave;y, B&ecirc;n B phải c&oacute; nghĩa vụ nộp phạt
-                        vi phạm cho B&ecirc;n A số tiền l&agrave;{' '}
-                        <strong>
-                            &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..
-                            đồng
-                        </strong>{' '}
-                        <em>
-                            (&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..
-                            đồng Việt Nam).
-                        </em>
+                        vi phạm cho B&ecirc;n A số tiền l&agrave;
+                        {` ${compensation} `}
+                        <strong>đồng</strong>{' '}
                     </span>
                 </span>
             </div>
@@ -900,17 +940,17 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
                     <span style={{ fontSize: '10.5pt' }}>
                         4. Hợp đồng cho thu&ecirc; ph&ograve;ng trọ n&agrave;y
                         c&oacute; hiệu lực kể từ ng&agrave;y k&yacute;. Hợp đồng
-                        gồm .........&nbsp;trang, 05 Điều khoản được lập
-                        th&agrave;nh ......... bản Tiếng Việt c&oacute;
-                        gi&aacute; trị ph&aacute;p l&yacute; như nhau, mỗi
-                        b&ecirc;n giữ ........... bản để thực hiện.
+                        gồm 4 trang, 05 Điều khoản được lập th&agrave;nh 2 bản
+                        Tiếng Việt c&oacute; gi&aacute; trị ph&aacute;p
+                        l&yacute; như nhau, mỗi b&ecirc;n giữ 1 bản để thực
+                        hiện.
                     </span>
                 </span>
             </div>
 
             <div>&nbsp;</div>
 
-            <table style={{ width: '525.0pt' }}>
+            <table style={{ width: '100%' }}>
                 <tbody>
                     <tr>
                         <td>
@@ -988,8 +1028,7 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = () => {
             <div>&nbsp;</div>
         </div>
     )
-    const html = ReactDOMServer.renderToStaticMarkup(content)
-    console.log('HTML: ', html)
+
     return (
         <Paper elevation={3} sx={{ padding: '16px 32px' }}>
             {content}

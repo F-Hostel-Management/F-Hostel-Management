@@ -1,10 +1,17 @@
-import React, { FC, ChangeEvent, Dispatch, SetStateAction } from 'react'
+import React, {
+    FC,
+    ChangeEvent,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useState,
+} from 'react'
 import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
-import { rooms } from '../../../../utils/MockData'
 import StepByStep from '../../../../components/StepByStep'
 import { IStepper } from '../../../../interface/IStepper'
+import { getListHostel, getRoomOfHostel } from '../../../../services/hostels'
 
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
@@ -12,10 +19,6 @@ interface ICommitmentStepperProps {
     setValues: Dispatch<SetStateAction<any>>
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
     resetForm: () => void
-    roomInfo: Record<string, any>[]
-    setRoomInfo: any
-    hostelInfo: Record<string, any>
-    setHostelInfo: any
 }
 
 const CommitmentStepper: FC<ICommitmentStepperProps> = ({
@@ -24,11 +27,28 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     setValues,
     handleInputChange,
     resetForm,
-    roomInfo,
-    setRoomInfo,
-    hostelInfo,
-    setHostelInfo,
 }) => {
+    const [rooms, setRooms] = useState([])
+    const [hostels, setHostels] = useState([])
+    const [roomInfo, setRoomInfo] = useState<any | null>(null)
+    const [hostelInfo, setHostelInfo] = useState<any | null>(null)
+
+    useEffect(() => {
+        ;(async () => {
+            const hostelList = await getListHostel()
+            setHostelInfo(hostelList?.[0])
+            setHostels(hostelList)
+        })()
+    }, [])
+    useEffect(() => {
+        if (!hostelInfo) return
+        ;(async () => {
+            const roomList = await getRoomOfHostel(hostelInfo?.id)
+            setRoomInfo(roomList?.[0])
+            setRooms(roomList)
+        })()
+    }, [hostelInfo])
+
     const steps: IStepper[] = [
         {
             name: 'Terms',
@@ -42,9 +62,10 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     roomOptions={rooms}
                     hostelInfo={hostelInfo}
                     setHostelInfo={setHostelInfo}
+                    hostelOptions={hostels}
                 />
             ),
-            handleNext: () => alert('Step 1'),
+            handleNext: () => console.log('Values commit: ', values),
             action: 'Next',
         },
         {
@@ -52,11 +73,8 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
             component: (
                 <Step2
                     roomInfo={roomInfo}
-                    createDate={values?.createDate}
-                    startDate={values?.startDate}
-                    endDate={values?.endDate}
-                    overdueDays={values?.overdueDays}
-                    compensation={values?.compensation}
+                    values={values}
+                    hostelInfo={hostelInfo}
                 />
             ),
             handleNext: () => alert('Step 2'),
