@@ -11,7 +11,7 @@ import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
 import { useDispatch } from 'react-redux'
-import { setIsAuthenticated } from '../../slices/authSlice'
+import { doGetProfile } from '../../actions/doGetProfile'
 
 interface ILoginProps {}
 
@@ -31,7 +31,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
         const { isFirstTime } = result
         if (isFirstTime) return redirectFirstTimePage()
 
-        dispatch(setIsAuthenticated(true))
+        await doGetProfile()
     }
 
     const exchangeToken = async (

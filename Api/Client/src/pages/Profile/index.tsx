@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import * as Styled from './styles'
 
-import avatarDefault from '../../assets/images/Avatar.png'
+import avatarDefault from '../../assets/images/avatar.png'
 import { Grid, Typography } from '@mui/material'
 import FormInfo from './components/FormInfo'
 import { IInformation } from './interface'

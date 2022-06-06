@@ -32,6 +32,7 @@ import { IFirstTimeBody, IInformation } from './interfaces'
 import { GENDERS, ROLES, STEPS } from './constants'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../stores/reduxStore'
+import { doGetProfile } from '../../actions/doGetProfile'
 
 // Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
@@ -686,7 +687,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         )
 
         if (uploadRes.isError) return
-        navigate('/home')
+        await doGetProfile()
     }
 
     const handleNext = () => {

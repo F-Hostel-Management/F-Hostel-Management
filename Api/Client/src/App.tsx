@@ -16,7 +16,7 @@ import NotFound from './pages/NotFound'
 import { privateRoutes, publicRoutes } from './routes'
 import PrivateRoute from './routes/PrivateRouter'
 import PublicRoute from './routes/PublicRoute'
-import { setCurrentUser, setIsAuthenticated } from './slices/authSlice'
+import { setCurrentUser } from './slices/authSlice'
 import { RestCaller } from './utils/RestCaller'
 
 function App(): React.ReactElement {
@@ -25,11 +25,10 @@ function App(): React.ReactElement {
 
     useEffect(() => {
         const startup = async () => {
-            const response = await RestCaller.get('Users/info')
+            const response = await RestCaller.get('Users/info', false)
             setTimeout(() => setIsLoading(false), 2000)
 
-            if (!response || response.isError)
-                return dispatch(setIsAuthenticated(false))
+            if (!response || response.isError) return
 
             const result: IUser = response.result
             dispatch(setCurrentUser(result))
