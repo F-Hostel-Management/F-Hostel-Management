@@ -8,13 +8,10 @@ namespace Api.Filters;
 
 public class ValidateManagementHostelLevelFilter : IAsyncActionFilter
 {
-    private readonly ValidateManagementByRoomLevelFilter _roomLevelFilter;
     private readonly ValidateManagementFilter _vmFilter;
     public ValidateManagementHostelLevelFilter
-        (ValidateManagementByRoomLevelFilter roomLevelFilter,
-         ValidateManagementFilter vmFilter)
+        (ValidateManagementFilter vmFilter)
     {
-        _roomLevelFilter = roomLevelFilter;
         _vmFilter = vmFilter;
     }
 
@@ -25,34 +22,28 @@ public class ValidateManagementHostelLevelFilter : IAsyncActionFilter
 
         var routeData = context.RouteData;
         var hostelIdData = routeData.Values["hostelId"] as string;
-        
+
         if (Guid.TryParse(hostelIdData, out hostelId))
         {
             context.HttpContext.Items.Add("hostelId", hostelId);
             await _vmFilter.OnActionExecutionAsync(context, next);
+            await next();
         }
-        else
-        {
-            await _roomLevelFilter.OnActionExecutionAsync(context, next);
-        }
-        await next();
+        throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
     }
 }
 
 public class ValidateManagementByRoomLevelFilter : IAsyncActionFilter
 {
     private readonly IRoomServices _roomServices;
-    private readonly IHostelServices _hostelServices;
     private readonly ValidateManagementFilter _vmFilter;
 
 
     public ValidateManagementByRoomLevelFilter(
         IRoomServices roomServices,
-        IHostelServices hostelServices,
         ValidateManagementFilter vmFilter)
     {
         _roomServices = roomServices;
-        _hostelServices = hostelServices;
         _vmFilter = vmFilter;
     }
 
@@ -68,12 +59,11 @@ public class ValidateManagementByRoomLevelFilter : IAsyncActionFilter
             RoomEntity room = await _roomServices.GetRoom(roomId);
             context.HttpContext.Items.Add("hostelId", room.HostelId);
             await _vmFilter.OnActionExecutionAsync(context, next);
+            context.HttpContext.Items.Add("room", room);
+            await next();
         }
-        else
-        {
-            throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
-        }
-        await next();
+        throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
+
     }
 }
 
@@ -89,7 +79,7 @@ public class ValidateManagementFilter : IAsyncActionFilter
     {
         Guid userID = Guid.Parse(context.HttpContext
                       .User.Claims.FirstOrDefault(a => a.Type == "id").Value);
-        
+
         Guid hostelId = (Guid)context.HttpContext.Items["hostelId"];
         HostelEntity hostel = await _hostelServices.HostelManagedBy(hostelId, userID);
         context.HttpContext.Items.Add("hostel", hostel);
