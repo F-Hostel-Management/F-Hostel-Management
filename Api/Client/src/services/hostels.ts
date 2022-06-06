@@ -9,20 +9,57 @@ const getListHostel = async () => {
         'address',
         'name',
         'numOfRooms',
-        'imgPath'
+        'imgPath',
+        'ownerId'
     )
-    return await get('./Hostels/get-hostels-by-owner', builder)
+    const result = await get('Hostels', builder)
+    console.log('getListHostel: ', result)
+    return result
 }
 
-const getHostelById = async (hostelId = '') => {
-    const builder = createBuilder<IHostel>().select(
-        'id',
-        'address',
-        'name',
-        'numOfRooms',
-        'imgPath'
-    )
-    return await get(`./Hostels/${hostelId}`, builder)
+const getHostelById = async (hostelId: string) => {
+    const builder = ODataCaller.createBuilder<IHostel>()
+        .filter('id', (e) => e.equals(hostelId))
+        .select('id', 'address', 'name', 'numOfRooms', 'imgPath', 'ownerId')
+    const result = await get('Hostels/', builder)
+    console.log('getHostelById: ', result?.[0])
+    return result?.[0]
+}
+
+const getRoomOfHostel = async (hostelId: string) => {
+    const builder = createBuilder<IHostel>()
+        .filter('id', (e) => e.equals(hostelId))
+        .select('rooms')
+        .expand('rooms', (room) =>
+            room.select(
+                'id',
+                'roomName',
+                'roomTypeId',
+                'numOfWindows',
+                'numOfDoors',
+                'numOfBathRooms',
+                'numOfWCs',
+                'price',
+                'area',
+                'length',
+                'width',
+                'height',
+                'maximumPeople'
+            )
+        )
+    const result = await get('Hostels/', builder)
+    console.log('getRoomOfHostel: ', result?.[0].rooms)
+    return result?.[0].rooms
+}
+
+const getOwnerOfHostel = async (hostelId = '') => {
+    const builder = createBuilder<IHostel>()
+        .filter('id', (e) => e.equals(hostelId))
+        .select('owner')
+        .expand('owner', (owner) => owner.select())
+    const result = await get('Hostels/', builder)
+    console.log('getRoomOfHostel: ', result?.[0].owner)
+    return result?.[0].owner
 }
 
 const createHostel = async (data = {}) => {
@@ -32,4 +69,11 @@ const createHostel = async (data = {}) => {
 const uploadImage = async (data = {}) => {
     return await RestCaller.post('Hostels/upload-hostel-image', data)
 }
-export { getListHostel, getHostelById, createHostel, uploadImage }
+export {
+    getListHostel,
+    getHostelById,
+    createHostel,
+    uploadImage,
+    getRoomOfHostel,
+    getOwnerOfHostel,
+}
