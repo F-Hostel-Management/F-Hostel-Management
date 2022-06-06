@@ -7,6 +7,7 @@ import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
 import DialogCustom from '../../../../components/DialogCustom'
+import UpdateFacilityDialog from '../UpdateFacilityDialog'
 interface IActionButtonsProps {
     rowData: any
 }
@@ -74,12 +75,17 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
+                    maxWidth="sm"
                 >
                     <div style={{ minHeight: '100px' }}>
-                        <Typography variant="h3" mb={1}>
+                        <Typography
+                            variant="h6"
+                            mb={1}
+                            sx={{ fontWeight: '600' }}
+                        >
                             Are you sure ?
                         </Typography>
-                        <Typography variant="body1">
+                        <Typography variant="body2">
                             Do yo really want to delete this facility. This
                             process can not be undone.
                         </Typography>
@@ -87,13 +93,14 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                 </ConfirmDialog>
             )}
 
-            {/* {openUpdate && (
-                <UpdateCommitmentDialog
+            {openUpdate && (
+                <UpdateFacilityDialog
                     openDialog={openUpdate}
                     handleOpenDialog={handleOpenUpdate}
                     handleCloseDialog={handleCloseUpdate}
+                    rowData={rowData}
                 />
-            )} */}
+            )}
         </Fragment>
     )
 }
