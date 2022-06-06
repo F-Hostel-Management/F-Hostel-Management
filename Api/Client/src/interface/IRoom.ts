@@ -4,10 +4,10 @@ export interface IRoom {
     id?: string
     roomName?: string
     roomTypeId?: ERoomType
-    numberOfWindows?: number
-    numberOfDoors?: number
-    numberOfBathRooms?: number
-    numberOfWCs?: number
+    numOfWindows?: number
+    numOfDoors?: number
+    numOfBathRooms?: number
+    numOfWCs?: number
     price?: number
     area?: number
     length?: number

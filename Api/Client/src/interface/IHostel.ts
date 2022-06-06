@@ -1,4 +1,5 @@
 import { IRoom } from './IRoom'
+import { IUser } from './IUser'
 export interface IHostel {
     id?: string
     address?: string
@@ -8,6 +9,7 @@ export interface IHostel {
     hostelCategory?: any
     hostelManagements?: any
     ownerId?: string
+    owner?: IUser
     imgPath?: string
     rooms?: IRoom[]
     isDeleted?: boolean

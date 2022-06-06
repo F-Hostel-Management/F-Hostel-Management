@@ -27,7 +27,7 @@ export interface ICommitment {
 }
 
 export interface ICommitmentValues {
-    createDate: string
+    createdDate: string
     startDate: string
     endDate: string
     roomId: string
