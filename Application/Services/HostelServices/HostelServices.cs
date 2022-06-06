@@ -62,6 +62,17 @@ public class HostelServices : IHostelServices
         return manager != null;
     }
 
+    public async Task<HostelEntity> HostelManagedBy(Guid hostelID, Guid userID)
+    {
+        var hostel = (await _hostelRepository.WhereAsync(e =>
+             (e.HostelManagements.FirstOrDefault(e => e.ManagerId.Equals(userID)) != null ||
+              e.OwnerId.Equals(userID)) && e.Id.Equals(hostelID)
+             , "HostelManagements", "HostelCategory", "Owner", "Rooms", "Commitments")).First();
+
+        return hostel ??
+            throw new ApiException("Forbid", StatusCodes.Status403Forbidden);
+    }
+
     public async Task<HostelEntity> UploadHostelImage(HostelEntity hostel, IFormFile image)
     {
         if (!string.IsNullOrEmpty(hostel.ImgPath))

@@ -47,7 +47,7 @@ public class HostelsController : BaseODataController<HostelEntity>
         return ApplyQuery(options, query);
     }
 
-    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet("{hostelId}/get-all-commitments")]
     public IQueryable GetAllCommitmentsOfThisHostel
@@ -55,6 +55,7 @@ public class HostelsController : BaseODataController<HostelEntity>
     {
         var query = db.Commitments.Where(commitment =>
                 commitment.HostelId.Equals(hostelId));
+        //HostelEntity hostel = (HostelEntity)this.HttpContext.Items["hostel"];
         return ApplyQuery(options, query);
     }
 }
