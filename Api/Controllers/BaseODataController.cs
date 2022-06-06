@@ -14,8 +14,8 @@ using System.Linq.Dynamic.Core;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("odata/[controller]")]
-[AutoWrapIgnore]
+[Route("server/odata/[controller]")]
+// [AutoWrapIgnore]
 [Authorize]
 public class BaseODataController<T> : ODataController where T : class
 {
