@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button, DialogProps } from '@mui/material'
 import * as React from 'react'
 import DialogCustom from '..'
 import * as Styled from './styles'
@@ -10,6 +10,7 @@ interface IFormDialogProps {
     handleCloseDialog: () => void
     handleSubmit: () => void
     children: any
+    maxWidth?: DialogProps['maxWidth']
 }
 
 const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
@@ -19,12 +20,14 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
     handleCloseDialog,
     handleSubmit,
     children,
+    maxWidth = 'xl',
 }) => {
     return (
         <DialogCustom
             title={title}
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
+            maxWidth={maxWidth}
         >
             <form onSubmit={handleSubmit}>
                 <div style={{ paddingBottom: '16px' }}>{children}</div>

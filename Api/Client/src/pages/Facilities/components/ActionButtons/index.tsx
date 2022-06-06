@@ -80,7 +80,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             Are you sure ?
                         </Typography>
                         <Typography variant="body1">
-                            Do yo really want to delete this commitment. This
+                            Do yo really want to delete this facility. This
                             process can not be undone.
                         </Typography>
                     </div>

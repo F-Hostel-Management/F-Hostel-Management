@@ -7,6 +7,7 @@ import { IFacility } from '../../interface/IFacility'
 import { ERole } from '../../utils/enums'
 import { facilities, getData } from '../../utils/MockData'
 import ActionButtons from './components/ActionButtons'
+import CreateFacilityDialog from './components/CreateFacilityDialog'
 import ToolbarChildren from './components/ToolbarChildren'
 
 interface IFacilitieProps {}
@@ -20,6 +21,7 @@ const Facilities: FC<IFacilitieProps> = () => {
     const [rows, setRows] = useState<IFacility[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
+    const handleSubmit = () => {}
 
     const columns: GridColDef[] = [
         createColumn('id', 'Code', 70),
@@ -56,6 +58,14 @@ const Facilities: FC<IFacilitieProps> = () => {
                     ) : null
                 }
             />
+
+            {openCreate && (
+                <CreateFacilityDialog
+                    openDialog={openCreate}
+                    handleCloseDialog={handleCloseCreate}
+                    handleSubmit={handleSubmit}
+                />
+            )}
         </Fragment>
     )
 }
