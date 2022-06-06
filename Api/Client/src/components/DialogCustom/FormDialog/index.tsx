@@ -32,7 +32,12 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
             <form onSubmit={handleSubmit}>
                 <div style={{ paddingBottom: '16px' }}>{children}</div>
                 <Styled.GroupButton>
-                    <Button variant="contained" color="secondary" size="small">
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={handleCloseDialog}
+                    >
                         Cancel
                     </Button>
                     <Button variant="contained" color="primary" size="small">
