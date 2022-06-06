@@ -16,8 +16,8 @@ public class InvoiceEntity : BaseEntity
     /*navigation props*/
 
     // 1 tenant (paid) M invoice
-    public Guid TenantPaidId { get; set; }
-    public UserEntity TenantPaid { get; set; }
+    public Guid? TenantPaidId { get; set; }
+    public UserEntity? TenantPaid { get; set; }
 
 
     // 1 Manager (create) M Invoices (for) 1 Room
