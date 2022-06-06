@@ -20,6 +20,8 @@ import {
 
 import { sidebarItemList } from './sidebarItemList'
 import * as Styled from './styles'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../stores/reduxStore'
 
 interface ISidebarProps {
     isShownSidebar: boolean
@@ -27,7 +29,7 @@ interface ISidebarProps {
 
 const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(0)
-
+    const currentUser = useSelector((state: AppState) => state.auth.currentUser)
     const handleListItemClick = (index: number) => {
         setSelectedIndex(index)
     }
@@ -38,13 +40,18 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                     <Styled.ProfileWrapper>
                         <Styled.ProfileImage url="https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-1/83445388_2423230741323586_2331765335868309504_n.jpg?stp=dst-jpg_s200x200&_nc_cat=107&ccb=1-7&_nc_sid=7206a8&_nc_ohc=9ZMrP7BsC5IAX-gabWu&tn=Vo_L4bz-6If-eYJC&_nc_ht=scontent-hkg4-1.xx&oh=00_AT8zFM6uCR2q2bs2by-uM84jGSSxGbfyQQkHh48dTWY-hw&oe=62B171F5" />
                         <Typography variant="subtitle1">
-                            Bui Ngoc Huy
+                            {currentUser?.name}
                         </Typography>
                         <Typography variant="subtitle2">Owner</Typography>
                     </Styled.ProfileWrapper>
                     <Styled.SidebarActionWrapper>
                         <IconButton size="small">
-                            <PermIdentityIcon />
+                            <Link
+                                to={`/home/profile/${currentUser?.id}`}
+                                replace={true}
+                            >
+                                <PermIdentityIcon />
+                            </Link>
                         </IconButton>
                         <IconButton size="small">
                             <LanguageIcon />

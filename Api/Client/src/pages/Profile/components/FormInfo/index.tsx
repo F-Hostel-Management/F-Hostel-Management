@@ -1,5 +1,6 @@
-import { Typography, MenuItem } from '@mui/material'
+import { Typography, MenuItem, Button } from '@mui/material'
 import React from 'react'
+
 import InputField from '../../../../components/Input/InputField'
 import { IInformation } from '../../interface'
 import * as Styled from './styles'
@@ -79,6 +80,9 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info }) => {
                     onChange={handleChange}
                     type="number"
                 />
+                <Button variant="contained" color="primary">
+                    SAVE
+                </Button>
             </div>
         </Styled.FormContainer>
     )

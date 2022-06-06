@@ -368,3 +368,5 @@ Api/wwwroot/**
 appsettings.*.json
 
 service-key.json
+
+.idea

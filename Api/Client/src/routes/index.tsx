@@ -61,19 +61,13 @@ const privateRoutes: IRoute[] = [
         },
     },
     {
-        path: 'home/profile',
+        path: 'home/profile/:userID',
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,
         props: {
             title: 'Profile',
         },
-    },
-    {
-        path: '/fillInformation',
-        component: FillInformation,
-        name: 'FillInformation',
-        layout: null,
     },
     {
         path: '/home/rooms',
