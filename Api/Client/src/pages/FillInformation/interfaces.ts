@@ -5,6 +5,7 @@ export interface IInformation {
     address: string
     gender: string
     phoneNo: string
+    taxCode: string
     imgCard: Map<number, File>
 }
 
@@ -21,10 +22,5 @@ export interface IFirstTimeBody {
     phone?: string
     gender?: number
     dateOfBirth?: Date
-    identificationImage?: string
-}
-
-export interface IFirstTimeResponse {
-    isFirstTime: boolean
-    token: string
+    taxCode?: string
 }

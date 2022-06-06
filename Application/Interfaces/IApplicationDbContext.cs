@@ -1,5 +1,4 @@
-﻿using Domain.Common;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
 using Domain.Entities.Invoice;
@@ -8,14 +7,16 @@ using Domain.Entities.Message;
 using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Entities.Ticket;
+using Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Application.Interfaces;
 
 public interface IApplicationDbContext
 {
     DbSet<UserEntity> Users { get; set; }
+    public DbSet<RoomTenant> RoomTenants { get; set; }
+
     public DbSet<HostelEntity> Hostels { get; set; }
     public DbSet<HostelCategory> HostelCategories { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
@@ -28,9 +29,9 @@ public interface IApplicationDbContext
     public DbSet<NotificationEntity> Notifications { get; set; }
     public DbSet<Notification_Room> RoomNotifications { get; set; }
     public DbSet<TicketEntity> Tickets { get; set; }
-    public DbSet<TicketType> TicketTypes { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<CommitmentEntity> Commitments { get; set; }
+    public DbSet<JoiningCode> JoiningCodes { get; set; }
 
     public DbSet<CommitmentScaffolding> CommitmentScaffoldings { get; set; }
 }

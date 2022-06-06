@@ -1,4 +1,5 @@
 ﻿using Application.AppConfig;
+using Domain.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -27,6 +28,14 @@ namespace Api.Configurations
                         RequireExpirationTime = jwtSetting.RequireExpirationTime,
                         ValidateLifetime = jwtSetting.RequireExpirationTime,
                         ClockSkew = TimeSpan.FromDays(1),
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies[Constant.COOKIE_NAME];
+                            return Task.CompletedTask;
+                        }
                     };
                 });
             return services;

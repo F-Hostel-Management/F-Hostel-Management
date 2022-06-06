@@ -2,8 +2,9 @@ import React, { FC, useEffect } from 'react'
 import * as Styled from './styles'
 import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
-import { IField } from '../../../../../interface/field'
+import { IField } from '../../../../../interface/IField'
 import { InputAdornment } from '@mui/material'
+import { hostels } from '../../../../../utils/MockData'
 interface IStep1Props {
     values: any
     setValues: any
@@ -11,6 +12,8 @@ interface IStep1Props {
     roomInfo: Record<string, any>
     setRoomInfo: any
     roomOptions: Array<any>
+    hostelInfo: Record<string, any>
+    setHostelInfo: any
 }
 const Step1: FC<IStep1Props> = ({
     values,
@@ -19,8 +22,16 @@ const Step1: FC<IStep1Props> = ({
     roomInfo,
     setRoomInfo,
     roomOptions,
+    hostelInfo,
+    setHostelInfo,
 }) => {
     const fields: IField[] = [
+        {
+            label: 'Create Date',
+            name: 'createDate',
+            type: 'date',
+            required: true,
+        },
         {
             label: 'Start Date',
             name: 'startDate',
@@ -62,7 +73,9 @@ const Step1: FC<IStep1Props> = ({
             disabled: true,
             endAdornment: (
                 <InputAdornment position="end">
-                    m<sup>2</sup>
+                    <div style={{ fontSize: '1.3rem' }}>
+                        m<sup>2</sup>
+                    </div>
                 </InputAdornment>
             ),
         },
@@ -84,7 +97,7 @@ const Step1: FC<IStep1Props> = ({
     return (
         <Styled.ContainerStep>
             <Styled.LeftSide>
-                {fields.slice(0, 4).map((field) => (
+                {fields.slice(0, 5).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
@@ -100,18 +113,25 @@ const Step1: FC<IStep1Props> = ({
             </Styled.LeftSide>
             <Styled.RightSide>
                 <ComboBox
-                    label="Rooms"
+                    label="Hostel"
+                    options={hostels}
+                    optionLabel="name"
+                    valueAutocomplete={hostelInfo}
+                    setValueAutocomplete={setHostelInfo}
+                />
+                <ComboBox
+                    label="Room"
                     options={roomOptions}
                     optionLabel="roomNumber"
                     valueAutocomplete={roomInfo}
                     setValueAutocomplete={setRoomInfo}
                 />
-                {fields.slice(4, 7).map((field) => (
+                {fields.slice(5, 8).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
                         name={field.name}
-                        value={roomInfo?.[field.name]}
+                        value={values[field.name]}
                         type={field.type}
                         required={field.required}
                         disabled={field.disabled}

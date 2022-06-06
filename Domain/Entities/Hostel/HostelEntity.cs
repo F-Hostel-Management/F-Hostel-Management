@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Entities.Commitment;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using System;
@@ -15,7 +16,8 @@ public class HostelEntity : BaseEntity
 {
     public string Address { get; set; }
     public string Name { get; set; }
-    public int NumOfRooms { get; set; }
+    public int? NumOfRooms { get; set; }
+    public string? ImgPath { get; set; }
 
     /*navigation props*/
 
@@ -32,5 +34,8 @@ public class HostelEntity : BaseEntity
 
     // 1 hostel - M rooms
     public virtual ICollection<RoomEntity> Rooms { get; set; }
+
+    // 1 hostel - m com
+    public virtual ICollection<CommitmentEntity> Commitments { get; set; }
 
 }

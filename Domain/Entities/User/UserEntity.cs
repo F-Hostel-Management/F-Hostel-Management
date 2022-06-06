@@ -7,6 +7,7 @@ using Domain.Entities.Message;
 using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Entities.Ticket;
+using Domain.Entities.User;
 using Domain.Enums;
 using Domain.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -57,9 +58,8 @@ public class UserEntity : BaseEntity
     // M manager - M hostels
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
 
-    // M tenants - 1 room
-    public Guid? RoomId { get; set; }
-    public RoomEntity Room { get; set; }
+    // M tenants - M room
+    public virtual ICollection<RoomTenant> RoomTenants { get; set; }
 
     // 1 tenannt - M invoices
     public virtual ICollection<InvoiceEntity> TenantPaidInvoices { get; set; }

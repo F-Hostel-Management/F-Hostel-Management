@@ -1,29 +1,43 @@
-﻿using Domain.Enums;
+﻿using Api.Filters;
+using Domain.Constants;
+using Domain.Entities.Commitment;
+using Domain.Entities.Room;
+using Domain.Enums;
 using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
-
-public class RoomsController : BaseODataController
+//[Authorize]
+public class RoomsController : BaseODataController<RoomEntity>
 {
-    [EnableQuery]
-    [HttpGet("get-all")]
-    public IActionResult GetRooms()
+    public RoomsController(ApplicationDbContext db) : base(db)
     {
-        return Ok(DbContext.Rooms);
     }
 
-    [EnableQuery]
-    [HttpGet("{roomId}/get-current-commitment")]
-    public IActionResult GetCurrentCommitmentByRoom([FromRoute] Guid roomId)
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Authorize(Roles = nameof(Role.Tenant))]
+    [HttpGet()]
+    public IQueryable GetRoomsForTenant(ODataQueryOptions<RoomEntity> options)
     {
+        var query = db.Rooms.Where(room =>
+                                   room.RoomTenants.Any(t =>
+                                                        t.TenantId.Equals(CurrentUserId)));
+        return ApplyQuery(options, query);
+    }
 
-        var com = DbContext.Commitments.FirstOrDefault(com =>
-                    com.RoomId == roomId
-                    && !com.Status.Equals(CommitmentStatus.Expired.ToString()));
-        return Ok(com);
+    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpGet("{roomId}/get-all-commitments")]
+    public IQueryable GetCommitmentsForRoom
+        (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid roomId)
+    {
+        var query = db.Commitments.Where(commitment =>
+                                         commitment.RoomId.Equals(roomId));
+        return ApplyQuery(options, query);
+
     }
 }

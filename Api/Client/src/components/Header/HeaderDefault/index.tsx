@@ -10,8 +10,9 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import { Avatar, Badge, Grid, IconButton, Typography } from '@mui/material'
 import * as colorTheme from '@mui/material/colors'
 
-import logo from '../../../assets/images/F-Hostel-removebg.png'
+import logo from '../../../assets/images/logo.png'
 import * as Styled from './styles'
+import Logo from '../../Logo'
 
 interface IHeaderDefaultProps {
     isShownSidebar: boolean
@@ -20,11 +21,20 @@ interface IHeaderDefaultProps {
 }
 
 const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
-    isShownSidebar = true,
-    setIsShownSidebar = () => {},
-    setIsSidebarMobile = () => {},
+    isShownSidebar,
+    setIsShownSidebar,
+    setIsSidebarMobile,
 }) => {
     const screen = useBreakpoint(up('lg'))
+    const handleShowSidebar = () => {
+        if (screen) {
+            setIsShownSidebar()
+            setIsSidebarMobile(false)
+        } else {
+            setIsSidebarMobile()
+            setIsShownSidebar(true)
+        }
+    }
     return (
         <Styled.Navbar>
             <Grid container direction="row">
@@ -37,15 +47,14 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                     justifyContent="center"
                 >
                     <Styled.NavbarLogo>
-                        <img src={logo} alt="logo" />
-                        {isShownSidebar && (
-                            <Typography
-                                variant="subtitle1"
-                                color="primary"
-                                sx={{ marginLeft: '4px' }}
-                            >
-                                F-Hostel
-                            </Typography>
+                        {isShownSidebar ? (
+                            <Logo />
+                        ) : (
+                            <img
+                                src={logo}
+                                alt="logo"
+                                style={{ height: '50px' }}
+                            />
                         )}
                     </Styled.NavbarLogo>
                 </Styled.LogoGrid>
@@ -61,9 +70,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                         <IconButton
                             color="gray"
                             style={{ marginLeft: '16px' }}
-                            onClick={
-                                screen ? setIsShownSidebar : setIsSidebarMobile
-                            }
+                            onClick={handleShowSidebar}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -112,7 +119,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                 </Styled.NavbarMainGrid>
             </Grid>
             <Styled.NavbarLogoResponsive>
-                <div>Logo here</div>
+                <Logo />
             </Styled.NavbarLogoResponsive>
         </Styled.Navbar>
     )

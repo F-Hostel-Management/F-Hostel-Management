@@ -3,6 +3,7 @@ import React, { FC, Fragment } from 'react'
 import DialogCustom from '../../DialogCustom'
 
 interface IConfirmDialogProps {
+    title: string
     openDialog: boolean | any
     handleOpenDialog: any
     handleCloseDialog: any
@@ -10,13 +11,14 @@ interface IConfirmDialogProps {
 }
 
 const ConfirmDialog: FC<IConfirmDialogProps> = ({
+    title,
     openDialog,
     handleCloseDialog,
     children,
 }) => {
     return (
         <DialogCustom
-            title="Delete Commitment"
+            title={title}
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
             maxWidth="md"

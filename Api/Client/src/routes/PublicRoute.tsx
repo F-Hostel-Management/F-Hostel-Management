@@ -1,11 +1,16 @@
 import * as React from 'react'
+import { useSelector } from 'react-redux'
 
 import { Navigate, Outlet } from 'react-router-dom'
+import { AppState } from '../stores/reduxStore'
 
-interface IPublicRouteProps {}
+interface IPublicRouteProps {
+}
 
 const PublicRoute: React.FunctionComponent<IPublicRouteProps> = () => {
-    let isAuthenticated = true
+    const isAuthenticated = useSelector(
+        (state: AppState) => state.auth.isAuthenticated
+    )
     return isAuthenticated ? <Navigate to="/home" /> : <Outlet />
 }
 

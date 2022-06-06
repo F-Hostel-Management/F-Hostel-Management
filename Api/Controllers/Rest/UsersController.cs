@@ -2,16 +2,14 @@
 using Api.UserFeatures.Responses;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace Api.Controllers.Rest
 {
     [Authorize]
-    public class UsersController:BaseRestController
+    public class UsersController : BaseRestController
     {
         private readonly IUserService _userService;
         private readonly IGenericRepository<UserEntity> _userRepository;
@@ -34,13 +32,12 @@ namespace Api.Controllers.Rest
         }
 
         [HttpPost("upload-identification-card")]
-        public async Task<IActionResult> UpLoadIdentificationCard([FromForm] UploadIdentificationUserRequest uploadIdentificationUserRequest)
+        public async Task<IActionResult> UploadIdentificationCard([FromForm] UploadIdentificationUserRequest uploadIdentificationUserRequest)
         {
             var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(CurrentUserID));
             var listImage = new List<IFormFile>();
             listImage.Add(uploadIdentificationUserRequest.FrontIdentification);
             listImage.Add(uploadIdentificationUserRequest.BackIdentification);
-
             var listResult = await _userService.UploadIdentification(user, listImage);
             user.FrontIdentification = listResult[0];
             user.BackIdentification = listResult[1];
@@ -49,10 +46,10 @@ namespace Api.Controllers.Rest
         }
 
         [HttpPatch("update-user")]
-        public async Task<IActionResult> UpdateUser( UpdateUserProfileRequest updateUserProfileRequest)
+        public async Task<IActionResult> UpdateUser(UpdateUserProfileRequest updateUserProfileRequest)
         {
             var userID = GetUserID();
-            var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(userID));   
+            var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(userID));
             Mapper.Map(updateUserProfileRequest, user);
             await _userRepository.UpdateAsync(user);
             return Ok();

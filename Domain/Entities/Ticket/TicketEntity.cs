@@ -15,10 +15,6 @@ public class TicketEntity : BaseEntity
 
     /*navigation props*/
 
-    // 1 type - M tickets
-    public Guid TicketTypeId { get; set; }
-    public TicketType TicketType { get; set; }
-
     // 1 ticket - M messages
     public virtual ICollection<MessageEntity> Messages { get; set; }
 

@@ -27,20 +27,22 @@ import * as Styled from './styles'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
-import { useDispatch } from 'react-redux'
-import { setToken } from '../../slices/authSlice'
 import { useNavigate } from 'react-router-dom'
-import { IFirstTimeBody, IFirstTimeResponse, IInformation } from './interfaces'
+import { IFirstTimeBody, IInformation } from './interfaces'
 import { GENDERS, ROLES, STEPS } from './constants'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../stores/reduxStore'
 
 // Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
 interface IFillInformationProps {}
 interface IPersonInformationProps {
+    roleActive: string
     state: IInformation
     onChangeState: (state: IInformation) => void
 }
 interface ISetRoleProps {
+    state: string
     onChangeState: (state: string) => void
 }
 interface IConfirmInfoProps {
@@ -48,28 +50,48 @@ interface IConfirmInfoProps {
     stateInfo: IInformation
 }
 
-const SetRole: React.FC<ISetRoleProps> = ({ onChangeState }) => {
+const SetRole: React.FC<ISetRoleProps> = ({ state, onChangeState }) => {
     return (
         <Styled.Step>
+            <Typography
+                variant="body2"
+                sx={{
+                    color: 'grey.600',
+                    textAlign: 'center',
+                    paddingBottom: '5%',
+                }}
+            >
+                Be careful when choosing a role because you won&apos;be able to
+                update your role
+            </Typography>
             <Grid container>
                 {ROLES.map((role, index) => (
-                    <Grid item key={index} xs={12} md={4}>
-                        <Styled.RoleCard elevation={0} variant="outlined">
-                            <CardActionArea
-                                onClick={() => onChangeState(role.name)}
+                    <Styled.GridCard item key={index} xs={12} md={4}>
+                        <div>
+                            <Styled.RoleCard
+                                variant="outlined"
+                                sx={
+                                    state === role.name
+                                        ? { border: '3px solid #0DCAF0' }
+                                        : {}
+                                }
                             >
-                                <CardContent>
-                                    <Styled.ImgRole
-                                        src={role.icon}
-                                        width="100%"
-                                    ></Styled.ImgRole>
-                                </CardContent>
-                            </CardActionArea>
-                        </Styled.RoleCard>
-                        <Styled.RoleName variant="body2">
-                            {role.name}
-                        </Styled.RoleName>
-                    </Grid>
+                                <CardActionArea
+                                    onClick={() => onChangeState(role.name)}
+                                >
+                                    <CardContent>
+                                        <Styled.ImgRole
+                                            src={role.icon}
+                                            width="100%"
+                                        ></Styled.ImgRole>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Styled.RoleCard>
+                            <Styled.RoleName variant="body2">
+                                {role.name}
+                            </Styled.RoleName>
+                        </div>
+                    </Styled.GridCard>
                 ))}
             </Grid>
         </Styled.Step>
@@ -77,6 +99,7 @@ const SetRole: React.FC<ISetRoleProps> = ({ onChangeState }) => {
 }
 
 const PersonalInformation: React.FC<IPersonInformationProps> = ({
+    roleActive,
     state,
     onChangeState,
 }) => {
@@ -87,6 +110,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
         address,
         gender,
         phoneNo,
+        taxCode,
         imgCard,
     } = state
 
@@ -134,6 +158,16 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 
     return (
         <Styled.Step>
+            <Typography
+                variant="body2"
+                sx={{
+                    color: 'grey.600',
+                    textAlign: 'center',
+                    paddingBottom: '5%',
+                }}
+            >
+                We need your information. Complete the form below
+            </Typography>
             <Box
                 sx={{
                     display: 'flex',
@@ -226,6 +260,21 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
 
                         {/* CCCD */}
                         <Grid item xs={12} md={6}>
+                            {roleActive === 'Owner' ? (
+                                <InputField
+                                    label="Tax code"
+                                    value={taxCode}
+                                    onChange={(e: InputFieldType) =>
+                                        onChangeState({
+                                            ...state,
+                                            taxCode: e.target.value,
+                                        })
+                                    }
+                                    type="number"
+                                />
+                            ) : (
+                                ''
+                            )}
                             <Box
                                 sx={{
                                     maxWidth: 400,
@@ -239,14 +288,24 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                     square
                                     elevation={0}
                                     sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        height: 50,
-                                        pl: 2,
+                                        textAlign: 'left',
+                                        height: 'auto',
+                                        ml: 2,
+                                        my: 1,
                                         bgcolor: 'background.default',
                                     }}
                                 >
                                     <Typography>Citizen ID photo</Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            fontSize: '15px',
+                                            color: 'grey.600',
+                                        }}
+                                    >
+                                        Please upload 2 sides of your identity
+                                        card
+                                    </Typography>
                                 </Paper>
 
                                 {!preview[activeStep] ? (
@@ -298,7 +357,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                                 color: 'grey.600',
                                             }}
                                         >
-                                            Upload file
+                                            Upload image
                                         </Typography>
                                     </CardActionArea>
                                 ) : (
@@ -340,7 +399,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                                     cursor: 'pointer',
                                                 }}
                                             >
-                                                Change file
+                                                Change image
                                             </Typography>
                                         </label>
                                     </CardActionArea>
@@ -400,6 +459,9 @@ const ConfirmInfo: React.FC<IConfirmInfoProps> = ({ stateInfo, stateRole }) => {
         { title: 'Address', value: stateInfo.address },
         { title: 'Phone number', value: stateInfo.phoneNo },
         { title: 'Citizen ID number', value: stateInfo.cardNumber },
+        stateRole === 'Owner'
+            ? { title: 'Tax code', value: stateInfo.taxCode }
+            : {},
     ]
     const imgCardPre = stateInfo.imgCard?.get(0)
     const imgCardPos = stateInfo.imgCard?.get(1)
@@ -443,6 +505,17 @@ const ConfirmInfo: React.FC<IConfirmInfoProps> = ({ stateInfo, stateRole }) => {
     }
     return (
         <Styled.Step>
+            <Typography
+                variant="body2"
+                sx={{
+                    color: 'grey.600',
+                    textAlign: 'center',
+                    paddingBottom: '5%',
+                }}
+            >
+                Please double check your personal information carefully. Click
+                on the BACK button if you want to modify
+            </Typography>
             <Box>
                 <Grid container spacing={4}>
                     <Grid item xs={12} md={6}>
@@ -466,7 +539,8 @@ const ConfirmInfo: React.FC<IConfirmInfoProps> = ({ stateInfo, stateRole }) => {
                                                 component="th"
                                                 scope="row"
                                             >
-                                                {row.title}:
+                                                {row.title}
+                                                {row.title != null ? ':' : ''}
                                             </TableCell>
                                             <TableCell align="right">
                                                 {row.value}
@@ -558,6 +632,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         cardNumber: '',
         gender: '',
         phoneNo: '',
+        taxCode: '',
         imgCard: new Map<number, File>(),
     })
     const [role, setRole] = useState<string>('Tenant')
@@ -565,7 +640,6 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const isStepSkipped = (step: number) => {
@@ -585,6 +659,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                 (gender) => information.gender === gender
             ),
             phone: information.phoneNo,
+            taxCode: information.taxCode,
         }
         const firstTimeRes = await RestCaller.post(
             'Authentication/first-time-login',
@@ -592,13 +667,6 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         )
 
         if (firstTimeRes.isError) return
-
-        const firstTimeResult: IFirstTimeResponse = firstTimeRes.result
-        const { token } = firstTimeResult
-
-        console.log(token)
-
-        dispatch(setToken(token))
 
         const uploadRes = await RestCaller.upload(
             'Users/upload-identification-card',
@@ -646,6 +714,20 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         setActiveStep(0)
     }
 
+    const isAuthenticated = useSelector(
+        (state: AppState) => state.auth.isAuthenticated
+    )
+
+    React.useEffect(() => {
+        ;(async () => {
+            if (isAuthenticated) return navigate('/home')
+
+            const firebaseToken =
+                await FirebaseService.getInstance().getFirebaseToken()
+            if (!firebaseToken) return navigate('/login')
+        })()
+    }, [])
+
     return (
         <Styled.Container>
             <Styled.MyPaper>
@@ -682,11 +764,17 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                     )
 
                                 case 0:
-                                    return <SetRole onChangeState={setRole} />
+                                    return (
+                                        <SetRole
+                                            state={role}
+                                            onChangeState={setRole}
+                                        />
+                                    )
 
                                 case 1:
                                     return (
                                         <PersonalInformation
+                                            roleActive={role}
                                             state={information}
                                             onChangeState={setInformation}
                                         />
@@ -719,7 +807,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <Styled.ButtonBox
+                            <Box
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'row',
@@ -740,7 +828,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                         ? 'Finish'
                                         : 'Next'}
                                 </Button>
-                            </Styled.ButtonBox>
+                            </Box>
                         </React.Fragment>
                     )}
                 </Box>

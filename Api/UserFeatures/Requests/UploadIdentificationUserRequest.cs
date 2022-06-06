@@ -1,4 +1,4 @@
-﻿using Api.UserFeatures.CustomValidationAttributes;
+﻿using Api.UserFeatures.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Api.UserFeatures.Requests

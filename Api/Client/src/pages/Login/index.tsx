@@ -11,7 +11,7 @@ import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
 import { useDispatch } from 'react-redux'
-import { setToken } from '../../slices/authSlice'
+import { setIsAuthenticated } from '../../slices/authSlice'
 
 interface ILoginProps {}
 
@@ -28,11 +28,10 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
         const result = await exchangeToken(firebaseToken)
         if (!result) return
 
-        const { isFirstTime, token } = result
+        const { isFirstTime } = result
         if (isFirstTime) return redirectFirstTimePage()
 
-        dispatch(setToken(token))
-        redirectHomePage()
+        dispatch(setIsAuthenticated(true))
     }
 
     const exchangeToken = async (
@@ -49,10 +48,6 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
 
     const redirectFirstTimePage = () => {
         navigate('/fillInformation')
-    }
-
-    const redirectHomePage = () => {
-        navigate('/home')
     }
 
     const onSignInGoogle = async () => {

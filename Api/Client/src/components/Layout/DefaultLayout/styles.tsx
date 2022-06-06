@@ -34,11 +34,6 @@ export const GridMain = styled(Grid)`
     box-shadow: var(--bgr-shadow) inset;
     box-shadow: 10px 8px 10px rgb(183 192 206 / 20%) inset;
 
-    display: flex;
-    flex-direction: column !important;
-    align-items: center;
-    justify-content: center;
-
     overflow-x: hidden;
     overflow-y: scroll;
 

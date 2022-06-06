@@ -8,12 +8,19 @@ import { Button } from '@mui/material'
 
 import * as Styled from './styles'
 import { ERole } from '../../../utils/enums'
+import { useDialog } from '../../../hooks/useDialog'
+import CreateCommitmentDialog from '../../Commitments/components/CreateCommitmentDialog'
+import CreateHostelDialog from '../components/CreateHostelDialog'
 
 interface IOwnerHomeProps {}
 
 const role: ERole = 2
 
 const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
+    const [openCreateCommit, handleOpenCreateCommit, handleCloseCreateCommit] =
+        useDialog()
+    const [openCreateHostel, handleOpenCreateHostel, handleCloseCreateHostel] =
+        useDialog()
     return (
         <Styled.HomeContainer>
             <Styled.ActionWrapper>
@@ -23,6 +30,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                         variant="outlined"
                         color="primary"
                         startIcon={<DescriptionIcon />}
+                        onClick={handleOpenCreateCommit}
                     >
                         CREATE COMMITMENT
                     </Button>
@@ -31,6 +39,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                             variant="contained"
                             color="primary"
                             startIcon={<AddCircleIcon />}
+                            onClick={handleOpenCreateHostel}
                         >
                             CREATE ROOM
                         </Button>
@@ -41,6 +50,19 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                 <HostelCard />
                 <HostelCard />
             </React.Fragment>
+
+            {openCreateCommit && (
+                <CreateCommitmentDialog
+                    openDialog={openCreateCommit}
+                    handleCloseDialog={handleCloseCreateCommit}
+                />
+            )}
+            {openCreateHostel && (
+                <CreateHostelDialog
+                    openDialog={openCreateHostel}
+                    handleCloseDialog={handleCloseCreateHostel}
+                />
+            )}
         </Styled.HomeContainer>
     )
 }

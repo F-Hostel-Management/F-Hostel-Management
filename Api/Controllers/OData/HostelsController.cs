@@ -1,42 +1,60 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Filters;
+using Domain.Constants;
+using Domain.Entities;
+using Domain.Entities.Commitment;
+using Domain.Entities.Room;
+using Domain.Enums;
+using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers.OData;
 
-
-public class HostelsController : BaseODataController
+[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+public class HostelsController : BaseODataController<HostelEntity>
 {
-    [EnableQuery]
-    [HttpGet]
-    public IActionResult GetHotels()
+
+    public HostelsController(ApplicationDbContext db) : base(db)
     {
-        return Ok(DbContext.Hostels);
     }
 
-    // return room expand 
-    [EnableQuery]
-    [HttpGet("rooms/{roomId}")]
-    public IActionResult GetHotelByRoomId(Guid roomId)
+    protected override IQueryable<HostelEntity> GetQuery()
     {
-        var room = DbContext.Rooms
-            .Where(room => room.Id.Equals(roomId))
-            .Include(hostel => hostel.Hostel);
-        if (room == null)
+        IQueryable<HostelEntity> result = base.GetQuery();
+        if (CurrentUser.Role.Equals(Role.Owner))
         {
-            return NotFound();
+            result = db.Hostels.Where(hostel =>
+                    hostel.OwnerId.Equals(CurrentUser.Id));
         }
-        return Ok(room);
+        if (CurrentUser.Role == Role.Manager)
+        {
+            result = db.Hostels.Where(hostel =>
+                    hostel.HostelManagements.Any(hm =>
+                    hm.ManagerId.Equals(CurrentUser.Id)));
+        }
+        return result;
     }
 
-    [EnableQuery]
-    [HttpGet("{hostelId}/get-all-commitments")]
-    public IActionResult GetCommitmentsByHostel([FromRoute] Guid hostelId)
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet()]
+    public IQueryable GetAllHostelByPolicy(ODataQueryOptions<HostelEntity> options)
     {
+        //var query = db.Hostels.Where(hostel => hostel.OwnerId.Equals(ownerId));
+        var query = GetQuery();
+        return ApplyQuery(options, query);
+    }
 
-        var coms = DbContext.Commitments.Where(com =>
-                    com.Room.HostelId.Equals(hostelId)
-                    );
-        return Ok(coms);
+    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("{hostelId}/get-all-commitments")]
+    public IQueryable GetAllCommitmentsOfThisHostel
+        (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid hostelId)
+    {
+        var query = db.Commitments.Where(commitment =>
+                commitment.HostelId.Equals(hostelId));
+        return ApplyQuery(options, query);
     }
 }

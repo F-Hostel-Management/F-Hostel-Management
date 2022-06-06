@@ -1,7 +1,8 @@
 import { ECommitmentStatus, ERoomStatus, ERoomType } from './enums'
-import { IRoom } from '../interface/room'
-import { IUser } from './../interface/user'
-import { ICommitment } from '../interface/commitment'
+import { IRoom } from '../interface/IRoom'
+import { IUser } from '../interface/IUser'
+import { ICommitment } from '../interface/ICommitment'
+import { IHostel } from '../interface/IHostel'
 export const users: IUser[] = [
     {
         id: 'aa1',
@@ -41,6 +42,22 @@ export const users: IUser[] = [
     },
 ]
 
+export const hostels: IHostel[] = [
+    {
+        id: '1',
+        address: '433/123/1 Quan 9, TH.HCM',
+        name: 'F-Code House',
+        hostelCategoryId: '1',
+        isDeleted: false,
+    },
+    {
+        id: '2',
+        address: '3/13/112 Quan 2, TH.HCM',
+        name: 'F-Code Gang',
+        hostelCategoryId: '1',
+        isDeleted: false,
+    },
+]
 export const rooms: IRoom[] = [
     {
         id: '1',
@@ -62,7 +79,7 @@ export const rooms: IRoom[] = [
         id: '2',
         roomNumber: 716,
         type: ERoomType.Single,
-        status: ERoomStatus.Renting,
+        status: ERoomStatus.Finished,
         numberOfWindows: 2,
         numberOfDoor: 1,
         numberOfBathRoom: 1,
@@ -77,11 +94,11 @@ export const rooms: IRoom[] = [
     {
         id: '3',
         roomNumber: 717,
-        type: ERoomType.Single,
+        type: ERoomType.Double,
         status: ERoomStatus.Renting,
         numberOfWindows: 2,
         numberOfDoor: 1,
-        numberOfBathRoom: 1,
+        numberOfBathRoom: 2,
         numberOfToilet: 1,
         price: 8200000,
         area: 30,

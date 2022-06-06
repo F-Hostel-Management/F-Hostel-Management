@@ -1,64 +1,70 @@
 ﻿using Api.UserFeatures.Requests;
 using Application.Interfaces;
-using Application.Interfaces.IRepository;
+using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers.Rest;
 
-[Route("api/Rooms/{RoomId}/")]
 public class CommitmentsController : BaseRestController
 {
-    private readonly IGenericRepository<UserEntity> _userRepository;
-    private readonly IGenericRepository<RoomEntity> _roomRepository;
-    private readonly IGenericRepository<HostelEntity> _hostelRepository;
+    private readonly IHostelServices _hostelServices;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IRoomServices _roomServices;
+    private readonly ITenantServices _tenantServices;
+    private readonly IJoiningCodeServices _joiningCodeServices;
+
 
     public CommitmentsController(
-        IGenericRepository<UserEntity> userRepository,
-        IGenericRepository<RoomEntity> roomRepository,
-        IGenericRepository<HostelEntity> hostelRepository,
+        IHostelServices hostelServices,
         ICommitmentServices commitmentServices,
-        IRoomServices roomServices)
+        IJoiningCodeServices joiningCodeServices,
+        IRoomServices roomServices,
+        ITenantServices tenantServices)
     {
-        _userRepository = userRepository;
-        _roomRepository = roomRepository;
-        _hostelRepository = hostelRepository;
+        _tenantServices = tenantServices;
+        _hostelServices = hostelServices;
+        _joiningCodeServices = joiningCodeServices;
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
     }
 
-    [HttpPost("commitments")]
-    public async Task<IActionResult> CreateCommitment([FromRoute] Guid RoomId, CreateCommitmentRequest comReq)
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPost]
+    public async Task<IActionResult> CreateCommitment(CreateCommitmentRequest comReq)
     {
-        
-        // check room status
-        RoomEntity room = await _roomServices.GetAvailableRoomByIdAsync(RoomId);
-        if (room == null)
-        {
-            return BadRequest("Room does not exist or already rented");
-        }
 
-        // not check hostel owner and owner from request
-        HostelEntity hostel = await _hostelRepository.FirstOrDefaultAsync(hostel => hostel.Id.Equals(room.HostelId));
+        // get available room
+        RoomEntity room = await _roomServices
+            .GetRoom(comReq.RoomId, RoomStatus.Available);
 
-        if (!comReq.OwnerId.Equals(hostel.OwnerId))
+        // check hostel owner and owner in room commitment request
+        HostelEntity hostel = await _hostelServices.GetHostel(room);
+
+        bool isManagedByCurrentUser = await _hostelServices.IsHostelManagedBy(hostel, CurrentUserID);
+
+        if (!isManagedByCurrentUser)
         {
             return Unauthorized();
         }
 
-            bool isDuplicated = await _commitmentServices.IsExist(comReq.CommitmentCode);
-        if (isDuplicated)
-        {
-            return BadRequest("Commitment code duplicate");
-        }
+        // continue of throw exception
+        await _commitmentServices.CheckDuplicate(comReq.CommitmentCode);
 
         // call service
         CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
+
+        if (CurrentUserRole.Equals(Role.Manager.ToString()))
+        {
+            com.ManagerId = CurrentUserID;
+        }
+        com.OwnerId = hostel.OwnerId;
+        com.HostelId = hostel.Id;
+
         await _commitmentServices.CreateCommitment(com, room);
 
         // update room status
@@ -68,38 +74,90 @@ public class CommitmentsController : BaseRestController
     }
 
     // owner conform commitment ==> com.status => approved
-    [HttpPatch("commitment/owner/status")]
+    [Authorize(Roles = nameof(Role.Owner))]
+    [HttpPatch("owner-approved-commitment/status")]
     public async Task<IActionResult> OwnerApprovedCommitment
-        ([FromRoute] Guid RoomId)
+        ([FromBody] OwnerApprovedCommitmentRequest req)
     {
-        CommitmentEntity com = 
-            await _commitmentServices.GetPendingCommitmentByRoom(RoomId);
-        if (com == null)
-        {
-            return BadRequest();
-        }
+        // get pending commitment
+        CommitmentEntity com =
+            await _commitmentServices.GetCommitment
+            (req.CommitmentId, CommitmentStatus.Pending);
 
         await _commitmentServices.ApprovedCommitment(com);
-        return Ok(com);
+        return Ok();
     }
 
-
-
-    // tenant into commitment ==> com.status => done
-    [HttpPatch("commitment/tenant/status")]
-    public async Task<IActionResult> TenantDoneCommitment
-    ([FromRoute] Guid RoomId)
-    {
-        CommitmentEntity com =
-            await _commitmentServices.GetApprovedCommitmentByRoom(RoomId);
-        if (com == null)
-        {
-            return BadRequest();
-        }
-
-        await _commitmentServices.DoneCommitment(com);
-        return Ok(com);
-    }
 
     // commitment expired ==> com.status => expired => remove all invoice schedules
+
+    // create joining code
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPost("joiningCode")]
+    public async Task<IActionResult> CreateJoiningCode
+        ([FromBody] CreateJoiningCodeRequest req)
+    {
+        // check exist and not expired commitment
+        CommitmentEntity com = await _commitmentServices.GetNotExpiredCommitment(req.CommitementId);
+        bool isManaged = await _hostelServices.IsHostelManagedBy(com.HostelId, CurrentUserID);
+        if (!isManaged)
+        {
+            return Forbid();
+        }
+
+        JoiningCode joiningCode = Mapper.Map<JoiningCode>(req);
+        var response = await _joiningCodeServices.CreateJoiningCode(joiningCode);
+        return Ok(response);
+    }
+
+    // get commitment by joining code
+    [AllowAnonymous]
+    [HttpGet("get-commitment-by-joiningCode/{SixDigitsCode}")]
+    public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
+    {
+        // validate joining code
+        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
+       _joiningCodeServices.ValidateJoiningCode(joiningCode);
+
+        CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
+        return Ok(commitment);
+    }
+
+    // tenant into commitment ==> com.status => done
+    [Authorize(Roles = nameof(Role.Tenant))]
+    [HttpPatch("tenant-done-commitment/status")]
+    public async Task<IActionResult> TenantDoneCommitment
+    ([FromBody] TenantDoneCommitmentRequest req)
+    {
+        // validate joining code
+        JoiningCode joiningCode = await _joiningCodeServices.
+            GetJoiningCode(req.SixDigitsJoiningCode);
+       _joiningCodeServices.ValidateJoiningCode(joiningCode);
+
+        CommitmentEntity com =
+            await _joiningCodeServices.GetCommitment(joiningCode);
+
+        // activate commitment
+        await _commitmentServices.ActivatedCommitment(com, CurrentUserID);
+
+        // get into room
+       await _tenantServices.GetIntoRoom(com.RoomId, CurrentUserID);
+        return Ok(com);
+    }
+
+    // update pending commitment
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPatch("{comId}")]
+    public async Task<IActionResult> UpdatePendingCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)
+    {
+        CommitmentEntity pendingCom = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Pending);
+        CommitmentEntity updatedCommitment = Mapper.Map(uComReq, pendingCom);
+        if (CurrentUserRole.Equals(Role.Manager.ToString()))
+        {
+            updatedCommitment.ManagerId = CurrentUserID;
+        }
+        await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
+        return Ok();
+    }
+
 }

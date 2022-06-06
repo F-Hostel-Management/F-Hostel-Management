@@ -168,7 +168,7 @@ const LandingPage: React.FunctionComponent<ILandingPageProps> = () => {
                     <Grid
                         container
                         spacing={{ xs: 2, md: 3 }}
-                        columns={{ xs: 12, md: 4 }}
+                        columns={{ xs: 4, sm: 8, md: 12 }}
                     >
                         {services.map((service, index) => (
                             <Grid key={index} item xs={12} sm={4} md={4}>
