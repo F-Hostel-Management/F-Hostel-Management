@@ -1,3 +1,6 @@
+import { IRoom } from './IRoom'
+import { IUser } from './IUser'
+
 export interface ICommitment {
     id?: string
     commitmentCode?: string
@@ -11,10 +14,15 @@ export interface ICommitment {
     commitmentScaffoldingId?: string
     commitmentScaffolding?: string
     managerId?: string
+    manager?: IUser
     tenantId?: string
+    tenant?: IUser
     ownerId?: string
+    owner?: IUser
     roomId?: string
+    room?: IRoom
     joiningCode?: string
+    hostelId?: string
     isDeleted?: boolean
 }
 
