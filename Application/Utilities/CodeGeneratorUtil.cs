@@ -11,7 +11,7 @@ namespace Application.Utilities
         public static string genarateByNowDateTime()
         {
             var now = DateTime.Now;
-            return now.ToString("yyyyMMdd_HHmmss");
+            return now.ToString("yyyyMMdd_HHmmss_fff");
         }
     }
 }
