@@ -3,10 +3,6 @@ import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import KeyIcon from '@mui/icons-material/Key'
-import LanguageIcon from '@mui/icons-material/Language'
-import PermIdentityIcon from '@mui/icons-material/PermIdentity'
 import {
     Grid,
     IconButton,
@@ -20,6 +16,7 @@ import {
 
 import { sidebarItemList } from './sidebarItemList'
 import * as Styled from './styles'
+import { IconButtonList } from './iconButtonList'
 
 interface ISidebarProps {
     isShownSidebar: boolean
@@ -43,18 +40,13 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                         <Typography variant="subtitle2">Owner</Typography>
                     </Styled.ProfileWrapper>
                     <Styled.SidebarActionWrapper>
-                        <IconButton size="small">
-                            <PermIdentityIcon />
-                        </IconButton>
-                        <IconButton size="small">
-                            <LanguageIcon />
-                        </IconButton>
-                        <IconButton size="small">
-                            <KeyIcon />
-                        </IconButton>
-                        <IconButton size="small">
-                            <ExitToAppIcon />
-                        </IconButton>
+                        {IconButtonList.items.map((item, index) => (
+                            <Link to={item.path} key={index}>
+                                <IconButton size="small" sx={{ mx: 1 }}>
+                                    {item.icon}
+                                </IconButton>
+                            </Link>
+                        ))}
                     </Styled.SidebarActionWrapper>
                 </React.Fragment>
             )}
