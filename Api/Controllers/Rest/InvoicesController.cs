@@ -1,4 +1,4 @@
-﻿using Api.UserFeatures.Requests;
+using Api.UserFeatures.Requests;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
@@ -50,7 +50,7 @@ public class InvoicesController : BaseRestController
         var hasPermission = await _roomService.RoomManagedBy(roomId, CurrentUserID);
         if (!hasPermission) throw new ApiException($"User is not the owner or manager of the room", StatusCodes.Status403Forbidden);
 
-        if (invoice.TenantPaidId != null) throw new ApiException($"Can not update when the invoice has been paid", StatusCodes.Status403Forbidden);
+        if (invoice.TenantPaidId != null) throw new ApiException($"Can not update when the invoice has been paid", StatusCodes.Status400BadRequest);
 
         Mapper.Map(request, invoice);
         await _invoiceRepository.UpdateAsync(invoice);
