@@ -52,11 +52,10 @@ public class CommitmentsController : BaseRestController
             return Unauthorized();
         }
 
-        // continue of throw exception
-        await _commitmentServices.CheckDuplicate(comReq.CommitmentCode);
-
         // call service
         CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
+
+        com.CommitmentCode = "F_" + DateTime.Now.Subtract(new DateTime(2001, 1, 1)).TotalSeconds;
 
         if (CurrentUserRole.Equals(Role.Manager.ToString()))
         {

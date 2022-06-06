@@ -8,7 +8,6 @@ namespace Application.Interfaces
     public interface ICommitmentServices
     {
         Task CreateCommitment(CommitmentEntity commitment, RoomEntity room);
-        Task CheckDuplicate(string commitmentCode);
         Task<IList<CommitmentEntity>> GetCommitmentForTenant(Guid roomId, Guid tenantId);
         Task<CommitmentEntity> GetCommitment(Guid Id);
         Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status);
