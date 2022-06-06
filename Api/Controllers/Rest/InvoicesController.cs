@@ -38,4 +38,23 @@ public class InvoicesController : BaseRestController
 
         return Ok();
     }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateInvoice([FromRoute] Guid id, UpdateInvoiceRequest request)
+    {
+        var invoice = await _invoiceRepository.FindByIdAsync(id);
+        if (invoice == null) throw new ApiException($"Invoice not found", StatusCodes.Status404NotFound);
+
+        var roomId = invoice.RoomId;
+        var hasPermission = await _roomService.RoomManagedBy(roomId, CurrentUserID);
+        if (!hasPermission) throw new ApiException($"User is not the owner or manager of the room", StatusCodes.Status403Forbidden);
+
+        if (invoice.TenantPaidId != null) throw new ApiException($"Can not update when the invoice has been paid", StatusCodes.Status403Forbidden);
+
+        Mapper.Map(request, invoice);
+        await _invoiceRepository.UpdateAsync(invoice);
+
+        return Ok();
+    }
 }
