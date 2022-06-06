@@ -4,7 +4,7 @@ import odataQuery, { ODataQuery } from 'odata-fluent-query'
 import { ISuccessResponse } from '../interface/serviceResponse'
 
 const instance = axios.create({
-    baseURL: 'server/odata',
+    baseURL: '/server/odata',
     responseType: 'json',
     withCredentials: true,
 })

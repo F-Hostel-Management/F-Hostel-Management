@@ -3,7 +3,7 @@ import { ISuccessResponse } from '../interface/serviceResponse'
 import { HttpErrorToast } from './HttpErrorToast'
 
 const instance = axios.create({
-    baseURL: 'server/api',
+    baseURL: '/server/api',
     responseType: 'json',
     withCredentials: true,
 })
