@@ -12,8 +12,8 @@ export default defineConfig({
         port: 3000,
         https: true,
         proxy: {
-            '/api': 'http://localhost:5177',
-            '/odata': 'http://localhost:5177',
+            '/server/api': 'http://localhost:5177',
+            '/server/odata': 'http://localhost:5177',
         },
     },
     preview: {

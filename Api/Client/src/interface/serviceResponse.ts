@@ -5,5 +5,15 @@ export interface ISuccessResponse {
 
 export interface IFailureResponse {
     isError: boolean
-    responseException?: any
+    responseException: IResponseException
+}
+
+interface IResponseException {
+    exceptionMessage: string
+    validationErrors?: IValidationError[]
+}
+
+interface IValidationError {
+    name: string
+    reason: string
 }
