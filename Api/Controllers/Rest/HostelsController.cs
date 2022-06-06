@@ -36,6 +36,7 @@ public class HostelsController : BaseRestController
         return Ok(hostel);
     }
 
+    [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
     {
@@ -46,22 +47,4 @@ public class HostelsController : BaseRestController
         await _hostelService.UploadHostelImage(target, uploadHostelImageRequest.Image);
         return Ok(target.ImgPath);
     }
-
-/*    [ServiceFilter(typeof(ValidateManagementFilter))]
-    [HttpGet("{hostelId}")]
-    public async Task<IActionResult> GetHostelById([FromRoute] Guid hostelId)
-    {
-        var hostel = await _hostelService.GetHostel(hostelId);
-        return Ok(hostel);
-    }
-
-    [ServiceFilter(typeof(ValidateManagementFilter))]
-    [HttpGet("get-all-rooms/{hostelId}")]
-    public async Task<IActionResult> GetRoomsOfHostel([FromRoute] Guid hostelId)
-    {
-        var rooms = await _roomRepository.WhereAsync(room => room.HostelId.Equals(hostelId));
-        return Ok(rooms);
-    }*/
-
-
 }

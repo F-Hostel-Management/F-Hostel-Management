@@ -8,11 +8,11 @@ namespace Api.Filters;
 
 public class ValidateManagementHostelLevelFilter : IAsyncActionFilter
 {
-    private readonly ValidateManagementFilter _vmFilter;
+    private readonly ValidateManagementFilter _lastFilter;
     public ValidateManagementHostelLevelFilter
         (ValidateManagementFilter vmFilter)
     {
-        _vmFilter = vmFilter;
+        _lastFilter = vmFilter;
     }
 
     public async Task OnActionExecutionAsync
@@ -23,28 +23,34 @@ public class ValidateManagementHostelLevelFilter : IAsyncActionFilter
         var routeData = context.RouteData;
         var hostelIdData = routeData.Values["hostelId"] as string;
 
-        if (Guid.TryParse(hostelIdData, out hostelId))
+        try
         {
+            if (!Guid.TryParse(hostelIdData, out hostelId))
+            {
+                hostelId = await _lastFilter.GetIdValueFromRequestStreamAsync("HostelId", context);
+            }
             context.HttpContext.Items.Add("hostelId", hostelId);
-            await _vmFilter.OnActionExecutionAsync(context, next);
-            await next();
+            await _lastFilter.OnActionExecutionAsync(context, next);
         }
-        throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
+        catch (ApiException ex)
+        {
+            throw new ApiException(ex.StackTrace, ex.StatusCode);
+        }
     }
 }
 
 public class ValidateManagementByRoomLevelFilter : IAsyncActionFilter
 {
     private readonly IRoomServices _roomServices;
-    private readonly ValidateManagementFilter _vmFilter;
+    private readonly ValidateManagementFilter _lastFilter;
 
 
     public ValidateManagementByRoomLevelFilter(
         IRoomServices roomServices,
-        ValidateManagementFilter vmFilter)
+        ValidateManagementFilter lastFilter)
     {
         _roomServices = roomServices;
-        _vmFilter = vmFilter;
+        _lastFilter = lastFilter;
     }
 
     public async Task OnActionExecutionAsync
@@ -52,18 +58,22 @@ public class ValidateManagementByRoomLevelFilter : IAsyncActionFilter
     {
 
         var roomIdData = context.RouteData.Values["roomId"] as string;
-
-        if (!string.IsNullOrEmpty(roomIdData))
+        Guid roomId = Guid.Empty;
+        try
         {
-            Guid roomId = Guid.Parse(roomIdData);
+            if (!Guid.TryParse(roomIdData, out roomId))
+            {
+                roomId = await _lastFilter.GetIdValueFromRequestStreamAsync("RoomId", context);
+            }
             RoomEntity room = await _roomServices.GetRoom(roomId);
             context.HttpContext.Items.Add("hostelId", room.HostelId);
-            await _vmFilter.OnActionExecutionAsync(context, next);
+            await _lastFilter.OnActionExecutionAsync(context, next);
             context.HttpContext.Items.Add("room", room);
-            await next();
         }
-        throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
-
+        catch (ApiException ex)
+        {
+            throw new ApiException(ex.StackTrace, ex.StatusCode);
+        }
     }
 }
 
@@ -84,5 +94,21 @@ public class ValidateManagementFilter : IAsyncActionFilter
         HostelEntity hostel = await _hostelServices.HostelManagedBy(hostelId, userID);
         context.HttpContext.Items.Add("hostel", hostel);
         await next();
+    }
+
+    public async Task<Guid> GetIdValueFromRequestStreamAsync(string param, ActionExecutingContext context)
+    {
+        /*var bodyReader = new StreamReader(context.HttpContext.Request.Body);
+        var bodyAsText = bodyReader.ReadToEnd();*/
+        var bodyAsText = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+        context.HttpContext.Request.Body.Position = 0;
+        string guid = "";
+        if (bodyAsText.Contains(param))
+        {
+            guid = bodyAsText.Substring(bodyAsText.IndexOf(param) + param.Length + 4, Guid.Empty.ToString().Length);
+            return Guid.Parse(guid);
+
+        }
+        throw new ApiException("Bad request", StatusCodes.Status400BadRequest);
     }
 }

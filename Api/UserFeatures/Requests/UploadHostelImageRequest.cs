@@ -1,5 +1,4 @@
 ﻿using Api.UserFeatures.Attributes;
-using Microsoft.AspNetCore.Http;
 
 namespace Api.UserFeatures.Requests
 {
