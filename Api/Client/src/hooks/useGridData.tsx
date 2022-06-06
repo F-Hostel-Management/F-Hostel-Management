@@ -32,7 +32,7 @@ export const useGridData = (): any => {
         }
     }
 
-    const renderValueSetter = (
+    const renderValueGetter = (
         field: string,
         headerName: string,
         width: number,
@@ -48,5 +48,5 @@ export const useGridData = (): any => {
         }
     }
 
-    return { renderCell, createColumn, renderValueSetter }
+    return { renderCell, createColumn, renderValueGetter }
 }
