@@ -133,7 +133,7 @@ public static class DatabaseInitializer
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
         var hostelCategories = dbContext.HostelCategories.ToArray();
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 6; i++)
         {
             var mockHostel = hostels[_rand.Next(hostelsLength)];
             await dbContext.Hostels.AddAsync(
@@ -221,7 +221,6 @@ public static class DatabaseInitializer
             await dbContext.Commitments.AddAsync(
                 new CommitmentEntity()
                 {
-                    CommitmentCode = "DNG" + code++,
                     Tenant = tenant,
                     Owner = owner,
                     Room = room,

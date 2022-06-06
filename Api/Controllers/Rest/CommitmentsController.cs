@@ -55,8 +55,6 @@ public class CommitmentsController : BaseRestController
         // call service
         CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
 
-        com.CommitmentCode = "F_" + DateTime.Now.Subtract(new DateTime(2001, 1, 1)).TotalSeconds;
-
         if (CurrentUserRole.Equals(Role.Manager.ToString()))
         {
             com.ManagerId = CurrentUserID;
