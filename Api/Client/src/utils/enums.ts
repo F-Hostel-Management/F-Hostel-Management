@@ -25,3 +25,16 @@ export enum ERoomStatus {
     'Finished',
     'Renting',
 }
+
+export enum EFacilityCategory {
+    Refrigerator = 'Refrigerator',
+    WashingMachine = 'Washing machine',
+    AirConditioner = 'Air-conditioner',
+    Bed = 'Bed',
+    Sofa = 'Sofa',
+    Wardrobe = 'Wardrobe',
+    Cupboard = 'Cupboard',
+    Heater = 'Heater',
+    Television = 'Television',
+    Other = 'Other',
+}

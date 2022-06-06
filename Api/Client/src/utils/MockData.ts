@@ -1,8 +1,15 @@
-import { ECommitmentStatus, ERoomStatus, ERoomType } from './enums'
+import {
+    ECommitmentStatus,
+    EFacilityCategory,
+    ERoomStatus,
+    ERoomType,
+} from './enums'
 import { IRoom } from '../interface/IRoom'
 import { IUser } from '../interface/IUser'
 import { ICommitment } from '../interface/ICommitment'
 import { IHostel } from '../interface/IHostel'
+import { IFacility } from '../interface/IFacility'
+import { IFacilityCategory } from '../interface/IFacilityCategory'
 export const users: IUser[] = [
     {
         id: 'aa1',
@@ -177,6 +184,53 @@ export const commitments: ICommitment[] = [
             },
         },
         status: ECommitmentStatus.Active,
+    },
+]
+
+export const facilityCategories: IFacilityCategory[] = [
+    {
+        id: '1',
+        facilityCateName: 'Refrigerator',
+        isDeleted: true,
+    },
+    {
+        id: '2',
+        facilityCateName: 'Washing machine',
+        isDeleted: true,
+    },
+    {
+        id: '3',
+        facilityCateName: 'Bed',
+        isDeleted: true,
+    },
+    {
+        id: '4',
+        facilityCateName: 'Air-conditioner',
+        isDeleted: true,
+    },
+]
+
+export const facilities: IFacility[] = [
+    {
+        id: '1',
+        facilityName: 'Toshiba Inverter 180l GR-B22VU (UKG)',
+        category: EFacilityCategory.Refrigerator,
+        price: 5590000,
+        isDeleted: true,
+    },
+    {
+        id: '2',
+        facilityName: 'Electrolux Inverter 8 kg EWW8023AEWA',
+        category: EFacilityCategory.WashingMachine,
+        price: 12990000,
+        isDeleted: true,
+    },
+    {
+        id: '3',
+        facilityName: 'LG Inverter 1 HP V10APH1',
+        category: EFacilityCategory.AirConditioner,
+        price: 9190000,
+        isDeleted: true,
     },
 ]
 
