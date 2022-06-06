@@ -18,17 +18,34 @@ import { sidebarItemList } from './sidebarItemList'
 import * as Styled from './styles'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../stores/reduxStore'
-import { IconButtonList } from './iconButtonList'
-
+import PermIdentityIcon from '@mui/icons-material/PermIdentity'
+import KeyIcon from '@mui/icons-material/Key'
+import LanguageIcon from '@mui/icons-material/Language'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 interface ISidebarProps {
     isShownSidebar: boolean
 }
-
+interface IIconButtonListProps {
+    icon: React.ReactElement
+    path: string
+}
 const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(0)
     const currentUser = useSelector((state: AppState) => state.auth.currentUser)
     const handleListItemClick = (index: number) => {
         setSelectedIndex(index)
+    }
+    console.log(currentUser)
+    const IconButtonList: { items: Array<IIconButtonListProps> } = {
+        items: [
+            {
+                icon: <PermIdentityIcon />,
+                path: `/home/profile/${currentUser?.id}`,
+            },
+            { icon: <LanguageIcon />, path: '' },
+            { icon: <KeyIcon />, path: '' },
+            { icon: <ExitToAppIcon />, path: '' },
+        ],
     }
     return (
         <Styled.SidebarContainer isShownSidebar={isShownSidebar}>

@@ -11,7 +11,7 @@ interface IProfileProps {}
 
 const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
     const initialValues: IInformation = {
-        fullName: 'Dang Phuong Anh',
+        fullName: 'Dang Phuong Anhs',
         role: 'Tenant',
         address: 'Ho Chi Minh City',
         email: 'abc@gmail.com',
