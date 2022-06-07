@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import StepByStep from '../../../../components/StepByStep'
+import { IStepper } from '../../../../interface/IStepper'
 import Step1 from './Step1'
 import Step2 from './Step2'
 
@@ -13,14 +14,18 @@ const JoinRoomDialog: FC<IJoinRoomDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
-    const steps = [
+    const steps: IStepper[] = [
         {
             name: 'Scan QR Code',
             component: <Step1 />,
+            handleNext: () => {},
+            action: 'Next',
         },
         {
             name: 'Commitment',
             component: <Step2 />,
+            handleNext: () => {},
+            action: 'Next',
         },
     ]
     return (

@@ -3,8 +3,9 @@ import styled from 'styled-components'
 
 import { Grid } from '@mui/material'
 
-export const Container = styled.div`
+export const Container = styled.div<{ loading: boolean }>`
     animation: var(--animation-transitionsIn) 1s;
+    display: ${(props) => (props.loading ? 'none' : 'block')};
 `
 
 export const GridSidebar = styled(Grid)<{ isSidebarMobile: boolean }>`

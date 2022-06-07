@@ -1,37 +1,43 @@
 import React, { FC } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
-import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
-import { ICommitmentValues } from '../../../../interface/ICommitment'
-import moment from 'moment'
-interface ICreateCommitmentDialogProps {
+import { IRoomValues } from '../../../../interface/IRoom'
+import RoomStepper from '../RoomStepper'
+
+interface ICreateRoomDialogProps {
     openDialog: boolean
     handleCloseDialog: () => void
 }
 
-const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
+const CreateRoomDialog: FC<ICreateRoomDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
-    const initialValues: ICommitmentValues = {
-        createdDate: moment(new Date()).format('YYYY-MM-DD'),
-        startDate: '',
-        endDate: '',
-        roomId: '',
-        overdueDays: 0,
-        compensation: 0,
+    const initialValues: IRoomValues = {
+        roomName: '',
+        quantity: 0,
+        maximumPeople: 0,
+        numOfWindows: 0,
+        numOfDoors: 0,
+        numOfBathRooms: 0,
+        numOfWCs: 0,
+        price: 0,
+        area: 0,
+        length: 0,
+        width: 0,
+        height: 0,
+        roomTypeId: '',
+        hostelId: '',
     }
-
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<ICommitmentValues>(initialValues)
-
+        useForm<IRoomValues>(initialValues)
     return (
         <DialogCustom
-            title="Create Commitment"
+            title="Create Room"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
         >
-            <CommitmentStepper
+            <RoomStepper
                 handleCloseDialog={handleCloseDialog}
                 values={values}
                 setValues={setValues}
@@ -42,4 +48,4 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     )
 }
 
-export default CreateCommitmentDialog
+export default CreateRoomDialog

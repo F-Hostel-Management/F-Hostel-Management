@@ -8,6 +8,7 @@ interface IComboBoxProps {
     optionLabel: string
     valueAutocomplete: any
     setValueAutocomplete: any
+    [x: string | number | symbol]: unknown
 }
 
 const ComboBox: FC<IComboBoxProps> = ({
@@ -16,6 +17,7 @@ const ComboBox: FC<IComboBoxProps> = ({
     options,
     valueAutocomplete,
     setValueAutocomplete,
+    ...others
 }) => {
     const [inputValue, setInputValue] = React.useState('')
     const CustomPaper: FC<{}> = (props) => {
@@ -52,6 +54,7 @@ const ComboBox: FC<IComboBoxProps> = ({
                 />
             )}
             size="small"
+            {...others}
         />
     )
 }

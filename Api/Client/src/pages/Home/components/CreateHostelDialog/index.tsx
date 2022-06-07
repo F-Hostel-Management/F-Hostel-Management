@@ -1,8 +1,9 @@
 import * as React from 'react'
-import FormDialog from '../../../../components/DialogCustom/FormDialog'
-import HostelForm from '../HostelForm'
 import { IHostelValues } from '../../../../interface/IHostel'
 import { useForm } from '../../../../hooks/useForm'
+import HostelStepper from '../HostelStepper'
+import DialogCustom from '../../../../components/DialogCustom'
+import { createHostel } from '../../../../services/hostels'
 
 interface ICreateHostelDialogProps {
     openDialog: boolean
@@ -17,29 +18,41 @@ const CreateHostelDialog: React.FunctionComponent<ICreateHostelDialogProps> = ({
         address: '',
         name: '',
         numOfRooms: 0,
-        hostelCategoryId: '',
-        ownerId: '',
-        imageSrc: '',
+        hostelCategoryId: '6c62f503-c093-4ef9-31e1-08da469bda62',
+        image: null,
     }
 
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IHostelValues>(initialValues)
 
-    const handleSubmit = () => {}
+    const handleSubmit = () => {
+        const { address, name, numOfRooms, hostelCategoryId, image } = values
+
+        const createValues = { address, name, numOfRooms, hostelCategoryId }
+
+        const uploadImageValues = { image }
+
+        ;(async () => {
+            await createHostel(createValues)
+            // await uploadImage(uploadImageValues)
+        })()
+    }
     return (
-        <FormDialog
+        <DialogCustom
             title="Create Hostel"
-            action="Create"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
-            handleSubmit={handleSubmit}
+            maxWidth="lg"
         >
-            <HostelForm
+            <HostelStepper
+                handleCloseDialog={handleCloseDialog}
                 values={values}
                 setValues={setValues}
                 handleInputChange={handleInputChange}
+                resetForm={resetForm}
+                handleSubmit={handleSubmit}
             />
-        </FormDialog>
+        </DialogCustom>
     )
 }
 

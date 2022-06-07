@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
+export const Container = styled.div<{ loading: boolean }>`
     animation: var(--animation-transitionsIn) 1s;
+    display: ${(props) => (props.loading ? 'none' : 'block')};
 `
 
 export const BodyWrapper = styled.div`

@@ -32,5 +32,21 @@ export const useGridData = (): any => {
         }
     }
 
-    return { renderCell, createColumn }
+    const renderValueGetter = (
+        field: string,
+        headerName: string,
+        width: number,
+        getValue: (params: Record<string, any>) => string
+    ): GridColDef => {
+        return {
+            field: field,
+            renderHeader: () => <strong>{headerName}</strong>,
+            width: width,
+            valueGetter: (params) => {
+                return getValue(params?.row)
+            },
+        }
+    }
+
+    return { renderCell, createColumn, renderValueGetter }
 }
