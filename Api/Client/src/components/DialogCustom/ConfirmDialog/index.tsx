@@ -1,4 +1,9 @@
-import { Button, DialogActions, DialogContentText } from '@mui/material'
+import {
+    Button,
+    DialogActions,
+    DialogContentText,
+    DialogProps,
+} from '@mui/material'
 import React, { FC, Fragment } from 'react'
 import DialogCustom from '../../DialogCustom'
 
@@ -8,6 +13,7 @@ interface IConfirmDialogProps {
     handleOpenDialog: any
     handleCloseDialog: any
     children: any
+    maxWidth?: DialogProps['maxWidth']
 }
 
 const ConfirmDialog: FC<IConfirmDialogProps> = ({
@@ -15,13 +21,14 @@ const ConfirmDialog: FC<IConfirmDialogProps> = ({
     openDialog,
     handleCloseDialog,
     children,
+    maxWidth = 'md',
 }) => {
     return (
         <DialogCustom
             title={title}
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
-            maxWidth="md"
+            maxWidth={maxWidth}
         >
             <Fragment>
                 <DialogContentText>{children}</DialogContentText>
