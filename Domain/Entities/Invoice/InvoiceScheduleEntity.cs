@@ -6,8 +6,7 @@ namespace Domain.Entities.InvoiceSchedule;
 
 [Table("InvoiceSchedules")]
 public class InvoiceScheduleEntity : BaseEntity
-{ 
-    public string InvoiceCode { get; set; }
+{
     public double Price { get; set; }
     public string Cron { get; set; }
     public string Content { get; set; }
