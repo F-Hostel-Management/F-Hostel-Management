@@ -7,6 +7,7 @@ using Domain.Enums;
 
 namespace Application.Services.CommitmentServices;
 
+
 public class CommitmentServices : ICommitmentServices
 {
     public readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
@@ -85,7 +86,7 @@ public class CommitmentServices : ICommitmentServices
         CommitmentEntity com = await _commitmentRepository
             .FirstOrDefaultAsync(com =>
             com.Id.Equals(Id)
-            && (com.Status.Equals(CommitmentStatus.Active.ToString()) || 
+            && (com.Status.Equals(CommitmentStatus.Active.ToString()) ||
                 com.Status.Equals(CommitmentStatus.Approved.ToString()))
             );
         return com ??
@@ -106,5 +107,12 @@ public class CommitmentServices : ICommitmentServices
             );
         return com ??
             throw new NotFoundException("Commitment Not Found");
+    }
+
+    public async Task<int> CountForHostel(Guid hostelId)
+    {
+        var list = await _commitmentRepository.WhereAsync(com =>
+        com.HostelId.Equals(hostelId));
+        return list.Count;
     }
 }

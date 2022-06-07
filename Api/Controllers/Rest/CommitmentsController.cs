@@ -71,6 +71,8 @@ public class CommitmentsController : BaseRestController
         com.OwnerId = hostel.OwnerId;
         com.HostelId = hostel.Id;
         com.CreatedDate = DateTime.Now;
+        int code = (await _commitmentServices.CountForHostel(com.HostelId) + 1);
+        com.CommitmentCode = "F-" + code;
 
         await _commitmentServices.CreateCommitment(com, room);
 

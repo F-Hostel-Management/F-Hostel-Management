@@ -183,7 +183,7 @@ public static class DatabaseInitializer
         var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
-        
+        int code = 1;
         foreach (var tenant in tenants)
         {
             var room = rooms[_rand.Next(rooms.Length)];
@@ -203,7 +203,8 @@ public static class DatabaseInitializer
                     CommitmentStatus = (CommitmentStatus)2,
                     DateOverdue = _rand.Next(1, 6),
                     Compensation = _rand.Next(3000, 4000),
-                    PaymentDate = _rand.Next(32)
+                    PaymentDate = _rand.Next(32),
+                    CommitmentCode = "DTN" + code++,
                 }) ;
 
             // tenant into room

@@ -17,6 +17,7 @@ namespace Application.Interfaces
         Task ApprovedCommitment(CommitmentEntity commitment);
         Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId);
         Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
+        Task<int> CountForHostel(Guid hostelId);
 
     }
 }
