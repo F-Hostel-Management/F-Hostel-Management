@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoWrapper.Wrappers;
 using Domain.Entities.Room;
@@ -34,7 +35,7 @@ public class RoomServices : IRoomServices
             );
 
         return room ??
-            throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+            throw new NotFoundException($"Room not found");
     }
 
     public async Task<RoomEntity> GetRoom(Guid Id)
@@ -42,13 +43,13 @@ public class RoomServices : IRoomServices
         RoomEntity room = await _roomRepository.FindByIdAsync(Id);
 
         return room ??
-            throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+            throw new NotFoundException($"Room not found");
     }
 
     public async Task<bool> RoomManagedBy(Guid roomId, Guid userId)
     {
         var room = await _roomRepository.FindByIdAsync(roomId);
-        if (room == null) throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+        if (room == null) throw new NotFoundException($"Room not found");
 
         var hostelId = room.HostelId;
         return await _hostelServices.IsHostelManagedBy(hostelId, userId);
@@ -57,7 +58,7 @@ public class RoomServices : IRoomServices
     public async Task<bool> HasTenant(Guid roomId, Guid userId)
     {
         var room = (await _roomRepository.WhereAsync(room => room.Id == roomId, new string[] {"RoomTenants"})).FirstOrDefault();
-        if (room == null) throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+        if (room == null) throw new NotFoundException($"Room not found");
 
         return room.RoomTenants.Any(roomTenant => roomTenant.TenantId == userId);
     }
