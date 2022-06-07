@@ -12,13 +12,21 @@ import Step3 from './Step3'
 import StepByStep from '../../../../components/StepByStep'
 import { IStepper } from '../../../../interface/IStepper'
 import { getListHostel, getRoomOfHostel } from '../../../../services/hostels'
-
+import { useSelector } from 'react-redux'
+import { getCurrentHostel } from '../../../../slices/hostelSlice'
+import * as Styled from './styles'
+import QrCode from '../../../../components/QrCode'
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
     values: Record<string, any>
     setValues: Dispatch<SetStateAction<any>>
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
     resetForm: () => void
+    handleSubmitStep2: () => void
+    handleSubmitStep3: () => void
+    timeSpan: number
+    handleChange: (e: ChangeEvent<HTMLInputElement>) => void
+    sixDigitsCode: any
 }
 
 const CommitmentStepper: FC<ICommitmentStepperProps> = ({
@@ -27,23 +35,38 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     setValues,
     handleInputChange,
     resetForm,
+    handleSubmitStep2,
+    handleSubmitStep3,
+    timeSpan,
+    handleChange,
+    sixDigitsCode,
 }) => {
+    const currentHostel = useSelector(getCurrentHostel)
     const [rooms, setRooms] = useState([])
     const [hostels, setHostels] = useState([])
     const [roomInfo, setRoomInfo] = useState<any | null>(null)
     const [hostelInfo, setHostelInfo] = useState<any | null>(null)
 
     useEffect(() => {
-        ;(async () => {
-            const hostelList = await getListHostel()
-            setHostelInfo(hostelList?.[0])
-            setHostels(hostelList)
-        })()
-    }, [])
+        if (localStorage.getItem('currentHostelId')) {
+            if ('id' in currentHostel) {
+                setHostelInfo(currentHostel)
+            }
+        } else {
+            ;(async () => {
+                const hostelList = await getListHostel()
+                setHostelInfo(hostelList?.[0])
+                setHostels(hostelList)
+            })()
+        }
+    }, [currentHostel])
     useEffect(() => {
-        if (!hostelInfo) return
+        const currentHostelId = localStorage.getItem('currentHostelId')
+        if (!hostelInfo && !currentHostelId) return
         ;(async () => {
-            const roomList = await getRoomOfHostel(hostelInfo?.id)
+            const roomList = await getRoomOfHostel(
+                currentHostelId || hostelInfo?.id
+            )
             setRoomInfo(roomList?.[0])
             setRooms(roomList)
         })()
@@ -77,18 +100,30 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     hostelInfo={hostelInfo}
                 />
             ),
-            handleNext: () => alert('Step 2'),
+            handleNext: handleSubmitStep2,
             action: 'Create',
         },
         {
             name: 'QR code',
-            component: <Step3 />,
-            handleNext: () => alert('Step 3'),
+            component: (
+                <Step3 timeSpan={timeSpan} handleChange={handleChange} />
+            ),
+            handleNext: handleSubmitStep3,
             action: 'Confirm',
         },
     ]
 
-    return <StepByStep steps={steps} handleCloseDialog={handleCloseDialog} />
+    return (
+        <StepByStep
+            steps={steps}
+            handleCloseDialog={handleCloseDialog}
+            finishedStep={
+                <Styled.ContainerStep>
+                    <QrCode link={sixDigitsCode} size={200} />
+                </Styled.ContainerStep>
+            }
+        />
+    )
 }
 
 export default CommitmentStepper
