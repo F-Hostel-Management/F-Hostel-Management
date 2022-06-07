@@ -34,11 +34,11 @@ public class AuthorizationServices : IAuthorizationServices
         throw new NotImplementedException();
     }
 
-    public async Task<bool> IsHostelManagedByCurrentUser(Guid comId, Guid userId)
+    public async Task<bool> IsHostelManagedByCurrentUser(Guid hostelID, Guid userId)
     {
         var list = await _hostelRepository.WhereAsync(e =>
             (e.HostelManagements.FirstOrDefault(e => e.ManagerId.Equals(userId)) != null ||
-             e.OwnerId.Equals(userId)) && e.Id.Equals(userId)
+             e.OwnerId.Equals(userId)) && e.Id.Equals(hostelID)
             , "HostelManagements");
         return list.Count == 1;
     }
