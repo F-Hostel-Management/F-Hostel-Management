@@ -10,7 +10,10 @@ import * as Styled from './styles'
 
 interface IFormInfoProps {
     info: IUser
-    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    handleInputChange: (
+        event: React.ChangeEvent<HTMLInputElement>,
+        isForce?: boolean
+    ) => void
 }
 const GENDERS = ['Male', 'Female', 'Other']
 const FormInfo: React.FC<IFormInfoProps> = ({ info, handleInputChange }) => {
@@ -89,7 +92,9 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info, handleInputChange }) => {
                 <InputField
                     label="Phone number"
                     value={info.phone}
-                    onChange={handleInputChange}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleInputChange(event, true)
+                    }
                     type="number"
                     name="phone"
                 />
@@ -97,7 +102,9 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info, handleInputChange }) => {
                 <InputField
                     label="Citizen ID number"
                     value={info.cardNumber}
-                    onChange={handleInputChange}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleInputChange(event, true)
+                    }
                     type="number"
                     name="cardNumber"
                 />
