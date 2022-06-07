@@ -4,6 +4,7 @@ import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
 import { IField } from '../../../../../interface/IField'
 import { InputAdornment } from '@mui/material'
+import { getItem } from '../../../../../utils/LocalStorageUtils'
 interface IStep1Props {
     values: any
     setValues: any
@@ -15,6 +16,52 @@ interface IStep1Props {
     setHostelInfo: any
     hostelOptions: Array<any>
 }
+
+const fields: IField[] = [
+    {
+        label: 'Start Date',
+        name: 'startDate',
+        type: 'date',
+        required: true,
+    },
+    {
+        label: 'End Date',
+        name: 'endDate',
+        type: 'date',
+        required: true,
+    },
+    {
+        label: 'Payment Day',
+        name: 'paymentDate',
+        type: 'number',
+        required: false,
+        endAdornment: <InputAdornment position="end">days</InputAdornment>,
+        inputProps: { min: 1, max: 31 },
+    },
+    {
+        label: 'Allowed of days overdue',
+        name: 'overdueDays',
+        type: 'number',
+        required: true,
+        endAdornment: <InputAdornment position="end">days</InputAdornment>,
+        inputProps: { min: 0, max: 31 },
+    },
+    {
+        label: 'Price',
+        name: 'price',
+        type: 'number',
+        required: true,
+        endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+    },
+    {
+        label: 'Compensation Money',
+        name: 'compensation',
+        type: 'number',
+        required: true,
+        endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+    },
+]
+
 const Step1: FC<IStep1Props> = ({
     values,
     setValues,
@@ -26,82 +73,15 @@ const Step1: FC<IStep1Props> = ({
     setHostelInfo,
     hostelOptions,
 }) => {
-    const fields: IField[] = [
-        {
-            label: 'Create Date',
-            name: 'createdDate',
-            type: 'date',
-            disabled: true,
-            required: true,
-        },
-        {
-            label: 'Start Date',
-            name: 'startDate',
-            type: 'date',
-            required: true,
-        },
-        {
-            label: 'End Date',
-            name: 'endDate',
-            type: 'date',
-            required: true,
-        },
-        {
-            label: 'Allowed of days overdue',
-            name: 'overdueDays',
-            type: 'number',
-            required: true,
-            endAdornment: <InputAdornment position="end">days</InputAdornment>,
-        },
-        {
-            label: 'Compensation Money',
-            name: 'compensation',
-            type: 'number',
-            required: true,
-            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
-        },
-        {
-            label: 'Maximum People',
-            name: 'maximumPeople',
-            type: 'number',
-            required: false,
-            disabled: true,
-        },
-        {
-            label: 'Area',
-            name: 'area',
-            type: 'number',
-            required: false,
-            disabled: true,
-            endAdornment: (
-                <InputAdornment position="end">
-                    <div style={{ fontSize: '1.3rem' }}>
-                        m<sup>2</sup>
-                    </div>
-                </InputAdornment>
-            ),
-        },
-        {
-            label: 'Price',
-            name: 'price',
-            type: 'number',
-            required: false,
-            disabled: true,
-            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
-        },
-    ]
-
     useEffect(() => {
         setValues({ ...values, roomId: roomInfo?.id })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomInfo])
-
-    console.log('test: ', values)
-
+    const currentHostelId = getItem('currentHostelId')
     return (
         <Styled.ContainerStep>
             <Styled.LeftSide>
-                {fields.slice(0, 5).map((field) => (
+                {fields.slice(0, 4).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
@@ -112,18 +92,22 @@ const Step1: FC<IStep1Props> = ({
                         required={field.required}
                         disabled={field.disabled}
                         endAdornment={field.endAdornment}
+                        inputProps={field.inputProps}
                     />
                 ))}
             </Styled.LeftSide>
             <Styled.RightSide>
-                <ComboBox
-                    label="Hostel"
-                    options={hostelOptions}
-                    optionLabel="name"
-                    valueAutocomplete={hostelInfo}
-                    setValueAutocomplete={setHostelInfo}
-                    defaultValue={hostelOptions?.[0]}
-                />
+                {!currentHostelId && (
+                    <ComboBox
+                        label="Hostel"
+                        options={hostelOptions}
+                        optionLabel="name"
+                        valueAutocomplete={hostelInfo}
+                        setValueAutocomplete={setHostelInfo}
+                        defaultValue={hostelOptions?.[0]}
+                    />
+                )}
+
                 <ComboBox
                     label="Room"
                     options={roomOptions}
@@ -133,16 +117,18 @@ const Step1: FC<IStep1Props> = ({
                     disabled={!hostelInfo || !Object.keys(hostelInfo).length}
                     defaultValue={roomOptions?.[0]}
                 />
-                {fields.slice(5, 8).map((field) => (
+                {fields.slice(4, 8).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
                         name={field.name}
-                        value={roomInfo?.[field.name]}
+                        value={values[field.name]}
+                        onChange={handleInputChange}
                         type={field.type}
                         required={field.required}
                         disabled={field.disabled}
                         endAdornment={field.endAdornment}
+                        inputProps={field.inputProps}
                     />
                 ))}
             </Styled.RightSide>
