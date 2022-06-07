@@ -1,6 +1,7 @@
 import { Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IUser } from '../../../../interface/IUser'
+import { ROLES } from '../../../FillInformation/constants'
 import * as Styled from './styles'
 interface IAvatarProps {
     handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -8,7 +9,19 @@ interface IAvatarProps {
 }
 
 const Avatar = (props: IAvatarProps) => {
+    const [preview, setPreview] = React.useState<string>()
     const { avatarUrl, role, name } = props.values
+    useEffect(() => {
+        if (avatarUrl) {
+            const reader = new FileReader()
+            reader.onload = () => {
+                setPreview(reader.result as string)
+            }
+            // reader.readAsDataURL(avatarUrl)
+        } else {
+            setPreview(undefined)
+        }
+    }, [avatarUrl])
     return (
         <div>
             <label>
@@ -42,7 +55,7 @@ const Avatar = (props: IAvatarProps) => {
                     textAlign: 'center',
                 }}
             >
-                {role}
+                {ROLES[role ?? 0].name}
             </Typography>
         </div>
     )

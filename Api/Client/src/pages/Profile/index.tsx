@@ -8,6 +8,7 @@ import { IUser } from '../../interface/IUser'
 import { AppState } from '../../stores/reduxStore'
 import { useSelector } from 'react-redux'
 import FormInfo from './components/FormInfo'
+import { Navigate } from 'react-router-dom'
 
 interface IProfileProps {}
 
@@ -41,7 +42,9 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
     //     }
     // }, [initialValues.avatar])
 
-    return (
+    return currentUser == null ? (
+        <Navigate to="/login" replace={true} />
+    ) : (
         <Styled.ProfilePaper>
             <Styled.GridPaper container>
                 <Grid item xs={12} md={3}>

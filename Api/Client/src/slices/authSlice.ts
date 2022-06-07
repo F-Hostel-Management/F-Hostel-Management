@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import moment from 'moment'
 import { IUser } from '../interface/IUser'
 
 interface AuthSliceState {
@@ -19,6 +20,9 @@ const authSlice = createSlice({
             actions: PayloadAction<IUser>
         ) => {
             state.currentUser = actions.payload
+            state.currentUser.dateOfBirth = moment(
+                state.currentUser.dateOfBirth
+            ).format('YYYY-MM-DD')
             state.isAuthenticated = true
         },
     },

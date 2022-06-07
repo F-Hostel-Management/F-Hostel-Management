@@ -19,6 +19,7 @@
         "apexcharts": "^3.35.3",
         "axios": "^0.27.2",
         "firebase": "^9.8.1",
+        "moment": "^2.29.3",
         "normalize.css": "^8.0.1",
         "odata-fluent-query": "https://github.com/oHTGo/odata-fluent-query",
         "qrcode.react": "^3.0.2",

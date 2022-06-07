@@ -58,6 +58,13 @@ export const RestCaller = {
             })
             .then(sleep(1000))
             .then(responseBody),
+    patch: (url: string, data?: unknown, showErrorToast?: boolean) =>
+        instance
+            .patch(url, JSON.stringify(data), {
+                showErrorToast,
+            })
+            .then(sleep(1000))
+            .then(responseBody),
     delete: (url: string, showErrorToast?: boolean) =>
         instance
             .delete(url, { showErrorToast })

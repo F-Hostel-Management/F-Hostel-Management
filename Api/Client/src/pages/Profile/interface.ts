@@ -12,3 +12,12 @@ export interface IInformation {
     organization?: string
     avatarUrl?: string
 }
+export interface IProfileFormInfo {
+    name?: string
+    phone?: string
+    cardNumber?: string
+    taxCode?: string
+    dateOfBirth?: string
+    gender?: number
+    organization?: string
+}
