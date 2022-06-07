@@ -61,7 +61,7 @@ const privateRoutes: IRoute[] = [
         },
     },
     {
-        path: 'home/profile/:userID',
+        path: 'home/profile',
         component: Profile,
         name: 'Profile',
         layout: DefaultLayout,

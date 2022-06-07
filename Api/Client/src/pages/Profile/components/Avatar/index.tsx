@@ -8,7 +8,7 @@ interface IAvatarProps {
 }
 
 const Avatar = (props: IAvatarProps) => {
-    const { avatarUrl, role } = props.values
+    const { avatarUrl, role, name } = props.values
     return (
         <div>
             <label>
@@ -33,7 +33,7 @@ const Avatar = (props: IAvatarProps) => {
                     fontWeight: 600,
                 }}
             >
-                {initialValues.fullName}
+                {name}
             </Typography>
             <Typography
                 variant="body2"
@@ -42,7 +42,7 @@ const Avatar = (props: IAvatarProps) => {
                     textAlign: 'center',
                 }}
             >
-                {initialValues.role}
+                {role}
             </Typography>
         </div>
     )

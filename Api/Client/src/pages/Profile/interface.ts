@@ -1,11 +1,14 @@
+import { ERole } from '../../utils/enums'
+
 export interface IInformation {
-    fullName: string
-    role: string
-    birthDate: string
-    cardNumber: string
-    address: string
-    gender: string
-    phoneNo: string
-    avatar: File | null
-    email: string
+    role?: ERole
+    name?: string
+    email?: string
+    phone?: string
+    cardNumber?: string
+    taxCode?: string
+    dateOfBirth?: string
+    gender?: number
+    organization?: string
+    avatarUrl?: string
 }

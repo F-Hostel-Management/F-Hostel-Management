@@ -35,12 +35,11 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     const handleListItemClick = (index: number) => {
         setSelectedIndex(index)
     }
-    console.log(currentUser)
     const IconButtonList: { items: Array<IIconButtonListProps> } = {
         items: [
             {
                 icon: <PermIdentityIcon />,
-                path: `/home/profile/${currentUser?.id}`,
+                path: `/home/profile`,
             },
             { icon: <LanguageIcon />, path: '' },
             { icon: <KeyIcon />, path: '' },

@@ -2,11 +2,12 @@ import { Typography, MenuItem, Button } from '@mui/material'
 import React from 'react'
 
 import InputField from '../../../../components/Input/InputField'
-import { IInformation } from '../../interface'
+import { IUser } from '../../../../interface/IUser'
 import * as Styled from './styles'
 
 interface IFormInfoProps {
-    info: IInformation
+    info: IUser
+    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 const GENDERS = ['Male', 'Female', 'Other']
 
@@ -30,7 +31,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info }) => {
                 </Typography>
                 <InputField
                     label="Full name"
-                    value={info.fullName}
+                    value={info.name}
                     onChange={handleChange}
                     autoFocus
                 />
@@ -49,7 +50,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info }) => {
                 />
                 <InputField
                     label="Birthday"
-                    value={info.birthDate}
+                    value={info.dateOfBirth}
                     onChange={handleChange}
                     type="date"
                 />
@@ -69,7 +70,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({ info }) => {
 
                 <InputField
                     label="Phone number"
-                    value={info.phoneNo}
+                    value={info.phone}
                     onChange={handleChange}
                     type="number"
                 />

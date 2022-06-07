@@ -5,20 +5,27 @@ import { Grid } from '@mui/material'
 import Avatar from './components/Avatar'
 import { useForm } from '../../hooks/useForm'
 import { IUser } from '../../interface/IUser'
+import { AppState } from '../../stores/reduxStore'
+import { useSelector } from 'react-redux'
+import FormInfo from './components/FormInfo'
 
 interface IProfileProps {}
 
 const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
+    const currentUser = useSelector((state: AppState) => state.auth.currentUser)
+
     const initialValues: IUser = {
-        name: 'Dang Phuong Anhs',
+        name: currentUser?.name,
         role: 0,
-        email: 'abc@gmail.com',
-        dateOfBirth: '18/8/2001',
-        cardNumber: '012101060113',
+        email: currentUser?.email,
+        dateOfBirth: currentUser?.dateOfBirth,
+        cardNumber: currentUser?.cardNumber,
         gender: 0,
-        phone: '0973997617',
+        phone: currentUser?.phone,
         avatarUrl: '',
+        address: currentUser?.address,
     }
+
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IUser>(initialValues)
     // const [preview, setPreview] = React.useState<string>()
@@ -39,12 +46,18 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
             <Styled.GridPaper container>
                 <Grid item xs={12} md={3}>
                     <Styled.ProfileHeader>
-                        <Avatar handleInputChange={handleInputChange}></Avatar>
+                        <Avatar
+                            handleInputChange={handleInputChange}
+                            values={values}
+                        ></Avatar>
                     </Styled.ProfileHeader>
                 </Grid>
                 {/* <Divider orientation="vertical" flexItem /> */}
                 <Grid item xs={12} md={9}>
-                    {/* <FormInfo info={initialValues} /> */}
+                    <FormInfo
+                        info={values}
+                        handleInputChange={handleInputChange}
+                    />
                 </Grid>
             </Styled.GridPaper>
         </Styled.ProfilePaper>
