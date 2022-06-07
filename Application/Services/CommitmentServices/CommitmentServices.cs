@@ -1,11 +1,9 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.CommitmentServices;
 
@@ -91,7 +89,7 @@ public class CommitmentServices : ICommitmentServices
                 com.Status.Equals(CommitmentStatus.Approved.ToString()))
             );
         return com ??
-           throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
+           throw new NotFoundException("Commitment Not Found Or Already Expired");
     }
 
     public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)

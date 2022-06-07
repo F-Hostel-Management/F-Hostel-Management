@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoWrapper.Wrappers;
 using Domain.Entities;
@@ -58,7 +59,7 @@ public class AuthorizationServices : IAuthorizationServices
     public async Task<bool> IsRoomManageByCurrentUser(Guid roomId, Guid userId)
     {
         var room = await _roomRepository.FindByIdAsync(roomId);
-        if (room == null) throw new ApiException($"Room not found", StatusCodes.Status404NotFound);
+        if (room == null) throw new NotFoundException($"Room not found");
 
         Guid hostelId = room.HostelId;
         return await this.IsHostelManagedByCurrentUser(hostelId, userId);

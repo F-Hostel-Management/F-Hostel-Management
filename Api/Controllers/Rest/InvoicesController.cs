@@ -37,8 +37,8 @@ public class InvoicesController : BaseRestController
     public async Task<IActionResult> CreateAsync([FromRoute] Guid roomId, CreateInvoiceRequest request)
     {
         var hasPermission = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
-        if (!hasPermission) throw new ApiException($"User is not the owner or manager of the room", StatusCodes.Status403Forbidden);
-
+        if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
+        
         var invoice = Mapper.Map<InvoiceEntity>(request);
         invoice.InvoiceCode = CodeGeneratorUtil.genarateByNowDateTime();
         invoice.Date = DateTime.Now;
@@ -62,7 +62,7 @@ public class InvoicesController : BaseRestController
 
         var roomId = invoice.RoomId;
         var hasPermission = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
-        if (!hasPermission) throw new ApiException($"User is not the owner or manager of the room", StatusCodes.Status403Forbidden);
+        if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
 
         if (invoice.TenantPaidId != null) throw new BadRequestException($"Can not update when the invoice has been paid");
 
@@ -84,8 +84,8 @@ public class InvoicesController : BaseRestController
 
         var roomId = invoice.RoomId;
         var hasPermission = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
-        if (!hasPermission) throw new ApiException($"User is not the owner or manager of the room", StatusCodes.Status403Forbidden);
-
+        if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
+        
         if (invoice.TenantPaidId != null) throw new BadRequestException($"The invoice has been paid");
 
         var tenant = await _userRepository.FindByIdAsync(tenantId);
