@@ -4,11 +4,13 @@ import OwnerHome from './OwnerHome'
 import TenantHome from './TenantHome'
 import { getListHostel } from '../../services/hostels'
 import { IHostel } from '../../interface/IHostel'
+import { removeItem } from '../../utils/LocalStorageUtils'
 interface IHomeProps {}
 
 const Home: FC<IHomeProps> = () => {
     const [hostels, setHostels] = useState<IHostel[]>([])
     useEffect(() => {
+        removeItem('currentHostelId')
         const FetchingData = async () => {
             setHostels(await getListHostel())
         }
