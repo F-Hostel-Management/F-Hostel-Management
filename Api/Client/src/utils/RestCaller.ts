@@ -31,32 +31,24 @@ instance.interceptors.response.use(undefined, (error) => {
 const responseBody = (response: AxiosResponse): ISuccessResponse =>
     <ISuccessResponse>response?.data
 
-const sleep = (ms: number) => (response: AxiosResponse) =>
-    new Promise<AxiosResponse>((resolve) =>
-        setTimeout(() => resolve(response), ms)
-    )
-
 export const RestCaller = {
     get: (url: string, showErrorToast?: boolean) =>
         instance
             .get(url, {
                 showErrorToast,
             })
-            .then(sleep(1000))
             .then(responseBody),
     post: (url: string, data?: unknown, showErrorToast?: boolean) =>
         instance
             .post(url, JSON.stringify(data), {
                 showErrorToast,
             })
-            .then(sleep(1000))
             .then(responseBody),
     put: (url: string, data?: unknown, showErrorToast?: boolean) =>
         instance
             .put(url, JSON.stringify(data), {
                 showErrorToast,
             })
-            .then(sleep(1000))
             .then(responseBody),
     patch: (url: string, data?: unknown, showErrorToast?: boolean) =>
         instance
@@ -66,10 +58,7 @@ export const RestCaller = {
             .then(sleep(1000))
             .then(responseBody),
     delete: (url: string, showErrorToast?: boolean) =>
-        instance
-            .delete(url, { showErrorToast })
-            .then(sleep(1000))
-            .then(responseBody),
+        instance.delete(url, { showErrorToast }).then(responseBody),
     upload: (url: string, form: FormData, showErrorToast?: boolean) =>
         instance
             .post(url, form, {
@@ -78,6 +67,5 @@ export const RestCaller = {
                 },
                 showErrorToast,
             })
-            .then(sleep(10000))
             .then(responseBody),
 }

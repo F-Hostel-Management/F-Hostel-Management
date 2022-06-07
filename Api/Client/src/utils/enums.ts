@@ -11,9 +11,10 @@ export enum EGender {
 }
 
 export enum ECommitmentStatus {
-    'Closed',
-    'Pending',
-    'Active',
+    Expired = 'Expired',
+    Approved = 'Approved',
+    Pending = 'Pending',
+    Active = 'Active',
 }
 
 export enum ERoomType {

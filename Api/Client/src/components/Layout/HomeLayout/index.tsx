@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, Fragment, ReactElement, useState } from 'react'
 
 import { FooterLandingPage as Footer } from '../../Footer/FooterLandingPage'
 import { HeaderLandingPage as Header } from '../../Header/HeaderLandingPage'
@@ -12,15 +12,15 @@ interface IHomeLayoutProps {
 export const HomeLayout: FC<IHomeLayoutProps> = ({ children }) => {
     const [loading, setLoading] = useState<boolean>(true)
     setTimeout(() => setLoading(false), 2000)
-
-    return loading ? (
-        <Loading />
-    ) : (
-        <Styled.Container>
-            <Header />
-            <Styled.BodyWrapper>{children}</Styled.BodyWrapper>
-            <Footer />
-        </Styled.Container>
+    return (
+        <Fragment>
+            <Loading loading={loading} />
+            <Styled.Container loading={loading}>
+                <Header />
+                <Styled.BodyWrapper>{children}</Styled.BodyWrapper>
+                <Footer />
+            </Styled.Container>
+        </Fragment>
     )
 }
 

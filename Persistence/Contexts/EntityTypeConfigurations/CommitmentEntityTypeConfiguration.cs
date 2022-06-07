@@ -37,9 +37,6 @@ namespace Infrastructure.Contexts.EntityTypeConfigurations
                 .HasForeignKey(ti => ti.TenantId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            // unique commitment code
-            builder.HasIndex(c => c.CommitmentCode).IsUnique();
-
             // 1 com - 1 joining code
             builder
                 .HasOne(jc => jc.JoiningCode)

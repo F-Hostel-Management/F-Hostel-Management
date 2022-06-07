@@ -20,6 +20,7 @@ namespace Api.Configurations
             services.AddScoped<IRoomServices, RoomServices>();
             services.AddScoped<ITenantServices, TenantServices>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthorizationServices, AuthorizationServices>();
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
         }
     }

@@ -47,7 +47,6 @@ public class HostelsController : BaseODataController<HostelEntity>
         return ApplyQuery(options, query);
     }
 
-    [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [ApiExplorerSettings(IgnoreApi = true)]
     [HttpGet("{hostelId}/get-all-commitments")]
     public IQueryable GetAllCommitmentsOfThisHostel

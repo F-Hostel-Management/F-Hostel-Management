@@ -4,9 +4,10 @@ import Step from '@mui/material/Step'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { StepButton, Stepper } from '@mui/material'
+import { IStepper } from '../../interface/IStepper'
 
 interface IStepByStepProps {
-    steps: Record<string, any>[]
+    steps: IStepper[]
     handleCloseDialog: () => void
 }
 
@@ -24,17 +25,6 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
         return activeStep === totalSteps()
     }
 
-    const handleStep = (step: number) => () => {
-        setActiveStep(step)
-    }
-
-    const handleNext = () => {
-        setActiveStep(activeStep + 1)
-        const newCompleted = completed
-        newCompleted[activeStep] = true
-        setCompleted(newCompleted)
-    }
-
     const handleReset = () => {
         setActiveStep(0)
         handleCloseDialog()
@@ -42,6 +32,13 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        // next step
+        setActiveStep(activeStep + 1)
+        const newCompleted = completed
+        newCompleted[activeStep] = true
+        setCompleted(newCompleted)
+        // custom your handle step
+        steps[activeStep].handleNext()
     }
     return (
         <Box sx={{ width: '100%' }}>
@@ -52,9 +49,7 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
             >
                 {steps.map((step, index) => (
                     <Step key={step?.name} completed={completed[index]}>
-                        <StepButton color="inherit" onClick={handleStep(index)}>
-                            {step?.name}
-                        </StepButton>
+                        <StepButton color="inherit">{step?.name}</StepButton>
                     </Step>
                 ))}
             </Stepper>
@@ -101,12 +96,9 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
                                 <Button
                                     variant="contained"
                                     size="small"
-                                    onClick={handleNext}
                                     type="submit"
                                 >
-                                    {activeStep === totalSteps() - 1
-                                        ? 'Confirm'
-                                        : 'Next'}
+                                    {steps[activeStep].action}
                                 </Button>
                             )}
                         </Box>

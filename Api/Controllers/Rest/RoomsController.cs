@@ -1,4 +1,5 @@
-﻿using Api.UserFeatures.Requests;
+﻿using Api.Filters;
+using Api.UserFeatures.Requests;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
@@ -14,21 +15,29 @@ public class RoomsController : BaseRestController
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
     private readonly IHostelServices _hostelServices;
     private readonly ICommitmentServices _commitmentServices;
+    private readonly IAuthorizationServices _authorServices;
     public RoomsController(
         IGenericRepository<RoomEntity> roomsRepository,
         ICommitmentServices commitmentServices,
-        IHostelServices hostelServices)
+        IHostelServices hostelServices,
+        IAuthorizationServices authorServices)
     {
         _roomsRepository = roomsRepository;
         _commitmentServices = commitmentServices;
         _hostelServices = hostelServices;
+        _authorServices = authorServices;
     }
 
+    /// <summary>
+    /// owner || manager create room of their hostel
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost()]
     public async Task<IActionResult> CreateRoomsAsync(CreateRoomsRequest req)
     {
-        bool isManagedByCurrentUser = await _hostelServices.IsHostelManagedBy(req.HostelId, CurrentUserID);
+        bool isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(req.HostelId, CurrentUserID);
         if (!isManagedByCurrentUser)
         {
             return Forbid();
@@ -55,6 +64,11 @@ public class RoomsController : BaseRestController
         return Ok();
     }
 
+    /// <summary>
+    /// only tenant get their commitments of that room
+    /// </summary>
+    /// <param name="roomId"></param>
+    /// <returns></returns>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{roomId}/get-list-commitment-of-room-for-tenant")]
     public async Task<IActionResult> GetCommitmentsForTenant

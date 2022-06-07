@@ -17,15 +17,23 @@ public class HostelsController : BaseRestController
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
     private readonly IGenericRepository<RoomEntity> _roomRepository; 
     private readonly IHostelServices _hostelService;
+    private readonly IAuthorizationServices _authorServices;
     public HostelsController(
         IGenericRepository<HostelEntity> hostelRepository,
         IGenericRepository<RoomEntity> roomRepository,
-        IHostelServices hostelServices)
+        IHostelServices hostelServices,
+        IAuthorizationServices authorServices)
     {
         _hostelRepository = hostelRepository;
         _roomRepository = roomRepository;
         _hostelService = hostelServices;
+        _authorServices = authorServices;
     }
+    /// <summary>
+    /// owner create hostel
+    /// </summary>
+    /// <param name="createHostelRequest"></param>
+    /// <returns></returns>
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpPost("create-hostel")]
     public async Task<IActionResult> CreateHostel(CreateHostelRequest createHostelRequest)
@@ -36,32 +44,21 @@ public class HostelsController : BaseRestController
         return Ok(hostel);
     }
 
+    /// <summary>
+    /// owner || manager update hostel image
+    /// </summary>
+    /// <param name="uploadHostelImageRequest"></param>
+    /// <returns></returns>
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
     {
-        var isManagedByCurrentUser = await _hostelService.IsHostelManagedBy(uploadHostelImageRequest.HostelId, CurrentUserID);
+        var isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(uploadHostelImageRequest.HostelId, CurrentUserID);
         if (!isManagedByCurrentUser)
             return Forbid();
         var target = await _hostelRepository.FirstOrDefaultAsync(e => e.Id.Equals(uploadHostelImageRequest.HostelId));
         await _hostelService.UploadHostelImage(target, uploadHostelImageRequest.Image);
         return Ok(target.ImgPath);
     }
-
-/*    [ServiceFilter(typeof(ValidateManagementFilter))]
-    [HttpGet("{hostelId}")]
-    public async Task<IActionResult> GetHostelById([FromRoute] Guid hostelId)
-    {
-        var hostel = await _hostelService.GetHostel(hostelId);
-        return Ok(hostel);
-    }
-
-    [ServiceFilter(typeof(ValidateManagementFilter))]
-    [HttpGet("get-all-rooms/{hostelId}")]
-    public async Task<IActionResult> GetRoomsOfHostel([FromRoute] Guid hostelId)
-    {
-        var rooms = await _roomRepository.WhereAsync(room => room.HostelId.Equals(hostelId));
-        return Ok(rooms);
-    }*/
-
-
 }
+
+

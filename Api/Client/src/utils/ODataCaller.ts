@@ -29,22 +29,14 @@ instance.interceptors.response.use(undefined, (error) => {
         HttpErrorToast.show(status, data)
 })
 
-const responseBody = (response: AxiosResponse): ISuccessResponse =>
-    <ISuccessResponse>response?.data
-
-const sleep = (ms: number) => (response: AxiosResponse) =>
-    new Promise<AxiosResponse>((resolve) =>
-        setTimeout(() => resolve(response), ms)
-    )
+const responseBody = (response: AxiosResponse) =>
+    (<ISuccessResponse>response?.data).result
 
 export const ODataCaller = {
     createBuilder: <T>() => odataQuery<T>(),
     get: <T>(path: string, query: ODataQuery<T>, showErrorToast?: boolean) => {
         const queryString = query.toString()
         const url = path + '?' + queryString
-        return instance
-            .get(url, { showErrorToast })
-            .then(sleep(1000))
-            .then(responseBody)
+        return instance.get(url, { showErrorToast }).then(responseBody)
     },
 }

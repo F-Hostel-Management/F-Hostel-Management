@@ -19,8 +19,6 @@ public static class DatabaseInitializer
 
         await dbContext.FeedUsers();
 
-        await dbContext.FeedHostelCategories();
-
         await dbContext.FeedHostels();
 
         await dbContext.FeedRoomTypes();
@@ -100,29 +98,6 @@ public static class DatabaseInitializer
         }
         await dbContext.SaveChangesAsync();
     }
-    public static async Task FeedHostelCategories(this ApplicationDbContext dbContext)
-    {
-        if (dbContext.HostelCategories.Any()) return;
-        List<HostelCategory> _hostelCategories = new List<HostelCategory>()
-        {
-            new HostelCategory(){ CategoryName =  "Cheap Hostel"},
-            new HostelCategory(){ CategoryName =  "Regular Hostel"},
-            new HostelCategory(){ CategoryName =  "Homely Hostel"},
-            new HostelCategory(){ CategoryName =  "Family Hostel"},
-            new HostelCategory(){ CategoryName =  "Eco Hostel"},
-            new HostelCategory(){ CategoryName =  "Beach Hostel"},
-            new HostelCategory(){ CategoryName =  "Surf Hostel"},
-            new HostelCategory(){ CategoryName =  "Party Hostel"},
-            new HostelCategory(){ CategoryName =  "Luxury ⁄ Boutique ⁄ Design Hostel"},
-            new HostelCategory(){ CategoryName =  "Historic Hostel"},
-        };
-
-        foreach (var hostelCategory in _hostelCategories)
-        {
-            await dbContext.HostelCategories.AddAsync(hostelCategory);
-        }
-        await dbContext.SaveChangesAsync();
-    }
 
     public static async Task FeedHostels(this ApplicationDbContext dbContext)
     {
@@ -131,9 +106,8 @@ public static class DatabaseInitializer
         dynamic hostels = SeedingServices.LoadJson("HOSTELS_MOCK_DATA.json");
         int hostelsLength = hostels.Count;
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
-        var hostelCategories = dbContext.HostelCategories.ToArray();
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 6; i++)
         {
             var mockHostel = hostels[_rand.Next(hostelsLength)];
             await dbContext.Hostels.AddAsync(
@@ -142,7 +116,6 @@ public static class DatabaseInitializer
                     Address = mockHostel.Address,
                     Name = mockHostel.Name,
                     NumOfRooms = mockHostel.NumOfRooms,
-                    HostelCategory = hostelCategories[_rand.Next(hostelCategories.Length)],
                     Owner = owners[_rand.Next(owners.Length)],
                 });
         }
@@ -190,7 +163,6 @@ public static class DatabaseInitializer
                     NumOfDoors = mockRoom.NumOfDoors,
                     NumOfWCs = mockRoom.NumOfWCs,
                     NumOfWindows = mockRoom.NumOfWindows,
-                    Price = mockRoom.Price,
                     RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
                     Hostel = hostels[_rand.Next(hostels.Length)],
                     RoomStatus = (RoomStatus)1,
@@ -211,7 +183,6 @@ public static class DatabaseInitializer
         var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
-        
         int code = 1;
         foreach (var tenant in tenants)
         {
@@ -221,7 +192,7 @@ public static class DatabaseInitializer
             await dbContext.Commitments.AddAsync(
                 new CommitmentEntity()
                 {
-                    CommitmentCode = "DNG" + code++,
+                    Price = _rand.Next(3000, 4000),
                     Tenant = tenant,
                     Owner = owner,
                     Room = room,
@@ -232,7 +203,9 @@ public static class DatabaseInitializer
                     CommitmentStatus = (CommitmentStatus)2,
                     DateOverdue = _rand.Next(1, 6),
                     Compensation = _rand.Next(3000, 4000),
-                });
+                    PaymentDate = _rand.Next(32),
+                    CommitmentCode = "DTN" + code++,
+                }) ;
 
             // tenant into room
             await dbContext.RoomTenants.AddAsync(

@@ -11,7 +11,7 @@ const CommitmentStatus: React.FunctionComponent<ICommitmentStatusProps> = ({
 }) => {
     let color = 'default'
     switch (rowData?.status) {
-        case Status.Closed: {
+        case Status.Expired: {
             color = 'gray'
             break
         }
@@ -23,14 +23,12 @@ const CommitmentStatus: React.FunctionComponent<ICommitmentStatusProps> = ({
             color = 'green'
             break
         }
+        case Status.Approved: {
+            color = 'pink'
+            break
+        }
     }
-    return (
-        <Chip
-            label={Status[rowData?.status]}
-            color={color}
-            variant="outlined"
-        />
-    )
+    return <Chip label={rowData?.status} color={color} variant="outlined" />
 }
 
 export default CommitmentStatus
