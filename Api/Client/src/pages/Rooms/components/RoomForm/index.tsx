@@ -1,17 +1,18 @@
 import React, { Dispatch, FC, SetStateAction } from 'react'
-import InputField from '../../../../components/Input/InputField'
 import * as Styled from './styles'
+import InputField from '../../../../components/Input/InputField'
 import { fields } from './fields'
-interface IHostelFormProps {
+
+interface IRoomFormProps {
     values: Record<string, any>
     handleInputChange: Dispatch<SetStateAction<any>>
 }
 
-const HostelForm: FC<IHostelFormProps> = ({ values, handleInputChange }) => {
+const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
     return (
         <Styled.Wrapper>
             <Styled.Side>
-                {fields.slice(0, 2).map((field) => (
+                {fields.slice(0, 6).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
@@ -26,7 +27,7 @@ const HostelForm: FC<IHostelFormProps> = ({ values, handleInputChange }) => {
                 ))}
             </Styled.Side>
             <Styled.Side>
-                {fields.slice(2, 4).map((field) => (
+                {fields.slice(6, 11).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
@@ -44,4 +45,4 @@ const HostelForm: FC<IHostelFormProps> = ({ values, handleInputChange }) => {
     )
 }
 
-export default HostelForm
+export default RoomForm

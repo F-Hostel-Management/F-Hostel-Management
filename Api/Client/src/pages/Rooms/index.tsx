@@ -9,7 +9,7 @@ import { getData, rooms } from '../../utils/MockData'
 import RoomStatus from './components/RoomStatus'
 import ToolbarChildren from './components/ToolbarChildren'
 import ActionButtons from './components/ActionButtons'
-
+import CreateCRoomDialog from './components/CreateRoomDialog'
 interface IRoomsProps {}
 
 const Rooms: FC<IRoomsProps> = () => {
@@ -61,6 +61,13 @@ const Rooms: FC<IRoomsProps> = () => {
                     ) : null
                 }
             />
+
+            {openCreate && (
+                <CreateCRoomDialog
+                    openDialog={openCreate}
+                    handleCloseDialog={handleCloseCreate}
+                />
+            )}
         </Fragment>
     )
 }

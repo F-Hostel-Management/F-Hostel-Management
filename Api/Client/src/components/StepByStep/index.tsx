@@ -25,10 +25,6 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
         return activeStep === totalSteps()
     }
 
-    const handleStep = (step: number) => () => {
-        setActiveStep(step)
-    }
-
     const handleReset = () => {
         setActiveStep(0)
         handleCloseDialog()
@@ -53,9 +49,7 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
             >
                 {steps.map((step, index) => (
                     <Step key={step?.name} completed={completed[index]}>
-                        <StepButton color="inherit" onClick={handleStep(index)}>
-                            {step?.name}
-                        </StepButton>
+                        <StepButton color="inherit">{step?.name}</StepButton>
                     </Step>
                 ))}
             </Stepper>
