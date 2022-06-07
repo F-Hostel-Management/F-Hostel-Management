@@ -5,7 +5,7 @@ using System.Security.Claims;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("server/api/[controller]")]
 public abstract class BaseRestController : ControllerBase
 {
     private IMapper _mapper;

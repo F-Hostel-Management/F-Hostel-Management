@@ -7,7 +7,7 @@ interface AuthSliceState {
 }
 
 const initialState: AuthSliceState = {
-    isAuthenticated: true,
+    isAuthenticated: false,
 }
 
 const authSlice = createSlice({
@@ -21,16 +21,10 @@ const authSlice = createSlice({
             state.currentUser = actions.payload
             state.isAuthenticated = true
         },
-        setIsAuthenticated: (
-            state: AuthSliceState,
-            actions: PayloadAction<boolean>
-        ) => {
-            state.isAuthenticated = actions.payload
-        },
     },
 })
 
-export const { setCurrentUser, setIsAuthenticated } = authSlice.actions
+export const { setCurrentUser } = authSlice.actions
 
 const { reducer } = authSlice
 export default reducer

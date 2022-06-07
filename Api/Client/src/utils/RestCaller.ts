@@ -3,7 +3,7 @@ import { ISuccessResponse } from '../interface/serviceResponse'
 import { HttpErrorToast } from './HttpErrorToast'
 
 const instance = axios.create({
-    baseURL: '/api',
+    baseURL: '/server/api',
     responseType: 'json',
     withCredentials: true,
 })
@@ -22,8 +22,10 @@ instance.interceptors.request.use(
 )
 
 instance.interceptors.response.use(undefined, (error) => {
-    const { status } = error.response
-    HttpErrorToast.show(status)
+    const { status, data } = error.response
+    const { config } = error
+    if (config.showErrorToast === undefined || config.showErrorToast)
+        HttpErrorToast.show(status, data)
 })
 
 const responseBody = (response: AxiosResponse): ISuccessResponse =>
@@ -35,26 +37,39 @@ const sleep = (ms: number) => (response: AxiosResponse) =>
     )
 
 export const RestCaller = {
-    get: (url: string) =>
-        instance.get(url).then(sleep(1000)).then(responseBody),
-    post: (url: string, data?: unknown) =>
+    get: (url: string, showErrorToast?: boolean) =>
         instance
-            .post(url, JSON.stringify(data))
+            .get(url, {
+                showErrorToast,
+            })
             .then(sleep(1000))
             .then(responseBody),
-    put: (url: string, data?: unknown) =>
+    post: (url: string, data?: unknown, showErrorToast?: boolean) =>
         instance
-            .put(url, JSON.stringify(data))
+            .post(url, JSON.stringify(data), {
+                showErrorToast,
+            })
             .then(sleep(1000))
             .then(responseBody),
-    delete: (url: string) =>
-        instance.delete(url).then(sleep(1000)).then(responseBody),
-    upload: (url: string, form: FormData) =>
+    put: (url: string, data?: unknown, showErrorToast?: boolean) =>
+        instance
+            .put(url, JSON.stringify(data), {
+                showErrorToast,
+            })
+            .then(sleep(1000))
+            .then(responseBody),
+    delete: (url: string, showErrorToast?: boolean) =>
+        instance
+            .delete(url, { showErrorToast })
+            .then(sleep(1000))
+            .then(responseBody),
+    upload: (url: string, form: FormData, showErrorToast?: boolean) =>
         instance
             .post(url, form, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                showErrorToast,
             })
             .then(sleep(10000))
             .then(responseBody),

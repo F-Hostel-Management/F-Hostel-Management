@@ -28,7 +28,7 @@ public class RoomsController : BaseODataController<RoomEntity>
         return ApplyQuery(options, query);
     }
 
-    [ServiceFilter(typeof(ValidateManagementFilter))]
+    [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpGet("{roomId}/get-all-commitments")]

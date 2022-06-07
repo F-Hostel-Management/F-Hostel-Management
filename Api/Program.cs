@@ -63,6 +63,10 @@ var configuration = builder.Configuration;
             new string[] {}
             }
         });
+
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        option.IncludeXmlComments(xmlPath);
     });
 }
 
@@ -78,7 +82,7 @@ var app = builder.Build();
         await app.Services.ApplyMigrations();
         await app.Services.DbInitializer();
     }
-    app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false, ShowIsErrorFlagForSuccessfulResponse = true });
+    app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false, ShowIsErrorFlagForSuccessfulResponse = true, WrapWhenApiPathStartsWith = "/server"});
     app.UseRouting();
 
     app.UseAuthentication();
