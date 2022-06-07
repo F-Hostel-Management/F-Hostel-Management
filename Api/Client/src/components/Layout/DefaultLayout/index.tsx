@@ -1,4 +1,4 @@
-import React, { FC, Fragment, ReactElement, useState } from 'react'
+import React, { FC, Fragment, ReactElement, useEffect, useState } from 'react'
 
 import { up } from 'styled-breakpoints'
 import { useBreakpoint } from 'styled-breakpoints/react-styled'
@@ -7,9 +7,12 @@ import { Grid, Typography } from '@mui/material'
 
 import Breadcrumb from '../../Breadcrumd'
 import HeaderDefault from '../../Header/HeaderDefault'
-import Loading from '../../Loading'
 import Sidebar from '../../Sidebar'
 import * as Styled from './styles'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentHostel, setCurrentHostel } from '../../../slices/hostelSlice'
+import { getHostelById } from '../../../services/hostels'
 
 interface IDefaultLayoutProps {
     title: string
@@ -19,6 +22,9 @@ interface IDefaultLayoutProps {
 const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
     // breakpoints of screen
     const screen = useBreakpoint(up('lg'))
+    const navigate = useNavigate()
+    const currentHostel = useSelector(getCurrentHostel)
+    const dispatch = useDispatch()
 
     // isShownSidebar = true, show full sidebar
     // isShowSidebar = false, show only icon
@@ -26,14 +32,23 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
 
     //isSidebarMobile = true, sidebar with overlay
     const [isSidebarMobile, setIsSidebarMobile] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(true)
 
-    setTimeout(() => setLoading(false), 2000)
+    useEffect(() => {
+        const hostelId = localStorage.getItem('currentHostelId')
+        if (!hostelId) {
+            navigate('/home')
+            return
+        } else if (!Object.keys(currentHostel).length) {
+            ;(async () => {
+                const hostel = await getHostelById(hostelId)
+                dispatch(setCurrentHostel(hostel))
+            })()
+        } else return
+    }, [currentHostel])
 
     return (
         <Fragment>
-            <Loading loading={loading} />
-            <Styled.Container loading={loading}>
+            <Styled.Container>
                 <HeaderDefault
                     isShownSidebar={isShownSidebar}
                     setIsShownSidebar={(state = !isShownSidebar) =>
