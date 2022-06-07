@@ -11,16 +11,13 @@ public class InvoiceEntity : BaseEntity
     public double Price { get; set; }
     public DateTime Date { get; set; }
     public string Content { get; set; }
+    public string InvoiceType { get; set; }
 
     /*navigation props*/
 
-    // M invoices - 1 type
-    public Guid InvoiceTypeId { get; set; }
-    public InvoiceType InvoiceType { get; set; }
-
     // 1 tenant (paid) M invoice
-    public Guid TenantPaidId { get; set; }
-    public UserEntity TenantPaid { get; set; }
+    public Guid? TenantPaidId { get; set; }
+    public UserEntity? TenantPaid { get; set; }
 
 
     // 1 Manager (create) M Invoices (for) 1 Room
