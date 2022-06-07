@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
 using AutoWrapper.Wrappers;
@@ -29,7 +30,7 @@ public class HostelServices : IHostelServices
             .FirstOrDefaultAsync(hostel => hostel.Id.Equals(room.HostelId));
         
         return hostel ??
-            throw new ApiException($"Hostel not found", StatusCodes.Status404NotFound);
+            throw new NotFoundException($"Hostel not found");
     }
 
     public async Task<HostelEntity> GetHostel(Guid hostelId)
@@ -38,7 +39,7 @@ public class HostelServices : IHostelServices
              .FirstOrDefaultAsync(hostel => hostel.Id.Equals(hostelId));
 
         return hostel ??
-            throw new ApiException($"Hostel not found", StatusCodes.Status404NotFound);
+            throw new NotFoundException($"Hostel not found");
     }
 
     public async Task<bool> IsHostelManagedBy(Guid hostelID, Guid userID)
@@ -70,7 +71,7 @@ public class HostelServices : IHostelServices
              , "HostelManagements", "HostelCategory", "Owner", "Rooms", "Commitments")).First();
 
         return hostel ??
-            throw new ApiException("Forbid", StatusCodes.Status403Forbidden);
+            throw new ForbiddenException("Forbid");
     }
 
     public async Task<HostelEntity> UploadHostelImage(HostelEntity hostel, IFormFile image)

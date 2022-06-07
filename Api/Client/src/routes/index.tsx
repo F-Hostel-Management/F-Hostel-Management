@@ -10,6 +10,7 @@ import Login from '../pages/Login'
 import Profile from '../pages/Profile'
 import FillInformation from '../pages/FillInformation'
 import Rooms from '../pages/Rooms'
+import Facilities from '../pages/Facilities'
 
 const publicRoutes: IRoute[] = [
     {
@@ -76,6 +77,15 @@ const privateRoutes: IRoute[] = [
         layout: DefaultLayout,
         props: {
             title: 'Rooms',
+        },
+    },
+    {
+        path: '/home/facilities',
+        component: Facilities,
+        name: 'Facilities',
+        layout: DefaultLayout,
+        props: {
+            title: 'Facilities',
         },
     },
 ]

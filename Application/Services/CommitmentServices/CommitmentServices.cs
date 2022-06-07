@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
@@ -36,7 +37,7 @@ public class CommitmentServices : ICommitmentServices
             && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
         return com ??
-           throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
+           throw new NotFoundException("Commitment Not Found Or Already Expired");
     }
 
     public async Task<IList<CommitmentEntity>> GetCommitmentForTenant(Guid roomId, Guid tenantId)
@@ -68,14 +69,14 @@ public class CommitmentServices : ICommitmentServices
             .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode));
 
         if (com != null)
-            throw new ApiException("Duplicated Commitment Code", StatusCodes.Status400BadRequest);
+            throw new BadRequestException("Duplicated Commitment Code");
     }
 
     public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
     {
         CommitmentEntity com = await _commitmentRepository.FindByIdAsync(commitmentId);
         return com ??
-          throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
+          throw new NotFoundException("Commitment Not Found Or Already Expired");
 
     }
 
@@ -87,7 +88,7 @@ public class CommitmentServices : ICommitmentServices
             && !com.Status.Equals(CommitmentStatus.Expired.ToString())
             );
         return com ??
-           throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
+           throw new NotFoundException("Commitment Not Found Or Already Expired");
     }
 
     public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)
@@ -103,6 +104,6 @@ public class CommitmentServices : ICommitmentServices
             && com.Status.Equals(status.ToString())
             );
         return com ??
-            throw new ApiException("Commitment Not Found", StatusCodes.Status404NotFound);
+            throw new NotFoundException("Commitment Not Found");
     }
 }
