@@ -69,6 +69,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return dbSet.AsQueryable().AsNoTracking().FirstOrDefaultAsync(predicate);
     }
 
+    public async Task<long> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> sumExpression)
+    {
+        return await dbSet.AsQueryable().AsNoTracking().Where(predicate).SumAsync(sumExpression);
+    }
+
     public async Task CreateRangeAsync(IEnumerable<T> entities)
     {
         await _context.AddRangeAsync(entities);
