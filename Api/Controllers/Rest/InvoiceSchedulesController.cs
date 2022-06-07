@@ -42,4 +42,21 @@ public class InvoiceSchedulesController : BaseRestController
 
         return Ok();
     }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateInvoiceScheduleAsync(Guid id, UpdateInvoiceScheduleRequest request)
+    {
+        var invoice = await _invoiceScheduleRepository.FindByIdAsync(id);
+        if (invoice == null) throw new NotFoundException($"Invoice not found");
+
+        var roomId = invoice.RoomId;
+        var hasPermission = await _authorizationService.IsRoomManageByCurrentUser(roomId, CurrentUserID);
+        if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
+
+        Mapper.Map(request, invoice);
+        await _invoiceScheduleRepository.UpdateAsync(invoice);
+
+        return Ok();
+    }
 }
