@@ -10,6 +10,9 @@ public class CreateCommitmentRequest : IMapTo<CommitmentEntity>
     public Guid RoomId { get; set; }
     [Required]
     public double Price { get; set; }
+    [Range(1, 31)]
+    public int PaymentDate { get; set; }
+
     [Required]
     public DateTime StartDate { get; set; }
     [Required]
