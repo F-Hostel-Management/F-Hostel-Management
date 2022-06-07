@@ -9,7 +9,6 @@ export interface IRoom {
     numOfDoors?: number
     numOfBathRooms?: number
     numOfWCs?: number
-    price?: number
     area?: number
     length?: number
     width?: number
@@ -29,7 +28,6 @@ export interface IRoomValues {
     numOfDoors?: number
     numOfBathRooms?: number
     numOfWCs?: number
-    price?: number
     area?: number
     length?: number
     width?: number

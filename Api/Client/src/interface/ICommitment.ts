@@ -24,13 +24,16 @@ export interface ICommitment {
     joiningCode?: string
     hostelId?: string
     isDeleted?: boolean
+    price?: number
+    paymentDate?: number
 }
 
 export interface ICommitmentValues {
-    createdDate: string
-    startDate: string
-    endDate: string
-    roomId: string
-    overdueDays: number
-    compensation: number
+    startDate?: string
+    endDate?: string
+    roomId?: string
+    overdueDays?: number
+    compensation?: number
+    price?: number
+    paymentDate?: number
 }
