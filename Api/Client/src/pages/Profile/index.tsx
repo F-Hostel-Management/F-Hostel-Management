@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import * as Styled from './styles'
 
-import avatarDefault from '../../assets/images/avatar.png'
 import { Grid, Typography } from '@mui/material'
 import FormInfo from './components/FormInfo'
 import { IInformation } from './interface'
@@ -36,6 +35,13 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
         }
     }, [initialValues.avatar])
 
+    const handleChooseImage = (e: any) => {
+        setValues({ ...values, avatar: e.target.files[0] })
+        setPreview(URL.createObjectURL(e.target.files[0]))
+        const { avatar } = values
+        console.log('avatar: ' + avatar)
+    }
+
     return (
         <Styled.ProfilePaper>
             <Styled.GridPaper container>
@@ -48,15 +54,11 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
                                     id="avatar"
                                     accept="image/png, image/jpeg"
                                     style={{ display: 'none' }}
-                                    onChange={handleInputChange}
+                                    onChange={handleChooseImage}
                                 ></input>
                                 <Styled.Avatar elevation={0} square>
                                     <img
-                                        src={
-                                            initialValues.avatar === null
-                                                ? avatarDefault
-                                                : preview
-                                        }
+                                        src={preview}
                                         height="auto"
                                         width="100%"
                                     ></img>
