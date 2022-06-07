@@ -45,11 +45,13 @@ public class RoomEntity : BaseEntity
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }
 
-    // 1 room - M facilities
-    public virtual ICollection<FacilityEntity> Facilities { get; set; }
+    // // 1 room - M facilities
+    // public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
     // M room - M tenants
     public virtual ICollection<RoomTenant> RoomTenants { get; set; }
+    
+    public virtual ICollection<FacilityManagement> FacilityManagements { get; set; }
 
     // 1 Manager (create) M Invoices (for) 1 Room
     public virtual ICollection<InvoiceEntity> ManagerCreatedInvoices { get; set; }

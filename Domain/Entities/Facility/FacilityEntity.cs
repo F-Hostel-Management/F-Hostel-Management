@@ -6,11 +6,13 @@ public class FacilityEntity : BaseEntity
 {
     public string Name { get; set; }
     public double Price { get; set; }
+    public int Quantity { get; set; }
     public string Type { get; set; }
-
+    
     /*navigation props*/
+    public Guid HostelId { get; set; }
+    public HostelEntity Hostel { get; set; }
+    
+    public virtual ICollection<FacilityManagement> FacilityManagements { get; set; }
 
-    // 1 Room - M Facilities
-    public Guid RoomId { get; set; }
-    public RoomEntity Room { get; set; }
 }

@@ -1,4 +1,6 @@
 ﻿using Api.Filters;
+using Application.Exceptions;
+using Application.Interfaces;
 using Domain.Constants;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
@@ -13,8 +15,12 @@ namespace Api.Controllers.OData;
 //[Authorize]
 public class RoomsController : BaseODataController<RoomEntity>
 {
-    public RoomsController(ApplicationDbContext db) : base(db)
+    private readonly IAuthorizationServices _authorizationServices;
+ 
+
+    public RoomsController(ApplicationDbContext db, IAuthorizationServices authorizationServices) : base(db)
     {
+        _authorizationServices = authorizationServices;
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
@@ -31,12 +37,13 @@ public class RoomsController : BaseODataController<RoomEntity>
     [ApiExplorerSettings(IgnoreApi = true)]
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpGet("{roomId}/get-all-commitments")]
-    public IQueryable GetCommitmentsForRoom
+    public async Task<IQueryable> GetCommitmentsForRoom
         (ODataQueryOptions<CommitmentEntity> options, [FromRoute] Guid roomId)
     {
+        if (!await _authorizationServices.IsRoomManageByCurrentUser(roomId, CurrentUserId))
+            throw new ForbiddenException("");
         var query = db.Commitments.Where(commitment =>
                                          commitment.RoomId.Equals(roomId));
         return ApplyQuery(options, query);
-
     }
 }

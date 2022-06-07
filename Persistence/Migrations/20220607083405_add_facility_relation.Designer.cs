@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220607083405_add_facility_relation")]
+    partial class add_facility_relation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,7 +148,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("HostelId")
+                    b.Property<Guid?>("HostelId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -158,8 +160,8 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RoomEntityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -167,6 +169,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HostelId");
+
+                    b.HasIndex("RoomEntityId");
 
                     b.ToTable("Facilities");
                 });
@@ -177,10 +181,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("FacilityId")
+                    b.Property<Guid?>("HostelId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -189,12 +190,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FacilityId");
+                    b.HasIndex("HostelId");
 
                     b.HasIndex("RoomId");
 
@@ -654,28 +655,26 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.HostelEntity", "Hostel")
                         .WithMany("Facilities")
-                        .HasForeignKey("HostelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HostelId");
+
+                    b.HasOne("Domain.Entities.Room.RoomEntity", null)
+                        .WithMany("Facilities")
+                        .HasForeignKey("RoomEntityId");
 
                     b.Navigation("Hostel");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityManagement", b =>
                 {
-                    b.HasOne("Domain.Entities.Facility.FacilityEntity", "Facility")
-                        .WithMany("FacilityManagements")
-                        .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                    b.HasOne("Domain.Entities.HostelEntity", "Hostel")
+                        .WithMany()
+                        .HasForeignKey("HostelId");
 
                     b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
-                        .WithMany("FacilityManagements")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("RoomId");
 
-                    b.Navigation("Facility");
+                    b.Navigation("Hostel");
 
                     b.Navigation("Room");
                 });
@@ -863,11 +862,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("JoiningCode");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
-                {
-                    b.Navigation("FacilityManagements");
-                });
-
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
                     b.Navigation("Commitments");
@@ -883,7 +877,7 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Commitments");
 
-                    b.Navigation("FacilityManagements");
+                    b.Navigation("Facilities");
 
                     b.Navigation("ManagerCreatedInvoices");
 
