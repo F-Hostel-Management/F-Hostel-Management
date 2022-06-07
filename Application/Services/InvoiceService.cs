@@ -5,7 +5,7 @@ namespace Application.Services;
 
 public class InvoiceService : IInvoiceService
 {
-    public async Task<bool> CanDelete(InvoiceEntity invoice)
+    public async Task<bool> CanModifyAsync(InvoiceEntity invoice)
     {
         if (invoice.TenantPaid != null) return false;
         return true;
