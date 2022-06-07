@@ -1,4 +1,5 @@
-﻿using Api.UserFeatures.Requests;
+﻿using Api.Filters;
+using Api.UserFeatures.Requests;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;

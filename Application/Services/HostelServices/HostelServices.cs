@@ -67,9 +67,11 @@ public class HostelServices : IHostelServices
         var hostel = (await _hostelRepository.WhereAsync(e =>
              (e.HostelManagements.FirstOrDefault(e => e.ManagerId.Equals(userID)) != null ||
               e.OwnerId.Equals(userID)) && e.Id.Equals(hostelID)
-             , "HostelManagements", "HostelCategory", "Owner", "Rooms", "Commitments")).First();
+             , "HostelManagements", "HostelCategory", "Owner", "Rooms", "Commitments"));
 
-        return hostel ??
+        if (hostel.Count == 1)
+            return hostel.First();
+        else
             throw new ApiException("Forbid", StatusCodes.Status403Forbidden);
     }
 

@@ -52,9 +52,6 @@ public class CommitmentsController : BaseRestController
             return Unauthorized();
         }
 
-        // continue of throw exception
-        await _commitmentServices.CheckDuplicate(comReq.CommitmentCode);
-
         // call service
         CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
 

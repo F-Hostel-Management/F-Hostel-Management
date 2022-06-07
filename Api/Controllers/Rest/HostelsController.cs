@@ -36,6 +36,7 @@ public class HostelsController : BaseRestController
         return Ok(hostel);
     }
 
+    [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
     {

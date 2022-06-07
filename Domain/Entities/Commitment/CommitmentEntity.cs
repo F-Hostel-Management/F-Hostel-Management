@@ -10,8 +10,13 @@ namespace Domain.Entities.Commitment;
 [Table("Commitments")]
 public class CommitmentEntity : BaseEntity
 {
-    [Required]
-    public string CommitmentCode { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int CommitmentCode { get; set; }
+
+    [NotMapped]
+    public string Code { get { return "F-" + CommitmentCode; } }
+
+
     [Required]
     public DateTime CreatedDate { get; set; }
     [Required]

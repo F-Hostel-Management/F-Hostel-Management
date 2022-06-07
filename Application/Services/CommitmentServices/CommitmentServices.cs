@@ -62,15 +62,6 @@ public class CommitmentServices : ICommitmentServices
         }
     }
 
-    public async Task CheckDuplicate(string commitmentCode)
-    {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode));
-
-        if (com != null)
-            throw new ApiException("Duplicated Commitment Code", StatusCodes.Status400BadRequest);
-    }
-
     public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
     {
         CommitmentEntity com = await _commitmentRepository.FindByIdAsync(commitmentId);
