@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import {
@@ -18,6 +18,12 @@ import PrivateRoute from './routes/PrivateRouter'
 import PublicRoute from './routes/PublicRoute'
 import { setCurrentUser } from './slices/authSlice'
 import { RestCaller } from './utils/RestCaller'
+import styled from 'styled-components'
+
+const AppContainer = styled.div<{ loading: boolean }>`
+    animation: var(--animation-transitionsIn) 1s;
+    display: ${(props) => (props.loading ? 'none' : 'block')};
+`
 
 function App(): React.ReactElement {
     const [isLoading, setIsLoading] = useState(true)
@@ -37,70 +43,82 @@ function App(): React.ReactElement {
     }, [])
 
     return (
-        <div className="App">
+        <Fragment>
             <Loading loading={isLoading} />
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/landingPage" />} />
-                    <Route path="/landingPage" element={<LandingPage />} />
-                    <Route path="/" element={<PrivateRoute />}>
-                        {privateRoutes.map((route: IRoute) => {
-                            const Layout =
-                                route.layout == null
-                                    ? React.Fragment
-                                    : route.layout
-                            const Component = route.component
-                            return (
-                                <Route
-                                    key={route.name}
-                                    path={route.path}
-                                    element={
-                                        route.layout == null ? (
-                                            <Layout>
-                                                <Component />
-                                            </Layout>
-                                        ) : (
-                                            <Layout {...route.props}>
-                                                <Component />
-                                            </Layout>
+            {!isLoading && (
+                <AppContainer loading={isLoading}>
+                    <Router>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={<Navigate to="/landingPage" />}
+                            />
+                            <Route
+                                path="/landingPage"
+                                element={<LandingPage />}
+                            />
+                            <Route path="/" element={<PrivateRoute />}>
+                                {privateRoutes.map((route: IRoute) => {
+                                    const Layout =
+                                        route.layout == null
+                                            ? React.Fragment
+                                            : route.layout
+                                    const Component = route.component
+                                    return (
+                                        <Route
+                                            key={route.name}
+                                            path={route.path}
+                                            element={
+                                                route.layout == null ? (
+                                                    <Layout>
+                                                        <Component />
+                                                    </Layout>
+                                                ) : (
+                                                    <Layout {...route.props}>
+                                                        <Component />
+                                                    </Layout>
+                                                )
+                                            }
+                                        />
+                                    )
+                                })}
+                            </Route>
+                            <Route path="/" element={<PublicRoute />}>
+                                <Route>
+                                    {publicRoutes.map((route: IRoute) => {
+                                        const Layout =
+                                            route.layout == null
+                                                ? React.Fragment
+                                                : route.layout
+                                        const Component = route.component
+                                        return (
+                                            <Route
+                                                key={route.name}
+                                                path={route.path}
+                                                element={
+                                                    route.layout == null ? (
+                                                        <Layout>
+                                                            <Component />
+                                                        </Layout>
+                                                    ) : (
+                                                        <Layout
+                                                            {...route.props}
+                                                        >
+                                                            <Component />
+                                                        </Layout>
+                                                    )
+                                                }
+                                            />
                                         )
-                                    }
-                                />
-                            )
-                        })}
-                    </Route>
-                    <Route path="/" element={<PublicRoute />}>
-                        <Route>
-                            {publicRoutes.map((route: IRoute) => {
-                                const Layout =
-                                    route.layout == null
-                                        ? React.Fragment
-                                        : route.layout
-                                const Component = route.component
-                                return (
-                                    <Route
-                                        key={route.name}
-                                        path={route.path}
-                                        element={
-                                            route.layout == null ? (
-                                                <Layout>
-                                                    <Component />
-                                                </Layout>
-                                            ) : (
-                                                <Layout {...route.props}>
-                                                    <Component />
-                                                </Layout>
-                                            )
-                                        }
-                                    />
-                                )
-                            })}
-                        </Route>
-                    </Route>
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </Router>
-        </div>
+                                    })}
+                                </Route>
+                            </Route>
+                            <Route path="*" element={<NotFound />} />
+                        </Routes>
+                    </Router>
+                </AppContainer>
+            )}
+        </Fragment>
     )
 }
 
