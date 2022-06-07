@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220607004519_AddCIToUser")]
+    partial class AddCIToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,12 +62,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PaymentDate")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
@@ -197,6 +193,23 @@ namespace Infrastructure.Migrations
                     b.ToTable("HostelManagents");
                 });
 
+            modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HostelCategories");
+                });
+
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -205,6 +218,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("HostelCategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");
@@ -222,6 +238,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HostelCategoryId");
 
                     b.HasIndex("OwnerId");
 
@@ -450,6 +468,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("NumOfWindows")
                         .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<string>("RoomName")
                         .HasColumnType("nvarchar(max)");
@@ -693,11 +714,19 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.HostelCategory", "HostelCategory")
+                        .WithMany("Hostels")
+                        .HasForeignKey("HostelCategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.UserEntity", "Owner")
                         .WithMany("Hostels")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HostelCategory");
 
                     b.Navigation("Owner");
                 });
@@ -872,6 +901,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
                     b.Navigation("JoiningCode");
+                });
+
+            modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
+                {
+                    b.Navigation("Hostels");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>

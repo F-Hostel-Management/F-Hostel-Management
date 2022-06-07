@@ -1,11 +1,9 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.CommitmentServices;
 
@@ -63,15 +61,6 @@ public class CommitmentServices : ICommitmentServices
         }
     }
 
-    public async Task CheckDuplicate(string commitmentCode)
-    {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com => com.CommitmentCode.Equals(commitmentCode));
-
-        if (com != null)
-            throw new BadRequestException("Duplicated Commitment Code");
-    }
-
     public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
     {
         CommitmentEntity com = await _commitmentRepository.FindByIdAsync(commitmentId);
@@ -86,6 +75,18 @@ public class CommitmentServices : ICommitmentServices
             .FirstOrDefaultAsync(com =>
             com.Id.Equals(Id)
             && !com.Status.Equals(CommitmentStatus.Expired.ToString())
+            );
+        return com ??
+           throw new NotFoundException("Commitment Not Found Or Already Expired");
+    }
+
+    public async Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id)
+    {
+        CommitmentEntity com = await _commitmentRepository
+            .FirstOrDefaultAsync(com =>
+            com.Id.Equals(Id)
+            && (com.Status.Equals(CommitmentStatus.Active.ToString()) || 
+                com.Status.Equals(CommitmentStatus.Approved.ToString()))
             );
         return com ??
            throw new NotFoundException("Commitment Not Found Or Already Expired");

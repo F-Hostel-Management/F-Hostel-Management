@@ -10,8 +10,13 @@ namespace Domain.Entities.Commitment;
 [Table("Commitments")]
 public class CommitmentEntity : BaseEntity
 {
-    [Required]
-    public string CommitmentCode { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int CommitmentCode { get; set; }
+
+    [NotMapped]
+    public string Code { get { return "F-" + CommitmentCode; } }
+
+
     [Required]
     public DateTime CreatedDate { get; set; }
     [Required]
@@ -32,6 +37,11 @@ public class CommitmentEntity : BaseEntity
 
     [NotMapped]
     public CommitmentStatus CommitmentStatus { get; set; }
+
+    [Range(1, 31)]
+    public int PaymentDate { get; set; }
+
+    public double Price { get; set; }
 
     //public string Content { get; set; }
 

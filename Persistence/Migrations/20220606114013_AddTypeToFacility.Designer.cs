@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220606114013_AddTypeToFacility")]
+    partial class AddTypeToFacility
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,11 +30,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("CommitmentCode")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommitmentCode"), 1L, 1);
+                    b.Property<string>("CommitmentCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("CommitmentScaffoldingId")
                         .HasColumnType("uniqueidentifier");
@@ -61,12 +61,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PaymentDate")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -81,6 +75,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommitmentCode")
+                        .IsUnique();
 
                     b.HasIndex("CommitmentScaffoldingId");
 
@@ -197,6 +194,23 @@ namespace Infrastructure.Migrations
                     b.ToTable("HostelManagents");
                 });
 
+            modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HostelCategories");
+                });
+
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -205,6 +219,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("HostelCategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");
@@ -222,6 +239,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HostelCategoryId");
 
                     b.HasIndex("OwnerId");
 
@@ -258,7 +277,7 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("TenantPaidId")
+                    b.Property<Guid>("TenantPaidId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -451,6 +470,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("NumOfWindows")
                         .HasColumnType("int");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<string>("RoomName")
                         .HasColumnType("nvarchar(max)");
 
@@ -556,9 +578,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BackIdentification")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CitizenIdentity")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateOfBirth")
@@ -693,11 +712,19 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
+                    b.HasOne("Domain.Entities.HostelCategory", "HostelCategory")
+                        .WithMany("Hostels")
+                        .HasForeignKey("HostelCategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.UserEntity", "Owner")
                         .WithMany("Hostels")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HostelCategory");
 
                     b.Navigation("Owner");
                 });
@@ -718,7 +745,9 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.UserEntity", "TenantPaid")
                         .WithMany("TenantPaidInvoices")
-                        .HasForeignKey("TenantPaidId");
+                        .HasForeignKey("TenantPaidId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Manager");
 
@@ -872,6 +901,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
                     b.Navigation("JoiningCode");
+                });
+
+            modelBuilder.Entity("Domain.Entities.HostelCategory", b =>
+                {
+                    b.Navigation("Hostels");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>

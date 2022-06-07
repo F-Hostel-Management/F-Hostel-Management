@@ -46,15 +46,6 @@ public class RoomServices : IRoomServices
             throw new NotFoundException($"Room not found");
     }
 
-    public async Task<bool> RoomManagedBy(Guid roomId, Guid userId)
-    {
-        var room = await _roomRepository.FindByIdAsync(roomId);
-        if (room == null) throw new NotFoundException($"Room not found");
-
-        var hostelId = room.HostelId;
-        return await _hostelServices.IsHostelManagedBy(hostelId, userId);
-    }
-
     public async Task<bool> HasTenant(Guid roomId, Guid userId)
     {
         var room = (await _roomRepository.WhereAsync(room => room.Id == roomId, new string[] {"RoomTenants"})).FirstOrDefault();

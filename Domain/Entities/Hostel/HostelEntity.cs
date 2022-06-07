@@ -17,13 +17,9 @@ public class HostelEntity : BaseEntity
     public string Address { get; set; }
     public string Name { get; set; }
     public int? NumOfRooms { get; set; }
-    public string? ImgPath { get; set; }
+    public string ImgPath { get; set; }
 
     /*navigation props*/
-
-    // 1 type - M hostels 
-    public Guid HostelCategoryId { get; set; }
-    public HostelCategory HostelCategory { get; set; }
 
     // 1 owner - M hostels
     public Guid OwnerId { get; set; }

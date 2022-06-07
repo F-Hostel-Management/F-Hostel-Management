@@ -18,7 +18,6 @@ public interface IApplicationDbContext
     public DbSet<RoomTenant> RoomTenants { get; set; }
 
     public DbSet<HostelEntity> Hostels { get; set; }
-    public DbSet<HostelCategory> HostelCategories { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<FacilityEntity> Facilities { get; set; }

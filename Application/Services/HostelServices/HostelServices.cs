@@ -2,7 +2,6 @@
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
-using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;
@@ -40,38 +39,6 @@ public class HostelServices : IHostelServices
 
         return hostel ??
             throw new NotFoundException($"Hostel not found");
-    }
-
-    public async Task<bool> IsHostelManagedBy(Guid hostelID, Guid userID)
-    {
-       var list = await _hostelRepository.WhereAsync(e => 
-            (e.HostelManagements.FirstOrDefault(e => e.ManagerId.Equals(userID)) != null || 
-             e.OwnerId.Equals(userID)) && e.Id.Equals(hostelID)
-            ,"HostelManagements");
-        return list.Count == 1;
-    }
-
-    public async Task<bool> IsHostelManagedBy(HostelEntity hostel, Guid userId)
-    {
-        if (hostel.OwnerId.Equals(userId))
-        {
-            return true;
-        }
-        var manager = await _hostelManagementRepository.FirstOrDefaultAsync(e =>
-                        e.ManagerId.Equals(userId) && e.HostelId.Equals(hostel.Id));
-
-        return manager != null;
-    }
-
-    public async Task<HostelEntity> HostelManagedBy(Guid hostelID, Guid userID)
-    {
-        var hostel = (await _hostelRepository.WhereAsync(e =>
-             (e.HostelManagements.FirstOrDefault(e => e.ManagerId.Equals(userID)) != null ||
-              e.OwnerId.Equals(userID)) && e.Id.Equals(hostelID)
-             , "HostelManagements", "HostelCategory", "Owner", "Rooms", "Commitments")).First();
-
-        return hostel ??
-            throw new ForbiddenException("Forbid");
     }
 
     public async Task<HostelEntity> UploadHostelImage(HostelEntity hostel, IFormFile image)
