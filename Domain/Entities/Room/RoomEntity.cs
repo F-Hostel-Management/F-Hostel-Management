@@ -57,8 +57,8 @@ public class RoomEntity : BaseEntity
     // 1 Manager (make) M InvoiceSchedules (for) 1 Room
     public virtual ICollection<InvoiceScheduleEntity> ManegerCreatedInvoiceSchedules { get; set; }
 
-    // 1 Manager (create) M Notifications (for) M Rooms
-    public virtual ICollection<Notification_Room> RoomNotifications { get; set; }
+    // 1 Manager (create) M Notifications (for) 1 Rooms
+    public virtual ICollection<NotificationEntity> Notifications { get; set; }
 
     // 1 Tenant (create) M Tickets (for) 1 Room
     public virtual ICollection<TicketEntity> Tickets { get; set; }

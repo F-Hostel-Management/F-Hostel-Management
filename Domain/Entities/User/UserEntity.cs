@@ -72,7 +72,7 @@ public class UserEntity : BaseEntity
 
 
     // 1 Manager (create) M Notifications (for) M Rooms
-    public virtual ICollection<Notification_Room> ManagerCreatedRoomNotifications { get; set; }
+    public virtual ICollection<NotificationEntity> Notifications { get; set; }
 
     // 1 ticket - M messages
     public virtual ICollection<MessageEntity> Messages { get; set; }

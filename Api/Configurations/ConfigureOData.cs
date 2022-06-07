@@ -61,7 +61,6 @@ public static class ConfigureOData
         builder.EntitySet<InvoiceEntity>("Invoices");
 
         builder.EntitySet<NotificationEntity>("Notifications");
-        builder.EntitySet<Notification_Room>("RoomNotifications");
         
         builder.EntitySet<TicketEntity>("Tickets");
 
