@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
@@ -62,7 +63,7 @@ public class JoiningCodeServices : IJoiningCodeServices
         JoiningCode jc =  await _joiningCodeRepository.FirstOrDefaultAsync(jc =>
         jc.SixDigitsCode == digits);
         return jc ??
-            throw new ApiException("Joining code is not exists or expired", StatusCodes.Status404NotFound);
+            throw new NotFoundException("Joining code is not exists or expired");
     }
 
     public void ValidateJoiningCode(JoiningCode joiningCode)
@@ -70,7 +71,7 @@ public class JoiningCodeServices : IJoiningCodeServices
         double timeSpan = DateTime.Now.Subtract(joiningCode.CreateDate).TotalMinutes;
         if (timeSpan > joiningCode.TimeSpan)
         {
-            throw new ApiException("Joining code is not exists or expired", StatusCodes.Status400BadRequest);
+            throw new BadRequestException("Joining code is not exists or expired");
         }
     }
 
