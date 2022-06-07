@@ -1,3 +1,4 @@
+import { RestCaller } from './../utils/RestCaller'
 import { ICommitment } from '../interface/ICommitment'
 import { ODataCaller } from '../utils/ODataCaller'
 
@@ -39,4 +40,31 @@ const getAllCommitmentOfHostel = async (
     return result
 }
 
-export { getAllCommitmentOfHostel, getNumberCommitmentOfHostel }
+const createCommitment = async (data = {}) => {
+    const result = await RestCaller.post('Commitments', data)
+    console.log('createCommitment: ', result)
+    return result
+}
+
+const approveCommitment = async (data = {}) => {
+    const response = await RestCaller.patch(
+        'Commitments/owner-approved-commitment/status',
+        data
+    )
+    console.log('approveCommitment: ', response.result)
+    return response
+}
+
+const getJoiningCode = async (data = {}) => {
+    const result = await RestCaller.post('Commitments/joiningCode', data)
+    console.log('getJoiningCode: ', result)
+    return result
+}
+
+export {
+    getAllCommitmentOfHostel,
+    getNumberCommitmentOfHostel,
+    createCommitment,
+    approveCommitment,
+    getJoiningCode,
+}
