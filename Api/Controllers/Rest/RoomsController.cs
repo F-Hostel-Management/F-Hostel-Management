@@ -15,14 +15,17 @@ public class RoomsController : BaseRestController
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
     private readonly IHostelServices _hostelServices;
     private readonly ICommitmentServices _commitmentServices;
+    private readonly IAuthorizationServices _authorServices;
     public RoomsController(
         IGenericRepository<RoomEntity> roomsRepository,
         ICommitmentServices commitmentServices,
-        IHostelServices hostelServices)
+        IHostelServices hostelServices,
+        IAuthorizationServices authorServices)
     {
         _roomsRepository = roomsRepository;
         _commitmentServices = commitmentServices;
         _hostelServices = hostelServices;
+        _authorServices = authorServices;
     }
 
     /// <summary>
@@ -34,7 +37,7 @@ public class RoomsController : BaseRestController
     [HttpPost()]
     public async Task<IActionResult> CreateRoomsAsync(CreateRoomsRequest req)
     {
-        bool isManagedByCurrentUser = await _hostelServices.IsHostelManagedBy(req.HostelId, CurrentUserID);
+        bool isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(req.HostelId, CurrentUserID);
         if (!isManagedByCurrentUser)
         {
             return Forbid();

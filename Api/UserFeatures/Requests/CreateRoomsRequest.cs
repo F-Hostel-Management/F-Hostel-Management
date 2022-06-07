@@ -7,7 +7,7 @@ namespace Api.UserFeatures.Requests;
 public class CreateRoomsRequest : IMapTo<RoomEntity>
 {
 
-    public string? RoomName { get; set; }
+    public string RoomName { get; set; }
     public int? Quantity { get; set; }
     public int? MaximumPeople { get; set; }
     [Required]

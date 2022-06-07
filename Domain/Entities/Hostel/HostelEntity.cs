@@ -17,7 +17,7 @@ public class HostelEntity : BaseEntity
     public string Address { get; set; }
     public string Name { get; set; }
     public int? NumOfRooms { get; set; }
-    public string? ImgPath { get; set; }
+    public string ImgPath { get; set; }
 
     /*navigation props*/
 

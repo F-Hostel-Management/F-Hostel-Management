@@ -212,7 +212,6 @@ public static class DatabaseInitializer
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
         
-        int code = 1;
         foreach (var tenant in tenants)
         {
             var room = rooms[_rand.Next(rooms.Length)];

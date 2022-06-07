@@ -17,14 +17,17 @@ public class HostelsController : BaseRestController
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
     private readonly IGenericRepository<RoomEntity> _roomRepository; 
     private readonly IHostelServices _hostelService;
+    private readonly IAuthorizationServices _authorServices;
     public HostelsController(
         IGenericRepository<HostelEntity> hostelRepository,
         IGenericRepository<RoomEntity> roomRepository,
-        IHostelServices hostelServices)
+        IHostelServices hostelServices,
+        IAuthorizationServices authorServices)
     {
         _hostelRepository = hostelRepository;
         _roomRepository = roomRepository;
         _hostelService = hostelServices;
+        _authorServices = authorServices;
     }
     /// <summary>
     /// owner create hostel
@@ -46,11 +49,10 @@ public class HostelsController : BaseRestController
     /// </summary>
     /// <param name="uploadHostelImageRequest"></param>
     /// <returns></returns>
-    [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
     {
-        var isManagedByCurrentUser = await _hostelService.IsHostelManagedBy(uploadHostelImageRequest.HostelId, CurrentUserID);
+        var isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(uploadHostelImageRequest.HostelId, CurrentUserID);
         if (!isManagedByCurrentUser)
             return Forbid();
         var target = await _hostelRepository.FirstOrDefaultAsync(e => e.Id.Equals(uploadHostelImageRequest.HostelId));
@@ -58,4 +60,5 @@ public class HostelsController : BaseRestController
         return Ok(target.ImgPath);
     }
 }
+
 

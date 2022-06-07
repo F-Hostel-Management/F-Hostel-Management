@@ -17,6 +17,7 @@ public class CommitmentsController : BaseRestController
     private readonly IRoomServices _roomServices;
     private readonly ITenantServices _tenantServices;
     private readonly IJoiningCodeServices _joiningCodeServices;
+    private readonly IAuthorizationServices _authorServices;
 
 
     public CommitmentsController(
@@ -24,13 +25,15 @@ public class CommitmentsController : BaseRestController
         ICommitmentServices commitmentServices,
         IJoiningCodeServices joiningCodeServices,
         IRoomServices roomServices,
-        ITenantServices tenantServices)
+        ITenantServices tenantServices,
+        IAuthorizationServices authorServices)
     {
         _tenantServices = tenantServices;
         _hostelServices = hostelServices;
         _joiningCodeServices = joiningCodeServices;
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
+        _authorServices = authorServices;
     }
     /// <summary>
     /// owner || manager create a commitment of room |
@@ -51,7 +54,7 @@ public class CommitmentsController : BaseRestController
         // check hostel owner and owner in room commitment request
         HostelEntity hostel = await _hostelServices.GetHostel(room);
 
-        bool isManagedByCurrentUser = await _hostelServices.IsHostelManagedBy(hostel, CurrentUserID);
+        bool isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(hostel, CurrentUserID);
 
         if (!isManagedByCurrentUser)
         {
@@ -111,7 +114,7 @@ public class CommitmentsController : BaseRestController
     {
         // check exist and not expired commitment
         CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(req.CommitementId);
-        bool isManaged = await _hostelServices.IsHostelManagedBy(com.HostelId, CurrentUserID);
+        bool isManaged = await _authorServices.IsHostelManagedByCurrentUser(com.HostelId, CurrentUserID);
         if (!isManaged)
         {
             return Forbid();
