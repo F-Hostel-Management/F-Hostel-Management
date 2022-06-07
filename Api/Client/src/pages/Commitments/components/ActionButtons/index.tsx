@@ -11,6 +11,8 @@ import { Typography } from '@mui/material'
 import CommitmentDetails from '../CommitmentDetails'
 import DialogCustom from '../../../../components/DialogCustom'
 import UpdateCommitmentDialog from '../UpdateCommitmentDialog'
+import QrCodeIcon from '@mui/icons-material/QrCode'
+import CommitmentQrCode from '../CommitmentQrCode'
 interface IActionButtonsProps {
     rowData: any
 }
@@ -20,6 +22,8 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
+    const [openCreateQrCode, handleOpenCreateQrCode, handleCloseCreateQrCode] =
+        useDialog()
 
     return (
         <Fragment>
@@ -49,6 +53,14 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             onClick={handleOpenUpdate}
                         >
                             <EditIcon sx={{ fontSize: '1.3rem' }} />
+                        </IconButtonCustom>
+                        <IconButtonCustom
+                            textColor="#fff"
+                            bgrColor="#495057"
+                            sx={{ width: '2.8rem', height: '2.8rem' }}
+                            onClick={handleOpenCreateQrCode}
+                        >
+                            <QrCodeIcon sx={{ fontSize: '1.3rem' }} />
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -107,6 +119,24 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     handleOpenDialog={handleOpenUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />
+            )}
+            {openCreateQrCode && (
+                <DialogCustom
+                    title="Generate QR Code"
+                    openDialog={openCreateQrCode}
+                    handleCloseDialog={handleCloseCreateQrCode}
+                    maxWidth="lg"
+                >
+                    <div
+                        style={{
+                            minHeight: '100px',
+                            width: '80%',
+                            margin: 'auto',
+                        }}
+                    >
+                        <CommitmentQrCode />
+                    </div>
+                </DialogCustom>
             )}
         </Fragment>
     )

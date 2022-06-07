@@ -7,24 +7,20 @@ import { ERole } from '../../utils/enums'
 import { useDialog } from '../../hooks/useDialog'
 import CreateCommitmentDialog from './components/CreateCommitmentDialog'
 import ToolbarChildren from './components/ToolbarChildren'
-import { getCurrentHostel, setCurrentHostel } from '../../slices/hostelSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { getItem } from '../../utils/LocalStorageUtils'
+import { getCurrentHostel } from '../../slices/hostelSlice'
+import { useSelector } from 'react-redux'
 import {
     getAllCommitmentOfHostel,
     getNumberCommitmentOfHostel,
 } from '../../services/commitments'
-import { getHostelById } from '../../services/hostels'
 import { createColumns } from './components/Table'
+import { getItem } from '../../utils/LocalStorageUtils'
 interface ICommitmentsProps {}
 
 const Commitments: FC<ICommitmentsProps> = () => {
     const role: ERole = 1
     const { renderCell, createColumn, renderValueGetter } = useGridData()
     const currentHostel = useSelector(getCurrentHostel)
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
     const columns = createColumns(renderCell, createColumn, renderValueGetter)
 
     const [pageSize, setPageSize] = useState<number>(5)
@@ -34,32 +30,21 @@ const Commitments: FC<ICommitmentsProps> = () => {
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
     const [numberOfCommitment, setNumberOfCommitment] = useState<number>(0)
 
-    const FetchData = async () => {
-        const hostelId = getItem('currentHostelId')
-        const commitments = await getAllCommitmentOfHostel(
-            hostelId,
-            pageSize,
-            page
-        )
-        const numberCommitment = await getNumberCommitmentOfHostel(hostelId)
-        setRows(commitments)
-        setNumberOfCommitment(numberCommitment)
-        setLoading(false)
-    }
-
     // Check currentHostelId in localStorage
     useEffect(() => {
-        const hostelId = getItem('currentHostelId')
-        if (!hostelId?.length) {
-            navigate('/home')
-        } else {
-            FetchData()
-            if (!Object.keys(currentHostel).length) {
-                ;(async () => {
-                    const hostelInfo = await getHostelById(hostelId)
-                    dispatch(setCurrentHostel(hostelInfo))
-                })()
-            }
+        const currentHostelId = getItem('currentHostelId')
+        const FetchData = async () => {
+            const commitments = await getAllCommitmentOfHostel(
+                currentHostelId,
+                pageSize,
+                page
+            )
+            const numberCommitment = await getNumberCommitmentOfHostel(
+                currentHostelId
+            )
+            setRows(commitments)
+            setNumberOfCommitment(numberCommitment)
+            setLoading(false)
         }
         FetchData()
     }, [page, pageSize])
