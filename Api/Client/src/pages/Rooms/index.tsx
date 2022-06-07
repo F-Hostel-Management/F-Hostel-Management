@@ -28,7 +28,6 @@ const Rooms: FC<IRoomsProps> = () => {
         createColumn('numberOfBathRoom', 'BathRoom', 100),
         createColumn('numberOfToilet', 'Toilet', 100),
         createColumn('area', 'Area', 100),
-        createColumn('price', 'Price', 120),
         renderCell('status', 'Status', 130, RoomStatus),
         renderCell('actions', 'Actions', 130, ActionButtons),
     ]
