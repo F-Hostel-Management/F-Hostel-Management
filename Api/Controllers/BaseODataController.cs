@@ -45,7 +45,7 @@ public class BaseODataController<T> : ODataController where T : class
     }
 
     [HttpGet("")]
-    // [ApiExplorerSettings(IgnoreApi = true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public virtual IQueryable GetData(ODataQueryOptions<T> options)
     {
         return ApplyQuery(options, GetQuery());
