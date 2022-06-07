@@ -10,5 +10,6 @@ namespace Application.AppConfig
         public string SpaDevServer { get; set; }
         public string FirebaseConfigPath { get; set; }
         public string GoogleCloudStorageBucket { get; set; }
+        public string Cron { get; set; }
     }
 }
