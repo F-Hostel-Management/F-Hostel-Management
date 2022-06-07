@@ -27,7 +27,9 @@ const CreateHostelDialog: React.FunctionComponent<ICreateHostelDialogProps> = ({
 
     const handleSubmit = () => {
         const { address, name, numOfRooms, hostelCategoryId, image } = values
+
         const createValues = { address, name, numOfRooms, hostelCategoryId }
+
         const uploadImageValues = { image }
 
         ;(async () => {

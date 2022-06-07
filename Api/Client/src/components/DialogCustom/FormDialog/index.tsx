@@ -22,6 +22,7 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
     handleSubmit,
     children,
     maxWidth = 'xl',
+    ...others
 }) => {
     return (
         <DialogCustom

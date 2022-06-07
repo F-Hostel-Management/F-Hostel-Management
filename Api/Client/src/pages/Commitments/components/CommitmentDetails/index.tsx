@@ -6,11 +6,11 @@ import { IUser } from '../../../../interface/IUser'
 import { formatDate, getDate } from '../../../../utils/FormatDate'
 
 interface ICommitmentDetailsProps {
-    createdDate: string
-    startDate: string
-    endDate: string
-    overdueDays: number
-    compensation: number
+    createdDate?: string
+    startDate?: string
+    endDate?: string
+    overdueDays?: number
+    compensation?: number
     owner?: IUser
     tenant?: IUser
     hostelInfo?: IHostel
@@ -28,9 +28,9 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
     hostelInfo,
     roomInfo,
 }) => {
-    const [createDay, createMonth, createYear] = getDate(createdDate)
-    const [startDay, startMonth, startYear] = getDate(startDate)
-    const [endDay, endMonth, endYear] = getDate(endDate)
+    const [createDay, createMonth, createYear] = getDate(createdDate || '')
+    const [startDay, startMonth, startYear] = getDate(startDate || '')
+    const [endDay, endMonth, endYear] = getDate(endDate || '')
 
     const content = (
         <div id="divToPrint">
