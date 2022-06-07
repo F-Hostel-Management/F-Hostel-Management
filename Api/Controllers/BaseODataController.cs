@@ -44,8 +44,8 @@ public class BaseODataController<T> : ODataController where T : class
         return db.Set<T>();
     }
 
-    [HttpGet("odata/[Controller]")]
-    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("")]
+    // [ApiExplorerSettings(IgnoreApi = true)]
     public virtual IQueryable GetData(ODataQueryOptions<T> options)
     {
         return ApplyQuery(options, GetQuery());
