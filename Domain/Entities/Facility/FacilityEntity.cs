@@ -12,4 +12,7 @@ public class FacilityEntity : BaseEntity
     /*navigation props*/
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }
+    
+    public virtual ICollection<FacilityManagement> FacilityManagements { get; set; }
+
 }
