@@ -3,6 +3,7 @@ using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Room;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Text;
 
 namespace Api.Filters;
 
@@ -100,7 +101,10 @@ public class ValidateManagementFilter : IAsyncActionFilter
     {
         /*var bodyReader = new StreamReader(context.HttpContext.Request.Body);
         var bodyAsText = bodyReader.ReadToEnd();*/
-        var bodyAsText = await new StreamReader(context.HttpContext.Request.Body).ReadToEndAsync();
+        
+        var bodyAsText = await new StreamReader(context.HttpContext.Request.Body,
+            Encoding.UTF8, true, 1024, true).ReadToEndAsync();
+
         context.HttpContext.Request.Body.Position = 0;
         string guid = "";
         if (bodyAsText.Contains(param))

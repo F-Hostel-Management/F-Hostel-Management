@@ -32,7 +32,13 @@ public class CommitmentsController : BaseRestController
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
     }
-
+    /// <summary>
+    /// owner || manager create a commitment of room |
+    /// commitment status ==> pending |
+    /// room status ==> rent
+    /// </summary>
+    /// <param name="comReq"></param>
+    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost]
     public async Task<IActionResult> CreateCommitment(CreateCommitmentRequest comReq)
@@ -70,7 +76,12 @@ public class CommitmentsController : BaseRestController
         return Ok(com);
     }
 
-    // owner conform commitment ==> com.status => approved
+    /// <summary>
+    /// owner approve the commitment |
+    /// commitment status ==> approved
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpPatch("owner-approved-commitment/status")]
     public async Task<IActionResult> OwnerApprovedCommitment
@@ -88,14 +99,18 @@ public class CommitmentsController : BaseRestController
 
     // commitment expired ==> com.status => expired => remove all invoice schedules
 
-    // create joining code
+    /// <summary>
+    /// owner || manager create a joining code for approved, active commitment
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("joiningCode")]
     public async Task<IActionResult> CreateJoiningCode
         ([FromBody] CreateJoiningCodeRequest req)
     {
         // check exist and not expired commitment
-        CommitmentEntity com = await _commitmentServices.GetNotExpiredCommitment(req.CommitementId);
+        CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(req.CommitementId);
         bool isManaged = await _hostelServices.IsHostelManagedBy(com.HostelId, CurrentUserID);
         if (!isManaged)
         {
@@ -107,7 +122,11 @@ public class CommitmentsController : BaseRestController
         return Ok(response);
     }
 
-    // get commitment by joining code
+    /// <summary>
+    /// tenant using qr to get commitment
+    /// </summary>
+    /// <param name="SixDigitsCode"></param>
+    /// <returns></returns>
     [AllowAnonymous]
     [HttpGet("get-commitment-by-joiningCode/{SixDigitsCode}")]
     public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
@@ -120,9 +139,13 @@ public class CommitmentsController : BaseRestController
         return Ok(commitment);
     }
 
-    // tenant into commitment ==> com.status => done
+    /// <summary>
+    /// tenant activate commitment
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
     [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpPatch("tenant-done-commitment/status")]
+    [HttpPatch("tenant-activate-commitment/status")]
     public async Task<IActionResult> TenantDoneCommitment
     ([FromBody] TenantDoneCommitmentRequest req)
     {
@@ -142,7 +165,12 @@ public class CommitmentsController : BaseRestController
         return Ok(com);
     }
 
-    // update pending commitment
+    /// <summary>
+    /// owner || manager update pending commitment
+    /// </summary>
+    /// <param name="comId"></param>
+    /// <param name="uComReq"></param>
+    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPatch("{comId}")]
     public async Task<IActionResult> UpdatePendingCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)

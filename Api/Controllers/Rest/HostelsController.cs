@@ -26,6 +26,11 @@ public class HostelsController : BaseRestController
         _roomRepository = roomRepository;
         _hostelService = hostelServices;
     }
+    /// <summary>
+    /// owner create hostel
+    /// </summary>
+    /// <param name="createHostelRequest"></param>
+    /// <returns></returns>
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpPost("create-hostel")]
     public async Task<IActionResult> CreateHostel(CreateHostelRequest createHostelRequest)
@@ -36,6 +41,11 @@ public class HostelsController : BaseRestController
         return Ok(hostel);
     }
 
+    /// <summary>
+    /// owner || manager update hostel image
+    /// </summary>
+    /// <param name="uploadHostelImageRequest"></param>
+    /// <returns></returns>
     [ServiceFilter(typeof(ValidateManagementHostelLevelFilter))]
     [HttpPost("upload-hostel-image")]
     public async Task<IActionResult> UploadHostelImage([FromForm] UploadHostelImageRequest uploadHostelImageRequest)
@@ -48,3 +58,4 @@ public class HostelsController : BaseRestController
         return Ok(target.ImgPath);
     }
 }
+

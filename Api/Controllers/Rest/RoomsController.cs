@@ -25,6 +25,11 @@ public class RoomsController : BaseRestController
         _hostelServices = hostelServices;
     }
 
+    /// <summary>
+    /// owner || manager create room of their hostel
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost()]
     public async Task<IActionResult> CreateRoomsAsync(CreateRoomsRequest req)
@@ -56,6 +61,11 @@ public class RoomsController : BaseRestController
         return Ok();
     }
 
+    /// <summary>
+    /// only tenant get their commitments of that room
+    /// </summary>
+    /// <param name="roomId"></param>
+    /// <returns></returns>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{roomId}/get-list-commitment-of-room-for-tenant")]
     public async Task<IActionResult> GetCommitmentsForTenant

@@ -81,6 +81,18 @@ public class CommitmentServices : ICommitmentServices
            throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
     }
 
+    public async Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id)
+    {
+        CommitmentEntity com = await _commitmentRepository
+            .FirstOrDefaultAsync(com =>
+            com.Id.Equals(Id)
+            && (com.Status.Equals(CommitmentStatus.Active.ToString()) || 
+                com.Status.Equals(CommitmentStatus.Approved.ToString()))
+            );
+        return com ??
+           throw new ApiException("Commitment Not Found Or Already Expired", StatusCodes.Status404NotFound);
+    }
+
     public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)
     {
         await _commitmentRepository.UpdateAsync(updatedCommitment);

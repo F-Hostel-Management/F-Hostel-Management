@@ -11,6 +11,7 @@ namespace Application.Interfaces
         Task<IList<CommitmentEntity>> GetCommitmentForTenant(Guid roomId, Guid tenantId);
         Task<CommitmentEntity> GetCommitment(Guid Id);
         Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status);
+        Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id);
         Task<CommitmentEntity> GetNotExpiredCommitment(Guid Id);
         Task<CommitmentEntity> GetNotExpiredCommitmentByRoom(Guid roomId);
         Task ApprovedCommitment(CommitmentEntity commitment);
