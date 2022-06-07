@@ -146,6 +146,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("HostelId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -155,7 +158,7 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid?>("RoomEntityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
@@ -163,9 +166,38 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("HostelId");
+
+                    b.HasIndex("RoomEntityId");
 
                     b.ToTable("Facilities");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Facility.FacilityManagement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("HostelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HostelId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("FacilityManagements");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
@@ -619,11 +651,28 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
                 {
-                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
+                    b.HasOne("Domain.Entities.HostelEntity", "Hostel")
                         .WithMany("Facilities")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HostelId");
+
+                    b.HasOne("Domain.Entities.Room.RoomEntity", null)
+                        .WithMany("Facilities")
+                        .HasForeignKey("RoomEntityId");
+
+                    b.Navigation("Hostel");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Facility.FacilityManagement", b =>
+                {
+                    b.HasOne("Domain.Entities.HostelEntity", "Hostel")
+                        .WithMany()
+                        .HasForeignKey("HostelId");
+
+                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId");
+
+                    b.Navigation("Hostel");
 
                     b.Navigation("Room");
                 });
@@ -814,6 +863,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
                 {
                     b.Navigation("Commitments");
+
+                    b.Navigation("Facilities");
 
                     b.Navigation("HostelManagements");
 
