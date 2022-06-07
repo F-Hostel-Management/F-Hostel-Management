@@ -9,6 +9,7 @@ interface IInputFieldProps {
     type?: string
     startAdornment?: any
     endAdornment?: any
+    inputProps?: Record<string, any>
     [x: string | number | symbol]: unknown
 }
 
@@ -20,6 +21,7 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
     type,
     startAdornment,
     endAdornment,
+    inputProps,
     ...others
 }) => {
     return (
@@ -50,7 +52,7 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
                 startAdornment: startAdornment,
                 endAdornment: endAdornment,
             }}
-            inputProps={{ min: 0 }}
+            inputProps={inputProps || { min: 0 }}
             {...others}
         />
     )
