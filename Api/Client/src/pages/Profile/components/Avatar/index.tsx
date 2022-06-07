@@ -1,27 +1,23 @@
 import { Typography } from '@mui/material'
-import React, { useEffect } from 'react'
-import { IUser } from '../../../../interface/IUser'
+import React, { Dispatch, SetStateAction } from 'react'
+
 import { ROLES } from '../../../FillInformation/constants'
 import * as Styled from './styles'
 interface IAvatarProps {
-    handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-    values: IUser
+    values: Record<string, any>
+    setValues: Dispatch<SetStateAction<any>>
 }
 
-const Avatar = (props: IAvatarProps) => {
-    const [preview, setPreview] = React.useState<string>()
-    const { avatarUrl, role, name } = props.values
-    useEffect(() => {
-        if (avatarUrl) {
-            const reader = new FileReader()
-            reader.onload = () => {
-                setPreview(reader.result as string)
-            }
-            // reader.readAsDataURL(avatarUrl)
-        } else {
-            setPreview(undefined)
-        }
-    }, [avatarUrl])
+const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
+    const handleChooseImage = (e: any) => {
+        setValues({
+            ...values,
+            avatarUrl: URL.createObjectURL(e.target.files[0]),
+        })
+    }
+
+    const { name, role, avatarUrl } = values
+
     return (
         <div>
             <label>
@@ -30,7 +26,7 @@ const Avatar = (props: IAvatarProps) => {
                     id="avatar"
                     accept="image/png, image/jpeg"
                     style={{ display: 'none' }}
-                    onChange={props.handleInputChange}
+                    onChange={handleChooseImage}
                 ></input>
                 <Styled.Avatar elevation={0} square>
                     <img src={avatarUrl} height="auto" width="100%"></img>

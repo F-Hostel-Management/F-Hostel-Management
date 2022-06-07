@@ -8,9 +8,11 @@ export interface IInformation {
     cardNumber?: string
     taxCode?: string
     dateOfBirth?: string
-    gender?: number
+    gender?: string
     organization?: string
     avatarUrl?: string
+    frontIdentification?: string
+    backIdentification?: string
 }
 export interface IProfileFormInfo {
     name?: string
@@ -18,6 +20,10 @@ export interface IProfileFormInfo {
     cardNumber?: string
     taxCode?: string
     dateOfBirth?: string
-    gender?: number
+    gender?: string
     organization?: string
+    citizenIdentity?: number
+    address?: string
+    frontIdentification?: string
+    backIdentification?: string
 }
