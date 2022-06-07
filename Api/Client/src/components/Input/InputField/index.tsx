@@ -50,6 +50,7 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
                 startAdornment: startAdornment,
                 endAdornment: endAdornment,
             }}
+            inputProps={{ min: 0 }}
             {...others}
         />
     )

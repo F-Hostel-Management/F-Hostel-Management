@@ -17,12 +17,15 @@ public class InvoicesController : BaseRestController
     private readonly IGenericRepository<InvoiceEntity> _invoiceRepository;
     private readonly IGenericRepository<UserEntity> _userRepository;
     private readonly IRoomServices _roomService;
+    private readonly IAuthorizationServices _authorServices;
 
-    public InvoicesController(IGenericRepository<InvoiceEntity> invoiceRepository, IRoomServices roomService, IGenericRepository<UserEntity> userRepository)
+    public InvoicesController(IGenericRepository<InvoiceEntity> invoiceRepository, IRoomServices roomService, IGenericRepository<UserEntity> userRepository,
+        IAuthorizationServices authorServices)
     {
         _invoiceRepository = invoiceRepository;
         _roomService = roomService;
         _userRepository = userRepository;
+        _authorServices = authorServices;
     }
 
     /// <summary>
@@ -33,9 +36,9 @@ public class InvoicesController : BaseRestController
 
     public async Task<IActionResult> CreateAsync([FromRoute] Guid roomId, CreateInvoiceRequest request)
     {
-        var hasPermission = await _roomService.RoomManagedBy(roomId, CurrentUserID);
+        var hasPermission = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
         if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
-
+        
         var invoice = Mapper.Map<InvoiceEntity>(request);
         invoice.InvoiceCode = CodeGeneratorUtil.genarateByNowDateTime();
         invoice.Date = DateTime.Now;
@@ -58,7 +61,7 @@ public class InvoicesController : BaseRestController
         if (invoice == null) throw new NotFoundException($"Invoice not found");
 
         var roomId = invoice.RoomId;
-        var hasPermission = await _roomService.RoomManagedBy(roomId, CurrentUserID);
+        var hasPermission = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
         if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
 
         if (invoice.TenantPaidId != null) throw new BadRequestException($"Can not update when the invoice has been paid");
@@ -80,9 +83,9 @@ public class InvoicesController : BaseRestController
         if (invoice == null) throw new NotFoundException($"Invoice not found");
 
         var roomId = invoice.RoomId;
-        var hasPermission = await _roomService.RoomManagedBy(roomId, CurrentUserID);
+        var hasPermission = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
         if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
-
+        
         if (invoice.TenantPaidId != null) throw new BadRequestException($"The invoice has been paid");
 
         var tenant = await _userRepository.FindByIdAsync(tenantId);

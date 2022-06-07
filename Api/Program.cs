@@ -27,7 +27,6 @@ var configuration = builder.Configuration;
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddOData();
-    services.AddFilters();
 
 
 

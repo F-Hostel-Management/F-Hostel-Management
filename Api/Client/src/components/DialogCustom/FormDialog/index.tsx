@@ -10,6 +10,7 @@ interface IFormDialogProps {
     handleCloseDialog: () => void
     handleSubmit: () => void
     children: any
+    [x: string | number | symbol]: unknown
     maxWidth?: DialogProps['maxWidth']
 }
 
@@ -21,6 +22,7 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
     handleSubmit,
     children,
     maxWidth = 'xl',
+    ...others
 }) => {
     return (
         <DialogCustom
@@ -28,6 +30,7 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
             maxWidth={maxWidth}
+            {...others}
         >
             <form onSubmit={handleSubmit}>
                 <div style={{ paddingBottom: '16px' }}>{children}</div>

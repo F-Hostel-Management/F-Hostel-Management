@@ -6,13 +6,11 @@ export interface IUser {
     name?: string
     email?: string
     phone?: string
-    cardNumber?: string
     taxCode?: string
-    dateOfBirth?: string
-    address?: string
     gender?: number
     organization?: string
     avatarUrl?: string
+    dateOfBirth?: string
     isDeleted?: boolean
 }
 

@@ -55,14 +55,12 @@ public static class ConfigureOData
         builder.EntitySet<HostelEntity>("Hostels");
         builder.EntitySet<RoomEntity>("Rooms");
         builder.EntitySet<RoomType>("RoomTypes");
-        builder.EntitySet<HostelCategory>("HostelCategories");
         builder.EntitySet<FacilityEntity>("Facilities");
 
         builder.EntitySet<InvoiceScheduleEntity>("InvoiceSchedules");
         builder.EntitySet<InvoiceEntity>("Invoices");
 
         builder.EntitySet<NotificationEntity>("Notifications");
-        builder.EntitySet<Notification_Room>("RoomNotifications");
         
         builder.EntitySet<TicketEntity>("Tickets");
 

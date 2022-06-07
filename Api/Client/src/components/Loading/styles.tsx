@@ -22,7 +22,7 @@ export const Container = styled.div`
 `
 
 type PropTypeLetter = {
-    delay: number;
+    delay: number
 }
 export const Letter = styled.span<PropTypeLetter>`
     display: inline-block;
@@ -30,7 +30,7 @@ export const Letter = styled.span<PropTypeLetter>`
     font-size: 3.2rem;
     color: var(--text-color-dark);
     animation: ${wave} 1s ease-in-out;
-    animation-delay: calc(0.1s * ${props => props.delay});
+    animation-delay: calc(0.1s * ${(props) => props.delay});
 
     -webkit-box-reflect: below 1px linear-gradient(transparent, #0004);
 `

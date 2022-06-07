@@ -5,7 +5,6 @@ using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Message;
 using Domain.Entities.Notification;
-using Domain.Entities.Room;
 using Domain.Entities.Ticket;
 using Domain.Entities.User;
 using Domain.Enums;
@@ -52,6 +51,7 @@ public class UserEntity : BaseEntity
     public string Avatar { get; set; }
     public string FrontIdentification { get; set; }
     public string BackIdentification { get; set; }
+    public string CitizenIdentity { get; set; }
 
     /*navigation props*/
 
@@ -75,7 +75,7 @@ public class UserEntity : BaseEntity
 
 
     // 1 Manager (create) M Notifications (for) M Rooms
-    public virtual ICollection<Notification_Room> ManagerCreatedRoomNotifications { get; set; }
+    public virtual ICollection<NotificationEntity> Notifications { get; set; }
 
     // 1 ticket - M messages
     public virtual ICollection<MessageEntity> Messages { get; set; }

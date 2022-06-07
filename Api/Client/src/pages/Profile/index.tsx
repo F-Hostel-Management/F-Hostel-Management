@@ -20,11 +20,9 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
         role: 0,
         email: currentUser?.email,
         dateOfBirth: currentUser?.dateOfBirth,
-        cardNumber: currentUser?.cardNumber,
         gender: 0,
         phone: currentUser?.phone,
         avatarUrl: '',
-        address: currentUser?.address,
     }
 
     const { values, setValues, handleInputChange, resetForm } =
