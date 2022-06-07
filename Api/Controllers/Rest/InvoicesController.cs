@@ -24,8 +24,12 @@ public class InvoicesController : BaseRestController
         _userRepository = userRepository;
     }
 
+    /// <summary>
+    /// Owner || Manager create invoice by room id
+    /// </summary>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("{roomId}")]
+
     public async Task<IActionResult> CreateAsync([FromRoute] Guid roomId, CreateInvoiceRequest request)
     {
         var hasPermission = await _roomService.RoomManagedBy(roomId, CurrentUserID);
@@ -42,6 +46,9 @@ public class InvoicesController : BaseRestController
         return Ok();
     }
 
+    /// <summary>
+    /// Owner || Manager update invoice by id
+    /// </summary>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateInvoice([FromRoute] Guid id, UpdateInvoiceRequest request)
@@ -61,6 +68,9 @@ public class InvoicesController : BaseRestController
         return Ok();
     }
 
+    /// <summary>
+    /// Owner || Manager update who paid invoice
+    /// </summary>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPut("{id}/pay/{tenantId}")]
     public async Task<IActionResult> Pay([FromRoute] Guid id, [FromRoute] Guid tenantId)
