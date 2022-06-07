@@ -31,7 +31,6 @@ public class RoomEntity : BaseEntity
     public int NumOfDoors { get; set; }
     public int NumOfBathRooms { get; set; }
     public int NumOfWCs { get; set; }
-    public double Price { get; set; }
     public double Area { get; set; }
     public double Length { get; set; }
     public double Width { get; set; }

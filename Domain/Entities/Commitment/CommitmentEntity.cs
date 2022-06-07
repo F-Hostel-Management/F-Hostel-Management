@@ -38,6 +38,11 @@ public class CommitmentEntity : BaseEntity
     [NotMapped]
     public CommitmentStatus CommitmentStatus { get; set; }
 
+    [Range(1, 31)]
+    public int PaymentDate { get; set; }
+
+    public double Price { get; set; }
+
     //public string Content { get; set; }
 
     /*navigation props*/

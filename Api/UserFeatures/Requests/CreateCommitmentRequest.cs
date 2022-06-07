@@ -8,8 +8,11 @@ public class CreateCommitmentRequest : IMapTo<CommitmentEntity>
 {
     [Required]
     public Guid RoomId { get; set; }
-    public DateTime CreatedDate { get; set; }
+    [Required]
+    public double Price { get; set; }
+    [Required]
     public DateTime StartDate { get; set; }
+    [Required]
     public DateTime EndDate { get; set; }
     /*public Guid? ScaffoldingId { get; set; } */
     public int? DateOverdue { get; set; }

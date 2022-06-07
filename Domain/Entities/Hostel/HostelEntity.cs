@@ -21,10 +21,6 @@ public class HostelEntity : BaseEntity
 
     /*navigation props*/
 
-    // 1 type - M hostels 
-    public Guid HostelCategoryId { get; set; }
-    public HostelCategory HostelCategory { get; set; }
-
     // 1 owner - M hostels
     public Guid OwnerId { get; set; }
     public UserEntity Owner { get; set; }

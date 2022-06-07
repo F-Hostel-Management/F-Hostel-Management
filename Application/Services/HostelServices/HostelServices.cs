@@ -2,7 +2,6 @@
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
-using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;

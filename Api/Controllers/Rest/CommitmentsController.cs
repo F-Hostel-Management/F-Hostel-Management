@@ -70,6 +70,7 @@ public class CommitmentsController : BaseRestController
         }
         com.OwnerId = hostel.OwnerId;
         com.HostelId = hostel.Id;
+        com.CreatedDate = DateTime.Now;
 
         await _commitmentServices.CreateCommitment(com, room);
 
