@@ -1,5 +1,6 @@
 ﻿using Api.UserFeatures.Requests;
 using Api.UserFeatures.Responses;
+using Application.Exceptions;
 using Application.Interfaces;
 using AutoWrapper.Wrappers;
 using Domain.Constants;
@@ -57,7 +58,7 @@ namespace Api.Controllers.Rest
             var email = firebaseToken.Claims.GetValueOrDefault("email");
             if (email is null)
             {
-                throw new ApiException($"This account cannot use to log-in, please try another account!", StatusCodes.Status400BadRequest);
+                throw new BadRequestException($"This account cannot use to log-in, please try another account!");
             }
             UserEntity userEntity = new UserEntity();
             userEntity.Email = email.ToString();

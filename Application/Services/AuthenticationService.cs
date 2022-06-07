@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoWrapper.Wrappers;
 using Domain.Entities;
@@ -50,7 +51,7 @@ namespace Application.Services
             var name = firebaseToken.Claims.GetValueOrDefault("name");
             if (email is null)
             {
-                throw new ApiException($"This account cannot use to log-in, please try another account!", StatusCodes.Status400BadRequest);
+                throw new BadRequestException($"This account cannot use to log-in, please try another account!");
             }
             UserEntity userEntity = await _userRepository.FirstOrDefaultAsync(a => a.Email.Equals(email));
             return userEntity;

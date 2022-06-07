@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Room;
@@ -29,7 +30,7 @@ public class ValidateManagementHostelLevelFilter : IAsyncActionFilter
             await _vmFilter.OnActionExecutionAsync(context, next);
             await next();
         }
-        throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
+        throw new ForbiddenException("Forbidden");
     }
 }
 
@@ -62,7 +63,7 @@ public class ValidateManagementByRoomLevelFilter : IAsyncActionFilter
             context.HttpContext.Items.Add("room", room);
             await next();
         }
-        throw new ApiException("Fobidden", StatusCodes.Status403Forbidden);
+        throw new ForbiddenException("Forbidden");
 
     }
 }

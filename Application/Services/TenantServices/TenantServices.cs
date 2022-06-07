@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoWrapper.Wrappers;
 using Domain.Entities;
@@ -39,7 +40,7 @@ public class TenantServices : ITenantServices
             rt.TenantId.Equals(tenantId));
         if (tenantInRoom != null)
         {
-            throw new ApiException("Cannot Get Into Room", StatusCodes.Status400BadRequest);
+            throw new BadRequestException("Cannot Get Into Room");
         }
 
         int count = 0;
@@ -52,7 +53,7 @@ public class TenantServices : ITenantServices
 
         if (room.MaximumPeople > 0 && room.MaximumPeople <= count)
         {
-            throw new ApiException("Cannot Get Into Room", StatusCodes.Status400BadRequest);
+            throw new BadRequestException("Cannot Get Into Room");
         }
 
         await _roomTenantRepository.CreateAsync(

@@ -1,4 +1,5 @@
-﻿using AutoWrapper.Extensions;
+﻿using Application.Exceptions;
+using AutoWrapper.Extensions;
 using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc.Filters;
 //using System.Web.Http.Filters;
@@ -11,7 +12,7 @@ namespace Api.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                throw new ApiException(context.ModelState.AllErrors());
+                throw new BadRequestException(context.ModelState.AllErrors());
             }
         }
     }
