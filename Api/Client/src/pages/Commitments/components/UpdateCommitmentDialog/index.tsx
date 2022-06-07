@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
-import { hostels, rooms } from '../../../../utils/MockData'
 import { ICommitmentValues } from '../../../../interface/ICommitment'
 interface IUpdateCommitmentDialogProps {
     openDialog: boolean
@@ -15,7 +14,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
     handleCloseDialog,
 }) => {
     const initialValues: ICommitmentValues = {
-        createDate: new Date().toJSON(),
+        createdDate: new Date().toJSON(),
         startDate: '23/07/2001',
         endDate: '23/07/2006',
         roomId: '1',
@@ -25,12 +24,12 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
 
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
-    const [roomInfo, setRoomInfo] = useState<any | null>(rooms[0])
-    const [hostelInfo, setHostelInfo] = useState<any | null>(hostels[0])
+    const [roomInfo, setRoomInfo] = useState<any | null>(null)
+    const [hostelInfo, setHostelInfo] = useState<any | null>(null)
 
     return (
         <DialogCustom
-            title="Create Commitment"
+            title="Update Commitment"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
         >
@@ -40,10 +39,6 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
                 setValues={setValues}
                 handleInputChange={handleInputChange}
                 resetForm={resetForm}
-                roomInfo={roomInfo}
-                setRoomInfo={setRoomInfo}
-                hostelInfo={hostelInfo}
-                setHostelInfo={setHostelInfo}
             />
         </DialogCustom>
     )

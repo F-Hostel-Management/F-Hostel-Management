@@ -38,18 +38,40 @@ function App(): React.ReactElement {
 
     return (
         <div className="App">
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <Router>
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={<Navigate to="/landingPage" />}
-                        />
-                        <Route path="/landingPage" element={<LandingPage />} />
-                        <Route path="/" element={<PrivateRoute />}>
-                            {privateRoutes.map((route: IRoute) => {
+            <Loading loading={isLoading} />
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Navigate to="/landingPage" />} />
+                    <Route path="/landingPage" element={<LandingPage />} />
+                    <Route path="/" element={<PrivateRoute />}>
+                        {privateRoutes.map((route: IRoute) => {
+                            const Layout =
+                                route.layout == null
+                                    ? React.Fragment
+                                    : route.layout
+                            const Component = route.component
+                            return (
+                                <Route
+                                    key={route.name}
+                                    path={route.path}
+                                    element={
+                                        route.layout == null ? (
+                                            <Layout>
+                                                <Component />
+                                            </Layout>
+                                        ) : (
+                                            <Layout {...route.props}>
+                                                <Component />
+                                            </Layout>
+                                        )
+                                    }
+                                />
+                            )
+                        })}
+                    </Route>
+                    <Route path="/" element={<PublicRoute />}>
+                        <Route>
+                            {publicRoutes.map((route: IRoute) => {
                                 const Layout =
                                     route.layout == null
                                         ? React.Fragment
@@ -74,38 +96,10 @@ function App(): React.ReactElement {
                                 )
                             })}
                         </Route>
-                        <Route path="/" element={<PublicRoute />}>
-                            <Route>
-                                {publicRoutes.map((route: IRoute) => {
-                                    const Layout =
-                                        route.layout == null
-                                            ? React.Fragment
-                                            : route.layout
-                                    const Component = route.component
-                                    return (
-                                        <Route
-                                            key={route.name}
-                                            path={route.path}
-                                            element={
-                                                route.layout == null ? (
-                                                    <Layout>
-                                                        <Component />
-                                                    </Layout>
-                                                ) : (
-                                                    <Layout {...route.props}>
-                                                        <Component />
-                                                    </Layout>
-                                                )
-                                            }
-                                        />
-                                    )
-                                })}
-                            </Route>
-                        </Route>
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </Router>
-            )}
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Router>
         </div>
     )
 }

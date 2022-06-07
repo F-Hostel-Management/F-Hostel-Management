@@ -5,7 +5,6 @@ import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
 import { IRoom } from '../../interface/IRoom'
 import { ERole } from '../../utils/enums'
-import { getData, rooms } from '../../utils/MockData'
 import RoomStatus from './components/RoomStatus'
 import ToolbarChildren from './components/ToolbarChildren'
 import ActionButtons from './components/ActionButtons'
@@ -36,11 +35,7 @@ const Rooms: FC<IRoomsProps> = () => {
 
     useEffect(() => {
         setLoading(true)
-        const FetchData = async () => {
-            const data = getData(page + 1, pageSize, rooms)
-            setRows(data)
-            setLoading(false)
-        }
+        const FetchData = async () => {}
         FetchData()
     }, [page, pageSize])
     return (
