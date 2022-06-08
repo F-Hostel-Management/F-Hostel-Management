@@ -9,7 +9,7 @@ public class JoiningCode : BaseEntity
 {
     // 1 com - 1 joining code
     [Required]
-    public Guid CommitementId { get; set; }
+    public Guid CommitmentId { get; set; }
     public CommitmentEntity Commitment { get; set; }
     [Required]
     public int SixDigitsCode { get; set; }

@@ -41,7 +41,7 @@ public class NotificationsController : BaseRestController
             }
             notifications.Add(new NotificationEntity()
             {
-                NotificationCode = CodeGeneratorUtil.genarateByNowDateTime(),
+                TransactionCode = CodeGeneratorUtil.genarateByNowDateTime(),
                 Date = DateTime.Now,
                 Content = req.Content,
                 Type = req.Type,
