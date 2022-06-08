@@ -1,15 +1,16 @@
 import { Button, Divider, InputAdornment, Typography } from '@mui/material'
-import React, { FC, useRef, useState } from 'react'
+import React, { ChangeEvent, FC, useRef } from 'react'
 import QrReader from 'react-qr-reader'
 import InputField from '../../../../../components/Input/InputField'
-interface IStep1Props {}
 import * as Styled from './styles'
 import CheckIcon from '@mui/icons-material/Check'
 
-const Step1: FC<IStep1Props> = () => {
-    const [scanResultFile, setScanResultFile] = useState('')
-    const [scanResultWebCam, setScanResultWebCam] = useState('')
+interface IStep1Props {
+    scanResult: string
+    setScanResult: any
+}
 
+const Step1: FC<IStep1Props> = ({ scanResult, setScanResult }) => {
     const qrRef = useRef<any>(null)
 
     const onScanFile = () => {
@@ -22,7 +23,7 @@ const Step1: FC<IStep1Props> = () => {
 
     const handleScanFile = (result: any) => {
         if (result) {
-            setScanResultFile(result)
+            setScanResult(result)
         }
     }
 
@@ -32,8 +33,12 @@ const Step1: FC<IStep1Props> = () => {
 
     const handleScanWebCam = (result: any) => {
         if (result) {
-            setScanResultWebCam(result)
+            setScanResult(result)
         }
+    }
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setScanResult(event.target.value)
     }
     return (
         <Styled.QrContainer>
@@ -78,12 +83,16 @@ const Step1: FC<IStep1Props> = () => {
                 <InputField
                     name="roomCode"
                     label="Room Code"
-                    value={scanResultWebCam || scanResultFile}
+                    value={scanResult}
                     endAdornment={
                         <InputAdornment position="end">
                             <CheckIcon color="success" />
                         </InputAdornment>
                     }
+                    type="number"
+                    inputProps={{ minLength: 6, maxLength: 6 }}
+                    onChange={handleChange}
+                    required={true}
                 />
             </Styled.WrapperRight>
         </Styled.QrContainer>

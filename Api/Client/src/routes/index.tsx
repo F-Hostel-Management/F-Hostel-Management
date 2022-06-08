@@ -35,7 +35,7 @@ const publicRoutes: IRoute[] = [
 
 const privateRoutes: IRoute[] = [
     {
-        path: '/home',
+        path: '/home/*',
         component: Home,
         name: 'Home',
         layout: HomeLayout,

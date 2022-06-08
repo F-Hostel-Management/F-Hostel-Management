@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { getUserRole } from '../../slices/authSlice'
 import { ERole } from '../../utils/enums'
 import { IRoom } from '../../interface/IRoom'
+import { getAllRoomOfTenant } from '../../services/RoomService'
 interface IHomeProps {}
 
 const Home: FC<IHomeProps> = () => {
@@ -21,7 +22,7 @@ const Home: FC<IHomeProps> = () => {
         const FetchingData = async () => {
             switch (role) {
                 case ERole.TENANT_ROLE: {
-                    // do something
+                    setRooms(await getAllRoomOfTenant())
                     break
                 }
                 case ERole.MANAGER_ROLE: {
@@ -38,7 +39,7 @@ const Home: FC<IHomeProps> = () => {
     }, [])
 
     return role === ERole.TENANT_ROLE ? (
-        <TenantHome />
+        <TenantHome rooms={rooms} />
     ) : (
         <OwnerHome hostels={hostels} />
     )

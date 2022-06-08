@@ -73,6 +73,7 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
                     variant="contained"
                     color="primary"
                     onClick={handleClickDetail}
+                    size="small"
                 >
                     Details
                 </Button>
