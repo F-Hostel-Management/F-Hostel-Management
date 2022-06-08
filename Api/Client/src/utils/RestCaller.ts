@@ -61,4 +61,10 @@ export const RestCaller = {
                 showErrorToast,
             })
             .then(responseBody),
+    download: (url: string, data?: unknown) =>
+        instance
+            .post(url, data, {
+                responseType: 'arraybuffer',
+            })
+            .then((response) => response?.data),
 }
