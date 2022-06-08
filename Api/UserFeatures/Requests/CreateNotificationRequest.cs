@@ -6,6 +6,7 @@ namespace Api.UserFeatures.Requests;
 
 public class CreateNotificationRequest : IMapTo<NotificationEntity>
 {
+    public string TransactionCode { get; set; }
     [Required]
     public string Content { get; set; }
     [Required]

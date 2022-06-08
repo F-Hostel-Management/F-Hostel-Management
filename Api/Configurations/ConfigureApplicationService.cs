@@ -22,6 +22,8 @@ namespace Api.Configurations
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthorizationServices, AuthorizationServices>();
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IHtml2PdfService, Html2PdfService>();
         }
     }
 }

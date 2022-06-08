@@ -671,6 +671,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
         if (firstTimeRes.isError) return
 
+        console.log('url: ' + information.imgCard.get(0))
         const uploadRes = await RestCaller.upload(
             'Users/upload-identification-card',
             (() => {

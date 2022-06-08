@@ -38,7 +38,7 @@ public class JoiningCodeServices : IJoiningCodeServices
         JoiningCode checkedJc = null;
 
         checkedJc = await _joiningCodeRepository.FirstOrDefaultAsync(
-                jc => jc.CommitementId.Equals(joiningCode.CommitementId));
+                jc => jc.CommitmentId.Equals(joiningCode.CommitmentId));
 
         if (checkedJc != null)
         {
@@ -77,6 +77,6 @@ public class JoiningCodeServices : IJoiningCodeServices
 
     public async Task<CommitmentEntity> GetCommitment(JoiningCode joiningCode)
     {
-        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitementId);
+        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitmentId, "Tenant", "Owner", "Room", "Hostel");
     }
 }

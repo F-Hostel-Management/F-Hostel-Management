@@ -11,10 +11,12 @@ namespace Domain.Entities.Notification;
 [Table("Notifications")]
 public class NotificationEntity : BaseEntity
 {
-    public string NotificationCode { get; set; }
+    public string TransactionCode { get; set; }
     public DateTime Date { get; set; }
     public string Content { get; set; }
     public string Type { get; set; }
+    public bool IsUnread { get; set; } = true;
+    public bool IsSent { get; set; }
 
     /*navigation props*/
 

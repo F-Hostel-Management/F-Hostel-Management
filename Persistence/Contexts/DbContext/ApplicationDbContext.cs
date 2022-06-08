@@ -33,6 +33,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<RoomEntity> Rooms { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<FacilityEntity> Facilities { get; set; }
+    public DbSet<FacilityManagement> FacilityManagements { get; set; }
     public DbSet<InvoiceScheduleEntity> InvoiceSchedules { get; set; }
     public DbSet<InvoiceEntity> Invoices { get; set; }
     public DbSet<NotificationEntity> Notifications { get; set; }

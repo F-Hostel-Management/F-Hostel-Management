@@ -3,6 +3,8 @@ import React, { Dispatch, SetStateAction } from 'react'
 
 import { ROLES } from '../../../FillInformation/constants'
 import * as Styled from './styles'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 interface IAvatarProps {
     values: Record<string, any>
     setValues: Dispatch<SetStateAction<any>>
@@ -28,9 +30,40 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                     style={{ display: 'none' }}
                     onChange={handleChooseImage}
                 ></input>
-                <Styled.Avatar elevation={0} square>
-                    <img src={avatarUrl} height="auto" width="100%"></img>
-                </Styled.Avatar>
+                <div>
+                    <Styled.Avatar elevation={0} square>
+                        <div>
+                            {avatarUrl === undefined ? (
+                                <Styled.IconAvatar>
+                                    <PersonOutlineOutlinedIcon
+                                        htmlColor="#a7a7a7"
+                                        sx={{ width: '100%', height: '100%' }}
+                                    />
+                                </Styled.IconAvatar>
+                            ) : (
+                                <img
+                                    src={avatarUrl}
+                                    height="auto"
+                                    width="100%"
+                                ></img>
+                            )}
+                            <Styled.Text>
+                                <div>
+                                    <CameraAltIcon htmlColor="#ffffff" />
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            color: '#e2e2e2',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Change image
+                                    </Typography>
+                                </div>
+                            </Styled.Text>
+                        </div>
+                    </Styled.Avatar>
+                </div>
             </label>
 
             <Typography

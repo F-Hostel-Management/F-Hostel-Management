@@ -35,6 +35,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
             address: values.address,
         }
         const profileResult = await RestCaller.patch('Users/update-user', body)
+        if (profileResult.isError) return
         showSuccess('ok')
     }
     return (
