@@ -12,7 +12,7 @@ import * as Styled from './styles'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentHostel, setCurrentHostel } from '../../../slices/hostelSlice'
-import { getHostelById } from '../../../services/hostels'
+import { getHostelById } from '../../../services/HostelService'
 
 interface IDefaultLayoutProps {
     title: string

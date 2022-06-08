@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { IHostel } from '../../../../../interface/IHostel'
 import { IRoom } from '../../../../../interface/IRoom'
 import { IUser } from '../../../../../interface/IUser'
-import { getOwnerOfHostel } from '../../../../../services/hostels'
+import { getOwnerOfHostel } from '../../../../../services/HostelService'
 import CommitmentDetails from '../../../../Commitments/components/CommitmentDetails'
 
 interface IStep2Props {

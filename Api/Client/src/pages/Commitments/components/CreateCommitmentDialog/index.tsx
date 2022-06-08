@@ -7,7 +7,7 @@ import {
     createCommitment,
     approveCommitment,
     getJoiningCode,
-} from '../../../../services/commitments'
+} from '../../../../services/CommitmentService'
 interface ICreateCommitmentDialogProps {
     openDialog: boolean
     handleCloseDialog: () => void

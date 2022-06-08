@@ -3,7 +3,7 @@ import { IHostelValues } from '../../../../interface/IHostel'
 import { useForm } from '../../../../hooks/useForm'
 import HostelStepper from '../HostelStepper'
 import DialogCustom from '../../../../components/DialogCustom'
-import { createHostel } from '../../../../services/hostels'
+import { createHostel } from '../../../../services/HostelService'
 
 interface ICreateHostelDialogProps {
     openDialog: boolean

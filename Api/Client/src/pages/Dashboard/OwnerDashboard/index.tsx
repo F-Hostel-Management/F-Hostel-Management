@@ -1,8 +1,6 @@
 import React, { FC, Fragment } from 'react'
 
 import StatisticCard from '../../../components/Card/StatisticCard'
-import DonutChart from '../../../components/Chart/DonutChart'
-import FooterLandingPage from '../../../components/Footer/FooterLandingPage'
 import ChartSurvey from '../components/ChartSurvey'
 import TenantAgeChart from '../components/TenantAgeChart'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'

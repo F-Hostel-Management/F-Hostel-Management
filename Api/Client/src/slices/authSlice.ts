@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from '../interface/IUser'
+import { AppState } from '../stores/reduxStore'
 
 interface AuthSliceState {
     isAuthenticated: boolean
@@ -25,6 +26,7 @@ const authSlice = createSlice({
 })
 
 export const { setCurrentUser } = authSlice.actions
+export const getUserRole = (state: AppState) => state.auth.currentUser?.role
 
 const { reducer } = authSlice
 export default reducer

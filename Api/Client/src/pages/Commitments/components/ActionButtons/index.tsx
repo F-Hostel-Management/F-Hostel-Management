@@ -13,8 +13,9 @@ import DialogCustom from '../../../../components/DialogCustom'
 import UpdateCommitmentDialog from '../UpdateCommitmentDialog'
 import QrCodeIcon from '@mui/icons-material/QrCode'
 import CommitmentQrCode from '../CommitmentQrCode'
+import { ICommitment } from '../../../../interface/ICommitment'
 interface IActionButtonsProps {
-    rowData: any
+    rowData: ICommitment
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
@@ -134,7 +135,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             margin: 'auto',
                         }}
                     >
-                        <CommitmentQrCode />
+                        <CommitmentQrCode commitmentId={rowData.id || ''} />
                     </div>
                 </DialogCustom>
             )}

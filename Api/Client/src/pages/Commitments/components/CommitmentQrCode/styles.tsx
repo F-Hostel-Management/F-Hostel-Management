@@ -1,4 +1,3 @@
-import { down } from 'styled-breakpoints'
 import styled from 'styled-components'
 
 export const ContainerStep = styled.div`
@@ -8,8 +7,5 @@ export const ContainerStep = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-
-    ${down('md')} {
-        flex-direction: column;
-    }
+    flex-direction: column;
 `

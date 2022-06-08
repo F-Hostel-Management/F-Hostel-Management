@@ -1,14 +1,15 @@
-import { Button, InputAdornment } from '@mui/material'
+import { Button, InputAdornment, Typography } from '@mui/material'
 import React, { ChangeEvent, FC, Fragment, useState } from 'react'
 import InputField from '../../../../components/Input/InputField'
 import QrCode from '../../../../components/QrCode'
-import { getJoiningCode } from '../../../../services/commitments'
+import { getJoiningCode } from '../../../../services/CommitmentService'
 import * as Styled from './styles'
+const baseUrl = import.meta.env.PUBLIC_FRONTEND
+interface ICommitmentQrCodeProps {
+    commitmentId: string
+}
 
-interface ICommitmentQrCodeProps {}
-
-const CommitmentQrCode: FC<ICommitmentQrCodeProps> = (props) => {
-    const commitmentId = '28fdadc5-0a4f-4057-a9c4-08da487f8276'
+const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
     const [timeSpan, setTimeSpan] = useState<number>(0)
     const [qrLink, setQrLink] = useState<any>(null)
 
@@ -17,47 +18,51 @@ const CommitmentQrCode: FC<ICommitmentQrCodeProps> = (props) => {
     }
 
     const handleClickCreateQr = async () => {
-        const link = await getJoiningCode({
+        const response = await getJoiningCode({
             commitementId: commitmentId,
             timeSpan: timeSpan,
         })
-        setQrLink(link)
+        setQrLink(response.result.sixDigitsCode)
     }
     return (
         <Fragment>
-            <div
-                style={{
-                    width: '80%',
-                    margin: '16px auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    minHeight: '300px',
-                }}
-            >
-                <InputField
-                    label="Time Span"
-                    name="timeSpan"
-                    value={timeSpan || ''}
-                    onChange={handleChange}
-                    type="number"
-                    required={true}
-                    endAdornment={
-                        <InputAdornment position="end">minutes</InputAdornment>
-                    }
-                />
-                <Button
-                    variant="contained"
-                    color="orange"
-                    onClick={handleClickCreateQr}
+            {!qrLink ? (
+                <div
+                    style={{
+                        width: '80%',
+                        margin: '16px auto',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                        minHeight: '300px',
+                    }}
                 >
-                    Create QR Code
-                </Button>
-            </div>
-            {qrLink && (
+                    <InputField
+                        label="Time Span"
+                        name="timeSpan"
+                        value={timeSpan || ''}
+                        onChange={handleChange}
+                        type="number"
+                        required={true}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                minutes
+                            </InputAdornment>
+                        }
+                    />
+                    <Button
+                        variant="contained"
+                        color="orange"
+                        onClick={handleClickCreateQr}
+                    >
+                        Create QR Code
+                    </Button>
+                </div>
+            ) : (
                 <Styled.ContainerStep>
-                    <QrCode link={qrLink} size={200} />
+                    <QrCode link={`${baseUrl}/scan/${qrLink}`} size={200} />
+                    <Typography variant="body2">Scan me</Typography>
                 </Styled.ContainerStep>
             )}
         </Fragment>

@@ -9,12 +9,14 @@ import RoomStatus from './components/RoomStatus'
 import ToolbarChildren from './components/ToolbarChildren'
 import ActionButtons from './components/ActionButtons'
 import CreateCRoomDialog from './components/CreateRoomDialog'
+import { getUserRole } from '../../slices/authSlice'
+import { useSelector } from 'react-redux'
 interface IRoomsProps {}
 
 const Rooms: FC<IRoomsProps> = () => {
-    const role: ERole = 1
-    const { renderCell, createColumn } = useGridData()
+    const role = useSelector(getUserRole)
 
+    const { renderCell, createColumn } = useGridData()
     const [pageSize, setPageSize] = useState<number>(5)
     const [page, setPage] = useState<number>(0)
     const [rows, setRows] = useState<IRoom[]>([])

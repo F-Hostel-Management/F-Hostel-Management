@@ -11,7 +11,10 @@ import Step2 from './Step2'
 import Step3 from './Step3'
 import StepByStep from '../../../../components/StepByStep'
 import { IStepper } from '../../../../interface/IStepper'
-import { getListHostel, getRoomOfHostel } from '../../../../services/hostels'
+import {
+    getListHostel,
+    getRoomOfHostel,
+} from '../../../../services/HostelService'
 import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/hostelSlice'
 import * as Styled from './styles'

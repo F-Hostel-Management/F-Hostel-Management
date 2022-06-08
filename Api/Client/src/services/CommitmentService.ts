@@ -1,4 +1,4 @@
-import { RestCaller } from './../utils/RestCaller'
+import { RestCaller } from '../utils/RestCaller'
 import { ICommitment } from '../interface/ICommitment'
 import { ODataCaller } from '../utils/ODataCaller'
 

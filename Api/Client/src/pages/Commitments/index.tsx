@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import {
     getAllCommitmentOfHostel,
     getNumberCommitmentOfHostel,
-} from '../../services/commitments'
+} from '../../services/CommitmentService'
 import { createColumns } from './components/Table'
 import { getItem } from '../../utils/LocalStorageUtils'
 interface ICommitmentsProps {}
