@@ -41,7 +41,7 @@ namespace Infrastructure.Contexts.EntityTypeConfigurations
             builder
                 .HasOne(jc => jc.JoiningCode)
                 .WithOne(c => c.Commitment)
-                .HasForeignKey<JoiningCode>(jci => jci.CommitementId);
+                .HasForeignKey<JoiningCode>(jci => jci.CommitmentId);
         }
     }
 }

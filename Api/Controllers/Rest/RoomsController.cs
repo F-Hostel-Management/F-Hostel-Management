@@ -13,18 +13,15 @@ namespace Api.Controllers.Rest;
 public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
-    private readonly IHostelServices _hostelServices;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IAuthorizationServices _authorServices;
     public RoomsController(
         IGenericRepository<RoomEntity> roomsRepository,
         ICommitmentServices commitmentServices,
-        IHostelServices hostelServices,
         IAuthorizationServices authorServices)
     {
         _roomsRepository = roomsRepository;
         _commitmentServices = commitmentServices;
-        _hostelServices = hostelServices;
         _authorServices = authorServices;
     }
 
