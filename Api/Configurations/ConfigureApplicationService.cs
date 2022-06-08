@@ -1,4 +1,5 @@
-﻿using Api.Services;
+﻿using Api.Controllers.Rest.Notification;
+using Api.Services;
 using Application.Interfaces;
 using Application.Services;
 using Application.Services.CommitmentServices;
@@ -23,6 +24,8 @@ namespace Api.Configurations
             services.AddScoped<IAuthorizationServices, AuthorizationServices>();
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+
+            services.AddScoped<HandleNotificationRequest>();
         }
     }
 }
