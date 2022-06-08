@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, MouseEventHandler } from 'react'
 
 import { Link } from 'react-router-dom'
 
@@ -16,17 +16,36 @@ import {
 
 import { sidebarItemList } from './sidebarItemList'
 import * as Styled from './styles'
-import { IconButtonList } from './iconButtonList'
-
+import PermIdentityIcon from '@mui/icons-material/PermIdentity'
+import KeyIcon from '@mui/icons-material/Key'
+import LanguageIcon from '@mui/icons-material/Language'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import { logOut } from '../../slices/authSlice'
+import { useAppDispatch } from '../../hooks/reduxHook'
 interface ISidebarProps {
     isShownSidebar: boolean
 }
-
+interface IIconButtonListProps {
+    icon: React.ReactElement
+    path: string
+    onClick?: MouseEventHandler<any> | undefined
+}
 const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(0)
-
+    const dispatch = useAppDispatch()
     const handleListItemClick = (index: number) => {
         setSelectedIndex(index)
+    }
+    const handleLogout = () => {
+        dispatch(logOut())
+    }
+    const IconButtonList: { items: Array<IIconButtonListProps> } = {
+        items: [
+            { icon: <PermIdentityIcon />, path: '/home/profile' },
+            { icon: <LanguageIcon />, path: '' },
+            { icon: <KeyIcon />, path: '' },
+            { icon: <ExitToAppIcon />, path: '', onClick: handleLogout },
+        ],
     }
     return (
         <Styled.SidebarContainer isShownSidebar={isShownSidebar}>
@@ -42,7 +61,11 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                     <Styled.SidebarActionWrapper>
                         {IconButtonList.items.map((item, index) => (
                             <Link to={item.path} key={index}>
-                                <IconButton size="small" sx={{ mx: 1 }}>
+                                <IconButton
+                                    size="small"
+                                    sx={{ mx: 1 }}
+                                    onClick={item.onClick}
+                                >
                                     {item.icon}
                                 </IconButton>
                             </Link>

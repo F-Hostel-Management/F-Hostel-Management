@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities.Facility;
 
 namespace Domain.Entities;
 
@@ -33,5 +34,7 @@ public class HostelEntity : BaseEntity
 
     // 1 hostel - m com
     public virtual ICollection<CommitmentEntity> Commitments { get; set; }
+    
+    public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
 }

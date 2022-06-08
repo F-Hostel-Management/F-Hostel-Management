@@ -1,18 +1,39 @@
 import { ERoomStatus, ERoomType } from '../utils/enums'
+import { IHostel } from './IHostel'
 
 export interface IRoom {
-    id: string
-    roomNumber: number
-    type: ERoomType
-    status: ERoomStatus
-    numberOfWindows: number
-    numberOfDoor: number
-    numberOfBathRoom: number
-    numberOfToilet: number
-    price: number
-    area: number
-    length: number
-    width: number
-    height: number
-    isDeleted: boolean
+    id?: string
+    roomName?: string
+    roomTypeId?: ERoomType
+    numOfWindows?: number
+    numOfDoors?: number
+    numOfBathRooms?: number
+    numOfWCs?: number
+    price?: number
+    area?: number
+    length?: number
+    width?: number
+    height?: number
+    hostelId?: string
+    hostel?: IHostel
+    roomStatus?: ERoomStatus
+    maximumPeople?: number
+    isDeleted?: boolean
+}
+
+export interface IRoomValues {
+    roomName?: string
+    quantity?: number
+    maximumPeople?: number
+    numOfWindows?: number
+    numOfDoors?: number
+    numOfBathRooms?: number
+    numOfWCs?: number
+    price?: number
+    area?: number
+    length?: number
+    width?: number
+    height?: number
+    roomTypeId?: string
+    hostelId?: string
 }

@@ -27,6 +27,7 @@ var configuration = builder.Configuration;
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddOData();
+    services.AddCronService();
 
 
 
@@ -76,7 +77,7 @@ var app = builder.Build();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(options => options.EnablePersistAuthorization());
         app.UseDeveloperExceptionPage();
         await app.Services.ApplyMigrations();
         await app.Services.DbInitializer();

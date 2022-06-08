@@ -12,6 +12,10 @@ import * as React from 'react'
 import './styles.css'
 import { Link } from 'react-scroll'
 import logo from '../../../assets/images/logo.png'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../../stores/reduxStore'
+import { useAppDispatch } from '../../../hooks/reduxHook'
+import { logOut } from '../../../slices/authSlice'
 
 interface IHeaderLandingPageProps {}
 
@@ -20,7 +24,10 @@ export const HeaderLandingPage: React.FunctionComponent<
 > = () => {
     const [click, setClick] = React.useState<boolean>(false)
     const [navbar, setNavbar] = React.useState(false)
-
+    const isAuthenticated = useSelector(
+        (state: AppState) => state.auth.isAuthenticated
+    )
+    const dispatch = useAppDispatch()
     const handleClick = () => {
         setClick(!click)
     }
@@ -184,6 +191,22 @@ export const HeaderLandingPage: React.FunctionComponent<
                                     Contacts
                                 </Link>
                             </li>
+                            {isAuthenticated ? (
+                                <li className="nav-item">
+                                    <Link
+                                        to="Contacts"
+                                        spy={true}
+                                        smooth={true}
+                                        offset={5}
+                                        duration={500}
+                                        onClick={() => dispatch(logOut())}
+                                    >
+                                        Log out
+                                    </Link>
+                                </li>
+                            ) : (
+                                ''
+                            )}
                         </ul>
                     </Box>
                 </Toolbar>

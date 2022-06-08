@@ -5,14 +5,13 @@ import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
 import { IFacility } from '../../interface/IFacility'
 import { ERole } from '../../utils/enums'
-import { facilities, getData } from '../../utils/MockData'
 import ActionButtons from './components/ActionButtons'
 import CreateFacilityDialog from './components/CreateFacilityDialog'
 import ToolbarChildren from './components/ToolbarChildren'
 
-interface IFacilitieProps {}
+interface IFacilitiesProps {}
 
-const Facilities: FC<IFacilitieProps> = () => {
+const Facilities: FC<IFacilitiesProps> = () => {
     const role: ERole = 1
     const { renderCell, createColumn } = useGridData()
 
@@ -33,11 +32,7 @@ const Facilities: FC<IFacilitieProps> = () => {
 
     useEffect(() => {
         setLoading(true)
-        const FetchData = async () => {
-            const data = getData(page + 1, pageSize, facilities)
-            setRows(data)
-            setLoading(false)
-        }
+        const FetchData = async () => {}
         FetchData()
     }, [page, pageSize])
     return (

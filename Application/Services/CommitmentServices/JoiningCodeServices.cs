@@ -77,6 +77,6 @@ public class JoiningCodeServices : IJoiningCodeServices
 
     public async Task<CommitmentEntity> GetCommitment(JoiningCode joiningCode)
     {
-        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitmentId);
+        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitmentId, "Tenant", "Owner", "Room", "Hostel");
     }
 }

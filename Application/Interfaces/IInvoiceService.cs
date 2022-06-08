@@ -4,5 +4,5 @@ namespace Application.Interfaces;
 
 public interface IInvoiceService
 {
-    Task<bool> CanDelete(InvoiceEntity invoice);
+    Task<bool> CanModifyAsync(InvoiceEntity invoice);
 }

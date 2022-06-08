@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RestCaller } from './../utils/RestCaller'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from '../interface/IUser'
 
 interface AuthSliceState {
@@ -9,7 +10,9 @@ interface AuthSliceState {
 const initialState: AuthSliceState = {
     isAuthenticated: false,
 }
-
+export const logOut = createAsyncThunk('auth/logout', async () => {
+    return await RestCaller.post('/authentication/log-out')
+})
 const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -22,9 +25,14 @@ const authSlice = createSlice({
             state.isAuthenticated = true
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(logOut.fulfilled, (state, action) => {
+            state.isAuthenticated = false
+            state.currentUser = undefined
+        })
+    },
 })
 
 export const { setCurrentUser } = authSlice.actions
-
 const { reducer } = authSlice
 export default reducer

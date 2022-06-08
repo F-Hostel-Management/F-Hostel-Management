@@ -35,10 +35,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return _entity;
     }
 
-    public virtual async Task<T> FindByIdAsync(Guid id)
+    public virtual async Task<T> FindByIdAsync(Guid id, params string[] navigationProperties)
     {
-        T entity = await dbSet.FindAsync(id);
+        var query = ApplyNavigation(navigationProperties);
+        T entity = await query.FirstOrDefaultAsync(e => e.Id.Equals(id));
         return entity;
+    }
+
+    private IQueryable<T> ApplyNavigation(params string[] navigationProperties)
+    {
+        var query = dbSet.AsQueryable();
+        foreach (string navigationProperty in navigationProperties)
+            query = query.Include(navigationProperty);
+        return query;
     }
 
     public virtual async Task<List<T>> ListAsync()
@@ -67,6 +76,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
         return dbSet.AsQueryable().AsNoTracking().FirstOrDefaultAsync(predicate);
+    }
+
+    public async Task<long> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> sumExpression)
+    {
+        return await dbSet.AsQueryable().AsNoTracking().Where(predicate).SumAsync(sumExpression);
     }
 
     public async Task CreateRangeAsync(IEnumerable<T> entities)
