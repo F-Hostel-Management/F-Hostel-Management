@@ -116,7 +116,7 @@ public class CommitmentsController : BaseRestController
         ([FromBody] CreateJoiningCodeRequest req)
     {
         // check exist and not expired commitment
-        CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(req.CommitementId);
+        CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(req.CommitmentId);
         bool isManaged = await _authorServices.IsHostelManagedByCurrentUser(com.HostelId, CurrentUserID);
         if (!isManaged)
         {
