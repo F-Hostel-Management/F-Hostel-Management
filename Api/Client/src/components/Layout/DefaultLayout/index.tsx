@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentHostel, setCurrentHostel } from '../../../slices/hostelSlice'
 import { getHostelById } from '../../../services/HostelService'
+import { getUserRole } from '../../../slices/authSlice'
+import { ERole } from '../../../utils/enums'
 
 interface IDefaultLayoutProps {
     title: string
@@ -20,6 +22,8 @@ interface IDefaultLayoutProps {
 }
 
 const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
+    const role = useSelector(getUserRole)
+
     // breakpoints of screen
     const screen = useBreakpoint(up('lg'))
     const navigate = useNavigate()
@@ -34,6 +38,7 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
     const [isSidebarMobile, setIsSidebarMobile] = useState<boolean>(false)
 
     useEffect(() => {
+        if (role === ERole.TENANT_ROLE) return
         const hostelId = localStorage.getItem('currentHostelId')
         if (!hostelId) {
             navigate('/home')

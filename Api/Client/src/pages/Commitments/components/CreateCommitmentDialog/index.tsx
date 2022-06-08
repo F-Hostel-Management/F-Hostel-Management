@@ -27,7 +27,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         paymentDate: 1,
     }
 
-    const [commitment, setCommitment] = useState<any>(null)
+    const [commitmentId, setCommitmentId] = useState<any>(null)
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
     const [timeSpan, setTimeSpan] = useState<number>(0)
@@ -40,15 +40,15 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     // create commitment
     const handleSubmitStep2 = async () => {
         const response = await createCommitment(values)
-        setCommitment(response.result)
+        setCommitmentId(response.result)
     }
 
     const handleSubmitStep3 = async () => {
         await approveCommitment({
-            commitmentId: commitment?.id,
+            commitmentId: commitmentId,
         })
         const response = await getJoiningCode({
-            commitementId: commitment?.id,
+            commitmentId: commitmentId,
             timeSpan,
         })
         setSixDigitsCode(response.result.sixDigitsCode)

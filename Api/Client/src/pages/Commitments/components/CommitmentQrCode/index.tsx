@@ -19,7 +19,7 @@ const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
 
     const handleClickCreateQr = async () => {
         const response = await getJoiningCode({
-            commitementId: commitmentId,
+            commitmentId: commitmentId,
             timeSpan: timeSpan,
         })
         setQrLink(response.result.sixDigitsCode)
@@ -61,7 +61,10 @@ const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
                 </div>
             ) : (
                 <Styled.ContainerStep>
-                    <QrCode link={`${baseUrl}/scan/${qrLink}`} size={200} />
+                    <QrCode
+                        link={`${baseUrl}/home/joinRoom/${qrLink}`}
+                        size={200}
+                    />
                     <Typography variant="body2">Scan me</Typography>
                 </Styled.ContainerStep>
             )}
