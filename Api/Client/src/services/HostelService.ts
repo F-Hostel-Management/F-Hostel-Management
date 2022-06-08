@@ -17,7 +17,7 @@ const getListHostel = async () => {
     return result
 }
 
-const getHostelById = async (hostelId: string) => {
+const getHostelById = async (hostelId = '') => {
     const builder = ODataCaller.createBuilder<IHostel>()
         .filter('id', (e) => e.equals(hostelId))
         .select('id', 'address', 'name', 'numOfRooms', 'imgPath', 'ownerId')
@@ -56,7 +56,7 @@ const getOwnerOfHostel = async (hostelId = '') => {
         .filter('id', (e) => e.equals(hostelId))
         .select('owner')
         .expand('owner', (owner) => owner.select())
-    const result = await get('Hostels/', builder)
+    const result = await get('Hostels', builder)
     console.log('getRoomOfHostel: ', result?.[0].owner)
     return result?.[0].owner
 }
