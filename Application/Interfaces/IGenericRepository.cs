@@ -12,7 +12,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task CreateAsync(T entity);
     Task CreateRangeAsync(IEnumerable<T> entities);
     Task<List<T>> ListAsync();
-    Task<T> FindByIdAsync(Guid id);
+    Task<T> FindByIdAsync(Guid id, params string[] navigationProperties);
     Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties);
     Task UpdateAsync(T updated);
     Task<T> DeleteAsync(Guid id);
