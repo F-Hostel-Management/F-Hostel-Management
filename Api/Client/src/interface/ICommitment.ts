@@ -1,3 +1,4 @@
+import { IHostel } from './IHostel'
 import { IRoom } from './IRoom'
 import { IUser } from './IUser'
 
@@ -23,6 +24,7 @@ export interface ICommitment {
     room?: IRoom
     joiningCode?: string
     hostelId?: string
+    hostel?: IHostel
     isDeleted?: boolean
     price?: number
     paymentDate?: number

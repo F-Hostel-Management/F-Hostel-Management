@@ -11,6 +11,7 @@ export interface IUser {
     organization?: string
     avatarUrl?: string
     dateOfBirth?: string
+    citizenIdentity?: string
     isDeleted?: boolean
 }
 

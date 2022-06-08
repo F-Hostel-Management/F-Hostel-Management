@@ -15,7 +15,7 @@ export interface IRoom {
     height?: number
     hostelId?: string
     hostel?: IHostel
-    roomStatus?: ERoomStatus
+    status?: ERoomStatus
     maximumPeople?: number
     isDeleted?: boolean
 }
