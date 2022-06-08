@@ -79,7 +79,7 @@ public class CommitmentsController : BaseRestController
         // update room status
         await _roomServices.Rent(room);
 
-        return Ok(com);
+        return Ok(com.Id);
     }
 
     /// <summary>
