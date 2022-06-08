@@ -40,11 +40,6 @@ public class NotificationsController : BaseRestController
     }
 
 
-
-    /// <summary>
-    /// owner || manager press cancel create notification button 
-    /// </summary>
-    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("create-but-cancel")]
     public async Task<IActionResult> CreateButCancelNotificationsAsync
@@ -89,11 +84,6 @@ public class NotificationsController : BaseRestController
         return Ok(notifications);
     }
 
-    /// <summary>
-    /// send
-    /// </summary>
-    /// <param name="req"></param>
-    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("send")]
     public async Task<IActionResult> SendNotificationsAsync
@@ -136,7 +126,7 @@ public class NotificationsController : BaseRestController
         return Ok(notifications);
     }
 
-
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpGet("transaction/{TransactionId}")]
     public async Task<IActionResult> GetNotiStransactionAsync
         ([FromRoute] Guid TransactionId)
@@ -150,12 +140,6 @@ public class NotificationsController : BaseRestController
         return Ok(notifications);
     }
 
-    /// <summary>
-    /// read noti
-    /// </summary>
-    /// <param name="notiId"></param>
-    /// <returns></returns>
-    /// <exception cref="NotFoundException"></exception>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{notiId}")]
     public async Task<IActionResult> ReadNotificationAsync([FromRoute] Guid notiId)
@@ -170,12 +154,6 @@ public class NotificationsController : BaseRestController
         return Ok(noti);
     }
 
-    /// <summary>
-    /// delete noti
-    /// </summary>
-    /// <param name="notiId"></param>
-    /// <returns></returns>
-    /// <exception cref="NotFoundException"></exception>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpDelete("{notiId}")]
     public async Task<IActionResult> DeleteNotificationAsync([FromRoute] Guid notiId)
