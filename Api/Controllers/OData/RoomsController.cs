@@ -23,15 +23,25 @@ public class RoomsController : BaseODataController<RoomEntity>
         _authorizationServices = authorizationServices;
     }
 
-    [ApiExplorerSettings(IgnoreApi = true)]
+  
+    // [HttpGet()]
+    // public IQueryable GetRoomsForTenant(ODataQueryOptions<RoomEntity> options)
+    // {
+    //     var query = 
+    //     return ApplyQuery(options, query);
+    // }
     [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpGet()]
-    public IQueryable GetRoomsForTenant(ODataQueryOptions<RoomEntity> options)
+    public override IQueryable GetData(ODataQueryOptions<RoomEntity> options)
     {
-        var query = db.Rooms.Where(room =>
-                                   room.RoomTenants.Any(t =>
-                                                        t.TenantId.Equals(CurrentUserId)));
-        return ApplyQuery(options, query);
+        return base.GetData(options);
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    protected override IQueryable<RoomEntity> GetQuery()
+    {
+        return db.Rooms.Where(room =>
+            room.RoomTenants.Any(t =>
+                t.TenantId.Equals(CurrentUserId)));
     }
 
     [ApiExplorerSettings(IgnoreApi = true)]
