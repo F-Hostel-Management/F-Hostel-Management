@@ -79,7 +79,7 @@ public class CommitmentsController : BaseRestController
         // update room status
         await _roomServices.Rent(room);
 
-        return Ok(com);
+        return Ok(com.Id);
     }
 
     /// <summary>
@@ -116,7 +116,7 @@ public class CommitmentsController : BaseRestController
         ([FromBody] CreateJoiningCodeRequest req)
     {
         // check exist and not expired commitment
-        CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(req.CommitementId);
+        CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(req.CommitmentId);
         bool isManaged = await _authorServices.IsHostelManagedByCurrentUser(com.HostelId, CurrentUserID);
         if (!isManaged)
         {
