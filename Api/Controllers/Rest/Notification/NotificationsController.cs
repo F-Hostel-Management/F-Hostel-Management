@@ -5,7 +5,9 @@ using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
 using Domain.Constants;
+using Domain.Entities;
 using Domain.Entities.Notification;
+using Domain.Entities.Room;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +17,26 @@ namespace Api.Controllers.Rest;
 public class NotificationsController : BaseRestController
 {
     private readonly IGenericRepository<NotificationEntity> _notificationsRepository;
+    private readonly IGenericRepository<NotificationTransaction> _transactionRepository;
+    private readonly IGenericRepository<HostelEntity> _hostelRepository;
+    private readonly IGenericRepository<RoomEntity> _roomRepository;
     private readonly IAuthorizationServices _authorServices;
     private readonly HandleNotificationRequest _reqHandler;
 
     public NotificationsController
         (IGenericRepository<NotificationEntity> notificationsRepository,
+        IGenericRepository<NotificationTransaction> transactionRepository,
+        IGenericRepository<HostelEntity> hostelRepository,
+        IGenericRepository<RoomEntity> roomRepository,
         IAuthorizationServices authorServices,
         HandleNotificationRequest reqHandler)
     {
         _notificationsRepository = notificationsRepository;
         _authorServices = authorServices;
         _reqHandler = reqHandler;
+        _transactionRepository = transactionRepository;
+        _hostelRepository = hostelRepository;
+        _roomRepository = roomRepository;
     }
 
 
@@ -39,17 +50,38 @@ public class NotificationsController : BaseRestController
     public async Task<IActionResult> CreateButCancelNotificationsAsync
         ([FromBody] CreateNotificationRequest req)
     {
+        if (!req.RoomIds.Any())
+        {
+            throw new ArgumentException();
+        }
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
-        bool isSent = false;
-        if (req.TransactionCode is null)
+        bool isSent = false;     
+
+        if (req.TransactionId is null)
         {
             // create ==> issent false
-            req.TransactionCode = CodeGeneratorUtil.genarateByNowDateTime();
+            NotificationTransaction transaction = new NotificationTransaction()
+            {
+                Id = Guid.NewGuid(),
+                TransactionCode = CodeGeneratorUtil.genarateByNowDateTime(),
+                ManagerId = CurrentUserID
+            };
+
+            req.TransactionId = transaction.Id;
             notifications = await _reqHandler.GetValidListFromRequest(req, CurrentUserID, isSent);
+            RoomEntity room = await _roomRepository.FindByIdAsync(req.RoomIds[0]);
+            HostelEntity hostel = await _hostelRepository.FindByIdAsync(room.HostelId);
+            transaction.HostelId = hostel.Id;
+            await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);
         }
         else
         {
+            NotificationTransaction transaction = await _transactionRepository.FindByIdAsync((Guid)req.TransactionId);
+            if (transaction is null)
+            {
+                throw new NotFoundException("Transcantion not found");
+            }
             // load db end update if any ==> issent still false
             notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, isSent, Mapper);
             await _notificationsRepository.UpdateRangeAsync(notifications);
@@ -57,25 +89,47 @@ public class NotificationsController : BaseRestController
         return Ok(notifications);
     }
 
-
+    /// <summary>
+    /// send
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("send")]
     public async Task<IActionResult> SendNotificationsAsync
         ([FromBody] CreateNotificationRequest req)
     {
+        if (!req.RoomIds.Any())
+        {
+            throw new ArgumentException();
+        }
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
         bool isSent = true;
 
-        if (req.TransactionCode is null)
+        if (req.TransactionId is null)
         {
-            // create issent true
-            req.TransactionCode = CodeGeneratorUtil.genarateByNowDateTime();
+            NotificationTransaction transaction = new NotificationTransaction()
+            {
+                TransactionCode = CodeGeneratorUtil.genarateByNowDateTime(),
+                ManagerId = CurrentUserID
+            };
+
+            req.TransactionId = transaction.Id;
             notifications = await _reqHandler.GetValidListFromRequest(req, CurrentUserID, isSent);
+            RoomEntity room = await _roomRepository.FindByIdAsync(req.RoomIds[0]);
+            HostelEntity hostel = await _hostelRepository.FindByIdAsync(room.HostelId);
+            transaction.HostelId = hostel.Id;
+            await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);
         }
         else
         {
             // update issent true
+            NotificationTransaction transaction = await _transactionRepository.FindByIdAsync((Guid)req.TransactionId);
+            if (transaction is null)
+            {
+                throw new NotFoundException("Transcantion not found");
+            }
             notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, isSent, Mapper);
             await _notificationsRepository.UpdateRangeAsync(notifications);
         }
@@ -83,12 +137,12 @@ public class NotificationsController : BaseRestController
     }
 
 
-    [HttpGet("transaction/{transactionCode}")]
+    [HttpGet("transaction/{TransactionId}")]
     public async Task<IActionResult> GetNotiStransactionAsync
-        (string transactionCode)
+        ([FromRoute] Guid TransactionId)
     {
         IList<NotificationEntity> notifications = await _notificationsRepository.WhereAsync(noti =>
-        noti.TransactionCode.Equals(transactionCode));
+        noti.TransactionId.Equals(TransactionId));
         if (notifications.Count == 0)
         {
             throw new NotFoundException("Not found transaction");
@@ -96,6 +150,12 @@ public class NotificationsController : BaseRestController
         return Ok(notifications);
     }
 
+    /// <summary>
+    /// read noti
+    /// </summary>
+    /// <param name="notiId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{notiId}")]
     public async Task<IActionResult> ReadNotificationAsync([FromRoute] Guid notiId)
@@ -110,6 +170,12 @@ public class NotificationsController : BaseRestController
         return Ok(noti);
     }
 
+    /// <summary>
+    /// delete noti
+    /// </summary>
+    /// <param name="notiId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpDelete("{notiId}")]
     public async Task<IActionResult> DeleteNotificationAsync([FromRoute] Guid notiId)

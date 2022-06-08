@@ -33,12 +33,11 @@ public class HandleNotificationRequest
             }
             notifications.Add(new NotificationEntity()
             {
-                TransactionCode = req.TransactionCode,
+                TransactionId = (Guid)req.TransactionId,
                 Date = DateTime.Now,
                 Content = req.Content,
                 Type = req.Type,
                 RoomId = i,
-                ManagerId = managerId,
                 IsSent = isSent
             });
 
@@ -58,7 +57,7 @@ public class HandleNotificationRequest
                 throw new ForbiddenException("Forbidden");
             }
             NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultAsync(noti =>
-               noti.TransactionCode.Equals(req.TransactionCode) && noti.RoomId.Equals(i));
+               noti.TransactionId.Equals(req.TransactionId) && noti.RoomId.Equals(i));
             if (uEntity == null)
             {
                 throw new NotFoundException("Not found");

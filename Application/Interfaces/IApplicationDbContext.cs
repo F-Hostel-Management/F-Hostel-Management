@@ -31,4 +31,5 @@ public interface IApplicationDbContext
     public DbSet<JoiningCode> JoiningCodes { get; set; }
 
     public DbSet<CommitmentScaffolding> CommitmentScaffoldings { get; set; }
+    public DbSet<NotificationTransaction> NotificationTransactions{ get; set; }
 }
