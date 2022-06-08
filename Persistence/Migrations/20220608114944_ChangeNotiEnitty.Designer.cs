@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220608114944_ChangeNotiEnitty")]
+    partial class ChangeNotiEnitty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +119,7 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CommitmentId")
+                    b.Property<Guid>("CommitementId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
@@ -134,7 +136,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommitmentId")
+                    b.HasIndex("CommitementId")
                         .IsUnique();
 
                     b.ToTable("JoiningCodes");
@@ -646,7 +648,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Commitment.CommitmentEntity", "Commitment")
                         .WithOne("JoiningCode")
-                        .HasForeignKey("Domain.Entities.Commitment.JoiningCode", "CommitmentId")
+                        .HasForeignKey("Domain.Entities.Commitment.JoiningCode", "CommitementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
