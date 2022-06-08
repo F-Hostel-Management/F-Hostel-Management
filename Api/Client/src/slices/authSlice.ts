@@ -35,11 +35,8 @@ const authSlice = createSlice({
 })
 
 export const { setCurrentUser } = authSlice.actions
-<<<<<<< HEAD
 export const getUserRole = (state: AppState) => state.auth.currentUser?.role
 export const getCurrentUser = (state: AppState) => state.auth.currentUser
 
-=======
->>>>>>> 47c05557522f5afee1a252d1c17c6b3d1788f0fc
 const { reducer } = authSlice
 export default reducer
