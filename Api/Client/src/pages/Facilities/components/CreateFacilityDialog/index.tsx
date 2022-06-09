@@ -29,7 +29,7 @@ const CreateFacilityDialog: FC<ICreateFacilityDialogProps> = ({
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IFacilityValues>(initialValues)
     const handleCreateSubmit = async () => {
-        const result = await RestCaller.put('Facility', values, true)
+        const result = await RestCaller.put('Facility', values)
         if (result.isError) return
         dispatch(fetchFacility(hostelId))
         handleCloseDialog()
