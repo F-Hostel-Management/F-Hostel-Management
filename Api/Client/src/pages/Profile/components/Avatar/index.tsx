@@ -14,11 +14,11 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
     const handleChooseImage = (e: any) => {
         setValues({
             ...values,
-            avatarUrl: URL.createObjectURL(e.target.files[0]),
+            avatar: URL.createObjectURL(e.target.files[0]),
         })
     }
 
-    const { name, role, avatarUrl } = values
+    const { name, role, avatar } = values
 
     return (
         <div>
@@ -33,7 +33,7 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                 <div>
                     <Styled.Avatar elevation={0} square>
                         <div>
-                            {avatarUrl === undefined ? (
+                            {avatar === undefined ? (
                                 <Styled.IconAvatar>
                                     <PersonOutlineOutlinedIcon
                                         htmlColor="#a7a7a7"
@@ -42,7 +42,7 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                                 </Styled.IconAvatar>
                             ) : (
                                 <img
-                                    src={avatarUrl}
+                                    src={avatar}
                                     height="auto"
                                     width="100%"
                                 ></img>

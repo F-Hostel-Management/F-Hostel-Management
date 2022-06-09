@@ -9,7 +9,7 @@ export interface IUser {
     taxCode?: string
     gender?: string
     organization?: string
-    avatarUrl?: string
+    avatar?: string
     dateOfBirth?: string
     isDeleted?: boolean
     citizenIdentity?: number

@@ -23,7 +23,8 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
         dateOfBirth: currentUser?.dateOfBirth,
         gender: currentUser?.gender,
         phone: currentUser?.phone,
-        avatarUrl: currentUser?.avatarUrl,
+        avatar: currentUser?.avatar,
+        address: currentUser?.address,
         citizenIdentity: currentUser?.citizenIdentity,
         frontIdentification: currentUser?.frontIdentification,
         backIdentification: currentUser?.backIdentification,
@@ -35,18 +36,18 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
     console.log('gender ' + initialValues.gender)
 
     const callApi = async () => {
-        const { avatarUrl } = values
-        console.log('avt: ' + avatarUrl)
+        const { avatar } = values
+        console.log('avt: ' + avatar)
         const uploadAvatar = await RestCaller.upload(
             'Users/upload-avatar',
             (() => {
                 const formData = new FormData()
-                formData.append('Avatar', avatarUrl as string)
+                formData.append('Avatar', avatar as string)
                 return formData
             })()
         )
 
-        if (uploadAvatar.isError) return
+        // if (uploadAvatar.isError) return
     }
 
     React.useEffect(() => {

@@ -30,12 +30,35 @@ const FormInfo: React.FC<IFormInfoProps> = ({
             name: values.name,
             phone: values.phone,
             gender: values.gender,
-            organization: values.organization,
             taxCode: values.taxCode,
             address: values.address,
         }
         const profileResult = await RestCaller.patch('Users/update-user', body)
-        if (profileResult.isError) return
+
+        const { frontIdentification, backIdentification } = values
+        const uploadFrontIdentification = await RestCaller.upload(
+            'Users/upload-identification-card',
+            (() => {
+                const formData = new FormData()
+                formData.append(
+                    'FrontIdentification',
+                    frontIdentification as string
+                )
+                return formData
+            })()
+        )
+        const uploadBackIdentification = await RestCaller.upload(
+            'Users/upload-identification-card',
+            (() => {
+                const formData = new FormData()
+                formData.append(
+                    'BackIdentification',
+                    backIdentification as string
+                )
+                return formData
+            })()
+        )
+        // if (profileResult.isError) return
         showSuccess('ok')
     }
     return (
@@ -108,7 +131,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                     event: React.ChangeEvent<HTMLInputElement>
                                 ) => handleInputChange(event, true)}
                                 type="number"
-                                name="cardNumber"
+                                name="citizenIdentity"
                             />
                             <UpdateImage
                                 values={values}
