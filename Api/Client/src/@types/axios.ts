@@ -1,6 +1,8 @@
+import { HttpToastConfig } from '../utils/HttpToast'
+
 export {}
 declare module 'axios' {
     export interface AxiosRequestConfig {
-        showErrorToast?: boolean
+        toast?: HttpToastConfig
     }
 }
