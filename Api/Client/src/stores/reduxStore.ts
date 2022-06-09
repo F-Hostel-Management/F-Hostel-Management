@@ -1,14 +1,14 @@
 import authReducer from '../slices/authSlice'
 import tableReducer from '../slices/tableSlice'
-import hostelReducer from '../slices/hostelSlice'
 import commitmentReducer from '../slices/commitmentSlice'
+import homeReducer from '../slices/homeSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         table: tableReducer,
-        hostel: hostelReducer,
+        home: homeReducer,
         commitment: commitmentReducer,
     },
 })

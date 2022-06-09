@@ -16,7 +16,7 @@ import {
     getRoomOfHostel,
 } from '../../../../services/HostelService'
 import { useSelector } from 'react-redux'
-import { getCurrentHostel } from '../../../../slices/hostelSlice'
+import { getCurrentHostel } from '../../../../slices/homeSlice'
 import * as Styled from './styles'
 import QrCode from '../../../../components/QrCode'
 const baseUrl = import.meta.env.PUBLIC_FRONTEND
