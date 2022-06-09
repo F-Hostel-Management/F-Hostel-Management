@@ -1,96 +1,83 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import * as Styled from './styles'
 
-import avatarDefault from '../../assets/images/avatar.png'
-import { Grid, Typography } from '@mui/material'
-import FormInfo from './components/FormInfo'
-import { IInformation } from './interface'
+import Avatar from './components/Avatar'
 import { useForm } from '../../hooks/useForm'
+import { IUser } from '../../interface/IUser'
+import { AppState } from '../../stores/reduxStore'
+import { useSelector } from 'react-redux'
+import FormInfo from './components/FormInfo'
+import { Navigate } from 'react-router-dom'
+import { Divider, Typography } from '@mui/material'
+import { RestCaller } from '../../utils/RestCaller'
 
 interface IProfileProps {}
 
 const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
-    const initialValues: IInformation = {
-        fullName: 'Dang Phuong Anh',
-        role: 'Tenant',
-        address: 'Ho Chi Minh City',
-        email: 'abc@gmail.com',
-        birthDate: '18/8/2001',
-        cardNumber: '012101060113',
-        gender: 'Female',
-        phoneNo: '0973997617',
-        avatar: null,
+    const currentUser = useSelector((state: AppState) => state.auth.currentUser)
+
+    const initialValues: IUser = {
+        name: currentUser?.name,
+        role: currentUser?.role,
+        email: currentUser?.email,
+        dateOfBirth: currentUser?.dateOfBirth,
+        gender: currentUser?.gender,
+        phone: currentUser?.phone,
+        avatar: currentUser?.avatar,
+        address: currentUser?.address,
+        citizenIdentity: currentUser?.citizenIdentity,
+        frontIdentification: currentUser?.frontIdentification,
+        backIdentification: currentUser?.backIdentification,
     }
+
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInformation>(initialValues)
-    const [preview, setPreview] = React.useState<string>()
-    useEffect(() => {
-        if (initialValues.avatar) {
-            const reader = new FileReader()
-            reader.onload = () => {
-                setPreview(reader.result as string)
-            }
-            reader.readAsDataURL(initialValues.avatar)
-        } else {
-            setPreview(undefined)
-        }
-    }, [initialValues.avatar])
+        useForm<IUser>(initialValues)
 
-    return (
+    console.log('gender ' + initialValues.gender)
+
+    const callApi = async () => {
+        const { avatar } = values
+        console.log('avt: ' + avatar)
+        const uploadAvatar = await RestCaller.upload(
+            'Users/upload-avatar',
+            (() => {
+                const formData = new FormData()
+                formData.append('Avatar', avatar as string)
+                return formData
+            })()
+        )
+
+        // if (uploadAvatar.isError) return
+    }
+
+    React.useEffect(() => {
+        ;(async () => {
+            await callApi()
+        })()
+        return
+    })
+
+    return currentUser == null ? (
+        <Navigate to="/login" replace={true} />
+    ) : (
         <Styled.ProfilePaper>
-            <Styled.GridPaper container>
-                <Grid item xs={12} md={3}>
-                    <Styled.ProfileHeader>
-                        <div>
-                            <label>
-                                <input
-                                    type="file"
-                                    id="avatar"
-                                    accept="image/png, image/jpeg"
-                                    style={{ display: 'none' }}
-                                    onChange={handleInputChange}
-                                ></input>
-                                <Styled.Avatar elevation={0} square>
-                                    <img
-                                        src={
-                                            initialValues.avatar === null
-                                                ? avatarDefault
-                                                : preview
-                                        }
-                                        height="auto"
-                                        width="100%"
-                                    ></img>
-                                </Styled.Avatar>
-                            </label>
+            <Styled.ProfileHeader>
+                <Avatar setValues={setValues} values={values}></Avatar>
+            </Styled.ProfileHeader>
 
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: 'grey.700',
-                                    textAlign: 'center',
-                                    mt: 2,
-                                    fontWeight: 600,
-                                }}
-                            >
-                                {initialValues.fullName}
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: 'grey.600',
-                                    textAlign: 'center',
-                                }}
-                            >
-                                {initialValues.role}
-                            </Typography>
-                        </div>
-                    </Styled.ProfileHeader>
-                </Grid>
-                {/* <Divider orientation="vertical" flexItem /> */}
-                <Grid item xs={12} md={9}>
-                    <FormInfo info={initialValues} />
-                </Grid>
-            </Styled.GridPaper>
+            {/* <Divider orientation="vertical" flexItem /> */}
+
+            <Divider sx={{ mb: 4 }}>
+                <Typography color="text.secondary" variant="caption">
+                    Personal Information
+                </Typography>
+            </Divider>
+
+            <FormInfo
+                values={values}
+                handleInputChange={handleInputChange}
+                setValues={setValues}
+            />
         </Styled.ProfilePaper>
     )
 }

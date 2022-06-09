@@ -18,8 +18,14 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
 }) => {
     const fields: IField[] = [
         {
-            label: 'Facility Name',
-            name: 'facilityName',
+            label: 'Name',
+            name: 'name',
+            type: 'text',
+            required: true,
+        },
+        {
+            label: 'Quantity',
+            name: 'quantity',
             type: 'text',
             required: true,
         },
@@ -31,18 +37,18 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
         },
     ]
-    const { category } = values
+    const { type } = values
     React.useEffect(() => {
-        setValues({ ...values, category: category })
+        setValues({ ...values, type: type })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [category])
+    }, [type])
     return (
         <Styled.FormContainer>
             <div style={{ width: '350px' }}>
                 <InputField
                     label="Facility Category"
-                    name="category"
-                    value={category}
+                    name="type"
+                    value={type}
                     required={true}
                     select
                     onChange={handleInputChange}

@@ -8,7 +8,7 @@ interface IFormDialogProps {
     action: string
     openDialog: boolean
     handleCloseDialog: () => void
-    handleSubmit: () => void
+    handleSubmit: React.FormEventHandler<any> | undefined
     children: any
     [x: string | number | symbol]: unknown
     maxWidth?: DialogProps['maxWidth']
@@ -24,6 +24,10 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
     maxWidth = 'xl',
     ...others
 }) => {
+    const handlerWrapper = (e: React.FormEvent<any>) => {
+        e.preventDefault()
+        if (handleSubmit) handleSubmit(e)
+    }
     return (
         <DialogCustom
             title={title}
@@ -32,7 +36,7 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
             maxWidth={maxWidth}
             {...others}
         >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handlerWrapper}>
                 <div style={{ paddingBottom: '16px' }}>{children}</div>
                 <Styled.GroupButton>
                     <Button
@@ -43,7 +47,12 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
                     >
                         Cancel
                     </Button>
-                    <Button variant="contained" color="primary" size="small">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        type="submit"
+                    >
                         {action}
                     </Button>
                 </Styled.GroupButton>
