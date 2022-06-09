@@ -29,7 +29,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
         <Fragment>
             <div
                 style={{
-                    width: role !== ERole.TENANT_ROLE ? '11rem' : '4rem',
+                    width: role !== ERole.TENANT_ROLE ? '100%' : '4rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-around',
@@ -58,6 +58,10 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             textColor="#fff"
                             bgrColor="#495057"
                             sx={{ width: '2.8rem', height: '2.8rem' }}
+                            disabled={
+                                rowData.status == Status.Pending ||
+                                rowData.status == Status.Expired
+                            }
                             onClick={handleOpenCreateQrCode}
                         >
                             <QrCodeIcon sx={{ fontSize: '1.3rem' }} />

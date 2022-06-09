@@ -2,7 +2,7 @@ import { InputAdornment } from '@mui/material'
 import React, { ChangeEvent, FC, Fragment } from 'react'
 import InputField from '../../../../../components/Input/InputField'
 interface IStep3Props {
-    timeSpan: number
+    timeSpan: number | null
     handleChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 

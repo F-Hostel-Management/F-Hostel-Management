@@ -2,18 +2,20 @@ import { Button } from '@mui/material'
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DialogCustom from '../../../../../components/DialogCustom'
-import { useAppSelector } from '../../../../../hooks/reduxHook'
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import { ICommitment } from '../../../../../interface/ICommitment'
 import {
     activateCommitment,
     getCommitmentFromCode,
 } from '../../../../../services/CommitmentService'
+import { fetchRoomList } from '../../../../../slices/homeSlice'
 import CommitmentDetails from '../../../../Commitments/components/CommitmentDetails'
 
 interface IConfirmCommitmentDialogProps {}
 
 const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     let { sixDigitsCode } = useParams()
     const currentUser = useAppSelector(({ auth }) => auth.currentUser)
 
@@ -31,7 +33,10 @@ const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
         const response = await activateCommitment({
             sixDigitsJoiningCode: sixDigitsCode,
         })
-        handleClose()
+        if (!response.isError) {
+            dispatch(fetchRoomList())
+            handleClose()
+        }
     }
 
     const handleClose = () => {

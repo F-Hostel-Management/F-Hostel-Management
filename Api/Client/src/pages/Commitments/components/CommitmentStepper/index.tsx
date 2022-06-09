@@ -17,8 +17,7 @@ import {
 } from '../../../../services/HostelService'
 import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/homeSlice'
-import * as Styled from './styles'
-import QrCode from '../../../../components/QrCode'
+import QrCodeGenerate from '../QrCodeGenerate'
 const baseUrl = import.meta.env.PUBLIC_FRONTEND
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
@@ -28,7 +27,7 @@ interface ICommitmentStepperProps {
     resetForm: () => void
     handleSubmitStep2: () => void
     handleSubmitStep3: () => void
-    timeSpan: number
+    timeSpan: number | null
     handleChange: (e: ChangeEvent<HTMLInputElement>) => void
     sixDigitsCode: any
 }
@@ -121,14 +120,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
         <StepByStep
             steps={steps}
             handleCloseDialog={handleCloseDialog}
-            finishedStep={
-                <Styled.ContainerStep>
-                    <QrCode
-                        link={`${baseUrl}/home/joinRoom/${sixDigitsCode}`}
-                        size={200}
-                    />
-                </Styled.ContainerStep>
-            }
+            finishedStep={<QrCodeGenerate code={sixDigitsCode} />}
         />
     )
 }

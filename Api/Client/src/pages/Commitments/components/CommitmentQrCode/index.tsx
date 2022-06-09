@@ -1,9 +1,8 @@
-import { Button, InputAdornment, Typography } from '@mui/material'
+import { Button, InputAdornment } from '@mui/material'
 import React, { ChangeEvent, FC, Fragment, useState } from 'react'
 import InputField from '../../../../components/Input/InputField'
-import QrCode from '../../../../components/QrCode'
 import { getJoiningCode } from '../../../../services/CommitmentService'
-import * as Styled from './styles'
+import QrCodeGenerate from '../QrCodeGenerate'
 const baseUrl = import.meta.env.PUBLIC_FRONTEND
 interface ICommitmentQrCodeProps {
     commitmentId: string
@@ -11,7 +10,7 @@ interface ICommitmentQrCodeProps {
 
 const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
     const [timeSpan, setTimeSpan] = useState<number>(0)
-    const [qrLink, setQrLink] = useState<any>(null)
+    const [code, setCode] = useState<any>(null)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setTimeSpan(Number(e.target.value))
@@ -22,11 +21,11 @@ const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
             commitmentId: commitmentId,
             timeSpan: timeSpan,
         })
-        setQrLink(response.result.sixDigitsCode)
+        setCode(response.result.sixDigitsCode)
     }
     return (
         <Fragment>
-            {!qrLink ? (
+            {!code ? (
                 <div
                     style={{
                         width: '80%',
@@ -60,13 +59,7 @@ const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
                     </Button>
                 </div>
             ) : (
-                <Styled.ContainerStep>
-                    <QrCode
-                        link={`${baseUrl}/home/joinRoom/${qrLink}`}
-                        size={200}
-                    />
-                    <Typography variant="body2">Scan me</Typography>
-                </Styled.ContainerStep>
+                <QrCodeGenerate code={code} />
             )}
         </Fragment>
     )

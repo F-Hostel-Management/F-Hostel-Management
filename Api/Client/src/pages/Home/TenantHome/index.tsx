@@ -11,7 +11,6 @@ import { IRoom } from '../../../interface/IRoom'
 import { Route, Routes } from 'react-router-dom'
 import ScanQrCodeDialog from '../components/Dialog/ScanQrCodeDialog'
 import ConfirmCommitmentDialog from '../components/Dialog/ConfirmCommitmentDialog'
-import NotFound from '../../NotFound'
 
 interface ITenantHomeProps {
     rooms: IRoom[]
@@ -44,7 +43,6 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
                     path="/joinRoom/:sixDigitsCode"
                     element={<ConfirmCommitmentDialog />}
                 />
-                <Route path="*" element={<NotFound />} />
             </Routes>
             {openScanQr && (
                 <ScanQrCodeDialog

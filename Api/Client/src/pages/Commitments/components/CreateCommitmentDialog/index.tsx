@@ -37,7 +37,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     const [commitmentId, setCommitmentId] = useState<any>(null)
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
-    const [timeSpan, setTimeSpan] = useState<number>(0)
+    const [timeSpan, setTimeSpan] = useState<number | null>(0)
     const [sixDigitsCode, setSixDigitsCode] = useState<any>(null)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
