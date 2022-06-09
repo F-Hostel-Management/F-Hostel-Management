@@ -1,13 +1,16 @@
 export interface IFacility {
     id: string
-    facilityName: string
-    category: string
+    name: string
+    type: string
+    hostelId: string
     price: number
-    isDeleted: boolean
+    quantity: number
 }
 
 export interface IFacilityValues {
-    facilityName: string
-    category: string
+    type: string
+    name: string
     price: number
+    quantity: number
+    hostelId: string
 }

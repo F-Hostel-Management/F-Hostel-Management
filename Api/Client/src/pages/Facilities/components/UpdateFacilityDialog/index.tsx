@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useForm } from '../../../../hooks/useForm'
-import { IFacilityValues } from '../../../../interface/IFacility'
+import { IFacility } from '../../../../interface/IFacility'
+import { RestCaller } from '../../../../utils/RestCaller'
 import FacilityForm from '../FacilityForm'
 
 interface IUpdateFacilityDialogProps {
@@ -17,8 +18,11 @@ const UpdateFacilityDialog: FC<IUpdateFacilityDialogProps> = ({
     rowData,
 }) => {
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IFacilityValues>(rowData)
-    const handleSubmit = () => {}
+        useForm<IFacility>(rowData)
+    const handleSubmit = async () => {
+        await RestCaller.patch('/Facility', values)
+        handleCloseDialog()
+    }
     return (
         <FormDialog
             title="Update Facility"
