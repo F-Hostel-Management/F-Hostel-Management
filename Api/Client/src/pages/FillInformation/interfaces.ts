@@ -23,4 +23,5 @@ export interface IFirstTimeBody {
     gender?: number
     dateOfBirth?: Date
     taxCode?: string
+    cardNumber?: string
 }

@@ -124,7 +124,6 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
     const theme = useTheme()
     const [activeStep, setActiveStep] = React.useState(0)
     const maxSteps = 2
-
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
     }
@@ -636,6 +635,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         taxCode: '',
         imgCard: new Map<number, File>(),
     })
+    console.log('hello')
     const [role, setRole] = useState<string>('Tenant')
 
     const [activeStep, setActiveStep] = React.useState(0)
@@ -650,11 +650,13 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const callApi = async () => {
         const firebaseToken =
             await FirebaseService.getInstance().getFirebaseToken()
+        console.log(firebaseToken)
         const body: IFirstTimeBody = {
             firebaseToken,
             role: ROLES.findIndex((r) => r.name === role),
             name: information.fullName,
             address: information.address,
+            cardNumber: information.cardNumber,
             dateOfBirth: new Date(information.birthDate),
             gender: GENDERS.findIndex(
                 (gender) => information.gender === gender
@@ -669,6 +671,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
         if (firstTimeRes.isError) return
 
+        console.log('url: ' + information.imgCard.get(0))
         const uploadRes = await RestCaller.upload(
             'Users/upload-identification-card',
             (() => {
@@ -725,6 +728,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
             const firebaseToken =
                 await FirebaseService.getInstance().getFirebaseToken()
+            console.log(firebaseToken)
             if (!firebaseToken) return navigate('/login')
         })()
     }, [])

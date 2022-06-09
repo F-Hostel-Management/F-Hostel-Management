@@ -1,15 +1,6 @@
-import { toast, ToastOptions } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { IFailureResponse } from '../interface/serviceResponse'
-
-const config: ToastOptions = {
-    position: 'bottom-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-}
+import { config } from './Toast'
 
 export const HttpErrorToast = {
     show: (status: number, detail?: IFailureResponse) => {
