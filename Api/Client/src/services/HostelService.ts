@@ -65,8 +65,8 @@ const createHostel = async (data = {}) => {
     return await RestCaller.post('Hostels/create-hostel', data)
 }
 
-const uploadImage = async (data = {}) => {
-    return await RestCaller.post('Hostels/upload-hostel-image', data)
+const uploadImage = async (data: FormData) => {
+    return await RestCaller.upload('Hostels/upload-hostel-image', data)
 }
 export {
     getListHostel,
