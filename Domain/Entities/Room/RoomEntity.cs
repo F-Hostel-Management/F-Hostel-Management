@@ -5,23 +5,32 @@ using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Notification;
 using Domain.Entities.Ticket;
-using System;
-using System.Collections.Generic;
+using Domain.Entities.User;
+using Domain.Enums;
+using Domain.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities.Room;
-[Table("Room")]
+[Table("Rooms")]
 public class RoomEntity : BaseEntity
 {
     public string RoomName { get; set; }
+
+    [Column("Room Status")]
+    public string Status
+    {
+        get { return RoomStatus.ToString(); }
+        private set { RoomStatus = value.ParseEnum<RoomStatus>(); }
+    }
+
+    [NotMapped]
+    public RoomStatus RoomStatus { get; set; }
+
+    public int? MaximumPeople { get; set; }
     public int NumOfWindows { get; set; }
     public int NumOfDoors { get; set; }
     public int NumOfBathRooms { get; set; }
     public int NumOfWCs { get; set; }
-    public double Price { get; set; }
     public double Area { get; set; }
     public double Length { get; set; }
     public double Width { get; set; }
@@ -36,11 +45,13 @@ public class RoomEntity : BaseEntity
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }
 
-    // 1 room - M facilities
-    public virtual ICollection<FacilityEntity> Facilities { get; set; }
+    // // 1 room - M facilities
+    // public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
-    // 1 room - M tenants
-    public virtual ICollection<UserEntity> Tenants{ get; set; }
+    // M room - M tenants
+    public virtual ICollection<RoomTenant> RoomTenants { get; set; }
+    
+    public virtual ICollection<FacilityManagement> FacilityManagements { get; set; }
 
     // 1 Manager (create) M Invoices (for) 1 Room
     public virtual ICollection<InvoiceEntity> ManagerCreatedInvoices { get; set; }
@@ -48,13 +59,13 @@ public class RoomEntity : BaseEntity
     // 1 Manager (make) M InvoiceSchedules (for) 1 Room
     public virtual ICollection<InvoiceScheduleEntity> ManegerCreatedInvoiceSchedules { get; set; }
 
-    // 1 Manager (create) M Notifications (for) M Rooms
-    public virtual ICollection<Notification_Room> RoomNotifications { get; set; }
+    // 1 Manager (create) M Notifications (for) 1 Rooms
+    public virtual ICollection<NotificationEntity> Notifications { get; set; }
 
     // 1 Tenant (create) M Tickets (for) 1 Room
     public virtual ICollection<TicketEntity> Tickets { get; set; }
 
-    // 1 Commitment (belong to) 1 Room
-    public CommitmentEntity Commitment;
+    // M Commitment (belong to) 1 Room
+    public virtual ICollection<CommitmentEntity> Commitments { get; set; }
 
 }

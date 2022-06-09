@@ -1,8 +1,10 @@
 ﻿using Api.Services;
 using Application.Interfaces;
-using Application.Interfaces.IRepository;
 using Application.Services;
-using Persistence.Repositories;
+using Application.Services.CommitmentServices;
+using Application.Services.HostelServices;
+using Application.Services.RoomServices;
+using Application.Services.UserServices;
 
 namespace Api.Configurations
 {
@@ -12,6 +14,16 @@ namespace Api.Configurations
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ITokenService, JwtBuilderService>();
+            services.AddScoped<IHostelServices, HostelServices>();
+            services.AddScoped<ICommitmentServices, CommitmentServices>();
+            services.AddScoped<IJoiningCodeServices, JoiningCodeServices>();
+            services.AddScoped<IRoomServices, RoomServices>();
+            services.AddScoped<ITenantServices, TenantServices>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthorizationServices, AuthorizationServices>();
+            services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IHtml2PdfService, Html2PdfService>();
         }
     }
 }

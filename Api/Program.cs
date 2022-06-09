@@ -1,11 +1,14 @@
-using System.Reflection;
-using Api.Services;
-using Microsoft.OpenApi.Models;
-using Domain.Constants;
-using System.Security.Claims;
-using Domain.Enums;
-using Api.App.Configurations;
 using Api.Configurations;
+using Api.Filters;
+using Application.AppConfig;
+using AutoWrapper;
+using Domain.Constants;
+using Domain.Enums;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -14,17 +17,20 @@ var configuration = builder.Configuration;
 {
     var services = builder.Services;
     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+    services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.SuppressModelStateInvalidFilter = true;
+    });
     services.AddDbService();
     services.AddRepositories();
     services.AddFirebase();
     services.AddAppServices();
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
-    services.AddControllers(
-        options =>
-        {
-            options.SuppressAsyncSuffixInActionNames = false;
-        }
-    );
+    services.AddOData();
+    services.AddCronService();
+
+
+
     services.AddJwtService();
     services.AddAuthorization(options =>
     {
@@ -44,34 +50,41 @@ var configuration = builder.Configuration;
             Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\"",
         });
         option.AddSecurityRequirement(new OpenApiSecurityRequirement
- {
-     {
-           new OpenApiSecurityScheme
-             {
-                 Reference = new OpenApiReference
-                 {
-                     Type = ReferenceType.SecurityScheme,
-                     Id = "Bearer"
-                 }
-             },
-             new string[] {}
-     }
- });
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+            },
+            new string[] {}
+            }
+        });
+
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        option.IncludeXmlComments(xmlPath);
     });
 }
 
 var app = builder.Build();
 // Add service to Http request pipeline
 {
+    
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(options => options.EnablePersistAuthorization());
         app.UseDeveloperExceptionPage();
-        await app.Services.DbInitializer();
         await app.Services.ApplyMigrations();
+        await app.Services.DbInitializer();
     }
+    app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false, ShowIsErrorFlagForSuccessfulResponse = true, WrapWhenApiPathStartsWith = "/server"});
     app.UseRouting();
+
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();

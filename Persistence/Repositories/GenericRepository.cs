@@ -35,15 +35,24 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return _entity;
     }
 
-    public virtual async Task<T> FindByIdAsync(Guid id)
+    public virtual async Task<T> FindByIdAsync(Guid id, params string[] navigationProperties)
     {
-        T entity = await dbSet.FindAsync(id);
+        var query = ApplyNavigation(navigationProperties);
+        T entity = await query.FirstOrDefaultAsync(e => e.Id.Equals(id));
         return entity;
+    }
+
+    private IQueryable<T> ApplyNavigation(params string[] navigationProperties)
+    {
+        var query = dbSet.AsQueryable();
+        foreach (string navigationProperty in navigationProperties)
+            query = query.Include(navigationProperty);
+        return query;
     }
 
     public virtual async Task<List<T>> ListAsync()
     {
-        return await dbSet.ToListAsync();
+        return await dbSet.AsNoTracking().ToListAsync();
     }
 
     public virtual async Task<IList<T>> WhereAsync(Expression<Func<T, bool>> predicate, params string[] navigationProperties)
@@ -53,7 +62,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         foreach (string navigationProperty in navigationProperties)
             query = query.Include(navigationProperty);//got to reaffect it.
 
-        list = await query.Where(predicate).ToListAsync<T>();
+        list = await query.Where(predicate).AsNoTracking().ToListAsync<T>();
         return list;
     }
 
@@ -67,5 +76,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
         return dbSet.AsQueryable().AsNoTracking().FirstOrDefaultAsync(predicate);
+    }
+
+    public async Task<long> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> sumExpression)
+    {
+        return await dbSet.AsQueryable().AsNoTracking().Where(predicate).SumAsync(sumExpression);
+    }
+
+    public async Task CreateRangeAsync(IEnumerable<T> entities)
+    {
+        await _context.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
     }
 }

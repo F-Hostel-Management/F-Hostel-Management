@@ -1,4 +1,4 @@
-﻿using Api.App.Configurations;
+﻿using Application.AppConfig;
 using Microsoft.Extensions.Options;
 using System.Reflection;
 
@@ -8,7 +8,8 @@ namespace Api.Configurations
     {
         private static class NonSpaPath
         {
-            public const string Api = "/api";
+            public const string Api = "/server/api";
+            public const string OData = "/server/odata";
         }
 
         private static string[] GetNonSpaPaths()
@@ -27,15 +28,6 @@ namespace Api.Configurations
                     Array.TrueForAll(nonSpaPaths, e => !ctx.Request.Path.StartsWithSegments(e)),
                 config =>
                     {
-                        if (app.Environment.IsDevelopment())
-                        {
-                            config.UseSpa(spa =>
-                            {
-                                spa.UseProxyToSpaDevelopmentServer(spaDevServer);
-                            });
-                            return;
-                        }
-
                         config.UseStaticFiles();
                         config.UseEndpoints(endpoints =>
                         {
@@ -44,21 +36,23 @@ namespace Api.Configurations
                     });
         }
 
-        private static void AddMappingApi(this WebApplication app)
+        private static void AddMappingApiAndOData(this WebApplication app)
         {
-            app.MapWhen(ctx => ctx.Request.Path.StartsWithSegments(NonSpaPath.Api), config =>
-            {
-                config.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
-            });
+            app.MapWhen(ctx =>
+                ctx.Request.Path.StartsWithSegments(NonSpaPath.Api)
+                || ctx.Request.Path.StartsWithSegments(NonSpaPath.OData), config =>
+                    {
+                        config.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                        });
+                    });
         }
 
         public static void AddControllerMapper(this WebApplication app)
         {
             app.AddMappingSpa();
-            app.AddMappingApi();
+            app.AddMappingApiAndOData();
         }
     }
 }

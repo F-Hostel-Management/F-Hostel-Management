@@ -10,14 +10,18 @@ import theme from './theme/CustomMUI'
 import GlobalStyles from './theme/GlobalStyles'
 import { store } from './stores/reduxStore'
 
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/ReactToastify.min.css'
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <GlobalStyles>
-                <ThemeProvider theme={theme}>
-                    <App />
-                </ThemeProvider>
-            </GlobalStyles>
-        </Provider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <Provider store={store}>
+        <GlobalStyles>
+            <ThemeProvider theme={theme}>
+                <App />
+                <ToastContainer />
+            </ThemeProvider>
+        </GlobalStyles>
+    </Provider>
+    // </React.StrictMode>
 )

@@ -1,10 +1,11 @@
-import homeReducer from '../pages/Home/homeSlice'
-
+import authReducer from '../slices/authSlice'
+import hostelReducer from '../slices/hostelSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
     reducer: {
-        home: homeReducer,
+        auth: authReducer,
+        hostel: hostelReducer,
     },
 })
 

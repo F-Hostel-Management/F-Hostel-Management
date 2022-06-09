@@ -366,3 +366,6 @@ Api/wwwroot/**
 !Api/wwwroot/.gitkeep
 
 appsettings.*.json
+
+service-key.json
+.idea

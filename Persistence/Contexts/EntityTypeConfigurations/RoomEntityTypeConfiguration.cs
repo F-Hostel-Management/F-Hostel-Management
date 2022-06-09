@@ -1,26 +1,17 @@
-﻿using Domain.Entities;
-using Domain.Entities.Commitment;
-using Domain.Entities.Hostel;
+﻿using Domain.Entities.Facility;
 using Domain.Entities.Room;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Contexts;
+namespace Infrastructure.Contexts.EntityTypeConfigurations;
 public class RoomEntityTypeConfiguration : IEntityTypeConfiguration<RoomEntity>
 {
     public void Configure(EntityTypeBuilder<RoomEntity> builder)
     {
-        // 1 Commitment (belong to) 1 Room
         builder
-            .HasOne(c => c.Commitment)
-            .WithOne(r => r.Room)
-            .HasForeignKey<CommitmentEntity>(ri => ri.RoomId)
+            .HasOne(r => r.RoomType)
+            .WithMany(r => r.Rooms)
+            .HasForeignKey(rti => rti.RoomTypeId)
             .OnDelete(DeleteBehavior.NoAction);
-
     }
 }

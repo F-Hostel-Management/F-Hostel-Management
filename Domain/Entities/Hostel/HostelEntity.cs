@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Entities.Commitment;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using System;
@@ -7,21 +8,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities.Facility;
 
 namespace Domain.Entities;
 
-[Table("Hostel")]
+[Table("Hostels")]
 public class HostelEntity : BaseEntity
 {
     public string Address { get; set; }
     public string Name { get; set; }
-    public int NumOfRooms { get; set; }
+    public int? NumOfRooms { get; set; }
+    public string ImgPath { get; set; }
 
     /*navigation props*/
-
-    // 1 type - M hostels 
-    public Guid HostelCategoryId { get; set; }
-    public HostelCategory HostelCategory { get; set; }
 
     // 1 owner - M hostels
     public Guid OwnerId { get; set; }
@@ -32,5 +31,10 @@ public class HostelEntity : BaseEntity
 
     // 1 hostel - M rooms
     public virtual ICollection<RoomEntity> Rooms { get; set; }
+
+    // 1 hostel - m com
+    public virtual ICollection<CommitmentEntity> Commitments { get; set; }
+    
+    public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
 }

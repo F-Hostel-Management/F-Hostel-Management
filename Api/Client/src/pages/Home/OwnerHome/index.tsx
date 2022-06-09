@@ -7,13 +7,23 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
-import { Role } from '../../../utils/enums'
+import { ERole } from '../../../utils/enums'
+import { useDialog } from '../../../hooks/useDialog'
+import CreateCommitmentDialog from '../../Commitments/components/CreateCommitmentDialog'
+import CreateHostelDialog from '../components/CreateHostelDialog'
+import { IHostel } from '../../../interface/IHostel'
 
-interface IOwnerHomeProps {}
+interface IOwnerHomeProps {
+    hostels: IHostel[]
+}
 
-const role: Role = 2
+const role: ERole = 2
 
-const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
+const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
+    const [openCreateCommit, handleOpenCreateCommit, handleCloseCreateCommit] =
+        useDialog()
+    const [openCreateHostel, handleOpenCreateHostel, handleCloseCreateHostel] =
+        useDialog()
     return (
         <Styled.HomeContainer>
             <Styled.ActionWrapper>
@@ -23,24 +33,40 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = () => {
                         variant="outlined"
                         color="primary"
                         startIcon={<DescriptionIcon />}
+                        onClick={handleOpenCreateCommit}
                     >
                         CREATE COMMITMENT
                     </Button>
-                    {role == Role.OWNER_ROLE && (
+                    {role == ERole.OWNER_ROLE && (
                         <Button
                             variant="contained"
                             color="primary"
                             startIcon={<AddCircleIcon />}
+                            onClick={handleOpenCreateHostel}
                         >
-                            CREATE ROOM
+                            CREATE HOSTEL
                         </Button>
                     )}
                 </Styled.ButtonWrapper>
             </Styled.ActionWrapper>
             <React.Fragment>
-                <HostelCard />
-                <HostelCard />
+                {hostels.map((hostel) => (
+                    <HostelCard key={hostel?.id} hostelInfo={hostel} />
+                ))}
             </React.Fragment>
+
+            {openCreateCommit && (
+                <CreateCommitmentDialog
+                    openDialog={openCreateCommit}
+                    handleCloseDialog={handleCloseCreateCommit}
+                />
+            )}
+            {openCreateHostel && (
+                <CreateHostelDialog
+                    openDialog={openCreateHostel}
+                    handleCloseDialog={handleCloseCreateHostel}
+                />
+            )}
         </Styled.HomeContainer>
     )
 }

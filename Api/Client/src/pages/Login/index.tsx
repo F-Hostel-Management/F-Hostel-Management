@@ -1,14 +1,87 @@
 import { Button, Grid, Typography } from '@mui/material'
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as Styled from './styles'
 import GoogleIcon from '../../assets/images/GoogleLogo.svg'
 import FacebookLogo from '../../assets/images/FacebookLogo.svg'
-import TwitterLogo from '../../assets/images/TwitterLogo.svg'
+import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
+
+import FirebaseService from '../../services/FirebaseService'
+import { RestCaller } from '../../utils/RestCaller'
+
+import { useDispatch } from 'react-redux'
+import { doGetProfile } from '../../actions/doGetProfile'
 
 interface ILoginProps {}
 
+interface IExchangeTokenResponse {
+    isFirstTime: boolean
+    token: string
+}
+
 const Login: React.FunctionComponent<ILoginProps> = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const doLogin = async (firebaseToken: string) => {
+        const result = await exchangeToken(firebaseToken)
+        if (!result) return
+
+        const { isFirstTime } = result
+        if (isFirstTime) return redirectFirstTimePage()
+
+        await doGetProfile()
+    }
+
+    const exchangeToken = async (
+        token: string
+    ): Promise<IExchangeTokenResponse | undefined> => {
+        const res = await RestCaller.post(
+            `Authentication/login?firebaseToken=${token}`
+        )
+
+        if (res.isError) return
+
+        return res.result as IExchangeTokenResponse
+    }
+
+    const redirectFirstTimePage = () => {
+        navigate('/fillInformation')
+    }
+
+    const onSignInGoogle = async () => {
+        const token = await FirebaseService.getInstance().signInWithGoogle()
+        if (!token) {
+            console.log('Failed to sign in Google')
+            return
+        }
+
+        await doLogin(token)
+    }
+
+    const onSignInFacebook = async () => {
+        const token = await FirebaseService.getInstance().signInWithFacebook()
+
+        if (!token) {
+            console.log('Failed to sign in Facebook')
+            return
+        }
+
+        await doLogin(token)
+    }
+
+    const onSignInMicrosoft = async () => {
+        const token = await FirebaseService.getInstance().signInWithMicrosoft()
+
+        if (!token) {
+            console.log('Failed to sign in Microsoft')
+            return
+        }
+
+        await doLogin(token)
+    }
+
     return (
         <Styled.Login>
             <Styled.Form>
@@ -35,7 +108,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
                     </Typography>
 
                     <Button
-                        type="submit"
+                        onClick={onSignInGoogle}
                         fullWidth
                         variant="contained"
                         size="large"
@@ -67,22 +140,22 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
                     </Button>
 
                     <Button
-                        type="submit"
+                        onClick={onSignInMicrosoft}
                         fullWidth
                         variant="contained"
                         size="large"
                         sx={{
                             mt: 1,
                             mb: 1,
-                            backgroundColor: '#1D9BF0',
+                            backgroundColor: '#2F2F2F',
                             color: '#ffffff',
                             justifyContent: 'left',
-                            '&:hover': { background: '#1D9BF0' },
+                            '&:hover': { background: '#2F2F2F' },
                         }}
                     >
                         <Grid container sx={{ height: '40px' }}>
                             <Grid item xs={3}>
-                                <img src={TwitterLogo} width="49px"></img>
+                                <img src={MicrosoftLogo} width="40px"></img>
                             </Grid>
                             <Grid item xs={9}>
                                 <Typography
@@ -93,14 +166,14 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
                                         textTransform: 'capitalize',
                                     }}
                                 >
-                                    Twitter
+                                    Microsoft
                                 </Typography>
                             </Grid>
                         </Grid>
                     </Button>
 
                     <Button
-                        type="submit"
+                        onClick={onSignInFacebook}
                         fullWidth
                         variant="contained"
                         size="large"

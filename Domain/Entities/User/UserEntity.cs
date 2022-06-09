@@ -5,17 +5,17 @@ using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Message;
 using Domain.Entities.Notification;
-using Domain.Entities.Room;
 using Domain.Entities.Ticket;
+using Domain.Entities.User;
 using Domain.Enums;
 using Domain.Extensions;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
 public class UserEntity : BaseEntity
 {
+
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
@@ -44,8 +44,15 @@ public class UserEntity : BaseEntity
     public Gender Gender { get; set; }
 
     public string TaxCode { get; set; }
+    public string CardNumber { get; set; }
+    
     public string OrganizationCode { get; set; }
     public string Avatar { get; set; }
+    public string FrontIdentification { get; set; }
+    public string BackIdentification { get; set; }
+    public string CitizenIdentity { get; set; }
+    
+    public string Address { get; set; }
 
     /*navigation props*/
 
@@ -55,9 +62,8 @@ public class UserEntity : BaseEntity
     // M manager - M hostels
     public virtual ICollection<HostelManagement> HostelManagements { get; set; }
 
-    // M tenants - 1 room
-    public Guid? RoomId { get; set; }
-    public RoomEntity Room { get; set; }
+    // M tenants - M room
+    public virtual ICollection<RoomTenant> RoomTenants { get; set; }
 
     // 1 tenannt - M invoices
     public virtual ICollection<InvoiceEntity> TenantPaidInvoices { get; set; }
@@ -70,7 +76,7 @@ public class UserEntity : BaseEntity
 
 
     // 1 Manager (create) M Notifications (for) M Rooms
-    public virtual ICollection<Notification_Room> ManagerCreatedRoomNotifications { get; set; }
+    public virtual ICollection<NotificationEntity> Notifications { get; set; }
 
     // 1 ticket - M messages
     public virtual ICollection<MessageEntity> Messages { get; set; }
@@ -78,11 +84,14 @@ public class UserEntity : BaseEntity
     // 1 Tenant (create) M Tickets (for) 1 Room
     public virtual ICollection<TicketEntity> Tickets { get; set; }
 
+    // 1 Owner manage M manager
+    public Guid? OwnerId { get; set; }
+    public UserEntity Owner { get; set; }
 
-    // 1 Commitment (belong to) 1 Manager
-    public CommitmentEntity Commitment { get; set; }
+    // 1 user M commitments
+    public virtual ICollection<CommitmentEntity> ManagerCommitments { get; set; }
+    public virtual ICollection<CommitmentEntity> TenantCommitments { get; set; }
+    public virtual ICollection<CommitmentEntity> OwnerCommitments { get; set; }
 
-    // M Commitments (belong to ) M Teanants
-    public virtual ICollection<CommitmentContains> CommitmentContains { get; set; }
 
 }
