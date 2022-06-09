@@ -18,7 +18,7 @@ namespace Api.UserFeatures.Responses
         public string Avatar { get; set; }
         public string FrontIdentification { get; set; }
         public string BackIdentification { get; set; }
-        public string CardNumber { get; set; }
-        public string Address { get; set; }
+        // public string CardNumber { get; set; }
+        // public string Address { get; set; }
     }
 }
