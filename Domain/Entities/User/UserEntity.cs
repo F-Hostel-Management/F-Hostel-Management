@@ -52,6 +52,7 @@ public class UserEntity : BaseEntity
     public string FrontIdentification { get; set; }
     public string BackIdentification { get; set; }
     public string CitizenIdentity { get; set; }
+    public string Address { get; set; }
 
     /*navigation props*/
 
