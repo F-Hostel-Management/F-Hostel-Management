@@ -4,15 +4,7 @@ import { ApexOptions } from 'apexcharts'
 import Chart from 'react-apexcharts'
 
 import CardShorten from '../../../../components/Card/CardShorten'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    IconButton,
-    Typography,
-} from '@mui/material'
+import { Typography } from '@mui/material'
 
 import * as Styled from './styles'
 

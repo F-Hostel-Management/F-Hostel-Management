@@ -1,15 +1,23 @@
 import { Button, Divider, InputAdornment, Typography } from '@mui/material'
-import React, { FC, useRef, useState } from 'react'
+import React, { ChangeEvent, FC, useRef } from 'react'
 import QrReader from 'react-qr-reader'
-import InputField from '../../../../../components/Input/InputField'
-interface IStep1Props {}
 import * as Styled from './styles'
 import CheckIcon from '@mui/icons-material/Check'
+import { useNavigate } from 'react-router-dom'
+import InputField from '../../../../components/Input/InputField'
 
-const Step1: FC<IStep1Props> = () => {
-    const [scanResultFile, setScanResultFile] = useState('')
-    const [scanResultWebCam, setScanResultWebCam] = useState('')
+interface IScanQrCodeProps {
+    scanResult: string
+    setScanResult: any
+    handleCloseDialog: any
+}
 
+const ScanQrCode: FC<IScanQrCodeProps> = ({
+    scanResult,
+    setScanResult,
+    handleCloseDialog,
+}) => {
+    const navigate = useNavigate()
     const qrRef = useRef<any>(null)
 
     const onScanFile = () => {
@@ -22,7 +30,9 @@ const Step1: FC<IStep1Props> = () => {
 
     const handleScanFile = (result: any) => {
         if (result) {
-            setScanResultFile(result)
+            setScanResult(result.slice(-6))
+            navigate(`joinRoom/${result.slice(-6)}`)
+            handleCloseDialog()
         }
     }
 
@@ -32,8 +42,14 @@ const Step1: FC<IStep1Props> = () => {
 
     const handleScanWebCam = (result: any) => {
         if (result) {
-            setScanResultWebCam(result)
+            setScanResult(result.slice(-6))
+            navigate(`joinRoom/${result.slice(-6)}`)
+            handleCloseDialog()
         }
+    }
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setScanResult(event.target.value)
     }
     return (
         <Styled.QrContainer>
@@ -74,20 +90,25 @@ const Step1: FC<IStep1Props> = () => {
             <Styled.WrapperRight>
                 <Typography variant="body2">
                     <strong>Enter your code:</strong>
+                    {scanResult}
                 </Typography>
                 <InputField
                     name="roomCode"
                     label="Room Code"
-                    value={scanResultWebCam || scanResultFile}
+                    value={scanResult}
                     endAdornment={
                         <InputAdornment position="end">
                             <CheckIcon color="success" />
                         </InputAdornment>
                     }
+                    type="number"
+                    inputProps={{ minLength: 6, maxLength: 6 }}
+                    onChange={handleChange}
+                    required={true}
                 />
             </Styled.WrapperRight>
         </Styled.QrContainer>
     )
 }
 
-export default Step1
+export default ScanQrCode

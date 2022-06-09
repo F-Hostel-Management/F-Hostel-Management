@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { IHostelValues } from '../../../../interface/IHostel'
-import { useForm } from '../../../../hooks/useForm'
-import DialogCustom from '../../../../components/DialogCustom'
-import HostelStepper from '../HostelStepper'
+import { IHostelValues } from '../../../../../interface/IHostel'
+import { useForm } from '../../../../../hooks/useForm'
+import DialogCustom from '../../../../../components/DialogCustom'
+import HostelStepper from '../../HostelStepper'
 
 interface IUpdateHostelDialogProps {
     openDialog: boolean
@@ -16,8 +16,6 @@ const UpdateHostelDialog: React.FunctionComponent<IUpdateHostelDialogProps> = ({
     const initialValues: IHostelValues = {
         address: '',
         name: '',
-        numOfRooms: 0,
-        hostelCategoryId: '',
         ownerId: '',
         imgPath: '',
     }

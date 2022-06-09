@@ -12,7 +12,18 @@ const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
     return (
         <Styled.Wrapper>
             <Styled.Side>
-                {fields.slice(0, 6).map((field) => (
+                {values.quantity <= 1 && (
+                    <InputField
+                        key="roomName"
+                        label="Room Name"
+                        name="name"
+                        value={values.name}
+                        type="text"
+                        required={true}
+                        onChange={handleInputChange}
+                    />
+                )}
+                {fields.slice(1, 5).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
@@ -27,7 +38,7 @@ const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
                 ))}
             </Styled.Side>
             <Styled.Side>
-                {fields.slice(6, 11).map((field) => (
+                {fields.slice(5, 10).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}

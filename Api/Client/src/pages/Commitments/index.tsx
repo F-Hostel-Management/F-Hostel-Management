@@ -1,68 +1,50 @@
 import React, { FC, Fragment, useEffect, useState } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useGridData } from '../../hooks/useGridData'
-import { ICommitment } from '../../interface/ICommitment'
 
 import { ERole } from '../../utils/enums'
 import { useDialog } from '../../hooks/useDialog'
 import CreateCommitmentDialog from './components/CreateCommitmentDialog'
 import ToolbarChildren from './components/ToolbarChildren'
-import { getCurrentHostel, setCurrentHostel } from '../../slices/hostelSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { getItem } from '../../utils/LocalStorageUtils'
-import {
-    getAllCommitmentOfHostel,
-    getNumberCommitmentOfHostel,
-} from '../../services/commitments'
-import { getHostelById } from '../../services/hostels'
+
 import { createColumns } from './components/Table'
+import { getItem } from '../../utils/LocalStorageUtils'
 interface ICommitmentsProps {}
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
+import { fetchCommitments } from '../../slices/commitmentSlice'
+import {
+    setPage,
+    setPageSize,
+    setTableInitialState,
+} from '../../slices/tableSlice'
 
 const Commitments: FC<ICommitmentsProps> = () => {
     const role: ERole = 1
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
-    const currentHostel = useSelector(getCurrentHostel)
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+    const dispatch = useAppDispatch()
 
-    const [pageSize, setPageSize] = useState<number>(5)
-    const [page, setPage] = useState<number>(0)
-    const [rows, setRows] = useState<ICommitment[]>([])
+    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const rows = useAppSelector(({ commitment }) => commitment.commitmentList)
+    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
+    const numOfCommitment = useAppSelector(
+        ({ commitment }) => commitment.numOfCommitment
+    )
+
     const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
-    const [numberOfCommitment, setNumberOfCommitment] = useState<number>(0)
 
-    const FetchData = async () => {
-        const hostelId = getItem('currentHostelId')
-        const commitments = await getAllCommitmentOfHostel(
-            hostelId,
-            pageSize,
-            page
-        )
-        const numberCommitment = await getNumberCommitmentOfHostel(hostelId)
-        setRows(commitments)
-        setNumberOfCommitment(numberCommitment)
-        setLoading(false)
-    }
+    useEffect(() => {
+        dispatch(setTableInitialState())
+    }, [dispatch])
 
     // Check currentHostelId in localStorage
     useEffect(() => {
-        const hostelId = getItem('currentHostelId')
-        if (!hostelId?.length) {
-            navigate('/home')
-        } else {
-            FetchData()
-            if (!Object.keys(currentHostel).length) {
-                ;(async () => {
-                    const hostelInfo = await getHostelById(hostelId)
-                    dispatch(setCurrentHostel(hostelInfo))
-                })()
-            }
-        }
-        FetchData()
-    }, [page, pageSize])
+        setLoading(true)
+        const currentHostelId = getItem('currentHostelId')
+        dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        setLoading(false)
+    }, [dispatch, page, pageSize])
 
     return (
         <Fragment>
@@ -72,10 +54,12 @@ const Commitments: FC<ICommitmentsProps> = () => {
                 rows={rows}
                 columns={columns}
                 pageSize={pageSize}
-                setPageSize={setPageSize}
+                setPageSize={(pageSize: number) =>
+                    dispatch(setPageSize(pageSize))
+                }
                 page={page}
-                setPage={setPage}
-                rowsCount={numberOfCommitment}
+                setPage={(page: number) => dispatch(setPage(page))}
+                rowsCount={numOfCommitment}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (
                         <ToolbarChildren handleOpenCreate={handleOpenCreate} />
