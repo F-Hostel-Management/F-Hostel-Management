@@ -44,6 +44,12 @@ export const RestCaller = {
                 showErrorToast,
             })
             .then(responseBody),
+    patch: (url: string, data?: unknown, showErrorToast?: boolean) =>
+        instance
+            .patch(url, JSON.stringify(data), {
+                showErrorToast,
+            })
+            .then(responseBody),
     put: (url: string, data?: unknown, showErrorToast?: boolean) =>
         instance
             .put(url, JSON.stringify(data), {
@@ -61,4 +67,10 @@ export const RestCaller = {
                 showErrorToast,
             })
             .then(responseBody),
+    download: (url: string, data?: unknown) =>
+        instance
+            .post(url, data, {
+                responseType: 'arraybuffer',
+            })
+            .then((response) => response?.data),
 }

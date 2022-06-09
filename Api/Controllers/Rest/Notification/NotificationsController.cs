@@ -131,6 +131,8 @@ public class NotificationsController : BaseRestController
     public async Task<IActionResult> GetNotiStransactionAsync
         ([FromRoute] Guid TransactionId)
     {
+        NotificationTransaction transaction
+
         IList<NotificationEntity> notifications = await _notificationsRepository.WhereAsync(noti =>
         noti.TransactionId.Equals(TransactionId));
         if (notifications.Count == 0)
