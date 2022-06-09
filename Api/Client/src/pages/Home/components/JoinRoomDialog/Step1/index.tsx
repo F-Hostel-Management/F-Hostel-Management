@@ -4,13 +4,20 @@ import QrReader from 'react-qr-reader'
 import InputField from '../../../../../components/Input/InputField'
 import * as Styled from './styles'
 import CheckIcon from '@mui/icons-material/Check'
+import { useNavigate } from 'react-router-dom'
 
 interface IStep1Props {
     scanResult: string
     setScanResult: any
+    handleCloseDialog: any
 }
 
-const Step1: FC<IStep1Props> = ({ scanResult, setScanResult }) => {
+const Step1: FC<IStep1Props> = ({
+    scanResult,
+    setScanResult,
+    handleCloseDialog,
+}) => {
+    const navigate = useNavigate()
     const qrRef = useRef<any>(null)
 
     const onScanFile = () => {
@@ -23,7 +30,9 @@ const Step1: FC<IStep1Props> = ({ scanResult, setScanResult }) => {
 
     const handleScanFile = (result: any) => {
         if (result) {
-            setScanResult(result)
+            setScanResult(result.slice(-6))
+            navigate(`joinRoom/${result.slice(-6)}`)
+            handleCloseDialog()
         }
     }
 
@@ -33,7 +42,9 @@ const Step1: FC<IStep1Props> = ({ scanResult, setScanResult }) => {
 
     const handleScanWebCam = (result: any) => {
         if (result) {
-            setScanResult(result)
+            setScanResult(result.slice(-6))
+            navigate(`joinRoom/${result.slice(-6)}`)
+            handleCloseDialog()
         }
     }
 
@@ -79,6 +90,7 @@ const Step1: FC<IStep1Props> = ({ scanResult, setScanResult }) => {
             <Styled.WrapperRight>
                 <Typography variant="body2">
                     <strong>Enter your code:</strong>
+                    {scanResult}
                 </Typography>
                 <InputField
                     name="roomCode"

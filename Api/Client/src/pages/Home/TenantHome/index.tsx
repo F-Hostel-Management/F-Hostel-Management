@@ -6,10 +6,12 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
-import JoinRoomDialog from '../components/JoinRoomDialog'
 import { useDialog } from '../../../hooks/useDialog'
 import { IRoom } from '../../../interface/IRoom'
 import { Route, Routes, useNavigate } from 'react-router-dom'
+import ScanQrCode from '../components/ScanQrCode'
+import Commitment from '../components/Commitment'
+import NotFound from '../../NotFound'
 
 interface ITenantHomeProps {
     rooms: IRoom[]
@@ -19,10 +21,6 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
     const navigate = useNavigate()
     const [openJoinRoom, handleOpenJoinRoom, handleCloseJoinRoom] = useDialog()
 
-    const handleScanQrCoce = () => {
-        handleOpenJoinRoom()
-        navigate('joinRoom')
-    }
     return (
         <Styled.HomeContainer>
             <Styled.ActionJoinWrapper>
@@ -32,7 +30,7 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
                     color="primary"
                     startIcon={<QrCodeScannerIcon />}
                     className="hello"
-                    onClick={handleScanQrCoce}
+                    onClick={handleOpenJoinRoom}
                 >
                     Scan to join
                 </Button>
@@ -45,16 +43,12 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
             <Routes>
                 <Route
                     path="/joinRoom/:sixDigitsCode"
-                    element={
-                        <JoinRoomDialog
-                            openDialog={openJoinRoom}
-                            handleCloseDialog={handleCloseJoinRoom}
-                        />
-                    }
+                    element={<Commitment />}
                 />
+                <Route path="*" element={<NotFound />} />
             </Routes>
             {openJoinRoom && (
-                <JoinRoomDialog
+                <ScanQrCode
                     openDialog={openJoinRoom}
                     handleCloseDialog={handleCloseJoinRoom}
                 />
