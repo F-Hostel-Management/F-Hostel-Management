@@ -55,7 +55,7 @@ public class HandleNotificationRequest
     }
 
     public async Task<IList<NotificationEntity>> GetValidListFromRepoAndUpdate
-        (CreateNotificationRequest req, Guid managerId, bool isSent, IMapper Mapper)
+        (CreateNotificationRequest req, Guid managerId, IMapper Mapper)
     {
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
         foreach (Guid i in req.RoomIds)
@@ -77,7 +77,6 @@ public class HandleNotificationRequest
                 throw new NotFoundException("Not found");
             }
             Mapper.Map(req, uEntity);
-            uEntity.IsSent = isSent;
             notifications.Add(uEntity);
         }
         return notifications;

@@ -90,7 +90,15 @@ public class NotificationsController : BaseRestController
                 throw new BadRequestException("Cannot access");
             }
             // load db end update if any ==> issent still false
-            notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, isSent, Mapper);
+            notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, Mapper);
+            foreach (NotificationEntity notification in notifications)
+            {
+                // noti has been sent
+                if (notification.IsSent)
+                {
+                    throw new BadRequestException("Cannot access");
+                }
+            }
             await _notificationsRepository.UpdateRangeAsync(notifications);
         }
         return Ok(notifications);
@@ -147,7 +155,16 @@ public class NotificationsController : BaseRestController
             {
                 throw new BadRequestException("Cannot access");
             }
-            notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, isSent, Mapper);
+            notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, Mapper);
+            foreach (NotificationEntity notification in notifications)
+            {
+                // noti has been sent
+                if (notification.IsSent)
+                {
+                    throw new BadRequestException("Cannot access");
+                }
+                notification.IsSent = isSent;
+            }
             await _notificationsRepository.UpdateRangeAsync(notifications);
         }
         return Ok(notifications);
