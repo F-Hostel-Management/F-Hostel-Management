@@ -127,18 +127,22 @@ public class NotificationsController : BaseRestController
     }
 
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
-    [HttpGet("transaction/{TransactionId}")]
+    [HttpGet("transaction/{transactionId}")]
     public async Task<IActionResult> GetNotiStransactionAsync
-        ([FromRoute] Guid TransactionId)
+        ([FromRoute] Guid transactionId)
     {
-        NotificationTransaction transaction
-
-        IList<NotificationEntity> notifications = await _notificationsRepository.WhereAsync(noti =>
-        noti.TransactionId.Equals(TransactionId));
-        if (notifications.Count == 0)
+        NotificationTransaction transaction = await _transactionRepository.FindByIdAsync(transactionId);
+        if (transaction is null)
         {
-            throw new NotFoundException("Not found transaction");
+            throw new NotFoundException("Transaction not found");
         }
+        bool isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(transaction.HostelId, CurrentUserID);
+        if (!isManagedByCurrentUser)
+        {
+            throw new ForbiddenException("Cannot access the request");
+        }
+        IList<NotificationEntity> notifications = await _notificationsRepository.WhereAsync(noti =>
+        noti.TransactionId.Equals(transactionId));
         return Ok(notifications);
     }
 
