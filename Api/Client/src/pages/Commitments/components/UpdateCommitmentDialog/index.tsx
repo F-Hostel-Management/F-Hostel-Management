@@ -48,7 +48,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
             commitmentId: commitment?.id,
         })
         const response = await getJoiningCode({
-            commitementId: commitment?.id,
+            commitmentId: commitment?.id,
             timeSpan,
         })
         setSixDigitsCode(response.result.sixDigitsCode)

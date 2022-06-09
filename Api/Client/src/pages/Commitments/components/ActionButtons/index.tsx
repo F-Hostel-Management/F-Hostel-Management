@@ -25,7 +25,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
     const [openCreateQrCode, handleOpenCreateQrCode, handleCloseCreateQrCode] =
         useDialog()
-
     return (
         <Fragment>
             <div
@@ -117,7 +116,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
             {openUpdate && (
                 <UpdateCommitmentDialog
                     openDialog={openUpdate}
-                    handleOpenDialog={handleOpenUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />
             )}
