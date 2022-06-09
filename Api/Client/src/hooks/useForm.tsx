@@ -4,11 +4,15 @@ export function useForm<Type>(initialValue: Type) {
     const [values, setValues] = useState(initialValue)
     const [errors, setErrors] = useState({})
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        event: ChangeEvent<HTMLInputElement>,
+        isForce = false
+    ) => {
         const { name, value, type } = event.target
         setValues({
             ...values,
-            [name]: value && type == 'number' ? Number(value) : value,
+            [name]:
+                value && type == 'number' && !isForce ? Number(value) : value,
         })
         // if (validateOnChange) {
 

@@ -71,6 +71,12 @@ export const RestCaller = {
                 toast: config,
             })
             .then(responseBody),
+    patch: (url: string, data?: unknown, config?: HttpToastConfig) =>
+        instance
+            .patch(url, JSON.stringify(data), {
+                toast: config,
+            })
+            .then(responseBody),
     delete: (url: string, config?: HttpToastConfig) =>
         instance.delete(url, { toast: config }).then(responseBody),
     upload: (url: string, form: FormData, config?: HttpToastConfig) =>

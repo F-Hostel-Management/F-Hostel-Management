@@ -2,8 +2,9 @@ import styled from 'styled-components'
 import { Grid, Paper } from '@mui/material'
 
 export const ProfilePaper = styled(Paper)`
-    height: 100%;
+    height: 90%;
     overflow-y: auto;
+    padding: 0 5% 5% 5%;
 `
 
 export const ProfileHeader = styled.div`
