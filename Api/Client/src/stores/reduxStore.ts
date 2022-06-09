@@ -2,6 +2,7 @@ import authReducer from '../slices/authSlice'
 import tableReducer from '../slices/tableSlice'
 import commitmentReducer from '../slices/commitmentSlice'
 import homeReducer from '../slices/homeSlice'
+import facilityReducer from '../slices/facilitySlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
         table: tableReducer,
         home: homeReducer,
         commitment: commitmentReducer,
+        facility: facilityReducer,
     },
 })
 

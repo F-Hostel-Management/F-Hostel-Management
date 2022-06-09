@@ -7,12 +7,16 @@ export interface IUser {
     email?: string
     phone?: string
     taxCode?: string
-    gender?: number
+    gender?: string
     organization?: string
-    avatarUrl?: string
+    avatar?: string
     dateOfBirth?: string
     citizenIdentity?: string
     isDeleted?: boolean
+    citizenIdentity?: number
+    address?: string
+    frontIdentification?: string
+    backIdentification?: string
 }
 
 export interface IUserForm {

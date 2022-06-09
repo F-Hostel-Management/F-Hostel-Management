@@ -2,6 +2,7 @@ import { RestCaller } from './../utils/RestCaller'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IUser } from '../interface/IUser'
 import { AppState } from '../stores/reduxStore'
+import moment from 'moment'
 
 interface AuthSliceState {
     isAuthenticated: boolean
@@ -23,6 +24,9 @@ const authSlice = createSlice({
             actions: PayloadAction<IUser>
         ) => {
             state.currentUser = actions.payload
+            state.currentUser.dateOfBirth = moment(
+                state.currentUser.dateOfBirth
+            ).format('YYYY-MM-DD')
             state.isAuthenticated = true
         },
     },

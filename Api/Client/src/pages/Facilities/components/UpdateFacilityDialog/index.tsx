@@ -1,7 +1,11 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
+import { useAppDispatch } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
-import { IFacilityValues } from '../../../../interface/IFacility'
+import { IFacility } from '../../../../interface/IFacility'
+import { fetchFacility } from '../../../../slices/facilitySlice'
+import { getItem } from '../../../../utils/LocalStorageUtils'
+import { RestCaller } from '../../../../utils/RestCaller'
 import FacilityForm from '../FacilityForm'
 
 interface IUpdateFacilityDialogProps {
@@ -16,9 +20,16 @@ const UpdateFacilityDialog: FC<IUpdateFacilityDialogProps> = ({
     handleCloseDialog,
     rowData,
 }) => {
+    const dispatch = useAppDispatch()
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IFacilityValues>(rowData)
-    const handleSubmit = () => {}
+        useForm<IFacility>(rowData)
+    const handleSubmit = async () => {
+        const hostelId = getItem('currentHostelId')
+        const result = await RestCaller.patch('/Facility', values)
+        if (result.isError) return
+        dispatch(fetchFacility(hostelId))
+        handleCloseDialog()
+    }
     return (
         <FormDialog
             title="Update Facility"
