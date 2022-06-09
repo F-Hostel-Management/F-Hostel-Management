@@ -1,42 +1,41 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import OwnerHome from './OwnerHome'
 import TenantHome from './TenantHome'
-import { getListHostel } from '../../services/HostelService'
-import { IHostel } from '../../interface/IHostel'
 import { removeItem } from '../../utils/LocalStorageUtils'
 import { useSelector } from 'react-redux'
 import { getUserRole } from '../../slices/authSlice'
 import { ERole } from '../../utils/enums'
-import { IRoom } from '../../interface/IRoom'
-import { getAllRoomOfTenant } from '../../services/RoomService'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
+import { fetchHostelList, fetchRoomList } from '../../slices/homeSlice'
 interface IHomeProps {}
 
 const Home: FC<IHomeProps> = () => {
+    const dispatch = useAppDispatch()
     const role = useSelector(getUserRole)
-    const [hostels, setHostels] = useState<IHostel[]>([])
-    const [rooms, setRooms] = useState<IRoom[]>([])
+    const rooms = useAppSelector(({ home }) => home.roomList)
+    const hostels = useAppSelector(({ home }) => home.hostelList)
 
     useEffect(() => {
         removeItem('currentHostelId')
         const FetchingData = async () => {
             switch (role) {
                 case ERole.TENANT_ROLE: {
-                    setRooms(await getAllRoomOfTenant())
+                    dispatch(fetchRoomList())
                     break
                 }
                 case ERole.MANAGER_ROLE: {
-                    setHostels(await getListHostel())
+                    dispatch(fetchHostelList())
                     break
                 }
                 case ERole.OWNER_ROLE: {
-                    setHostels(await getListHostel())
+                    dispatch(fetchHostelList())
                     break
                 }
             }
         }
         FetchingData()
-    }, [])
+    }, [dispatch, role])
 
     return role === ERole.TENANT_ROLE ? (
         <TenantHome rooms={rooms} />

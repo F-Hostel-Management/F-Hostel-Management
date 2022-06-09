@@ -1,19 +1,22 @@
 import { Button } from '@mui/material'
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import DialogCustom from '../../../../components/DialogCustom'
-import { ICommitment } from '../../../../interface/ICommitment'
+import DialogCustom from '../../../../../components/DialogCustom'
+import { useAppSelector } from '../../../../../hooks/reduxHook'
+import { ICommitment } from '../../../../../interface/ICommitment'
 import {
     activateCommitment,
     getCommitmentFromCode,
-} from '../../../../services/CommitmentService'
-import Step2 from '../../components/JoinRoomDialog/Step2'
+} from '../../../../../services/CommitmentService'
+import CommitmentDetails from '../../../../Commitments/components/CommitmentDetails'
 
-interface ICommitmentProps {}
+interface IConfirmCommitmentDialogProps {}
 
-const Commitment: FC<ICommitmentProps> = ({}) => {
+const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
     const navigate = useNavigate()
     let { sixDigitsCode } = useParams()
+    const currentUser = useAppSelector(({ auth }) => auth.currentUser)
+
     const [commitment, setCommitment] = useState<ICommitment>()
     const [openDialog, setOpenDialog] = useState<boolean>(true)
 
@@ -52,7 +55,20 @@ const Commitment: FC<ICommitmentProps> = ({}) => {
                     marginBottom: '16px',
                 }}
             >
-                <Step2 commitment={commitment || {}} />
+                <div style={{ width: '80%', margin: '16px auto' }}>
+                    <CommitmentDetails
+                        createdDate={commitment?.createdDate}
+                        startDate={commitment?.startDate}
+                        endDate={commitment?.endDate}
+                        overdueDays={commitment?.dateOverdue}
+                        compensation={commitment?.compensation}
+                        owner={commitment?.owner}
+                        tenant={commitment?.tenant || currentUser}
+                        hostelInfo={commitment?.hostel}
+                        roomInfo={commitment?.room}
+                        price={commitment?.price}
+                    />
+                </div>
                 <Button
                     variant="contained"
                     size="small"
@@ -67,4 +83,4 @@ const Commitment: FC<ICommitmentProps> = ({}) => {
     )
 }
 
-export default Commitment
+export default ConfirmCommitmentDialog

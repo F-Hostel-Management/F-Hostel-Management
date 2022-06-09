@@ -1,11 +1,12 @@
 import React, { useState, FC, useEffect } from 'react'
 
-import CardWithImage from '../../../../components/Card/CardWithImage'
+import CardWithImage from '../../../../../components/Card/CardWithImage'
 import { Typography, Button, Chip } from '@mui/material'
-import { IRoom } from '../../../../interface/IRoom'
-import { getHostelOfRoom } from '../../../../services/RoomService'
-import { IHostel } from '../../../../interface/IHostel'
-import { ERoomStatus } from '../../../../utils/enums'
+import { IRoom } from '../../../../../interface/IRoom'
+import { getHostelOfRoom } from '../../../../../services/RoomService'
+import { IHostel } from '../../../../../interface/IHostel'
+import { ERoomStatus } from '../../../../../utils/enums'
+const urlImage = import.meta.env.PUBLIC_FIREBASE_STORAGE_IMAGE
 
 interface IRoomCardProps {
     room: IRoom
@@ -22,7 +23,9 @@ const RoomCard: FC<IRoomCardProps> = ({ room }) => {
     return (
         <CardWithImage
             image={{
-                src: hostel?.imgPath || '',
+                src: hostel?.imgPath
+                    ? urlImage + hostel?.imgPath + '?alt=media'
+                    : '',
                 alt: 'Room Image',
             }}
             content={

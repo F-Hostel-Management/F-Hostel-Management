@@ -1,14 +1,16 @@
 import React, { FC } from 'react'
-import CardWithImage from '../../../../components/Card/CardWithImage'
+import CardWithImage from '../../../../../components/Card/CardWithImage'
 import { Typography, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ERole } from '../../../../utils/enums'
+import { ERole } from '../../../../../utils/enums'
 import CardOptions from '../CardOptions'
 import * as Styled from './styles'
-import { IHostel } from '../../../../interface/IHostel'
+import { IHostel } from '../../../../../interface/IHostel'
 import { useDispatch } from 'react-redux'
-import { setCurrentHostel } from '../../../../slices/hostelSlice'
-import { setItem } from '../../../../utils/LocalStorageUtils'
+import { setCurrentHostel } from '../../../../../slices/homeSlice'
+import { setItem } from '../../../../../utils/LocalStorageUtils'
+const urlImage = import.meta.env.PUBLIC_FIREBASE_STORAGE_IMAGE
+
 interface IHostelCardProps {
     hostelInfo: IHostel
 }
@@ -25,7 +27,9 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
     return (
         <CardWithImage
             image={{
-                src: hostelInfo?.imgPath || '',
+                src: hostelInfo?.imgPath
+                    ? urlImage + hostelInfo?.imgPath + '?alt=media'
+                    : '',
                 alt: 'Hostel image',
             }}
             content={

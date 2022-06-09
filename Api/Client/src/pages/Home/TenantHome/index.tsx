@@ -1,16 +1,16 @@
 import React, { FC } from 'react'
 
 import Greeting from '../components/Greeting'
-import RoomCard from '../components/RoomCard'
+import RoomCard from '../components/Card/RoomCard'
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
 import { useDialog } from '../../../hooks/useDialog'
 import { IRoom } from '../../../interface/IRoom'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import ScanQrCode from '../components/ScanQrCode'
-import Commitment from '../components/Commitment'
+import { Route, Routes } from 'react-router-dom'
+import ScanQrCodeDialog from '../components/Dialog/ScanQrCodeDialog'
+import ConfirmCommitmentDialog from '../components/Dialog/ConfirmCommitmentDialog'
 import NotFound from '../../NotFound'
 
 interface ITenantHomeProps {
@@ -18,8 +18,7 @@ interface ITenantHomeProps {
 }
 
 const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
-    const navigate = useNavigate()
-    const [openJoinRoom, handleOpenJoinRoom, handleCloseJoinRoom] = useDialog()
+    const [openScanQr, handleOpenScanQr, handleCloseScanQr] = useDialog()
 
     return (
         <Styled.HomeContainer>
@@ -30,7 +29,7 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
                     color="primary"
                     startIcon={<QrCodeScannerIcon />}
                     className="hello"
-                    onClick={handleOpenJoinRoom}
+                    onClick={handleOpenScanQr}
                 >
                     Scan to join
                 </Button>
@@ -43,14 +42,14 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
             <Routes>
                 <Route
                     path="/joinRoom/:sixDigitsCode"
-                    element={<Commitment />}
+                    element={<ConfirmCommitmentDialog />}
                 />
                 <Route path="*" element={<NotFound />} />
             </Routes>
-            {openJoinRoom && (
-                <ScanQrCode
-                    openDialog={openJoinRoom}
-                    handleCloseDialog={handleCloseJoinRoom}
+            {openScanQr && (
+                <ScanQrCodeDialog
+                    openDialog={openScanQr}
+                    handleCloseDialog={handleCloseScanQr}
                 />
             )}
         </Styled.HomeContainer>

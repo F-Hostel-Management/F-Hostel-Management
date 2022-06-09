@@ -13,16 +13,4 @@ export const fields: IField[] = [
         type: 'text',
         required: true,
     },
-    {
-        label: 'Number of rooms',
-        name: 'numOfRooms',
-        type: 'number',
-        required: true,
-    },
-    {
-        label: 'Hostel Category Id',
-        name: 'hostelCategoryId',
-        type: 'string',
-        required: true,
-    },
 ]
