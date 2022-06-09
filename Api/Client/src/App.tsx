@@ -25,7 +25,9 @@ function App(): React.ReactElement {
 
     useEffect(() => {
         const startup = async () => {
-            const response = await RestCaller.get('Users/info', false)
+            const response = await RestCaller.get('Users/info', {
+                notShowError: false,
+            })
             setTimeout(() => setIsLoading(false), 2000)
 
             if (!response || response.isError) return
