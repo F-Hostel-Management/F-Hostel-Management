@@ -1,9 +1,11 @@
 import { GridColDef } from '@mui/x-data-grid'
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react'
+import React, { FC, Fragment, useEffect, useState } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
 import { IFacility } from '../../interface/IFacility'
+import { fetchFacility } from '../../slices/facilitySlice'
 import { ERole } from '../../utils/enums'
 import { getItem } from '../../utils/LocalStorageUtils'
 import { ODataCaller } from '../../utils/ODataCaller'
@@ -23,13 +25,14 @@ const Facilities: FC<IFacilitiesProps> = () => {
     const role: ERole = 1
     const { renderCell, createColumn } = useGridData()
     const hostelId = getItem('currentHostelId')
-
+    const dispatch = useAppDispatch()
     const [pageSize, setPageSize] = useState<number>(5)
     const [page, setPage] = useState<number>(0)
-    const [rows, setRows] = useState<IFacility[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
+    // const [rows, setRows] = useState<IFacility[]>([])
+    // const [loading, setLoading] = useState<boolean>(true)
+    const loading = useAppSelector((state) => state.facility.isFetchingList)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
-
+    const rows = useAppSelector((e) => e.facility.facilityList)
     const columns: GridColDef[] = [
         // createColumn('id', 'Code', 70),
         createColumn('name', 'Facility Name', 400),
@@ -38,15 +41,10 @@ const Facilities: FC<IFacilitiesProps> = () => {
         createColumn('price', 'Price', 150),
         renderCell('actions', 'Actions', 130, ActionButtons),
     ]
-    const FetchData = useCallback(async () => {
-        const result = await getListFacility(hostelId)
-        setLoading(false)
-        setRows(result)
-    }, [])
+
     useEffect(() => {
-        setLoading(true)
-        FetchData()
-    }, [page, pageSize, hostelId, FetchData])
+        dispatch(fetchFacility(hostelId))
+    }, [page, pageSize, hostelId, dispatch])
     return (
         <Fragment>
             <DataGridCustom
@@ -70,7 +68,7 @@ const Facilities: FC<IFacilitiesProps> = () => {
                 <CreateFacilityDialog
                     openDialog={openCreate}
                     handleCloseDialog={handleCloseCreate}
-                    reloadData={FetchData}
+                    // reloadData={() =>)}
                 />
             )}
         </Fragment>

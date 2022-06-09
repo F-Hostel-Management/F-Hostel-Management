@@ -1,20 +1,21 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
+import { useAppDispatch } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
 import { IFacilityValues } from '../../../../interface/IFacility'
+import { fetchFacility } from '../../../../slices/facilitySlice'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 import { RestCaller } from '../../../../utils/RestCaller'
 import FacilityForm from '../FacilityForm'
 interface ICreateFacilityDialogProps {
     openDialog: boolean
     handleCloseDialog: () => void
-    reloadData: () => Promise<void>
+    reloadData?: () => Promise<void>
 }
 
 const CreateFacilityDialog: FC<ICreateFacilityDialogProps> = ({
     openDialog,
     handleCloseDialog,
-    reloadData,
 }) => {
     const initialValues: IFacilityValues = {
         type: '',
@@ -23,12 +24,14 @@ const CreateFacilityDialog: FC<ICreateFacilityDialogProps> = ({
         quantity: 1,
         hostelId: getItem('currentHostelId'),
     }
+    const hostelId = getItem('currentHostelId')
+    const dispatch = useAppDispatch()
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IFacilityValues>(initialValues)
     const handleCreateSubmit = async () => {
         const result = await RestCaller.put('Facility', values, true)
         if (result.isError) return
-        await reloadData()
+        dispatch(fetchFacility(hostelId))
         handleCloseDialog()
     }
 
