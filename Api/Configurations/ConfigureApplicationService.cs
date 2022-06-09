@@ -1,4 +1,5 @@
-﻿using Api.Services;
+﻿using Api.Controllers.Rest.Notification;
+using Api.Services;
 using Application.Interfaces;
 using Application.Services;
 using Application.Services.CommitmentServices;
@@ -24,6 +25,7 @@ namespace Api.Configurations
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IHtml2PdfService, Html2PdfService>();
+            services.AddScoped<HandleNotificationRequest>();
         }
     }
 }
