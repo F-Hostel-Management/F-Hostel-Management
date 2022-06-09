@@ -14,6 +14,7 @@ namespace Api.UserFeatures.Requests
         public string Address { get; set; }
         public string Phone { get; set; }
         public string TaxCode { get; set; }
+        public string CitizenIdentity { get; set; }
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
 
