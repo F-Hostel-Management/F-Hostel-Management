@@ -1,14 +1,10 @@
 ﻿using Domain.Common;
 using Domain.Entities.Commitment;
-using Domain.Entities.Hostel;
-using Domain.Entities.Room;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain.Entities.Facility;
+using Domain.Entities.Hostel;
+using Domain.Entities.Notification;
+using Domain.Entities.Room;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities;
 
@@ -37,4 +33,6 @@ public class HostelEntity : BaseEntity
     
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
 
+    // 1 user M trans notifications 1 hostel
+    public virtual ICollection<NotificationTransaction> NotificationTransactions { get; set; }
 }

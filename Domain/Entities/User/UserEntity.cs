@@ -44,11 +44,15 @@ public class UserEntity : BaseEntity
     public Gender Gender { get; set; }
 
     public string TaxCode { get; set; }
+    public string CardNumber { get; set; }
+    
     public string OrganizationCode { get; set; }
     public string Avatar { get; set; }
     public string FrontIdentification { get; set; }
     public string BackIdentification { get; set; }
     public string CitizenIdentity { get; set; }
+    
+    public string Address { get; set; }
 
     /*navigation props*/
 
@@ -70,10 +74,6 @@ public class UserEntity : BaseEntity
     // 1 Manager (make) M InvoiceSchedules (for) 1 Room
     public virtual ICollection<InvoiceScheduleEntity> ManegerCreatedInvoiceSchedules { get; set; }
 
-
-    // 1 Manager (create) M Notifications (for) M Rooms
-    public virtual ICollection<NotificationEntity> Notifications { get; set; }
-
     // 1 ticket - M messages
     public virtual ICollection<MessageEntity> Messages { get; set; }
 
@@ -89,5 +89,8 @@ public class UserEntity : BaseEntity
     public virtual ICollection<CommitmentEntity> TenantCommitments { get; set; }
     public virtual ICollection<CommitmentEntity> OwnerCommitments { get; set; }
 
+
+    // 1 user M trans notifications 1 hostel
+    public virtual ICollection<NotificationTransaction> NotificationTransactions { get; set; }
 
 }
