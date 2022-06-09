@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/hostelSlice'
 import * as Styled from './styles'
 import QrCode from '../../../../components/QrCode'
+const baseUrl = import.meta.env.PUBLIC_FRONTEND
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
     values: Record<string, any>
@@ -122,7 +123,10 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
             handleCloseDialog={handleCloseDialog}
             finishedStep={
                 <Styled.ContainerStep>
-                    <QrCode link={sixDigitsCode} size={200} />
+                    <QrCode
+                        link={`${baseUrl}/home/joinRoom/${sixDigitsCode}`}
+                        size={200}
+                    />
                 </Styled.ContainerStep>
             }
         />

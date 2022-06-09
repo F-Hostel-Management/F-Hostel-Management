@@ -8,6 +8,9 @@ import {
     approveCommitment,
     getJoiningCode,
 } from '../../../../services/CommitmentService'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
+import { getItem } from '../../../../utils/LocalStorageUtils'
+import { fetchCommitments } from '../../../../slices/commitmentSlice'
 interface ICreateCommitmentDialogProps {
     openDialog: boolean
     handleCloseDialog: () => void
@@ -17,6 +20,10 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
+    const dispatch = useAppDispatch()
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
+
     const initialValues: ICommitmentValues = {
         startDate: '',
         endDate: '',
@@ -40,7 +47,11 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     // create commitment
     const handleSubmitStep2 = async () => {
         const response = await createCommitment(values)
-        setCommitmentId(response.result)
+        if (!response.isError) {
+            setCommitmentId(response.result)
+            const currentHostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        }
     }
 
     const handleSubmitStep3 = async () => {
@@ -51,7 +62,11 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
             commitmentId: commitmentId,
             timeSpan,
         })
-        setSixDigitsCode(response.result.sixDigitsCode)
+        if (!response.isError) {
+            setSixDigitsCode(response.result.sixDigitsCode)
+            const currentHostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        }
     }
 
     return (
