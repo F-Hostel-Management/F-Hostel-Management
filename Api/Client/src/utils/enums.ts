@@ -5,9 +5,9 @@ export enum ERole {
 }
 
 export enum EGender {
-    'Male',
-    'Female',
-    'Unknown',
+    'Male' = 0,
+    'Female' = 1,
+    'Unknown' = 2,
 }
 
 export enum ECommitmentStatus {
@@ -23,6 +23,6 @@ export enum ERoomType {
 }
 
 export enum ERoomStatus {
-    'Finished',
-    'Renting',
+    Available = 'Available',
+    Rented = 'Rented',
 }

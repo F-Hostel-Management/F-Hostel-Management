@@ -15,6 +15,7 @@ interface ICommitmentDetailsProps {
     tenant?: IUser
     hostelInfo?: IHostel
     roomInfo?: IRoom
+    price?: number
 }
 
 const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
@@ -27,11 +28,11 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
     tenant,
     hostelInfo,
     roomInfo,
+    price,
 }) => {
     const [createDay, createMonth, createYear] = getDate(createdDate || '')
     const [startDay, startMonth, startYear] = getDate(startDate || '')
     const [endDay, endMonth, endYear] = getDate(endDate || '')
-
     const content = (
         <div id="divToPrint">
             <div style={{ textAlign: 'center' }}>
@@ -179,10 +180,7 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
             <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
-                        CMND số: {},&nbsp; Ng&agrave;y cấp:
-                        &hellip;&hellip;....&hellip;&hellip;&hellip;&hellip;.
-                        Nơi cấp:
-                        &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..&hellip;&hellip;
+                        CMND số: {owner?.citizenIdentity}
                     </span>
                 </span>
             </div>
@@ -227,11 +225,13 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
-                            &Ocirc;ng (B&agrave;){` ${tenant?.name || ''}`}
+                            &Ocirc;ng (B&agrave;)
                         </span>
                     </strong>
+                    {` ${tenant?.name}`}
                     <span style={{ fontSize: '10.5pt' }}>
-                        {}.&nbsp; Năm sinh: {tenant?.dateOfBirth || ''}.
+                        {}.&nbsp; Năm sinh:{' '}
+                        {`${formatDate(new Date(tenant?.dateOfBirth || ''))}`}.
                     </span>
                 </span>
             </div>
@@ -239,7 +239,7 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
             <div>
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <span style={{ fontSize: '10.5pt' }}>
-                        CMND số: {}, Ng&agrave;y cấp: {}&nbsp;Nơi cấp: {}
+                        CMND số: {tenant?.citizenIdentity}
                     </span>
                 </span>
             </div>
@@ -431,7 +431,7 @@ const CommitmentDetails: FC<ICommitmentDetailsProps> = ({
                 <span style={{ fontFamily: 'Times New Roman,Times,serif' }}>
                     <strong>
                         <span style={{ fontSize: '10.5pt' }}>
-                            2. Gi&aacute; cho thu&ecirc;:{` ${roomInfo?.price}`}
+                            2. Gi&aacute; cho thu&ecirc;:{` ${price}`}
                         </span>
                     </strong>
                     <span style={{ fontSize: '10.5pt' }}>
