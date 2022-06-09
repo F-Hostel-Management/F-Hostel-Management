@@ -56,12 +56,6 @@ export const RestCaller = {
                 showErrorToast,
             })
             .then(responseBody),
-    patch: (url: string, data?: unknown, showErrorToast?: boolean) =>
-        instance
-            .patch(url, JSON.stringify(data), {
-                showErrorToast,
-            })
-            .then(responseBody),
     delete: (url: string, showErrorToast?: boolean) =>
         instance.delete(url, { showErrorToast }).then(responseBody),
     upload: (url: string, form: FormData, showErrorToast?: boolean) =>
