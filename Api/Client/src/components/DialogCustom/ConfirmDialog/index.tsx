@@ -14,6 +14,7 @@ interface IConfirmDialogProps {
     handleCloseDialog: any
     children: any
     maxWidth?: DialogProps['maxWidth']
+    handleConfirm?: () => void
 }
 
 const ConfirmDialog: FC<IConfirmDialogProps> = ({
@@ -22,6 +23,7 @@ const ConfirmDialog: FC<IConfirmDialogProps> = ({
     handleCloseDialog,
     children,
     maxWidth = 'md',
+    handleConfirm,
 }) => {
     return (
         <DialogCustom
@@ -42,7 +44,12 @@ const ConfirmDialog: FC<IConfirmDialogProps> = ({
                     >
                         Cancel
                     </Button>
-                    <Button variant="contained" color="orange" size="small">
+                    <Button
+                        variant="contained"
+                        color="orange"
+                        size="small"
+                        onClick={handleConfirm}
+                    >
                         Confirm
                     </Button>
                 </DialogActions>

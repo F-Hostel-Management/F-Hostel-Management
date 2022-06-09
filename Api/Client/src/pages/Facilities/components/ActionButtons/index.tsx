@@ -8,6 +8,8 @@ import { useDialog } from '../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
 import DialogCustom from '../../../../components/DialogCustom'
 import UpdateFacilityDialog from '../UpdateFacilityDialog'
+import { IFacility } from '../../../../interface/IFacility'
+import { RestCaller } from '../../../../utils/RestCaller'
 interface IActionButtonsProps {
     rowData: any
 }
@@ -17,7 +19,11 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
-
+    const handleDelete = async () => {
+        const rowValue = rowData as IFacility
+        await RestCaller.delete(`Facility?facilityId=${rowValue.id}`)
+        handleCloseDelete()
+    }
     return (
         <Fragment>
             <div
@@ -76,6 +82,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
                     maxWidth="sm"
+                    handleConfirm={handleDelete}
                 >
                     <div style={{ minHeight: '100px' }}>
                         <Typography
