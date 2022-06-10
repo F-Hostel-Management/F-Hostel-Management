@@ -9,14 +9,13 @@ export interface IRoom {
     numOfDoors?: number
     numOfBathRooms?: number
     numOfWCs?: number
-    price?: number
     area?: number
     length?: number
     width?: number
     height?: number
     hostelId?: string
     hostel?: IHostel
-    roomStatus?: ERoomStatus
+    status?: ERoomStatus
     maximumPeople?: number
     isDeleted?: boolean
 }
@@ -29,7 +28,6 @@ export interface IRoomValues {
     numOfDoors?: number
     numOfBathRooms?: number
     numOfWCs?: number
-    price?: number
     area?: number
     length?: number
     width?: number

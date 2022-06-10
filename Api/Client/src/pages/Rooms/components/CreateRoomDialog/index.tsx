@@ -21,7 +21,6 @@ const CreateRoomDialog: FC<ICreateRoomDialogProps> = ({
         numOfDoors: 0,
         numOfBathRooms: 0,
         numOfWCs: 0,
-        price: 0,
         area: 0,
         length: 0,
         width: 0,

@@ -10,18 +10,24 @@ import DialogCustom from '../../../../components/DialogCustom'
 import UpdateFacilityDialog from '../UpdateFacilityDialog'
 import { IFacility } from '../../../../interface/IFacility'
 import { RestCaller } from '../../../../utils/RestCaller'
+import { useAppDispatch } from '../../../../hooks/reduxHook'
+import { fetchFacility } from '../../../../slices/facilitySlice'
+import { getItem } from '../../../../utils/LocalStorageUtils'
 interface IActionButtonsProps {
     rowData: any
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const role: ERole = 1
+    const hostelId = getItem('currentHostelId')
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
+    const dispatch = useAppDispatch()
     const handleDelete = async () => {
         const rowValue = rowData as IFacility
         await RestCaller.delete(`Facility?facilityId=${rowValue.id}`)
+        dispatch(fetchFacility(hostelId))
         handleCloseDelete()
     }
     return (

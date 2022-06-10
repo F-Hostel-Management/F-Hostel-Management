@@ -44,6 +44,6 @@ export const createColumns = (
                 formatDate(new Date(params.endDate))
         ),
         renderCell('status', 'Status', 180, CommitmentStatus),
-        renderCell('actions', 'Actions', 180, ActionButtons),
+        renderCell('actions', 'Actions', 150, ActionButtons),
     ]
 }

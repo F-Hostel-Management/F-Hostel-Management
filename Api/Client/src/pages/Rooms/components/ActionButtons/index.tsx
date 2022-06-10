@@ -42,7 +42,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             textColor="#fff"
                             bgrColor="#f96332"
                             sx={{ width: '2.8rem', height: '2.8rem' }}
-                            disabled={rowData.status === Status.Renting}
+                            disabled={rowData.status === Status.Rented}
                             onClick={handleOpenDelete}
                         >
                             <DeleteIcon sx={{ fontSize: '1.6rem' }} />

@@ -10,9 +10,9 @@ import {
     MenuItem,
     Typography,
 } from '@mui/material'
-import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
-import { useDialog } from '../../../../hooks/useDialog'
-import UpdateHostelDialog from '../UpdateHostelDialog'
+import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
+import { useDialog } from '../../../../../hooks/useDialog'
+import UpdateHostelDialog from '../../Dialog/UpdateHostelDialog'
 
 interface ICardOptionsProps {}
 

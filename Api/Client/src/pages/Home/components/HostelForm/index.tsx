@@ -11,22 +11,7 @@ const HostelForm: FC<IHostelFormProps> = ({ values, handleInputChange }) => {
     return (
         <Styled.Wrapper>
             <Styled.Side>
-                {fields.slice(0, 2).map((field) => (
-                    <InputField
-                        key={field.name}
-                        label={field.label}
-                        name={field.name}
-                        value={values[field.name]}
-                        type={field.type}
-                        required={field.required}
-                        disabled={field.disabled}
-                        endAdornment={field.endAdornment}
-                        onChange={handleInputChange}
-                    />
-                ))}
-            </Styled.Side>
-            <Styled.Side>
-                {fields.slice(2, 4).map((field) => (
+                {fields.map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}
