@@ -54,8 +54,8 @@ public class HandleNotificationRequest
         return notifications;
     }
 
-    public async Task<IList<NotificationEntity>> GetValidListFromRepoAndUpdate
-        (CreateNotificationRequest req, Guid managerId, IMapper Mapper)
+    public async Task<IList<NotificationEntity>> GetUnsentValidListFromRepoAndUpdate
+        (CreateNotificationRequest req, bool isSent, Guid managerId, IMapper Mapper)
     {
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
         foreach (Guid i in req.RoomIds)
@@ -70,13 +70,19 @@ public class HandleNotificationRequest
                 throw new BadRequestException("Cannot access");
             }
 
-            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultAsync(noti =>
+            var uEntity = await _notificationsRepository.FirstOrDefaultAsync(noti =>
                noti.TransactionId.Equals(req.TransactionId) && noti.RoomId.Equals(i));
             if (uEntity == null)
             {
                 throw new NotFoundException("Not found");
             }
-            Mapper.Map(req, uEntity);
+            // noti has been send
+            if (uEntity.IsSent)
+            {
+                throw new BadRequestException("Cannot access");
+            }
+            uEntity.IsSent = isSent;
+            uEntity = Mapper.Map(req, uEntity);
             notifications.Add(uEntity);
         }
         return notifications;
