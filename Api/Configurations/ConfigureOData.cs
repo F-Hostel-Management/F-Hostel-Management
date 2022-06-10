@@ -56,17 +56,13 @@ public static class ConfigureOData
         builder.EntitySet<RoomEntity>("Rooms");
         builder.EntitySet<RoomType>("RoomTypes");
         builder.EntitySet<FacilityEntity>("Facilities");
-
         builder.EntitySet<InvoiceScheduleEntity>("InvoiceSchedules");
         builder.EntitySet<InvoiceEntity>("Invoices");
-
         builder.EntitySet<NotificationEntity>("Notifications");
-        
         builder.EntitySet<TicketEntity>("Tickets");
-
         builder.EntitySet<MessageEntity>("Messages");
         builder.EntitySet<CommitmentEntity>("Commitments");
-
+        
         return builder.GetEdmModel();
     }
 }

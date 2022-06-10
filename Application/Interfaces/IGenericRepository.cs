@@ -18,7 +18,6 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<T> DeleteAsync(Guid id);
     Task<T> DeleteSoftAsync(Guid id);
     Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
-
-
+    Task UpdateRangeAsync(IEnumerable<T> entities);
     Task<long> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> sumExpression);
 }

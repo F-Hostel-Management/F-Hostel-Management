@@ -12,7 +12,6 @@ using Domain.Entities.Ticket;
 using Domain.Entities.User;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Contexts;
 

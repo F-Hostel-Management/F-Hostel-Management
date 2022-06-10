@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities.Facility;
+using Domain.Entities.Notification;
 
 namespace Domain.Entities;
 
@@ -36,5 +37,8 @@ public class HostelEntity : BaseEntity
     public virtual ICollection<CommitmentEntity> Commitments { get; set; }
     
     public virtual ICollection<FacilityEntity> Facilities { get; set; }
+
+    // 1 user M trans notifications 1 hostel
+    public virtual ICollection<NotificationTransaction> NotificationTransactions { get; set; }
 
 }
