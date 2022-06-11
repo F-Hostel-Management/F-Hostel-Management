@@ -8,7 +8,7 @@ import React, {
     useState,
 } from 'react'
 import * as Styled from './styles'
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
+import { PhotoCamera } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
 import defaultImage from '../../../../assets/images/default_hostel.jpg'
 
@@ -66,7 +66,7 @@ const UploadHostelImage: FC<IUploadHostelImageProps> = ({
                     color="orange"
                     component="span"
                     size="small"
-                    startIcon={<PhotoCameraIcon />}
+                    startIcon={<PhotoCamera />}
                 >
                     Upload
                 </Button>

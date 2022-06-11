@@ -1,9 +1,8 @@
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@mui/icons-material/CheckBox'
+import { CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material'
 import React, { FC } from 'react'
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
-const checkedIcon = <CheckBoxIcon fontSize="small" />
+const icon = <CheckBoxOutlineBlank fontSize="small" />
+const checkedIcon = <CheckBox fontSize="small" />
 
 interface IRoomFacilitiesProps {}
 

@@ -16,7 +16,6 @@ public interface IApplicationDbContext
 {
     DbSet<UserEntity> Users { get; set; }
     public DbSet<RoomTenant> RoomTenants { get; set; }
-
     public DbSet<HostelEntity> Hostels { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
@@ -29,6 +28,5 @@ public interface IApplicationDbContext
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<CommitmentEntity> Commitments { get; set; }
     public DbSet<JoiningCode> JoiningCodes { get; set; }
-
     public DbSet<CommitmentScaffolding> CommitmentScaffoldings { get; set; }
 }
