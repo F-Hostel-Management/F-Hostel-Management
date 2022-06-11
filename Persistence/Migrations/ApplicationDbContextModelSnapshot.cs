@@ -91,7 +91,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Commitments");
+                    b.ToTable("Commitments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentScaffolding", b =>
@@ -108,7 +108,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CommitmentScaffoldings");
+                    b.ToTable("CommitmentScaffoldings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Commitment.JoiningCode", b =>
@@ -137,7 +137,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("CommitmentId")
                         .IsUnique();
 
-                    b.ToTable("JoiningCodes");
+                    b.ToTable("JoiningCodes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
@@ -168,7 +168,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("HostelId");
 
-                    b.ToTable("Facilities");
+                    b.ToTable("Facilities", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityManagement", b =>
@@ -198,7 +198,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("FacilityManagements");
+                    b.ToTable("FacilityManagements", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
@@ -224,7 +224,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("HostelManagents");
+                    b.ToTable("HostelManagents", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
@@ -255,7 +255,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Hostels");
+                    b.ToTable("Hostels", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Invoice.InvoiceEntity", b =>
@@ -299,7 +299,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantPaidId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.InvoiceSchedule.InvoiceScheduleEntity", b =>
@@ -335,7 +335,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("InvoiceSchedules");
+                    b.ToTable("InvoiceSchedules", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Message.MessageEntity", b =>
@@ -362,7 +362,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
@@ -420,9 +420,11 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("ManagerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("HostelId");
+                    b.Property<string>("TransactionCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("ManagerId");
 
@@ -484,7 +486,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomTypeId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomType", b =>
@@ -501,7 +503,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomTypes");
+                    b.ToTable("RoomTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Ticket.TicketEntity", b =>
@@ -531,7 +533,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User.RoomTenant", b =>
@@ -557,7 +559,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("RoomTenants");
+                    b.ToTable("RoomTenants", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
@@ -620,7 +622,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
@@ -806,17 +808,27 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
                 {
-                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
-                        .WithMany("Notifications")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Notification.NotificationTransaction", "Transaction")
-                        .WithMany("Notifications")
-                        .HasForeignKey("TransactionId")
+                    b.HasOne("Domain.Entities.UserEntity", "Manager")
+                        .WithMany("ManagerCreatedRoomNotifications")
+                        .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Notification.NotificationEntity", "Notification")
+                        .WithMany("RoomNotifications")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Room.RoomEntity", "Room")
+                        .WithMany("RoomNotifications")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+
+                    b.Navigation("Notification");
 
                     b.Navigation("Room");
 
@@ -976,8 +988,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("ManegerCreatedInvoiceSchedules");
 
                     b.Navigation("Messages");
-
-                    b.Navigation("NotificationTransactions");
 
                     b.Navigation("OwnerCommitments");
 

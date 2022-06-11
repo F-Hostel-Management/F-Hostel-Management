@@ -59,6 +59,7 @@ public class NotificationsController : BaseRestController
         await _authorServices.RoomsInAHostelThatManageByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
         IList<NotificationEntity> notifications;
 
+
         if (req.TransactionId is null)
         {
             NotificationTransaction transaction = new()
@@ -68,8 +69,6 @@ public class NotificationsController : BaseRestController
             };
 
             req.TransactionId = transaction.Id;
-            notifications = await _reqHandler.GetValidListFromRequest(req, Mapper);
-            transaction.HostelId = req.HostelId;
             await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);
         }
@@ -81,11 +80,9 @@ public class NotificationsController : BaseRestController
             {
                 throw new NotFoundException("Transcantion not found");
             }
-            if (!transaction.HostelId.Equals(req.HostelId))
             {
                 throw new BadRequestException("Cannot access");
             }
-            notifications = await _reqHandler.GetUnsentValidListFromRepoAndUpdate(req, Mapper);
             await _notificationsRepository.UpdateRangeAsync(notifications);
         }
         return Ok();
@@ -148,7 +145,6 @@ public class NotificationsController : BaseRestController
             throw new NotFoundException("Not found notification");
         }
 
-        if (noti.NotificationStage == NotificationStage.Sent)
         {
             throw new BadRequestException("Cannot access");
         }
@@ -173,7 +169,6 @@ public class NotificationsController : BaseRestController
             throw new NotFoundException("Not found notification");
         }
 
-        if (noti.NotificationStage == NotificationStage.Sent)
         {
             throw new BadRequestException("Cannot access");
         }
