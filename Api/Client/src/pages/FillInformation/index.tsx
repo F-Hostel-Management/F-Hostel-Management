@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import FileUploadIcon from '@mui/icons-material/FileUpload'
+import { FileUpload } from '@mui/icons-material'
 import InputField from '../../components/Input/InputField'
 
 import * as Styled from './styles'
@@ -342,7 +342,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                                 }}
                                             ></input>
 
-                                            <FileUploadIcon
+                                            <FileUpload
                                                 htmlColor="#a7a7a7"
                                                 sx={{
                                                     width: '20%',

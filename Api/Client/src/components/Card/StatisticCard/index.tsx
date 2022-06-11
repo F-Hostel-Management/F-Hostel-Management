@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react'
 
-import HotelIcon from '@mui/icons-material/Hotel'
+import { Hotel } from '@mui/icons-material'
 import { Typography } from '@mui/material'
 
 import LinearProgress from '../../Progress/LinearProgress'
@@ -15,7 +15,7 @@ interface IStatisticCardProps {
 }
 
 const StatisticCard: FC<IStatisticCardProps> = ({
-    icon = <HotelIcon />,
+    icon = <Hotel />,
     label = 'Rooms Available',
     count = 287,
     progress = 40,

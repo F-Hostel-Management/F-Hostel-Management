@@ -1,15 +1,17 @@
 import * as React from 'react'
 
-import CalendarMonthTwoToneIcon from '@mui/icons-material/CalendarMonthTwoTone'
-import ChatBubbleTwoToneIcon from '@mui/icons-material/ChatBubbleTwoTone'
-import DashboardTwoToneIcon from '@mui/icons-material/DashboardTwoTone'
-import DescriptionTwoToneIcon from '@mui/icons-material/DescriptionTwoTone'
-import FaceTwoToneIcon from '@mui/icons-material/FaceTwoTone'
-import GroupTwoToneIcon from '@mui/icons-material/GroupTwoTone'
-import MeetingRoomTwoToneIcon from '@mui/icons-material/MeetingRoomTwoTone'
-import NotificationsNoneTwoToneIcon from '@mui/icons-material/NotificationsNoneTwoTone'
-import ReceiptTwoToneIcon from '@mui/icons-material/ReceiptTwoTone'
-import TableRestaurantTwoToneIcon from '@mui/icons-material/TableRestaurantTwoTone'
+import {
+    CalendarMonthTwoTone,
+    ChatBubbleTwoTone,
+    DashboardTwoTone,
+    DescriptionTwoTone,
+    FaceTwoTone,
+    GroupTwoTone,
+    MeetingRoomTwoTone,
+    NotificationsNoneTwoTone,
+    ReceiptTwoTone,
+    TableRestaurantTwoTone,
+} from '@mui/icons-material'
 
 interface ISidebarItem {
     icon: React.ReactElement
@@ -36,52 +38,52 @@ export const sidebarItemList: {
             groupLabel: '--MAIN',
             items: [
                 {
-                    icon: <DashboardTwoToneIcon />,
+                    icon: <DashboardTwoTone />,
                     label: 'Dashboard',
                     path: '/home/dashboard',
                 },
                 {
-                    icon: <MeetingRoomTwoToneIcon />,
+                    icon: <MeetingRoomTwoTone />,
                     label: 'Rooms',
                     path: '/home/rooms',
                 },
                 {
-                    icon: <FaceTwoToneIcon />,
+                    icon: <FaceTwoTone />,
                     label: 'Tenants',
                     path: '/home/tenants',
                 },
                 {
-                    icon: <GroupTwoToneIcon />,
+                    icon: <GroupTwoTone />,
                     label: 'Managers',
                     path: '/home/managers',
                 },
                 {
-                    icon: <NotificationsNoneTwoToneIcon />,
+                    icon: <NotificationsNoneTwoTone />,
                     label: 'Notifications',
                     path: '/home/notifications',
                 },
                 {
-                    icon: <ChatBubbleTwoToneIcon />,
+                    icon: <ChatBubbleTwoTone />,
                     label: 'Tickets',
                     path: '/home/tickets',
                 },
                 {
-                    icon: <CalendarMonthTwoToneIcon />,
+                    icon: <CalendarMonthTwoTone />,
                     label: 'Scheduling Invoices',
                     path: '/home/schedulingInvoices',
                 },
                 {
-                    icon: <ReceiptTwoToneIcon />,
+                    icon: <ReceiptTwoTone />,
                     label: 'Invoices',
                     path: '/home/invoices',
                 },
                 {
-                    icon: <DescriptionTwoToneIcon />,
+                    icon: <DescriptionTwoTone />,
                     label: 'Commitments',
                     path: '/home/commitments',
                 },
                 {
-                    icon: <TableRestaurantTwoToneIcon />,
+                    icon: <TableRestaurantTwoTone />,
                     label: 'Facilities',
                     path: '/home/facilities',
                 },

@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 import { CardContent, IconButton } from '@mui/material'
 
 import * as Styled from './styles'
@@ -22,9 +21,9 @@ const CardShorten: FC<ICardShortenProps> = ({ title, children }) => {
                         onClick={() => setIsShowChart(!isShowChart)}
                     >
                         {isShowChart ? (
-                            <KeyboardArrowUpIcon />
+                            <KeyboardArrowUp />
                         ) : (
-                            <KeyboardArrowDownIcon />
+                            <KeyboardArrowDown />
                         )}
                     </IconButton>
                 }
