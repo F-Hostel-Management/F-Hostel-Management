@@ -4,66 +4,66 @@ using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities.Notification;
+using Domain.Entities.Room;
+using Domain.Enums;
 
 namespace Api.Controllers.Rest.Notification;
 
 public class HandleNotificationRequest
 {
     private readonly IGenericRepository<NotificationEntity> _notificationsRepository;
-    private readonly IAuthorizationServices _authorServices;
 
     public HandleNotificationRequest
-        (IGenericRepository<NotificationEntity> notificationsRepository,
-        IAuthorizationServices authorServices)
+        (IGenericRepository<NotificationEntity> notificationsRepository)
     {
         _notificationsRepository = notificationsRepository;
-        _authorServices = authorServices;
     }
 
     public async Task<IList<NotificationEntity>> GetValidListFromRequest
-        (CreateNotificationRequest req, Guid managerId, bool isSent)
+        (CreateNotificationRequest req, IMapper Mapper)
     {
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
         foreach (Guid i in req.RoomIds)
         {
-            bool IsRoomManageByCurrentUser = await _authorServices.IsRoomManageByCurrentUser(i, managerId);
-            if (!IsRoomManageByCurrentUser)
-            {
-                throw new ForbiddenException("Forbidden");
-            }
-            notifications.Add(new NotificationEntity()
-            {
-                TransactionId = (Guid)req.TransactionId,
-                Date = DateTime.Now,
-                Content = req.Content,
-                Type = req.Type,
-                RoomId = i,
-                IsSent = isSent
-            });
-
+            NotificationEntity noti = Mapper.Map<NotificationEntity>(req);
+            noti.Date = DateTime.Now;
+            noti.RoomId = i;
+            notifications.Add(noti);
         }
         return notifications;
     }
 
-    public async Task<IList<NotificationEntity>> GetValidListFromRepoAndUpdate
-        (CreateNotificationRequest req, Guid managerId, bool isSent, IMapper Mapper)
+    public async Task<IList<NotificationEntity>> GetUnsentValidListFromRepoAndUpdate
+       (CreateNotificationRequest req, IMapper Mapper)
     {
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
+
+        var roomIdsInATransaction = (await _notificationsRepository.WhereAsync(noti =>
+        noti.TransactionId.Equals(req.TransactionId))).Select(noti => noti.RoomId).ToArray();
+        
+        var diff = req.RoomIds.Except(roomIdsInATransaction).ToArray();
+        if (diff.Any())
+        {
+            req.RoomIds = req.RoomIds.Except(diff).ToArray();
+            foreach (Guid i in diff)
+            {
+                NotificationEntity uEntity = Mapper.Map<NotificationEntity>(req);
+                uEntity.Date = DateTime.Now;
+                uEntity.RoomId = i;
+                notifications.Add(uEntity);
+            }
+        }
         foreach (Guid i in req.RoomIds)
         {
-            bool IsRoomManageByCurrentUser = await _authorServices.IsRoomManageByCurrentUser(i, managerId);
-            if (!IsRoomManageByCurrentUser)
-            {
-                throw new ForbiddenException("Forbidden");
-            }
-            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultAsync(noti =>
+            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultTrackingAsync(noti =>
                noti.TransactionId.Equals(req.TransactionId) && noti.RoomId.Equals(i));
-            if (uEntity == null)
+            // noti has been send
+            if (uEntity.NotificationStage == NotificationStage.Sent)
             {
-                throw new NotFoundException("Not found");
+                throw new BadRequestException("Cannot access");
             }
             Mapper.Map(req, uEntity);
-            uEntity.IsSent = isSent;
+            uEntity.Date = DateTime.Now;
             notifications.Add(uEntity);
         }
         return notifications;

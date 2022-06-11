@@ -1,8 +1,6 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../components/Button/IconButtonCustom'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import DescriptionIcon from '@mui/icons-material/Description'
+import { Edit, Delete, Description, QrCode } from '@mui/icons-material'
 import { ECommitmentStatus as Status } from '../../../../utils/enums'
 import { ERole } from '../../../../utils/enums'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
@@ -11,8 +9,10 @@ import { Typography } from '@mui/material'
 import CommitmentDetails from '../CommitmentDetails'
 import DialogCustom from '../../../../components/DialogCustom'
 import UpdateCommitmentDialog from '../UpdateCommitmentDialog'
+import CommitmentQrCode from '../CommitmentQrCode'
+import { ICommitment } from '../../../../interface/ICommitment'
 interface IActionButtonsProps {
-    rowData: any
+    rowData: ICommitment
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
@@ -20,12 +20,13 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
-
+    const [openCreateQrCode, handleOpenCreateQrCode, handleCloseCreateQrCode] =
+        useDialog()
     return (
         <Fragment>
             <div
                 style={{
-                    width: role !== ERole.TENANT_ROLE ? '11rem' : '4rem',
+                    width: role !== ERole.TENANT_ROLE ? '100%' : '4rem',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-around',
@@ -37,7 +38,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     sx={{ width: '2.8rem', height: '2.8rem' }}
                     onClick={handleOpenView}
                 >
-                    <DescriptionIcon sx={{ fontSize: '1.6rem' }} />
+                    <Description sx={{ fontSize: '1.6rem' }} />
                 </IconButtonCustom>
                 {role !== ERole.TENANT_ROLE && (
                     <>
@@ -48,7 +49,19 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             disabled={rowData.status !== Status.Pending}
                             onClick={handleOpenUpdate}
                         >
-                            <EditIcon sx={{ fontSize: '1.3rem' }} />
+                            <Edit sx={{ fontSize: '1.3rem' }} />
+                        </IconButtonCustom>
+                        <IconButtonCustom
+                            textColor="#fff"
+                            bgrColor="#495057"
+                            sx={{ width: '2.8rem', height: '2.8rem' }}
+                            disabled={
+                                rowData.status == Status.Pending ||
+                                rowData.status == Status.Expired
+                            }
+                            onClick={handleOpenCreateQrCode}
+                        >
+                            <QrCode sx={{ fontSize: '1.3rem' }} />
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -57,7 +70,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             disabled={rowData.status === Status.Active}
                             onClick={handleOpenDelete}
                         >
-                            <DeleteIcon sx={{ fontSize: '1.6rem' }} />
+                            <Delete sx={{ fontSize: '1.6rem' }} />
                         </IconButtonCustom>
                     </>
                 )}
@@ -104,9 +117,26 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
             {openUpdate && (
                 <UpdateCommitmentDialog
                     openDialog={openUpdate}
-                    handleOpenDialog={handleOpenUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />
+            )}
+            {openCreateQrCode && (
+                <DialogCustom
+                    title="Generate QR Code"
+                    openDialog={openCreateQrCode}
+                    handleCloseDialog={handleCloseCreateQrCode}
+                    maxWidth="lg"
+                >
+                    <div
+                        style={{
+                            minHeight: '100px',
+                            width: '80%',
+                            margin: 'auto',
+                        }}
+                    >
+                        <CommitmentQrCode commitmentId={rowData.id || ''} />
+                    </div>
+                </DialogCustom>
             )}
         </Fragment>
     )

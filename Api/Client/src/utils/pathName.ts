@@ -7,4 +7,6 @@ export const pathNames: pathName = {
     demo: 'Demo',
     dashboard: 'Dashboard',
     commitments: 'Commitments',
+    rooms: 'Rooms',
+    facilities: 'Facilities',
 }

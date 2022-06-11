@@ -23,6 +23,6 @@ export enum ERoomType {
 }
 
 export enum ERoomStatus {
-    'Finished',
-    'Renting',
+    Available = 'Available',
+    Rented = 'Rented',
 }

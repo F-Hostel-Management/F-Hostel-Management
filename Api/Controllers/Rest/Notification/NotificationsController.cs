@@ -39,51 +39,13 @@ public class NotificationsController : BaseRestController
         _roomRepository = roomRepository;
     }
 
-
-    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
-    [HttpPost("create-but-cancel")]
-    public async Task<IActionResult> CreateButCancelNotificationsAsync
-        ([FromBody] CreateNotificationRequest req)
-    {
-        if (!req.RoomIds.Any())
-        {
-            throw new ArgumentException();
-        }
-        IList<NotificationEntity> notifications = new List<NotificationEntity>();
-        bool isSent = false;     
-
-        if (req.TransactionId is null)
-        {
-            // create ==> issent false
-            NotificationTransaction transaction = new NotificationTransaction()
-            {
-                Id = Guid.NewGuid(),
-                TransactionCode = CodeGeneratorUtil.genarateByNowDateTime(),
-                ManagerId = CurrentUserID
-            };
-
-            req.TransactionId = transaction.Id;
-            notifications = await _reqHandler.GetValidListFromRequest(req, CurrentUserID, isSent);
-            RoomEntity room = await _roomRepository.FindByIdAsync(req.RoomIds[0]);
-            HostelEntity hostel = await _hostelRepository.FindByIdAsync(room.HostelId);
-            transaction.HostelId = hostel.Id;
-            await _transactionRepository.CreateAsync(transaction);
-            await _notificationsRepository.CreateRangeAsync(notifications);
-        }
-        else
-        {
-            NotificationTransaction transaction = await _transactionRepository.FindByIdAsync((Guid)req.TransactionId);
-            if (transaction is null)
-            {
-                throw new NotFoundException("Transcantion not found");
-            }
-            // load db end update if any ==> issent still false
-            notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, isSent, Mapper);
-            await _notificationsRepository.UpdateRangeAsync(notifications);
-        }
-        return Ok(notifications);
-    }
-
+    /// <summary>
+    /// send notis for chose room
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="NotFoundException"></exception>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("send")]
     public async Task<IActionResult> SendNotificationsAsync
@@ -93,22 +55,21 @@ public class NotificationsController : BaseRestController
         {
             throw new ArgumentException();
         }
-        IList<NotificationEntity> notifications = new List<NotificationEntity>();
-        bool isSent = true;
+        // validation req
+        await _authorServices.RoomsInAHostelThatManageByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
+        IList<NotificationEntity> notifications;
 
         if (req.TransactionId is null)
         {
-            NotificationTransaction transaction = new NotificationTransaction()
+            NotificationTransaction transaction = new()
             {
-                TransactionCode = CodeGeneratorUtil.genarateByNowDateTime(),
+                Id = Guid.NewGuid(),
                 ManagerId = CurrentUserID
             };
 
             req.TransactionId = transaction.Id;
-            notifications = await _reqHandler.GetValidListFromRequest(req, CurrentUserID, isSent);
-            RoomEntity room = await _roomRepository.FindByIdAsync(req.RoomIds[0]);
-            HostelEntity hostel = await _hostelRepository.FindByIdAsync(room.HostelId);
-            transaction.HostelId = hostel.Id;
+            notifications = await _reqHandler.GetValidListFromRequest(req, Mapper);
+            transaction.HostelId = req.HostelId;
             await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);
         }
@@ -120,12 +81,23 @@ public class NotificationsController : BaseRestController
             {
                 throw new NotFoundException("Transcantion not found");
             }
-            notifications = await _reqHandler.GetValidListFromRepoAndUpdate(req, CurrentUserID, isSent, Mapper);
+            if (!transaction.HostelId.Equals(req.HostelId))
+            {
+                throw new BadRequestException("Cannot access");
+            }
+            notifications = await _reqHandler.GetUnsentValidListFromRepoAndUpdate(req, Mapper);
             await _notificationsRepository.UpdateRangeAsync(notifications);
         }
-        return Ok(notifications);
+        return Ok();
     }
 
+    /// <summary>
+    /// get all notis of a transaction
+    /// </summary>
+    /// <param name="transactionId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="ForbiddenException"></exception>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpGet("transaction/{transactionId}")]
     public async Task<IActionResult> GetNotiStransactionAsync
@@ -146,6 +118,26 @@ public class NotificationsController : BaseRestController
         return Ok(notifications);
     }
 
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpDelete("transaction/{transactionId}")]
+    public async Task<IActionResult> DeleteNotiStransactionAsync
+        ([FromRoute] Guid transactionId)
+    {
+        NotificationTransaction transaction = await _transactionRepository.FindByIdAsync(transactionId);
+        if (transaction is null)
+        {
+            throw new NotFoundException("Transaction not found");
+        }
+        bool isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(transaction.HostelId, CurrentUserID);
+        if (!isManagedByCurrentUser)
+        {
+            throw new ForbiddenException("Cannot access the request");
+        }
+        transaction.IsDeleted = true;
+        await _transactionRepository.UpdateAsync(transaction);
+        return Ok();
+    }
+
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{notiId}")]
     public async Task<IActionResult> ReadNotificationAsync([FromRoute] Guid notiId)
@@ -155,7 +147,18 @@ public class NotificationsController : BaseRestController
         {
             throw new NotFoundException("Not found notification");
         }
-        //noti.IsUnread = false;
+
+        if (noti.NotificationStage == NotificationStage.Sent)
+        {
+            throw new BadRequestException("Cannot access");
+        }
+
+        bool isCurrentUserRentTheRoom = await _authorServices.IsCurrentUserRentTheRoom(noti.RoomId, CurrentUserID);
+        if (!isCurrentUserRentTheRoom)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        noti.IsUnread = false;
         await _notificationsRepository.UpdateAsync(noti);
         return Ok(noti);
     }
@@ -168,6 +171,17 @@ public class NotificationsController : BaseRestController
         if (noti == null)
         {
             throw new NotFoundException("Not found notification");
+        }
+
+        if (noti.NotificationStage == NotificationStage.Sent)
+        {
+            throw new BadRequestException("Cannot access");
+        }
+
+        bool isCurrentUserRentTheRoom = await _authorServices.IsCurrentUserRentTheRoom(noti.RoomId, CurrentUserID);
+        if (!isCurrentUserRentTheRoom)
+        {
+            throw new ForbiddenException("Forbidden");
         }
         noti.IsDeleted = true;
         await _notificationsRepository.UpdateAsync(noti);

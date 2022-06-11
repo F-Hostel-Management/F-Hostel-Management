@@ -35,6 +35,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return _entity;
     }
 
+    public virtual async Task<T> DeleteSoftAsync(Guid id)
+    {
+        T _entity = await FindByIdAsync(id);
+        if (_entity == null)
+        {
+            return null;
+        }
+        _entity.IsDeleted = true;
+        await UpdateAsync(_entity);
+        return _entity;
+    }
+
     public virtual async Task<T> FindByIdAsync(Guid id, params string[] navigationProperties)
     {
         var query = ApplyNavigation(navigationProperties);
@@ -76,6 +88,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
         return dbSet.AsQueryable().AsNoTracking().FirstOrDefaultAsync(predicate);
+    }
+    public Task<T> FirstOrDefaultTrackingAsync(Expression<Func<T, bool>> predicate)
+    {
+        return dbSet.AsQueryable().FirstOrDefaultAsync(predicate);
     }
 
     public async Task<long> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> sumExpression)

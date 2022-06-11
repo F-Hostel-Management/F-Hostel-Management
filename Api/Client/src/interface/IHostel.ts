@@ -18,9 +18,7 @@ export interface IHostel {
 export interface IHostelValues {
     address?: string
     name?: string
-    numOfRooms?: number
-    hostelCategoryId?: string
     ownerId?: string
     imgPath?: string
-    image?: any
+    image?: File
 }

@@ -9,9 +9,14 @@ import { IStepper } from '../../interface/IStepper'
 interface IStepByStepProps {
     steps: IStepper[]
     handleCloseDialog: () => void
+    finishedStep?: any
 }
 
-const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
+const StepByStep: FC<IStepByStepProps> = ({
+    steps,
+    handleCloseDialog,
+    finishedStep,
+}) => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [completed, setCompleted] = React.useState<{
         [k: number]: boolean
@@ -64,7 +69,9 @@ const StepByStep: FC<IStepByStepProps> = ({ steps, handleCloseDialog }) => {
                                 textAlign: 'center',
                             }}
                         >
-                            All steps completed - you&apos;re finished
+                            {finishedStep
+                                ? finishedStep
+                                : ' All steps completed - you&apos;re finished'}
                         </Typography>
                         <Box
                             sx={{

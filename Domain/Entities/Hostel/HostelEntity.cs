@@ -40,4 +40,5 @@ public class HostelEntity : BaseEntity
 
     // 1 user M trans notifications 1 hostel
     public virtual ICollection<NotificationTransaction> NotificationTransactions { get; set; }
+
 }

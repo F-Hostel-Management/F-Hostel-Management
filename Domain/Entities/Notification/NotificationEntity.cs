@@ -1,5 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Entities.Room;
+using Domain.Enums;
+using Domain.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,7 +17,15 @@ public class NotificationEntity : BaseEntity
     public string Content { get; set; }
     public string Type { get; set; }
     public bool IsUnread { get; set; } = true;
-    public bool IsSent { get; set; }
+    [Column("IsSent")]
+    public string NotificationStageString
+    {
+        get { return NotificationStage.ToString(); }
+        private set { NotificationStage = value.ParseEnum<NotificationStage>(); }
+    }
+
+    [NotMapped]
+    public NotificationStage NotificationStage { get; set; }
 
     /*navigation props*/
 

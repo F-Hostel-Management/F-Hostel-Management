@@ -89,8 +89,6 @@ public class UserEntity : BaseEntity
     public virtual ICollection<CommitmentEntity> TenantCommitments { get; set; }
     public virtual ICollection<CommitmentEntity> OwnerCommitments { get; set; }
 
-
     // 1 user M trans notifications 1 hostel
     public virtual ICollection<NotificationTransaction> NotificationTransactions { get; set; }
-
 }

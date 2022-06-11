@@ -1,16 +1,15 @@
 import * as React from 'react'
 
 import Greeting from '../components/Greeting'
-import HostelCard from '../components/HostelCard'
-import AddCircleIcon from '@mui/icons-material/AddCircle'
-import DescriptionIcon from '@mui/icons-material/Description'
+import HostelCard from '../components/Card/HostelCard'
+import { AddCircle, Description } from '@mui/icons-material'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
 import { ERole } from '../../../utils/enums'
 import { useDialog } from '../../../hooks/useDialog'
 import CreateCommitmentDialog from '../../Commitments/components/CreateCommitmentDialog'
-import CreateHostelDialog from '../components/CreateHostelDialog'
+import CreateHostelDialog from '../components/Dialog/CreateHostelDialog'
 import { IHostel } from '../../../interface/IHostel'
 
 interface IOwnerHomeProps {
@@ -32,7 +31,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
                     <Button
                         variant="outlined"
                         color="primary"
-                        startIcon={<DescriptionIcon />}
+                        startIcon={<Description />}
                         onClick={handleOpenCreateCommit}
                     >
                         CREATE COMMITMENT
@@ -41,7 +40,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
                         <Button
                             variant="contained"
                             color="primary"
-                            startIcon={<AddCircleIcon />}
+                            startIcon={<AddCircle />}
                             onClick={handleOpenCreateHostel}
                         >
                             CREATE HOSTEL

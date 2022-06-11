@@ -9,22 +9,16 @@ interface IRoomStatusProps {
 const RoomStatus: React.FunctionComponent<IRoomStatusProps> = ({ rowData }) => {
     let color = 'default'
     switch (rowData?.status) {
-        case Status.Finished: {
+        case Status.Rented: {
             color = 'warning'
             break
         }
-        case Status.Renting: {
+        case Status.Available: {
             color = 'green'
             break
         }
     }
-    return (
-        <Chip
-            label={Status[rowData?.status]}
-            color={color}
-            variant="outlined"
-        />
-    )
+    return <Chip label={rowData?.status} color={color} variant="outlined" />
 }
 
 export default RoomStatus
