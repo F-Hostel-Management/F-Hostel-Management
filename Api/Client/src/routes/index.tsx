@@ -2,7 +2,6 @@ import DefaultLayout from '../components/Layout/DefaultLayout'
 import HomeLayout from '../components/Layout/HomeLayout'
 import { IRoute } from '../interface/IRoute'
 
-import About from '../pages/About'
 import Commitments from '../pages/Commitments'
 import Dashboard from '../pages/Dashboard'
 import Home from '../pages/Home'
@@ -13,12 +12,6 @@ import Rooms from '../pages/Rooms'
 import Facilities from '../pages/Facilities'
 
 const publicRoutes: IRoute[] = [
-    {
-        path: '/about',
-        component: About,
-        name: 'About',
-        layout: null,
-    },
     {
         path: '/login',
         component: Login,
