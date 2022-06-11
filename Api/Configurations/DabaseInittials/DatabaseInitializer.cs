@@ -21,7 +21,7 @@ public static class DatabaseInitializer
 
         await dbContext.FeedHostels();
 
-        await dbContext.FeedRoomTypes();
+        //await dbContext.FeedRoomTypes();
 
         await dbContext.FeedRooms();
 
@@ -73,7 +73,7 @@ public static class DatabaseInitializer
         }
         await dbContext.SaveChangesAsync();
     }
-    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
+/*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
     {
         if (dbContext.RoomTypes.Any()) return;
 
@@ -97,7 +97,7 @@ public static class DatabaseInitializer
             await dbContext.RoomTypes.AddAsync(roomType);
         }
         await dbContext.SaveChangesAsync();
-    }
+    }*/
 
     public static async Task FeedHostels(this ApplicationDbContext dbContext)
     {
@@ -146,7 +146,7 @@ public static class DatabaseInitializer
 
         dynamic rooms = SeedingServices.LoadJson("ROOMS_MOCK_DATA.json");
         var hostels = dbContext.Hostels.ToArray();
-        var _roomTypes = dbContext.RoomTypes.ToArray();
+        //var _roomTypes = dbContext.RoomTypes.ToArray();
         int roomLength = rooms.Count;
         for (int i = 0; i < 20; i++)
         {
@@ -163,7 +163,8 @@ public static class DatabaseInitializer
                     NumOfDoors = mockRoom.NumOfDoors,
                     NumOfWCs = mockRoom.NumOfWCs,
                     NumOfWindows = mockRoom.NumOfWindows,
-                    RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
+                    NumOfBedRooms = _rand.Next(5),
+                    //RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
                     Hostel = hostels[_rand.Next(hostels.Length)],
                     RoomStatus = (RoomStatus)1,
                     MaximumPeople = _rand.Next(2, 10)
