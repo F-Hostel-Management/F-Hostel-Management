@@ -1,6 +1,6 @@
 import { Chip } from '@mui/material'
 import * as React from 'react'
-import { EInvoiceStatus as Status } from '../../../utils/enums'
+import { EInvoiceStatus as Status } from '../../../../utils/enums'
 
 interface IInvoiceStatusProps {
     rowData: any
@@ -24,9 +24,7 @@ const InvoiceStatus: React.FunctionComponent<IInvoiceStatusProps> = ({
             break
         }
     }
-    return (
-        <Chip label={Status[rowData?.status]} color={color} variant="filled" />
-    )
+    return <Chip label={rowData?.status} color={color} variant="filled" />
 }
 
 export default InvoiceStatus

@@ -4,7 +4,7 @@ import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
 import { IInvoice } from '../../interface/IInvoice'
 import { ERole } from '../../utils/enums'
-import InvoiceStatus from './InvoiceStatus'
+import InvoiceStatus from './components/InvoiceStatus'
 
 interface IInvoicesProps {}
 
@@ -27,7 +27,7 @@ const Invoices: FC<IInvoicesProps> = () => {
         createColumn('area', 'Area', 100),
         createColumn('price', 'Price', 120),
         renderCell('status', 'Status', 130, InvoiceStatus),
-        renderCell('actions', 'Actions', 130, ActionButtons),
+        // renderCell('actions', 'Actions', 130, ActionButtons),
     ]
 
     useEffect(() => {
