@@ -5,6 +5,7 @@ using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
 using Domain.Entities;
+using Domain.Entities.Commitment;
 using Domain.Entities.Notification;
 using Domain.Entities.Room;
 using Domain.Enums;
@@ -17,25 +18,22 @@ public class NotificationsController : BaseRestController
 {
     private readonly IGenericRepository<NotificationEntity> _notificationsRepository;
     private readonly IGenericRepository<NotificationTransaction> _transactionRepository;
-    private readonly IGenericRepository<HostelEntity> _hostelRepository;
-    private readonly IGenericRepository<RoomEntity> _roomRepository;
+    private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
     private readonly IAuthorizationServices _authorServices;
     private readonly HandleNotificationRequest _reqHandler;
 
     public NotificationsController
         (IGenericRepository<NotificationEntity> notificationsRepository,
         IGenericRepository<NotificationTransaction> transactionRepository,
-        IGenericRepository<HostelEntity> hostelRepository,
-        IGenericRepository<RoomEntity> roomRepository,
+        IGenericRepository<CommitmentEntity> commitmentRepository,
         IAuthorizationServices authorServices,
         HandleNotificationRequest reqHandler)
     {
         _notificationsRepository = notificationsRepository;
+        _transactionRepository = transactionRepository;
+        _commitmentRepository = commitmentRepository;
         _authorServices = authorServices;
         _reqHandler = reqHandler;
-        _transactionRepository = transactionRepository;
-        _hostelRepository = hostelRepository;
-        _roomRepository = roomRepository;
     }
 
     /// <summary>
@@ -147,13 +145,22 @@ public class NotificationsController : BaseRestController
             throw new NotFoundException("Not found notification");
         }
 
-        if (noti.NotificationStage == NotificationStage.Sent)
+        if (noti.NotificationStage != NotificationStage.Sent)
         {
             throw new BadRequestException("Cannot access");
         }
 
-        bool isCurrentUserRentTheRoom = await _authorServices.IsCurrentUserRentTheRoom(noti.RoomId, CurrentUserID);
-        if (!isCurrentUserRentTheRoom)
+        var commitments = (await _commitmentRepository.WhereAsync(c =>
+           c.RoomId.Equals(noti.RoomId))).OrderByDescending(com => com.EndDate);
+
+        if (!commitments.Any())
+        {
+            throw new BadRequestException("Cannot access");
+        }
+        var currentCommitment = commitments.First();
+
+        bool isCurrentUserRentingTheRoom = await _authorServices.IsCurrentUserRentingTheRoom(currentCommitment, CurrentUserID);
+        if (!isCurrentUserRentingTheRoom)
         {
             throw new ForbiddenException("Forbidden");
         }
@@ -172,18 +179,36 @@ public class NotificationsController : BaseRestController
             throw new NotFoundException("Not found notification");
         }
 
-        if (noti.NotificationStage == NotificationStage.Sent)
+        if (noti.NotificationStage != NotificationStage.Sent)
         {
             throw new BadRequestException("Cannot access");
         }
 
-        bool isCurrentUserRentTheRoom = await _authorServices.IsCurrentUserRentTheRoom(noti.RoomId, CurrentUserID);
-        if (!isCurrentUserRentTheRoom)
+        var commitments = (await _commitmentRepository.WhereAsync(c =>
+            c.RoomId.Equals(noti.RoomId))).OrderByDescending(com => com.EndDate);
+
+        if (!commitments.Any())
+        {
+            throw new BadRequestException("Cannot access");
+        }
+        var currentCommitment = commitments.First();
+
+        bool isCurrentUserRentingTheRoom = await _authorServices.IsCurrentUserRentingTheRoom(currentCommitment, CurrentUserID);
+        if (!isCurrentUserRentingTheRoom)
         {
             throw new ForbiddenException("Forbidden");
         }
         noti.IsDeleted = true;
         await _notificationsRepository.UpdateAsync(noti);
         return Ok();
+    }
+
+    [AllowAnonymous]
+    [HttpGet("test/{roomId}")]
+    public async Task<IActionResult> GetTest(Guid roomId)
+    {
+        var commitments = (await _commitmentRepository.WhereAsync(c =>
+            c.RoomId.Equals(roomId))).OrderByDescending(com => com.EndDate).Select(com => com.EndDate);
+        return Ok(commitments);
     }
 }

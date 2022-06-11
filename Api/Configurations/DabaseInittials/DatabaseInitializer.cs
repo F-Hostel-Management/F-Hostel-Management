@@ -190,23 +190,24 @@ public static class DatabaseInitializer
             var room = rooms[_rand.Next(rooms.Length)];
             UserEntity owner = owners.FirstOrDefault(owner => owner.Id.Equals(dbContext.Hostels.FirstOrDefault(hostel => hostel.Id.Equals(room.HostelId)).OwnerId));
             // create commitment
-            await dbContext.Commitments.AddAsync(
-                new CommitmentEntity()
-                {
-                    Price = _rand.Next(3000, 4000),
-                    Tenant = tenant,
-                    Owner = owner,
-                    Room = room,
-                    HostelId = room.HostelId,
-                    CreatedDate = DateTime.Now,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
-                    CommitmentStatus = (CommitmentStatus)2,
-                    DateOverdue = _rand.Next(1, 6),
-                    Compensation = _rand.Next(3000, 4000),
-                    PaymentDate = _rand.Next(32),
-                    CommitmentCode = "DTN" + code++,
-                }) ;
+            CommitmentEntity com = new ()
+            {
+                Price = _rand.Next(3000, 4000),
+                Tenant = tenant,
+                Owner = owner,
+                Room = room,
+                HostelId = room.HostelId,
+                CreatedDate = DateTime.Now,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
+                CommitmentStatus = (CommitmentStatus)2,
+                DateOverdue = _rand.Next(1, 6),
+                Compensation = _rand.Next(3000, 4000),
+                PaymentDate = _rand.Next(32),
+                CommitmentCode = "DTN" + code++,
+            };
+            await dbContext.Commitments.AddAsync(com);
+                
 
             // tenant into room
             await dbContext.RoomTenants.AddAsync(
@@ -214,6 +215,7 @@ public static class DatabaseInitializer
                 {
                     TenantId = tenant.Id,
                     RoomId = room.Id,
+                    CommitmentId = com.Id
                 });
 
             // update room status

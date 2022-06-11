@@ -38,11 +38,15 @@ public class AuthorizationServices : IAuthorizationServices
         throw new NotImplementedException();
     }
 
-    public async Task<bool> IsCurrentUserRentTheRoom(Guid roomId, Guid userId)
+    public async Task<bool> IsCurrentUserRentingTheRoom(CommitmentEntity commitment, Guid userId)
     {
-        var res = await _roomTenantRepository.WhereAsync(rt =>
-         rt.RoomId.Equals(roomId) && rt.TenantId.Equals(userId));
-        return res.Any();
+        var tenantInCommitment = await _roomTenantRepository.FirstOrDefaultAsync(rt =>
+        rt.TenantId.Equals(userId) && rt.CommitmentId.Equals(commitment.Id));
+        if (tenantInCommitment == null)
+        {
+            return false;
+        }
+        return this.IsCommitmentStillValid(commitment);
     }
 
     public async Task<bool> IsHostelManagedByCurrentUser(Guid hostelId, Guid userId)
@@ -102,5 +106,11 @@ public class AuthorizationServices : IAuthorizationServices
             return null;
         }
         return room;
+    }
+
+    public bool IsCommitmentStillValid(CommitmentEntity commitment)
+    {
+        double countLess = commitment.EndDate.Subtract(DateTime.Now).TotalMinutes;
+        return countLess > 0;
     }
 }

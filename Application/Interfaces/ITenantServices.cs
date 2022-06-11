@@ -5,5 +5,5 @@ namespace Application.Interfaces;
 
 public interface ITenantServices
 {
-    Task GetIntoRoom(Guid roomId, Guid tenantId);
+    Task GetIntoRoom(CommitmentEntity commitment, Guid tenantId);
 }

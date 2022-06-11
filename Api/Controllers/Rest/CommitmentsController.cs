@@ -167,7 +167,7 @@ public class CommitmentsController : BaseRestController
         await _commitmentServices.ActivatedCommitment(com, CurrentUserID);
 
         // get into room
-       await _tenantServices.GetIntoRoom(com.RoomId, CurrentUserID);
+       await _tenantServices.GetIntoRoom(com, CurrentUserID);
         return Ok(com);
     }
 
