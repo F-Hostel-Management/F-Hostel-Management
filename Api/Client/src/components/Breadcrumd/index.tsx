@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { useLocation } from 'react-router-dom'
 
-import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import { NavigateNext } from '@mui/icons-material'
 import { Breadcrumbs, Link, Stack } from '@mui/material'
 
 import { pathNames as pathNameLabels } from '../../utils/pathName'
@@ -47,7 +47,7 @@ const Breadcrumb: FC<IBreadcrumbProps> = () => {
             <Stack spacing={2}>
                 <Breadcrumbs
                     separator={
-                        <NavigateNextIcon
+                        <NavigateNext
                             fontSize="small"
                             style={{ marginTop: '4px' }}
                         />

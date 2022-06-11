@@ -6,8 +6,7 @@ import {
     Toolbar,
     Typography,
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import CloseIcon from '@mui/icons-material/Close'
+import { Menu, Close } from '@mui/icons-material'
 import * as React from 'react'
 import './styles.css'
 import { Link } from 'react-scroll'
@@ -92,7 +91,7 @@ export const HeaderLandingPage: React.FunctionComponent<
                                 onClick={handleClick}
                                 color="inherit"
                             >
-                                <CloseIcon />
+                                <Close />
                             </IconButton>
                         ) : (
                             <IconButton
@@ -103,7 +102,7 @@ export const HeaderLandingPage: React.FunctionComponent<
                                 onClick={handleClick}
                                 color="inherit"
                             >
-                                <MenuIcon />
+                                <Menu />
                             </IconButton>
                         )}
 
