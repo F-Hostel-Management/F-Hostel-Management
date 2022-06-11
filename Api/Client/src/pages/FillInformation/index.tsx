@@ -27,12 +27,10 @@ import * as Styled from './styles'
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
-import { useNavigate } from 'react-router-dom'
 import { IFirstTimeBody, IInformation } from './interfaces'
 import { GENDERS, ROLES, STEPS } from './constants'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../stores/reduxStore'
 import { doGetProfile } from '../../actions/doGetProfile'
+import { useRouter } from '../../hooks/routerHook'
 
 // Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
@@ -641,7 +639,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const [activeStep, setActiveStep] = React.useState(0)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
-    const navigate = useNavigate()
+    const { navigateWithRedirect } = useRouter()
 
     const isStepSkipped = (step: number) => {
         return skipped.has(step)
@@ -718,18 +716,11 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         setActiveStep(0)
     }
 
-    const isAuthenticated = useSelector(
-        (state: AppState) => state.auth.isAuthenticated
-    )
-
     React.useEffect(() => {
         ;(async () => {
-            if (isAuthenticated) return navigate('/home')
-
             const firebaseToken =
                 await FirebaseService.getInstance().getFirebaseToken()
-            console.log(firebaseToken)
-            if (!firebaseToken) return navigate('/login')
+            if (!firebaseToken) return navigateWithRedirect('/login')
         })()
     }, [])
 
