@@ -3,13 +3,12 @@ import React, { ChangeEvent, FC, Fragment, useState } from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { getJoiningCode } from '../../../../services/CommitmentService'
 import QrCodeGenerate from '../QrCodeGenerate'
-const baseUrl = import.meta.env.PUBLIC_FRONTEND
 interface ICommitmentQrCodeProps {
     commitmentId: string
 }
 
 const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
-    const [timeSpan, setTimeSpan] = useState<number>(0)
+    const [timeSpan, setTimeSpan] = useState<number | null>(null)
     const [code, setCode] = useState<any>(null)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +39,7 @@ const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
                     <InputField
                         label="Time Span"
                         name="timeSpan"
-                        value={timeSpan || ''}
+                        value={timeSpan || null}
                         onChange={handleChange}
                         type="number"
                         required={true}
