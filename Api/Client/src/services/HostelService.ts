@@ -43,6 +43,7 @@ const getRoomOfHostel = async (hostelId: string) => {
                 'length',
                 'width',
                 'height',
+                'status',
                 'maximumPeople'
             )
         )

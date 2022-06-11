@@ -28,7 +28,8 @@ const getAllCommitmentOfHostel = async (
             'status',
             'commitmentScaffoldingId',
             'joiningCode',
-            'isDeleted'
+            'paymentDate',
+            'price'
         )
         .expand('manager', (e) => e.select('id', 'name'))
         .expand('tenant', (e) => e.select('id', 'name'))
@@ -70,6 +71,12 @@ const createCommitment = async (data = {}) => {
     return result
 }
 
+const updateCommitment = async (id = '', data = {}) => {
+    const result = await RestCaller.patch(`Commitments/${id}`, data)
+    console.log('updateCommitment: ', result)
+    return result
+}
+
 const approveCommitment = async (data = {}) => {
     const response = await RestCaller.patch(
         'Commitments/owner-approved-commitment/status',
@@ -107,6 +114,7 @@ export {
     getNumberCommitmentOfHostel,
     getCommitmentDetails,
     createCommitment,
+    updateCommitment,
     approveCommitment,
     getJoiningCode,
     activateCommitment,
