@@ -3,7 +3,6 @@ using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using Application.Utilities;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Notification;
@@ -55,19 +54,9 @@ public class NotificationsController : BaseRestController
         {
             throw new ArgumentException();
         }
-        HostelEntity hostel = await _hostelRepository.FindByIdAsync(req.HostelId);
-        if (hostel is null)
-        {
-            throw new NotFoundException("Hostel not found");
-        }
-
-        bool isSent = true;
-        if (req.Stage == CreateNotificationRequestStage.Cancel)
-        {
-            isSent = false;
-        }
+        // validation req
+        await _authorServices.RoomsInAHostelThatManageByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
         IList<NotificationEntity> notifications;
-
 
         if (req.TransactionId is null)
         {
@@ -78,8 +67,8 @@ public class NotificationsController : BaseRestController
             };
 
             req.TransactionId = transaction.Id;
-            notifications = await _reqHandler.GetValidListFromRequest(req, CurrentUserID, isSent);
-            transaction.HostelId = hostel.Id;
+            notifications = await _reqHandler.GetValidListFromRequest(req, Mapper);
+            transaction.HostelId = req.HostelId;
             await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);
         }
@@ -91,11 +80,11 @@ public class NotificationsController : BaseRestController
             {
                 throw new NotFoundException("Transcantion not found");
             }
-            if (!transaction.HostelId.Equals(hostel.Id))
+            if (!transaction.HostelId.Equals(req.HostelId))
             {
                 throw new BadRequestException("Cannot access");
             }
-            notifications = await _reqHandler.GetUnsentValidListFromRepoAndUpdate(req, isSent, CurrentUserID, Mapper);
+            notifications = await _reqHandler.GetUnsentValidListFromRepoAndUpdate(req, Mapper);
             await _notificationsRepository.UpdateRangeAsync(notifications);
         }
         return Ok();
@@ -158,7 +147,7 @@ public class NotificationsController : BaseRestController
             throw new NotFoundException("Not found notification");
         }
 
-        if (!noti.IsSent)
+        if (noti.NotificationStage == NotificationStage.Sent)
         {
             throw new BadRequestException("Cannot access");
         }
@@ -183,7 +172,7 @@ public class NotificationsController : BaseRestController
             throw new NotFoundException("Not found notification");
         }
 
-        if (!noti.IsSent)
+        if (noti.NotificationStage == NotificationStage.Sent)
         {
             throw new BadRequestException("Cannot access");
         }

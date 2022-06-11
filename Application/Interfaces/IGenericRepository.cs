@@ -1,10 +1,5 @@
 ﻿using Domain.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Interfaces.IRepository;
 public interface IGenericRepository<T> where T : BaseEntity
@@ -18,6 +13,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<T> DeleteAsync(Guid id);
     Task<T> DeleteSoftAsync(Guid id);
     Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
+    Task<T> FirstOrDefaultTrackingAsync(Expression<Func<T, bool>> predicate);
     Task UpdateRangeAsync(IEnumerable<T> entities);
     Task<long> SumAsync(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> sumExpression);
 }

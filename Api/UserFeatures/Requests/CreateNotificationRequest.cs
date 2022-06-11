@@ -18,5 +18,5 @@ public class CreateNotificationRequest : IMapTo<NotificationEntity>
     public Guid[] RoomIds { get; set; }
     [Required]
     [Range(0, 1)]
-    public CreateNotificationRequestStage Stage { get; set; }
+    public NotificationStage NotificationStage { get; set; }
 }
