@@ -53,7 +53,7 @@ public class HandleNotificationRequest
         }
         foreach (Guid i in req.RoomIds)
         {
-            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultTrackingAsync(noti =>
+            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultAsync(noti =>
                noti.TransactionId.Equals(req.TransactionId) && noti.RoomId.Equals(i));
             // noti has been send
             if (uEntity.NotificationStage == NotificationStage.Sent)

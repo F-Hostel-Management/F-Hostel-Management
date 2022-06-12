@@ -106,9 +106,4 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         _context.UpdateRange(entities);
         await _context.SaveChangesAsync();
     }
-
-    public Task<T> FirstOrDefaultTrackingAsync(Expression<Func<T, bool>> predicate)
-    {
-        return dbSet.AsQueryable().FirstOrDefaultAsync(predicate);
-    }
 }
