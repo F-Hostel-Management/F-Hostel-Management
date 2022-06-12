@@ -10,6 +10,7 @@ public class InvoiceEntity : BaseEntity
     public string InvoiceCode { get; set; }
     public double Price { get; set; }
     public DateTime Date { get; set; }
+    public DateTime DueDate { get; set; }
     public string Content { get; set; }
     public string InvoiceType { get; set; }
 
