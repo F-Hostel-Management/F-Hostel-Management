@@ -19,6 +19,21 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
     review = false,
 }) => {
     const roomList = ['701', '702', '703', '704', '705']
+
+    const { type, roomName, cron, quantity, unitPrice, price } = values
+    React.useEffect(() => {
+        setValues({
+            ...values,
+            type: type,
+            roomName: roomName,
+            cron: cron,
+            quantity: type === 'Service' ? 1 : quantity,
+            unitPrice: type === 'Service' ? 0 : unitPrice,
+            price: type === 'Service' ? price : quantity * unitPrice,
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [type, roomName, cron, quantity, unitPrice, price])
+
     const fields: IField[] = [
         {
             label: 'Due Date',
@@ -39,23 +54,11 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             label: 'Detail',
             name: 'content',
             type: 'text',
-            required: true,
+            required: type === 'Service' ? true : false,
             multiline: true,
         },
     ]
-    const { type, roomName, cron, quantity, unitPrice, price } = values
-    React.useEffect(() => {
-        setValues({
-            ...values,
-            type: type,
-            roomName: roomName,
-            cron: cron,
-            quantity: type === 'Service' ? 1 : quantity,
-            unitPrice: type === 'Service' ? 0 : unitPrice,
-            price: type === 'Service' ? price : quantity * unitPrice,
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type, roomName, cron, quantity, unitPrice, price])
+
     console.log('price: ' + price)
     return (
         <Styled.FormContainer>
