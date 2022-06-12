@@ -5,7 +5,7 @@ using AutoMapper;
 using Domain.Entities.Notification;
 using Domain.Enums;
 
-namespace Api.Controllers.Rest.Notification;
+namespace Api.Services;
 
 public class HandleNotificationRequest
 {
@@ -17,7 +17,7 @@ public class HandleNotificationRequest
         _notificationsRepository = notificationsRepository;
     }
 
-    public async Task<IList<NotificationEntity>> GetValidListFromRequest
+    public IList<NotificationEntity> GetValidListFromRequest
         (CreateNotificationRequest req, IMapper Mapper)
     {
         IList<NotificationEntity> notifications = new List<NotificationEntity>();

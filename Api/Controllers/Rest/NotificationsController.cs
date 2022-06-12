@@ -1,4 +1,4 @@
-﻿using Api.Controllers.Rest.Notification;
+﻿using Api.Services;
 using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
@@ -67,7 +67,7 @@ public class NotificationsController : BaseRestController
             };
 
             req.TransactionId = transaction.Id;
-            notifications = await _reqHandler.GetValidListFromRequest(req, Mapper);
+            notifications = _reqHandler.GetValidListFromRequest(req, Mapper);
             transaction.HostelId = req.HostelId;
             await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);
