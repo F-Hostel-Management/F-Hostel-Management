@@ -22,7 +22,7 @@ public class AuthorizationServices : IAuthorizationServices
     public AuthorizationServices(
         IGenericRepository<HostelEntity> hostelRepository,
         IGenericRepository<HostelManagement> hostelManagementRepository,
-        IGenericRepository<RoomEntity> roomRepository, 
+        IGenericRepository<RoomEntity> roomRepository,
         IGenericRepository<CommitmentEntity> commitmentRepository,
         IGenericRepository<RoomTenant> roomTenantRepository)
     {
@@ -76,7 +76,23 @@ public class AuthorizationServices : IAuthorizationServices
         return await this.IsHostelManagedByCurrentUser(hostelId, userId);
     }
 
-    public async Task<RoomEntity> RoomThatManageByCurrentUser(Guid roomId, Guid userId)
+    public async Task VerifiedRoomsInAHostelThatManagedByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId)
+    {
+        foreach (Guid i in roomIds)
+        {
+            RoomEntity room = await this.GetRoomThatManagedByCurrentUser(i, userId);
+            if (room is null)
+            {
+                throw new ForbiddenException("Forbidden");
+            }
+            if (!room.HostelId.Equals(hostelId))
+            {
+                throw new BadRequestException("These rooms are not the same a hostel");
+            }
+        }
+    }
+
+    public async Task<RoomEntity> GetRoomThatManagedByCurrentUser(Guid roomId, Guid userId)
     {
         var room = await _roomRepository.FindByIdAsync(roomId);
         if (room == null) throw new NotFoundException($"Room not found");

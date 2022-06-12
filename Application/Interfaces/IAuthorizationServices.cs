@@ -11,5 +11,7 @@ public interface IAuthorizationServices
     Task<bool> IsCommitmentManageByCurrentUser(Guid comId, Guid userId);
     //Task<bool> IsFacilityManageByCurrentUser(Guid hostelId, Guid userId),
     Task<bool> IsCurrentUserRentTheRoom(Guid roomId, Guid userId);
-    Task<RoomEntity> RoomThatManageByCurrentUser(Guid roomId, Guid userId);
+    Task<RoomEntity> GetRoomThatManagedByCurrentUser(Guid roomId, Guid userId);
+    Task VerifiedRoomsInAHostelThatManagedByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId);
+
 }

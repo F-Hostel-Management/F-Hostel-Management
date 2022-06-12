@@ -48,20 +48,17 @@ public class RoomsController : BaseRestController
             return Forbid();
         }
 
-        if (req.Quantity == null || req.Quantity == 0)
-        {
-            req.Quantity = 1;
-        }
-
         if (req.RoomName == null)
         {
             req.RoomName = "Unnamed";
         }
 
-        List<RoomEntity> rooms = new List<RoomEntity>();
+        List<RoomEntity> rooms = new();
         while (req.Quantity > 0)
         {
-            rooms.Add(Mapper.Map<RoomEntity>(req));
+            var room = Mapper.Map<RoomEntity>(req);
+            room.RoomStatus = RoomStatus.Available;
+            rooms.Add(room);
             req.Quantity--;
         }
 
