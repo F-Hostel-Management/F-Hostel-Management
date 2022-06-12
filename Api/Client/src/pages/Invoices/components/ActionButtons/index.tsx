@@ -8,8 +8,9 @@ import { Edit, Delete, Description } from '@mui/icons-material'
 import { EInvoiceStatus as Status } from '../../../../utils/enums'
 import UpdateInvoiceDialog from '../UpdateInvoiceDialog'
 import InvoiceDetails from '../InvoiceDetails'
+import { IInvoice } from '../../../../interface/IInvoice'
 interface IActionButtonsProps {
-    rowData: any
+    rowData: IInvoice
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {

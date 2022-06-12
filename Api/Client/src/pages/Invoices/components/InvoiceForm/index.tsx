@@ -3,12 +3,16 @@ import * as React from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { InvoiceCron, InvoiceType } from '../../../../constants/Invoice'
 import { IField } from '../../../../interface/IField'
+import { IInvoice } from '../../../../interface/IInvoice'
 import * as Styled from './styles'
 
 interface IInvoiceFormProps {
-    values: any
-    setValues: any
-    handleInputChange: any
+    values: Record<string, any>
+    setValues: React.Dispatch<React.SetStateAction<IInvoice>>
+    handleInputChange: (
+        event: React.ChangeEvent<HTMLInputElement>,
+        isForce?: boolean
+    ) => void
     review?: boolean
 }
 
@@ -29,7 +33,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             cron: cron,
             quantity: type === 'Service' ? 1 : quantity,
             unitPrice: type === 'Service' ? 0 : unitPrice,
-            price: type === 'Service' ? price : quantity * unitPrice,
+            price:
+                type === 'Service'
+                    ? price
+                    : quantity && unitPrice
+                    ? quantity * unitPrice
+                    : price,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type, roomName, cron, quantity, unitPrice, price])

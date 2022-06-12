@@ -10,7 +10,7 @@ interface IInvoiceDetailsProps {
     openDialog: boolean
     handleOpenDialog: () => void
     handleCloseDialog: () => void
-    rowData: any
+    rowData: IInvoice
 }
 
 const InvoiceDetails: FC<IInvoiceDetailsProps> = ({

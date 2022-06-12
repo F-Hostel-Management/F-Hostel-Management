@@ -1,9 +1,10 @@
 import { Chip } from '@mui/material'
 import * as React from 'react'
+import { IInvoice } from '../../../../interface/IInvoice'
 import { EInvoiceStatus as Status } from '../../../../utils/enums'
 
 interface IInvoiceStatusProps {
-    rowData: any
+    rowData: IInvoice
 }
 
 const InvoiceStatus: React.FunctionComponent<IInvoiceStatusProps> = ({
