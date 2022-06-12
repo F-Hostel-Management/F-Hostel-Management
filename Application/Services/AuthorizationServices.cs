@@ -80,7 +80,7 @@ public class AuthorizationServices : IAuthorizationServices
     {
         foreach (Guid i in roomIds)
         {
-            RoomEntity room = await this.RoomThatManageByCurrentUser(i, userId);
+            RoomEntity room = await this.RoomThatManagedByCurrentUser(i, userId);
             if (room is null)
             {
                 throw new ForbiddenException("Forbidden");
@@ -92,7 +92,7 @@ public class AuthorizationServices : IAuthorizationServices
         }
     }
 
-    public async Task<RoomEntity> RoomThatManageByCurrentUser(Guid roomId, Guid userId)
+    public async Task<RoomEntity> RoomThatManagedByCurrentUser(Guid roomId, Guid userId)
     {
         var room = await _roomRepository.FindByIdAsync(roomId);
         if (room == null) throw new NotFoundException($"Room not found");
