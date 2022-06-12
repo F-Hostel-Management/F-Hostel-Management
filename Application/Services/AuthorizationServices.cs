@@ -76,7 +76,7 @@ public class AuthorizationServices : IAuthorizationServices
         return await this.IsHostelManagedByCurrentUser(hostelId, userId);
     }
 
-    public async Task RoomsInAHostelThatManageByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId)
+    public async Task VerifiedRoomsInAHostelThatManagedByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId)
     {
         foreach (Guid i in roomIds)
         {

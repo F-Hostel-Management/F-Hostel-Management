@@ -55,7 +55,7 @@ public class NotificationsController : BaseRestController
             throw new ArgumentException();
         }
         // validation req
-        await _authorServices.RoomsInAHostelThatManageByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
+        await _authorServices.VerifiedRoomsInAHostelThatManagedByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
         IList<NotificationEntity> notifications;
 
         if (req.TransactionId is null)
