@@ -9,24 +9,26 @@ interface IInvoiceFormProps {
     values: any
     setValues: any
     handleInputChange: any
+    review?: boolean
 }
 
 const InvoiceForm: React.FC<IInvoiceFormProps> = ({
     values,
     setValues,
     handleInputChange,
+    review = false,
 }) => {
     const roomList = ['701', '702', '703', '704', '705']
     const fields: IField[] = [
         {
-            label: 'Payment Term',
-            name: 'paymentTerm',
+            label: 'Due Date',
+            name: 'dueDate',
             type: 'date',
             required: true,
             multiline: false,
         },
         {
-            label: 'Price',
+            label: 'Amount',
             name: 'price',
             type: 'number',
             required: true,
@@ -41,11 +43,20 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             multiline: true,
         },
     ]
-    const { type, roomName, cron } = values
+    const { type, roomName, cron, quantity, unitPrice, price } = values
     React.useEffect(() => {
-        setValues({ ...values, type: type, roomName: roomName, cron: cron })
+        setValues({
+            ...values,
+            type: type,
+            roomName: roomName,
+            cron: cron,
+            quantity: type === 'Service' ? 1 : quantity,
+            unitPrice: type === 'Service' ? 0 : unitPrice,
+            price: type === 'Service' ? price : quantity * unitPrice,
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type])
+    }, [type, roomName, cron, quantity, unitPrice, price])
+    console.log('price: ' + price)
     return (
         <Styled.FormContainer>
             <Grid container>
@@ -58,6 +69,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                             required={true}
                             select
                             onChange={handleInputChange}
+                            InputProps={{
+                                readOnly: review,
+                            }}
                         >
                             {roomList.map((option, index) => (
                                 <MenuItem key={index} value={option}>
@@ -72,6 +86,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                             required={true}
                             select
                             onChange={handleInputChange}
+                            InputProps={{
+                                readOnly: review,
+                            }}
                         >
                             {InvoiceType.map((option, index) => (
                                 <MenuItem key={index} value={option.name}>
@@ -86,6 +103,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                             required={true}
                             select
                             onChange={handleInputChange}
+                            InputProps={{
+                                readOnly: review,
+                            }}
                         >
                             {InvoiceCron.map((option, index) => (
                                 <MenuItem key={index} value={option.name}>
@@ -105,12 +125,78 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                 onChange={handleInputChange}
                                 endAdornment={field.endAdornment}
                                 multiline={field.multiline}
+                                InputProps={{
+                                    readOnly: review,
+                                }}
                             />
                         ))}
                     </div>
                 </Styled.GridForm>
                 <Styled.GridForm item xs={12} md={6}>
                     <div style={{ width: '350px' }}>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <InputField
+                                    label="Quantity"
+                                    name="quantity"
+                                    value={quantity}
+                                    type="number"
+                                    required
+                                    disabled={type === 'Service' ? true : false}
+                                    onChange={handleInputChange}
+                                    sx={{
+                                        width: 140,
+                                        ml: 2,
+                                        mt: 3,
+                                        mb: 2,
+                                        '& .MuiInputLabel-root': {
+                                            fontSize: '1.6rem',
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '1.6rem',
+                                            height: '3rem',
+                                        },
+                                        '& .MuiInputAdornment-root > .MuiTypography-root':
+                                            {
+                                                fontSize: '1.3rem',
+                                            },
+                                    }}
+                                    InputProps={{
+                                        readOnly: review,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <InputField
+                                    label="Unit Price"
+                                    name="unitPrice"
+                                    value={unitPrice}
+                                    type="number"
+                                    required
+                                    disabled={type === 'Service' ? true : false}
+                                    onChange={handleInputChange}
+                                    sx={{
+                                        width: 140,
+                                        mt: 3,
+                                        mb: 2,
+                                        '& .MuiInputLabel-root': {
+                                            fontSize: '1.6rem',
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '1.6rem',
+                                            height: '3rem',
+                                        },
+                                        '& .MuiInputAdornment-root > .MuiTypography-root':
+                                            {
+                                                fontSize: '1.3rem',
+                                            },
+                                    }}
+                                    InputProps={{
+                                        readOnly: review,
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
                         {fields.slice(1, 3).map((field, index) => (
                             <InputField
                                 key={index}
@@ -123,7 +209,10 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                 onChange={handleInputChange}
                                 endAdornment={field.endAdornment}
                                 multiline={field.multiline}
-                                rows={field.multiline ? 6 : 1}
+                                rows={field.multiline ? 4 : 1}
+                                InputProps={{
+                                    readOnly: review,
+                                }}
                             />
                         ))}
                     </div>

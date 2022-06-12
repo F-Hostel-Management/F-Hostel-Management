@@ -28,7 +28,7 @@ const Invoices: FC<IInvoicesProps> = () => {
         createColumn('roomName', 'Room Name', 100),
         createColumn('type', 'Type', 100),
         createColumn('createDate', 'Create Date', 150),
-        createColumn('paymentTerm', 'Payment Term', 150),
+        createColumn('dueDate', 'Due Date', 150),
         createColumn('price', 'Price', 120),
         renderCell('status', 'Status', 130, InvoiceStatus),
         renderCell('actions', 'Actions', 150, ActionButtons),
@@ -47,7 +47,7 @@ const Invoices: FC<IInvoicesProps> = () => {
         <Fragment>
             <DataGridCustom
                 loading={loading}
-                title="All Facilities"
+                title="All Invoice"
                 rows={rows}
                 columns={columns}
                 pageSize={pageSize}
