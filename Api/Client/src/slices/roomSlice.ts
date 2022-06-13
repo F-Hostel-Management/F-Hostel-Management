@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IRoom } from '../interface/IRoom'
-import { getRoomOfHostel } from '../services/HostelService'
-import { countRoomOfHostel } from '../services/RoomService'
+import { countRoomOfHostel, getAllRoomOfHostel } from '../services/RoomService'
 
 interface IRoomState {
     roomList: IRoom[]
@@ -15,9 +14,10 @@ const initialState: IRoomState = {
 
 export const fetchRoomList = createAsyncThunk(
     'room/fetchRoomList',
-    async (hostelId: string) => {
+    async (params: any) => {
+        const { hostelId, pageSize, page } = params
         return {
-            roomList: await getRoomOfHostel(hostelId),
+            roomList: await getAllRoomOfHostel(hostelId, pageSize, page),
             numOfRoom: await countRoomOfHostel(hostelId),
         }
     }

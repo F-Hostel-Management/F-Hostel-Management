@@ -38,10 +38,10 @@ const Rooms: FC<IRoomsProps> = () => {
 
     useEffect(() => {
         setLoading(true)
-        const currentHostelId = getItem('currentHostelId')
-        dispatch(fetchRoomList(currentHostelId))
+        const hostelId = getItem('currentHostelId')
+        dispatch(fetchRoomList({ hostelId, pageSize, page }))
         setLoading(false)
-    }, [dispatch])
+    }, [dispatch, page, pageSize])
     return (
         <Fragment>
             <DataGridCustom
