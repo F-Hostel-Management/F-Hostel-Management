@@ -1,5 +1,6 @@
 ﻿using Api.UserFeatures.Requests;
 using Application.Interfaces;
+using Application.Interfaces.IRepository;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Commitment;
@@ -18,6 +19,7 @@ public class CommitmentsController : BaseRestController
     private readonly ITenantServices _tenantServices;
     private readonly IJoiningCodeServices _joiningCodeServices;
     private readonly IAuthorizationServices _authorServices;
+    private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
 
 
     public CommitmentsController(
@@ -26,7 +28,8 @@ public class CommitmentsController : BaseRestController
         IJoiningCodeServices joiningCodeServices,
         IRoomServices roomServices,
         ITenantServices tenantServices,
-        IAuthorizationServices authorServices)
+        IAuthorizationServices authorServices,
+        IGenericRepository<CommitmentEntity> commitmentRepository)
     {
         _tenantServices = tenantServices;
         _hostelServices = hostelServices;
@@ -34,6 +37,7 @@ public class CommitmentsController : BaseRestController
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
         _authorServices = authorServices;
+        _commitmentRepository = commitmentRepository;
     }
     /// <summary>
     /// owner || manager create a commitment of room |
@@ -139,7 +143,7 @@ public class CommitmentsController : BaseRestController
     {
         // validate joining code
         JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
-       _joiningCodeServices.ValidateJoiningCode(joiningCode);
+        _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
         CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
         return Ok(commitment);
@@ -158,7 +162,7 @@ public class CommitmentsController : BaseRestController
         // validate joining code
         JoiningCode joiningCode = await _joiningCodeServices.
             GetJoiningCode(req.SixDigitsJoiningCode);
-       _joiningCodeServices.ValidateJoiningCode(joiningCode);
+        _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
         CommitmentEntity com =
             await _joiningCodeServices.GetCommitment(joiningCode);
@@ -167,7 +171,7 @@ public class CommitmentsController : BaseRestController
         await _commitmentServices.ActivatedCommitment(com, CurrentUserID);
 
         // get into room
-       await _tenantServices.GetIntoRoom(com.RoomId, CurrentUserID);
+        await _tenantServices.GetIntoRoom(com, CurrentUserID);
         return Ok(com);
     }
 
@@ -191,4 +195,21 @@ public class CommitmentsController : BaseRestController
         return Ok();
     }
 
+    [Authorize(Roles = nameof(Role.Owner))]
+    [HttpDelete("{comId}")]
+    public async Task<IActionResult> DeleteCommitment([FromRoute] Guid comId)
+    {
+        var com = await _commitmentServices.GetCommitment(comId);
+        if (com.CommitmentStatus == CommitmentStatus.Active || com.CommitmentStatus == CommitmentStatus.Expired)
+        {
+            return BadRequest();
+        }
+        com.IsDeleted = true;
+        await _commitmentRepository.UpdateAsync(com);
+
+        RoomEntity room = await _roomServices.GetRoom(com.RoomId);
+        room.RoomStatus = RoomStatus.Available;
+
+        return Ok();
+    }
 }

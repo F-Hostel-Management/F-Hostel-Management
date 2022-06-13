@@ -8,8 +8,7 @@ import {
 import React, { FC, useRef, useState } from 'react'
 import QrCode from '../../../../components/QrCode'
 import * as Styled from './styles'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import DoneIcon from '@mui/icons-material/Done'
+import { ContentCopy, Done } from '@mui/icons-material'
 import BootstrapTooltip from '../../../../components/BootstrapTooltip'
 interface IQrCodeGenerateProps {
     code: number
@@ -55,10 +54,10 @@ const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
                             >
                                 {isCopied ? (
                                     <BootstrapTooltip title="Copied!">
-                                        <DoneIcon />
+                                        <Done />
                                     </BootstrapTooltip>
                                 ) : (
-                                    <ContentCopyIcon />
+                                    <ContentCopy />
                                 )}
                             </IconButton>
                         </InputAdornment>

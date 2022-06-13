@@ -30,16 +30,13 @@ public class RoomEntity : BaseEntity
     public int NumOfWindows { get; set; }
     public int NumOfDoors { get; set; }
     public int NumOfBathRooms { get; set; }
+    public int NumOfBedRooms { get; set; }
     public int NumOfWCs { get; set; }
     public double Area { get; set; }
     public double Length { get; set; }
     public double Width { get; set; }
     public double Height { get; set; }
     /*navigation props*/
-
-    // 1 type - M rooms
-    public Guid RoomTypeId { get; set; }
-    public RoomType RoomType { get; set; }
 
     // 1 hostel - M rooms
     public Guid HostelId { get; set; }

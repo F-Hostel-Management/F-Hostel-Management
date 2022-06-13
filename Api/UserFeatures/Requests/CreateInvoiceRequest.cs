@@ -14,6 +14,8 @@ namespace Api.UserFeatures.Requests
 
         [Required]
         public string Content { get; set; }
+        [Required]
+        public DateTime DueDate { get; set; }
 
     }
 }

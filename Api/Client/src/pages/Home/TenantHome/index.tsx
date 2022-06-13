@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import Greeting from '../components/Greeting'
 import RoomCard from '../components/Card/RoomCard'
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner'
+import { QrCodeScanner } from '@mui/icons-material'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
@@ -26,7 +26,7 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
                 <Button
                     variant="contained"
                     color="primary"
-                    startIcon={<QrCodeScannerIcon />}
+                    startIcon={<QrCodeScanner />}
                     className="hello"
                     onClick={handleOpenScanQr}
                 >

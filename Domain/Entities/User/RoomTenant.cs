@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,4 +15,6 @@ public class RoomTenant : BaseEntity
     [Column(Order = 2)]
     public Guid TenantId { get; set; }
     public UserEntity Tenant { get; set; }
+    public Guid CommitmentId { get; set; }
+    public CommitmentEntity Commitment { get; set; }
 }

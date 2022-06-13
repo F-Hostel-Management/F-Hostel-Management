@@ -26,3 +26,10 @@ export enum ERoomStatus {
     Available = 'Available',
     Rented = 'Rented',
 }
+
+export enum EInvoiceStatus {
+    Pending = 'Pending',
+    Unpaid = 'Unpaid',
+    Paid = 'Paid',
+    Overdue = 'Overdue',
+}

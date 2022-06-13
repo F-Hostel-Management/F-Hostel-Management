@@ -21,7 +21,7 @@ public static class DatabaseInitializer
 
         await dbContext.FeedHostels();
 
-        await dbContext.FeedRoomTypes();
+        //await dbContext.FeedRoomTypes();
 
         await dbContext.FeedRooms();
 
@@ -73,7 +73,7 @@ public static class DatabaseInitializer
         }
         await dbContext.SaveChangesAsync();
     }
-    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
+/*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
     {
         if (dbContext.RoomTypes.Any()) return;
 
@@ -97,7 +97,7 @@ public static class DatabaseInitializer
             await dbContext.RoomTypes.AddAsync(roomType);
         }
         await dbContext.SaveChangesAsync();
-    }
+    }*/
 
     public static async Task FeedHostels(this ApplicationDbContext dbContext)
     {
@@ -146,7 +146,7 @@ public static class DatabaseInitializer
 
         dynamic rooms = SeedingServices.LoadJson("ROOMS_MOCK_DATA.json");
         var hostels = dbContext.Hostels.ToArray();
-        var _roomTypes = dbContext.RoomTypes.ToArray();
+        //var _roomTypes = dbContext.RoomTypes.ToArray();
         int roomLength = rooms.Count;
         for (int i = 0; i < 20; i++)
         {
@@ -163,7 +163,8 @@ public static class DatabaseInitializer
                     NumOfDoors = mockRoom.NumOfDoors,
                     NumOfWCs = mockRoom.NumOfWCs,
                     NumOfWindows = mockRoom.NumOfWindows,
-                    RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
+                    NumOfBedRooms = _rand.Next(5),
+                    //RoomType = _roomTypes[_rand.Next(_roomTypes.Length)],
                     Hostel = hostels[_rand.Next(hostels.Length)],
                     RoomStatus = (RoomStatus)1,
                     MaximumPeople = _rand.Next(2, 10)
@@ -189,23 +190,24 @@ public static class DatabaseInitializer
             var room = rooms[_rand.Next(rooms.Length)];
             UserEntity owner = owners.FirstOrDefault(owner => owner.Id.Equals(dbContext.Hostels.FirstOrDefault(hostel => hostel.Id.Equals(room.HostelId)).OwnerId));
             // create commitment
-            await dbContext.Commitments.AddAsync(
-                new CommitmentEntity()
-                {
-                    Price = _rand.Next(3000, 4000),
-                    Tenant = tenant,
-                    Owner = owner,
-                    Room = room,
-                    HostelId = room.HostelId,
-                    CreatedDate = DateTime.Now,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
-                    CommitmentStatus = (CommitmentStatus)2,
-                    DateOverdue = _rand.Next(1, 6),
-                    Compensation = _rand.Next(3000, 4000),
-                    PaymentDate = _rand.Next(32),
-                    CommitmentCode = "DTN" + code++,
-                }) ;
+            CommitmentEntity com = new ()
+            {
+                Price = _rand.Next(3000, 4000),
+                Tenant = tenant,
+                Owner = owner,
+                Room = room,
+                HostelId = room.HostelId,
+                CreatedDate = DateTime.Now,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
+                CommitmentStatus = (CommitmentStatus)2,
+                DateOverdue = _rand.Next(1, 6),
+                Compensation = _rand.Next(3000, 4000),
+                PaymentDate = _rand.Next(32),
+                CommitmentCode = "DTN" + code++,
+            };
+            await dbContext.Commitments.AddAsync(com);
+                
 
             // tenant into room
             await dbContext.RoomTenants.AddAsync(
@@ -213,6 +215,7 @@ public static class DatabaseInitializer
                 {
                     TenantId = tenant.Id,
                     RoomId = room.Id,
+                    CommitmentId = com.Id
                 });
 
             // update room status

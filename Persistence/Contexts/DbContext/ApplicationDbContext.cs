@@ -12,7 +12,6 @@ using Domain.Entities.Ticket;
 using Domain.Entities.User;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infrastructure.Contexts;
 
@@ -31,7 +30,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<HostelEntity> Hostels { get; set; }
     public DbSet<HostelManagement> HostelManagements { get; set; }
     public DbSet<RoomEntity> Rooms { get; set; }
-    public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<FacilityEntity> Facilities { get; set; }
     public DbSet<FacilityManagement> FacilityManagements { get; set; }
     public DbSet<InvoiceScheduleEntity> InvoiceSchedules { get; set; }

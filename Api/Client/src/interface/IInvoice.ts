@@ -1,9 +1,18 @@
+import { EInvoiceStatus } from '../utils/enums'
+
 export interface IInvoice {
-    id: string
-    invoiceCode: string
-    type: number
-    price: number
-    cron: number
-    content: string
-    isDeleted: boolean
+    id?: string
+    invoiceCode?: string
+    roomName?: string
+    createDate?: string
+    dueDate?: string
+    type?: string
+    price?: number
+    content?: string
+    isDeleted?: boolean
+    status?: EInvoiceStatus
+    creator?: string
+    cron?: string
+    quantity?: number
+    unitPrice?: number
 }

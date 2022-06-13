@@ -1,12 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate,
-} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Loading from './components/Loading'
 import { IRoute } from './interface/IRoute'
 import { IUser } from './interface/IUser'
@@ -51,14 +46,7 @@ function App(): React.ReactElement {
                 <AppContainer loading={isLoading}>
                     <Router>
                         <Routes>
-                            <Route
-                                path="/"
-                                element={<Navigate to="/landingPage" />}
-                            />
-                            <Route
-                                path="/landingPage"
-                                element={<LandingPage />}
-                            />
+                            <Route path="/" element={<LandingPage />} />
                             <Route path="/" element={<PrivateRoute />}>
                                 {privateRoutes.map((route: IRoute) => {
                                     const Layout =

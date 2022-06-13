@@ -7,11 +7,17 @@ namespace Api.UserFeatures.Requests;
 public class AddFacilityToRoomRequest:IMapTo<FacilityManagement>
 {
     [Required]
-    public Guid FacilityId { get; set; }
+    public IList<FacilityRoom> FacilityRooms { get; set; }
     [Required]
     public Guid RoomId { get; set; }
+
+}
+
+public class FacilityRoom
+{
+    [Required]
+    public Guid FacilityId { get; set; }
+    public String? Description { get; set; }
     [Required]
     public int Quantity { get; set; }
-    
-    public string? Description { get; set; }
 }

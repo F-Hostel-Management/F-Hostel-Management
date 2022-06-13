@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import SearchIcon from '@mui/icons-material/Search'
+import { Search } from '@mui/icons-material'
 import { CircularProgress, Divider, IconButton, Paper } from '@mui/material'
 
 import * as Styled from './styles'
@@ -29,7 +29,7 @@ const SearchInput: React.FunctionComponent<ISearchInputProps> = ({
             }}
         >
             <IconButton sx={{ p: '10px' }} aria-label="submit" type="submit">
-                <SearchIcon />
+                <Search />
             </IconButton>
             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
 

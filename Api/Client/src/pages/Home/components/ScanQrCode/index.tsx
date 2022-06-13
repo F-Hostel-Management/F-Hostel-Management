@@ -2,7 +2,7 @@ import { Button, Divider, InputAdornment, Typography } from '@mui/material'
 import React, { ChangeEvent, FC, useRef } from 'react'
 import QrReader from 'react-qr-reader'
 import * as Styled from './styles'
-import CheckIcon from '@mui/icons-material/Check'
+import { Check } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import InputField from '../../../../components/Input/InputField'
 
@@ -98,7 +98,7 @@ const ScanQrCode: FC<IScanQrCodeProps> = ({
                     value={scanResult}
                     endAdornment={
                         <InputAdornment position="end">
-                            <CheckIcon color="success" />
+                            <Check color="success" />
                         </InputAdornment>
                     }
                     type="number"
