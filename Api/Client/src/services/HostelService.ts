@@ -34,9 +34,9 @@ const getRoomOfHostel = async (hostelId: string) => {
             room.select(
                 'id',
                 'roomName',
-                'roomTypeId',
                 'numOfWindows',
                 'numOfDoors',
+                'numOfBedRooms',
                 'numOfBathRooms',
                 'numOfWCs',
                 'area',
