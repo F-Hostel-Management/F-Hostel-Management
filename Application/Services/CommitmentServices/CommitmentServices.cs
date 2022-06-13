@@ -39,10 +39,12 @@ public class CommitmentServices : ICommitmentServices
            throw new NotFoundException("Commitment Not Found Or Already Expired");
     }
 
-    public async Task<IList<CommitmentEntity>> GetCommitmentForTenant(Guid roomId, Guid tenantId)
+    public async Task<IList<CommitmentEntity>> GetCommitmentsForTenant(Guid roomId, Guid tenantId)
     {
+
         var coms = await _commitmentRepository.WhereAsync(com =>
-            com.RoomId.Equals(roomId) && com.TenantId.Equals(tenantId));
+            com.RoomTenants.Where(rt =>
+            rt.TenantId.Equals(tenantId) && rt.RoomId.Equals(roomId)).Any(), "RoomTenants");
         return coms;
     }
 

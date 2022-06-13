@@ -76,7 +76,7 @@ public class RoomsController : BaseRestController
     public async Task<IActionResult> GetCommitmentsForTenant
     ([FromRoute] Guid roomId)
     {
-        var coms = await _commitmentServices.GetCommitmentForTenant(roomId, CurrentUserID);
+        var coms = await _commitmentServices.GetCommitmentsForTenant(roomId, CurrentUserID);
         return Ok(coms);
     }
 

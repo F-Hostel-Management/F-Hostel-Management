@@ -8,7 +8,7 @@ namespace Application.Interfaces
     public interface ICommitmentServices
     {
         Task CreateCommitment(CommitmentEntity commitment, RoomEntity room);
-        Task<IList<CommitmentEntity>> GetCommitmentForTenant(Guid roomId, Guid tenantId);
+        Task<IList<CommitmentEntity>> GetCommitmentsForTenant(Guid roomId, Guid tenantId);
         Task<CommitmentEntity> GetCommitment(Guid Id);
         Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status);
         Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id);
