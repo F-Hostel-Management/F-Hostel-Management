@@ -30,10 +30,10 @@ public class TenantServices : ITenantServices
 
     // check joining code con hieu luc khong
     // ==> check room khong vuot qua so nguoi cho 
-    public async Task GetIntoRoom(Guid roomId, Guid tenantId)
+    public async Task GetIntoRoom(CommitmentEntity commitment, Guid tenantId)
     {
         var currentTenantsInRoom = await _roomTenantRepository.WhereAsync(rt =>
-            rt.RoomId.Equals(roomId));
+            rt.RoomId.Equals(commitment.RoomId));
         
         // check tenant is already in room?
         var tenantInRoom = currentTenantsInRoom.FirstOrDefault(rt =>
@@ -49,7 +49,7 @@ public class TenantServices : ITenantServices
            count = currentTenantsInRoom.Count;
         }
 
-        RoomEntity room = await _roomServices.GetRoom(roomId);
+        RoomEntity room = await _roomServices.GetRoom(commitment.RoomId);
 
         if (room.MaximumPeople > 0 && room.MaximumPeople <= count)
         {
@@ -60,7 +60,8 @@ public class TenantServices : ITenantServices
             new RoomTenant()
             {
                 TenantId = tenantId,
-                RoomId = roomId
+                RoomId = commitment.RoomId,
+                CommitmentId = commitment.Id
             });
     }
 }
