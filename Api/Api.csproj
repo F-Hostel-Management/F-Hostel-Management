@@ -44,5 +44,9 @@
   <ItemGroup>
 	<Content Update="Client\**" CopyToPublishDirectory="Never" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <None Remove="Client\pnpm-lock.yaml" />
+  </ItemGroup>
 
 </Project>
