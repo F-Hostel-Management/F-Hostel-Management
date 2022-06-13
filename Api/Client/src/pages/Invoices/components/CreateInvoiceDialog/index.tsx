@@ -15,11 +15,13 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
 }) => {
     const initialValues: IInvoice = {
         roomName: '',
-        paymentTerm: '',
+        dueDate: '',
         type: 'House',
         price: 0,
         content: '',
         cron: 'None',
+        quantity: 1,
+        unitPrice: 0,
     }
 
     const { values, setValues, handleInputChange, resetForm } =

@@ -4,12 +4,13 @@ import { ERole } from '../../../../utils/enums'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
-import DialogCustom from '../../../../components/DialogCustom'
 import { Edit, Delete, Description } from '@mui/icons-material'
 import { EInvoiceStatus as Status } from '../../../../utils/enums'
 import UpdateInvoiceDialog from '../UpdateInvoiceDialog'
+import InvoiceDetails from '../InvoiceDetails'
+import { IInvoice } from '../../../../interface/IInvoice'
 interface IActionButtonsProps {
-    rowData: any
+    rowData: IInvoice
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
@@ -55,7 +56,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             textColor="#fff"
                             bgrColor="#f96332"
                             sx={{ width: '2.8rem', height: '2.8rem' }}
-                            disabled={rowData.status !== Status.Pending}
+                            disabled={rowData.status === Status.Paid}
                             onClick={handleOpenDelete}
                         >
                             <Delete sx={{ fontSize: '1.6rem' }} />
@@ -65,22 +66,12 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
             </div>
 
             {openView && (
-                <DialogCustom
-                    title="Invoice Details"
+                <InvoiceDetails
                     openDialog={openView}
+                    handleOpenDialog={handleOpenView}
                     handleCloseDialog={handleCloseView}
-                    maxWidth="xl"
-                >
-                    <div
-                        style={{
-                            minHeight: '100px',
-                            width: '80%',
-                            margin: 'auto',
-                        }}
-                    >
-                        {/* <InvoiceDetails /> */}
-                    </div>
-                </DialogCustom>
+                    rowData={rowData}
+                />
             )}
 
             {openDelete && (

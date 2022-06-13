@@ -5,7 +5,7 @@ export interface IInvoice {
     invoiceCode?: string
     roomName?: string
     createDate?: string
-    paymentTerm?: string
+    dueDate?: string
     type?: string
     price?: number
     content?: string
@@ -13,4 +13,6 @@ export interface IInvoice {
     status?: EInvoiceStatus
     creator?: string
     cron?: string
+    quantity?: number
+    unitPrice?: number
 }

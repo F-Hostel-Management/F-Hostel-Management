@@ -29,7 +29,7 @@ export enum ERoomStatus {
 
 export enum EInvoiceStatus {
     Pending = 'Pending',
-    Active = 'Active',
-    Complete = 'Complete',
+    Unpaid = 'Unpaid',
+    Paid = 'Paid',
     Overdue = 'Overdue',
 }

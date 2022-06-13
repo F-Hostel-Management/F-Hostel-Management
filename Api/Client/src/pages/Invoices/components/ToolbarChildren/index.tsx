@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { AddCircle } from '@mui/icons-material'
 
 interface IToolbarChildrenProps {
-    handleOpenCreate: any
+    handleOpenCreate: () => void
 }
 
 const ToolbarChildren: FC<IToolbarChildrenProps> = ({ handleOpenCreate }) => {
