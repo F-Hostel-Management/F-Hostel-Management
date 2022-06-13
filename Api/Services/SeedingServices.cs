@@ -5,7 +5,6 @@ namespace Api.Services;
 
 public static class SeedingServices
 {
-    //public static
     public static dynamic LoadJson(string f)
     {
         using (StreamReader r = new StreamReader("./MockData/" + f))
@@ -14,5 +13,11 @@ public static class SeedingServices
             dynamic array = JsonConvert.DeserializeObject(json);
             return array;
         }
+    }
+
+    public static dynamic LoadFileToString(string f)
+    {
+        string contents = File.ReadAllText("./MockData/" + f);
+        return contents;
     }
 }

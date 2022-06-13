@@ -26,6 +26,8 @@ public static class DatabaseInitializer
         await dbContext.FeedRooms();
 
         await dbContext.FeedTenantsToRoom();
+
+        await dbContext.FeedCommitmentScaffolding();
     }
 
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
@@ -222,6 +224,16 @@ public static class DatabaseInitializer
             room.RoomStatus = 0;
 
         }
+        await dbContext.SaveChangesAsync();
+    }
+
+    public static async Task FeedCommitmentScaffolding(this ApplicationDbContext dbContext)
+    {
+        if (dbContext.CommitmentScaffoldings.Any()) return;
+        await dbContext.AddAsync(new CommitmentScaffolding()
+        {
+            Content = SeedingServices.LoadFileToString("comitment.html"),
+        });
         await dbContext.SaveChangesAsync();
     }
 }
