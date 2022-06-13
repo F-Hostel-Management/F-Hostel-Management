@@ -195,7 +195,7 @@ public class CommitmentsController : BaseRestController
         return Ok();
     }
 
-/*    [Authorize(Roles = nameof(Role.Owner))]
+    [Authorize(Roles = nameof(Role.Owner))]
     [HttpDelete("{comId}")]
     public async Task<IActionResult> DeleteCommitment([FromRoute] Guid comId)
     {
@@ -204,18 +204,8 @@ public class CommitmentsController : BaseRestController
         {
             return BadRequest();
         }
-        if (com.CommitmentStatus == CommitmentStatus.Pending)
-        {
-            com.IsDeleted = true;
-            await _commitmentRepository.UpdateAsync(com);
-            return Ok();
-        }
-        else
-        {
-            //if ()
-        }*/
-
-
-
+        com.IsDeleted = true;
+        await _commitmentRepository.UpdateAsync(com);
+        return Ok();
     }
 }
