@@ -1,44 +1,47 @@
-import { GridColDef } from '@mui/x-data-grid'
 import React, { FC, Fragment, useEffect, useState } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
-import { IRoom } from '../../interface/IRoom'
 import { ERole } from '../../utils/enums'
-import RoomStatus from './components/RoomStatus'
 import ToolbarChildren from './components/ToolbarChildren'
-import ActionButtons from './components/ActionButtons'
-import CreateCRoomDialog from './components/CreateRoomDialog'
-import { getUserRole } from '../../slices/authSlice'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
+import {
+    setPage,
+    setPageSize,
+    setTableInitialState,
+} from '../../slices/tableSlice'
+import { getItem } from '../../utils/LocalStorageUtils'
+import { fetchRoomList } from '../../slices/roomSlice'
+import { createColumns } from './components/Columns'
+import CreateCRoomDialog from './components/Dialog/CreateRoomDialog'
+
 interface IRoomsProps {}
 
 const Rooms: FC<IRoomsProps> = () => {
-    const role = useSelector(getUserRole)
+    const dispatch = useAppDispatch()
 
-    const { renderCell, createColumn } = useGridData()
-    const [pageSize, setPageSize] = useState<number>(5)
-    const [page, setPage] = useState<number>(0)
-    const [rows, setRows] = useState<IRoom[]>([])
+    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
+    const numOfRooms = useAppSelector(({ room }) => room.numOfRooms)
+
+    const rows = useAppSelector(({ room }) => room.roomList)
+    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+
     const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
-    const columns: GridColDef[] = [
-        createColumn('id', 'Code', 50),
-        createColumn('roomNumber', 'Room Name', 120),
-        createColumn('type', 'Type', 100),
-        createColumn('numberOfBathRoom', 'BathRoom', 100),
-        createColumn('numberOfToilet', 'Toilet', 100),
-        createColumn('area', 'Area', 100),
-        renderCell('status', 'Status', 130, RoomStatus),
-        renderCell('actions', 'Actions', 130, ActionButtons),
-    ]
+    useEffect(() => {
+        dispatch(setTableInitialState())
+    }, [dispatch])
 
     useEffect(() => {
         setLoading(true)
-        const FetchData = async () => {}
-        FetchData()
-    }, [page, pageSize])
+        const currentHostelId = getItem('currentHostelId')
+        dispatch(fetchRoomList(currentHostelId))
+        setLoading(false)
+    }, [dispatch])
     return (
         <Fragment>
             <DataGridCustom
@@ -47,10 +50,12 @@ const Rooms: FC<IRoomsProps> = () => {
                 rows={rows}
                 columns={columns}
                 pageSize={pageSize}
-                setPageSize={setPageSize}
+                setPageSize={(pageSize: number) =>
+                    dispatch(setPageSize(pageSize))
+                }
                 page={page}
-                setPage={setPage}
-                rowsCount={27}
+                setPage={(page: number) => dispatch(setPage(page))}
+                rowsCount={numOfRooms}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (
                         <ToolbarChildren handleOpenCreate={handleOpenCreate} />
