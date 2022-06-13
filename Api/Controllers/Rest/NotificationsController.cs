@@ -1,4 +1,4 @@
-﻿using Api.Controllers.Rest.Notification;
+﻿using Api.Services;
 using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
@@ -53,7 +53,7 @@ public class NotificationsController : BaseRestController
             throw new ArgumentException();
         }
         // validation req
-        await _authorServices.RoomsInAHostelThatManageByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
+        await _authorServices.VerifiedRoomsInAHostelThatManagedByCurrentUser(req.RoomIds, req.HostelId, CurrentUserID);
         IList<NotificationEntity> notifications;
 
         if (req.TransactionId is null)
@@ -65,7 +65,7 @@ public class NotificationsController : BaseRestController
             };
 
             req.TransactionId = transaction.Id;
-            notifications = await _reqHandler.GetValidListFromRequest(req, Mapper);
+            notifications = _reqHandler.GetValidListFromRequest(req, Mapper);
             transaction.HostelId = req.HostelId;
             await _transactionRepository.CreateAsync(transaction);
             await _notificationsRepository.CreateRangeAsync(notifications);

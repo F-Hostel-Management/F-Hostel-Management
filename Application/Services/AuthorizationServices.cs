@@ -80,11 +80,11 @@ public class AuthorizationServices : IAuthorizationServices
         return await this.IsHostelManagedByCurrentUser(hostelId, userId);
     }
 
-    public async Task RoomsInAHostelThatManageByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId)
+    public async Task VerifiedRoomsInAHostelThatManagedByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId)
     {
         foreach (Guid i in roomIds)
         {
-            RoomEntity room = await this.RoomThatManageByCurrentUser(i, userId);
+            RoomEntity room = await this.GetRoomThatManagedByCurrentUser(i, userId);
             if (room is null)
             {
                 throw new ForbiddenException("Forbidden");
@@ -96,7 +96,7 @@ public class AuthorizationServices : IAuthorizationServices
         }
     }
 
-    public async Task<RoomEntity> RoomThatManageByCurrentUser(Guid roomId, Guid userId)
+    public async Task<RoomEntity> GetRoomThatManagedByCurrentUser(Guid roomId, Guid userId)
     {
         var room = await _roomRepository.FindByIdAsync(roomId);
         if (room == null) throw new NotFoundException($"Room not found");

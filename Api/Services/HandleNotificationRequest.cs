@@ -5,7 +5,7 @@ using AutoMapper;
 using Domain.Entities.Notification;
 using Domain.Enums;
 
-namespace Api.Controllers.Rest.Notification;
+namespace Api.Services;
 
 public class HandleNotificationRequest
 {
@@ -17,7 +17,7 @@ public class HandleNotificationRequest
         _notificationsRepository = notificationsRepository;
     }
 
-    public async Task<IList<NotificationEntity>> GetValidListFromRequest
+    public IList<NotificationEntity> GetValidListFromRequest
         (CreateNotificationRequest req, IMapper Mapper)
     {
         IList<NotificationEntity> notifications = new List<NotificationEntity>();
@@ -53,7 +53,7 @@ public class HandleNotificationRequest
         }
         foreach (Guid i in req.RoomIds)
         {
-            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultTrackingAsync(noti =>
+            NotificationEntity uEntity = await _notificationsRepository.FirstOrDefaultAsync(noti =>
                noti.TransactionId.Equals(req.TransactionId) && noti.RoomId.Equals(i));
             // noti has been send
             if (uEntity.NotificationStage == NotificationStage.Sent)
