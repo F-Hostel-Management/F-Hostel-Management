@@ -1,4 +1,6 @@
-﻿using Api.UserFeatures.Requests;
+﻿using Api.Services;
+using Api.UserFeatures.Requests;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
@@ -19,7 +21,9 @@ public class CommitmentsController : BaseRestController
     private readonly ITenantServices _tenantServices;
     private readonly IJoiningCodeServices _joiningCodeServices;
     private readonly IAuthorizationServices _authorServices;
+    private readonly HandleCommitmentRequestService _reqHandler;
     private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
+    private readonly IGenericRepository<CommitmentScaffolding> _commitmentScaffoldingRepository;
 
 
     public CommitmentsController(
@@ -29,7 +33,9 @@ public class CommitmentsController : BaseRestController
         IRoomServices roomServices,
         ITenantServices tenantServices,
         IAuthorizationServices authorServices,
-        IGenericRepository<CommitmentEntity> commitmentRepository)
+        HandleCommitmentRequestService reqHandler,
+        IGenericRepository<CommitmentEntity> commitmentRepository,
+        IGenericRepository<CommitmentScaffolding> commitmentScaffoldingRepository)
     {
         _tenantServices = tenantServices;
         _hostelServices = hostelServices;
@@ -37,7 +43,9 @@ public class CommitmentsController : BaseRestController
         _commitmentServices = commitmentServices;
         _roomServices = roomServices;
         _authorServices = authorServices;
+        _reqHandler = reqHandler;
         _commitmentRepository = commitmentRepository;
+        _commitmentScaffoldingRepository = commitmentScaffoldingRepository;
     }
     /// <summary>
     /// owner || manager create a commitment of room |
@@ -58,32 +66,24 @@ public class CommitmentsController : BaseRestController
         // check hostel owner and owner in room commitment request
         HostelEntity hostel = await _hostelServices.GetHostel(room);
 
-        bool isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(hostel, CurrentUserID);
-
+        bool isManagedByCurrentUser = await _authorServices.IsRoomManageByCurrentUser(comReq.RoomId, CurrentUserID);
         if (!isManagedByCurrentUser)
         {
-            return Unauthorized();
+            throw new ForbiddenException("Forbidden");
         }
 
         // call service
-        CommitmentEntity com = Mapper.Map<CommitmentEntity>(comReq);
-
+        CommitmentEntity comitment = await _reqHandler.FillCommitmentForOwner(comReq, hostel, room, Mapper);
         if (CurrentUserRole.Equals(Role.Manager.ToString()))
         {
-            com.ManagerId = CurrentUserID;
+            comitment.ManagerId = CurrentUserID;
         }
-        com.OwnerId = hostel.OwnerId;
-        com.HostelId = hostel.Id;
-        com.CreatedDate = DateTime.Now;
-        int code = (await _commitmentServices.CountForHostel(com.HostelId) + 1);
-        com.CommitmentCode = "F-" + code;
-
-        await _commitmentServices.CreateCommitment(com, room);
+        await _commitmentServices.CreateCommitment(comitment);
 
         // update room status
-        await _roomServices.Rent(room);
+        await _roomServices.RentThisRoom(room);
 
-        return Ok(com.Id);
+        return Ok(comitment.Id);
     }
 
     /// <summary>
@@ -156,7 +156,7 @@ public class CommitmentsController : BaseRestController
     /// <returns></returns>
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpPatch("tenant-activate-commitment/status")]
-    public async Task<IActionResult> TenantDoneCommitment
+    public async Task<IActionResult> TenantActivateCommitment
     ([FromBody] TenantDoneCommitmentRequest req)
     {
         // validate joining code
@@ -168,11 +168,14 @@ public class CommitmentsController : BaseRestController
             await _joiningCodeServices.GetCommitment(joiningCode);
 
         // activate commitment
-        await _commitmentServices.ActivatedCommitment(com, CurrentUserID);
-
+        if (com.TenantId is null)
+        {
+            com = await _reqHandler.FillCommitmentForTenant(com, CurrentUserID, Mapper);
+            await _commitmentServices.ActivatedCommitment(com);
+        }
         // get into room
         await _tenantServices.GetIntoRoom(com, CurrentUserID);
-        return Ok(com);
+        return Ok();
     }
 
     /// <summary>

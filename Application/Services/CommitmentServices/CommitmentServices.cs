@@ -20,11 +20,9 @@ public class CommitmentServices : ICommitmentServices
         _commitmentRepository = commitmentRepository;
     }
 
-    public async Task CreateCommitment(CommitmentEntity commitment, RoomEntity room)
+    public async Task CreateCommitment(CommitmentEntity commitment)
     {
-        commitment.RoomId = room.Id;
         commitment.CommitmentStatus = CommitmentStatus.Pending;
-        // save commitment
         await _commitmentRepository.CreateAsync(commitment);
     }
 
@@ -53,15 +51,10 @@ public class CommitmentServices : ICommitmentServices
         commitment.CommitmentStatus = CommitmentStatus.Approved;
         await _commitmentRepository.UpdateAsync(commitment);
     }
-    public async Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId)
+    public async Task ActivatedCommitment(CommitmentEntity commitment)
     {
-        // There is no main person in the contract
-        if (commitment.Tenant == null)
-        {
-            commitment.TenantId = tenantId;
-            commitment.CommitmentStatus = CommitmentStatus.Active;
-            await _commitmentRepository.UpdateAsync(commitment);
-        }
+        commitment.CommitmentStatus = CommitmentStatus.Active;
+        await _commitmentRepository.UpdateAsync(commitment);
     }
 
     public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
@@ -111,7 +104,7 @@ public class CommitmentServices : ICommitmentServices
             throw new NotFoundException("Commitment Not Found");
     }
 
-    public async Task<int> CountForHostel(Guid hostelId)
+    public async Task<int> CountCommitmentByHostel(Guid hostelId)
     {
         var list = await _commitmentRepository.WhereAsync(com =>
         com.HostelId.Equals(hostelId));
