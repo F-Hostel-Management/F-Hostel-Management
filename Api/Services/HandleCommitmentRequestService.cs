@@ -1,6 +1,7 @@
 ﻿using Api.UserFeatures.Requests;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Utilities;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Entities.Commitment;
@@ -56,10 +57,13 @@ public class HandleCommitmentRequestService
             NumOfWCs = room.NumOfWCs.ToString(),
             NumOfWindows = room.NumOfWindows.ToString(),
             MaximumPeople = room.MaximumPeople.ToString(),
-            RoomPriceText = "RoomPriceText",
+            RoomPriceText = MoneyToTextConverter.VietnamesedongToTextConverter(req.Price),
             HostelAddress = hostel.Address,
-            CompensationText = "CompensationText",
         };
+        if (req.Compensation != null)
+        {
+            commitment.CompensationText = MoneyToTextConverter.VietnamesedongToTextConverter((double)req.Compensation);
+        }
         Mapper.Map(req, commitment);
         return commitment;
     }

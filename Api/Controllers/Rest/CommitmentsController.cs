@@ -23,7 +23,6 @@ public class CommitmentsController : BaseRestController
     private readonly IAuthorizationServices _authorServices;
     private readonly HandleCommitmentRequestService _reqHandler;
     private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
-    private readonly IGenericRepository<CommitmentScaffolding> _commitmentScaffoldingRepository;
 
 
     public CommitmentsController(
@@ -34,8 +33,7 @@ public class CommitmentsController : BaseRestController
         ITenantServices tenantServices,
         IAuthorizationServices authorServices,
         HandleCommitmentRequestService reqHandler,
-        IGenericRepository<CommitmentEntity> commitmentRepository,
-        IGenericRepository<CommitmentScaffolding> commitmentScaffoldingRepository)
+        IGenericRepository<CommitmentEntity> commitmentRepository)
     {
         _tenantServices = tenantServices;
         _hostelServices = hostelServices;
@@ -45,7 +43,6 @@ public class CommitmentsController : BaseRestController
         _authorServices = authorServices;
         _reqHandler = reqHandler;
         _commitmentRepository = commitmentRepository;
-        _commitmentScaffoldingRepository = commitmentScaffoldingRepository;
     }
     /// <summary>
     /// owner || manager create a commitment of room |
