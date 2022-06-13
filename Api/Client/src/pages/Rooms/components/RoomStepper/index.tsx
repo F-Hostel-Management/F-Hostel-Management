@@ -1,6 +1,7 @@
 import React, { ChangeEvent, Dispatch, FC, SetStateAction } from 'react'
 import StepByStep from '../../../../components/StepByStep'
 import { IStepper } from '../../../../interface/IStepper'
+import RoomFacilities from '../RoomFacilities'
 import RoomForm from '../RoomForm'
 
 interface IRoomStepperProps {
@@ -20,7 +21,7 @@ const RoomStepper: FC<IRoomStepperProps> = ({
 }) => {
     const steps: IStepper[] = [
         {
-            name: 'Room Information',
+            name: 'Create Room',
             component: (
                 <RoomForm
                     values={values}
@@ -31,9 +32,9 @@ const RoomStepper: FC<IRoomStepperProps> = ({
             action: 'Next',
         },
         {
-            name: 'Room Facilities',
-            component: <h1>Step 2</h1>,
-            handleNext: () => console.log('Values commit: ', values),
+            name: 'Add Facilities',
+            component: <RoomFacilities />,
+            handleNext: () => console.log('Submit'),
             action: 'Next',
         },
     ]

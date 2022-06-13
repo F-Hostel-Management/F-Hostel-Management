@@ -14,12 +14,6 @@ export const fields: IField[] = [
         required: true,
     },
     {
-        label: 'Area',
-        name: 'area',
-        type: 'number',
-        required: true,
-    },
-    {
         label: 'Length',
         name: 'length',
         type: 'number',
