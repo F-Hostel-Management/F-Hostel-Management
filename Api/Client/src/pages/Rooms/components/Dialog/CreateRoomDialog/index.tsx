@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import DialogCustom from '../../../../components/DialogCustom'
-import { useForm } from '../../../../hooks/useForm'
-import { IRoomValues } from '../../../../interface/IRoom'
-import RoomStepper from '../RoomStepper'
+import DialogCustom from '../../../../../components/DialogCustom'
+import { useForm } from '../../../../../hooks/useForm'
+import { IRoomValues } from '../../../../../interface/IRoom'
+import RoomStepper from '../../RoomStepper'
 
 interface ICreateRoomDialogProps {
     openDialog: boolean
