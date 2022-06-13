@@ -8,6 +8,7 @@ import { useDialog } from '../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
 import DialogCustom from '../../../../components/DialogCustom'
 import { useAppSelector } from '../../../../hooks/reduxHook'
+import UpdateRoomDialog from '../Dialog/UpdateRoomDialog'
 interface IActionButtonsProps {
     rowData: any
 }
@@ -89,13 +90,13 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                 </ConfirmDialog>
             )}
 
-            {/* {openUpdate && (
-                <UpdateCommitmentDialog
+            {openUpdate && (
+                <UpdateRoomDialog
+                    room={rowData}
                     openDialog={openUpdate}
-                    handleOpenDialog={handleOpenUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />
-            )} */}
+            )}
         </Fragment>
     )
 }
