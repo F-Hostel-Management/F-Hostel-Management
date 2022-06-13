@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Entities.Room;
+using Domain.Entities.User;
 using Domain.Enums;
 using Domain.Extensions;
 using System.ComponentModel.DataAnnotations;
@@ -70,4 +71,6 @@ public class CommitmentEntity : BaseEntity
     // 1 hostel - m com
     public Guid HostelId { get; set; }
     public HostelEntity Hostel { get; set; }
+    // add to room tenant
+    public virtual ICollection<RoomTenant> RoomTenants { get; set; }
 }
