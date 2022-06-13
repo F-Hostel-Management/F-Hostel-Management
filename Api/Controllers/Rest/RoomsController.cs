@@ -83,18 +83,31 @@ public class RoomsController : BaseRestController
     [HttpPost("add-facility")]
     public async Task<IActionResult> AddFacilityToRoom(AddFacilityToRoomRequest request)
     {
-        var facilityTarget = await _facilityRepo.FirstOrDefaultAsync(e => e.Id.Equals(request.FacilityId));
-        if (facilityTarget is null)
-            throw new BadRequestException("Facility is not valid");
         bool isManagedByCurrentUser = await _authorServices.IsRoomManageByCurrentUser(request.RoomId, CurrentUserID);
         if (!isManagedByCurrentUser)
             throw new ForbiddenException("");
-        var targetFacility = await _facilityRepo.FirstOrDefaultAsync(e => e.Id.Equals(facilityTarget.Id));
-        if (targetFacility is null)
-            throw new BadRequestException("Wrong Facility ID");
-        var entity = new FacilityManagement();
-        Mapper.Map(request, entity);
-        await _facilityManagementRepo.CreateAsync(entity);
+        foreach (var facility in request.FacilityRooms)
+        {
+            // var test = await _facilityRepo.ListAsync();
+            var facilityTarget = await _facilityRepo.FirstOrDefaultAsync(e => e.Id.Equals(facility.FacilityId));
+            if (facilityTarget is null)
+                throw new BadRequestException("Facility is not valid");
+            var targetManagement = await _facilityManagementRepo.FirstOrDefaultAsync(e => e.FacilityId.Equals(facility.FacilityId) && e.RoomId.Equals(request.RoomId));
+            if (targetManagement is not null)
+                throw new BadRequestException("The facility has been existed in the room!");
+            if (facilityTarget.Quantity < facility.Quantity)
+                throw new BadRequestException("The hostel does not have enough quantity for this facility!");
+            // if (facilityTarget.Quantity < facility.Quantity)
+            //     throw new BadRequestException("The hostel does not have enough quantity for this facility!");
+            var entity = new FacilityManagement();
+            entity.FacilityId = facility.FacilityId;
+            entity.Quantity = facility.Quantity;
+            entity.Description = facility.Description;
+            entity.RoomId = request.RoomId;
+            
+            // Mapper.Map(request, entity);
+            await _facilityManagementRepo.CreateAsync(entity);
+        }
         return Ok();
     }
     [HttpPatch("update-facility")]
@@ -106,6 +119,12 @@ public class RoomsController : BaseRestController
         bool isManagedByCurrentUser = await _authorServices.IsRoomManageByCurrentUser(target.RoomId, CurrentUserID);
         if (!isManagedByCurrentUser)
             throw new ForbiddenException("");
+        var facilityTarget = await _facilityRepo.FirstOrDefaultAsync(e => e.Id.Equals(target.FacilityId));
+        if (facilityTarget is null)
+            throw new BadRequestException("Facility is not valid");
+        int total = facilityTarget.Quantity + target.Quantity;
+        if (total < request.Quantity)
+            throw new BadRequestException("The hostel does not have enough quantity for this facility!");
         Mapper.Map(request, target);
         await _facilityManagementRepo.UpdateAsync(target);
         return Ok();
