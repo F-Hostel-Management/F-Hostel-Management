@@ -202,13 +202,4 @@ public class NotificationsController : BaseRestController
         await _notificationsRepository.UpdateAsync(noti);
         return Ok();
     }
-
-    [AllowAnonymous]
-    [HttpGet("test/{roomId}")]
-    public async Task<IActionResult> GetTest(Guid roomId)
-    {
-        var commitments = (await _commitmentRepository.WhereAsync(c =>
-            c.RoomId.Equals(roomId))).OrderByDescending(com => com.EndDate).Select(com => com.EndDate);
-        return Ok(commitments);
-    }
 }
