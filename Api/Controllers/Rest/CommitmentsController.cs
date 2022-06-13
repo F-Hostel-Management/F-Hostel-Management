@@ -206,6 +206,10 @@ public class CommitmentsController : BaseRestController
         }
         com.IsDeleted = true;
         await _commitmentRepository.UpdateAsync(com);
+
+        RoomEntity room = await _roomServices.GetRoom(com.RoomId);
+        room.RoomStatus = RoomStatus.Available;
+
         return Ok();
     }
 }
