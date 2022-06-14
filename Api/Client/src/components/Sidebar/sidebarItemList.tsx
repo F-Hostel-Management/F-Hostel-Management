@@ -13,7 +13,7 @@ import {
     TableRestaurantTwoTone,
 } from '@mui/icons-material'
 
-interface ISidebarItem {
+export interface ISidebarItem {
     icon: React.ReactElement
     label: string
     path: string
@@ -99,7 +99,13 @@ export const sidebarItemList: {
     tenant: [
         {
             groupLabel: '--MAIN',
-            items: [],
+            items: [
+                {
+                    icon: <ReceiptTwoTone />,
+                    label: 'Invoices',
+                    path: '/home/invoices',
+                },
+            ],
         },
     ],
 }

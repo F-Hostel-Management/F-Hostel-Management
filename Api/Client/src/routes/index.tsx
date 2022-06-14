@@ -12,6 +12,7 @@ import Rooms from '../pages/Rooms'
 import Facilities from '../pages/Facilities'
 import Invoices from '../pages/Invoices'
 import InvoiceSchedule from '../pages/InvoiceSchedule'
+import { PaymentCallback } from '../pages/Invoices/components/Payment/Callback'
 
 const publicRoutes: IRoute[] = [
     {
@@ -99,6 +100,15 @@ const privateRoutes: IRoute[] = [
         layout: DefaultLayout,
         props: {
             title: 'Invoices Schedule',
+        },
+    },
+    {
+        path: '/home/invoices/callback',
+        component: PaymentCallback,
+        name: 'VnPay Result',
+        layout: DefaultLayout,
+        props: {
+            title: 'VnPay Result',
         },
     },
 ]
