@@ -1,15 +1,32 @@
 import { GridColDef } from '@mui/x-data-grid'
+import { IFacilityManagement } from '../../../../../interface/IFacility'
 import ActionButtons from '../ActionButtons'
 
 export const createColumns = (
     renderCell: any,
-    createColumn: any
+    createColumn: any,
+    renderValueGetter: any
 ): GridColDef[] => {
     return [
-        createColumn('name', 'Facility Name', 400),
-        createColumn('type', 'Category', 200),
-        createColumn('quantity', 'Quantity', 200),
-        createColumn('price', 'Price', 150),
+        renderValueGetter(
+            'name',
+            'Name',
+            300,
+            (params: IFacilityManagement) => params.facility.name
+        ),
+        renderValueGetter(
+            'type',
+            'Category',
+            200,
+            (params: IFacilityManagement) => params.facility.type
+        ),
+        createColumn('quantity', 'Quantity', 100),
+        renderValueGetter(
+            'price',
+            'Price',
+            200,
+            (params: IFacilityManagement) => params.facility.price
+        ),
         renderCell('actions', 'Actions', 130, ActionButtons),
     ]
 }
