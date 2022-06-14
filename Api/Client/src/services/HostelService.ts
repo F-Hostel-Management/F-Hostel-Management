@@ -75,7 +75,7 @@ const getRoomNamesByHostelId = async (hostelId: string): Promise<IRoom[]> => {
     const builder = createBuilder<IHostel>()
         .filter('id', (e) => e.equals(hostelId))
         .expand('rooms', (q) => q.select('id', 'roomName'))
-    const result = await get('Hostels', builder)
+    const result = await get('Hostels', builder, { error: { show: false } })
     const { rooms } = result[0]
     return rooms
 }
