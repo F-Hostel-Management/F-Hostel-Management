@@ -14,12 +14,13 @@ import {
     fetchInvoices,
     fetchNumberOfInvoice,
 } from '../../../../slices/invoiceSlice'
+import { getUserRole } from '../../../../slices/authSlice'
 interface IActionButtonsProps {
     rowData: IInvoice
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
-    const role: ERole = 1
+    const role = useAppSelector(getUserRole)
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
