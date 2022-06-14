@@ -17,6 +17,7 @@ import {
 import { fetchInvoices, fetchNumberOfInvoice } from '../../slices/invoiceSlice'
 import { IInvoice } from '../../interface/IInvoice'
 import { formatDate } from '../../utils/FormatDate'
+import { getItem } from '../../utils/LocalStorageUtils'
 
 interface IInvoicesProps {}
 
@@ -51,6 +52,7 @@ const Invoices: FC<IInvoicesProps> = () => {
     const numOfInvoice = useAppSelector(({ invoice }) => invoice.numOfInvoice)
     const currentPage = useAppSelector(({ table }) => table.page)
     const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+    const currentHostelId = getItem('currentHostelId')
 
     const dispatch = useAppDispatch()
 
@@ -58,7 +60,7 @@ const Invoices: FC<IInvoicesProps> = () => {
         dispatch(setTableInitialState())
     }, [dispatch])
 
-    const getInvoicesUI = () => {
+    const getInvoicesUI = async () => {
         setLoading(true)
         dispatch(fetchInvoices({ currentPageSize, currentPage }))
         dispatch(fetchNumberOfInvoice())
@@ -67,7 +69,7 @@ const Invoices: FC<IInvoicesProps> = () => {
 
     useEffect(() => {
         getInvoicesUI()
-    }, [dispatch, currentPageSize, currentPage])
+    }, [dispatch, currentPageSize, currentPage, currentHostelId])
     return (
         <Fragment>
             <DataGridCustom
