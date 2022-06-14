@@ -4,6 +4,7 @@ import DialogCustom from '../../../../components/DialogCustom'
 import { useForm } from '../../../../hooks/useForm'
 import { IInvoice } from '../../../../interface/IInvoice'
 import InvoiceForm from '../InvoiceForm'
+import { Payment } from '../Payment'
 import * as Styled from './styles'
 
 interface IInvoiceDetailsProps {
@@ -65,7 +66,7 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
                     Tenant Paid: Panh {/**/}
                 </Typography>
             </Styled.InfoDetail>
-
+            <Payment />
             <Divider variant="middle" sx={{ m: 4 }} />
             <InvoiceForm
                 values={values}
