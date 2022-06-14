@@ -19,6 +19,8 @@ import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/homeSlice'
 import QrCodeGenerate from '../QrCodeGenerate'
 import { ICommitment } from '../../../../interface/ICommitment'
+import { ERoomStatus } from '../../../../utils/enums'
+import { IRoom } from '../../../../interface/IRoom'
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
     values: Record<string, any>
@@ -69,13 +71,16 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
         const currentHostelId = localStorage.getItem('currentHostelId')
         if (!hostelInfo && !currentHostelId) return
         ;(async () => {
-            const roomList = await getRoomOfHostel(
+            let roomList = await getRoomOfHostel(
                 currentHostelId || hostelInfo?.id
+            )
+            roomList = roomList.filter(
+                (room: IRoom) => room.status === ERoomStatus.Available
             )
             setRoomInfo(commitment?.room || roomList?.[0])
             setRooms(roomList)
         })()
-    }, [hostelInfo])
+    }, [commitment?.room, hostelInfo])
 
     const steps: IStepper[] = [
         {
