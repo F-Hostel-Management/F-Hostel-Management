@@ -115,6 +115,16 @@ public class InvoicesController : BaseRestController
     }
 
 
+    [HttpDelete("{Id}")]
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    public async Task<IActionResult> DeleteInvoiceAsync([FromRoute] Guid Id)
+    {
+        var invoice = await _invoiceRepository.FindByIdAsync(Id);
+        if (invoice is null) throw new NotFoundException($"Invoice not found");
+        await _invoiceRepository.DeleteSoftAsync(Id);
+        return Ok("Delete invoice successfully");
+    }
+
     [HttpPost("create-vnpay")]
     // [Authorize(Roles = nameof(Role.Tenant))]
     public async Task<IActionResult> CreateVnPayBill(Guid invoiceId)
