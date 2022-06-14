@@ -1,14 +1,17 @@
 import { Grid, InputAdornment, MenuItem } from '@mui/material'
 import * as React from 'react'
 import InputField from '../../../../components/Input/InputField'
-import { InvoiceCron, InvoiceType } from '../../../../constants/Invoice'
+import { InvoiceType } from '../../../../constants/Invoice'
 import { IField } from '../../../../interface/IField'
-import { IInvoice } from '../../../../interface/IInvoice'
+import { IRoom } from '../../../../interface/IRoom'
+import { getRoomNamesByHostelId } from '../../../../services/HostelService'
+import { getItem } from '../../../../utils/LocalStorageUtils'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import * as Styled from './styles'
 
-interface IInvoiceFormProps {
-    values: Record<string, any>
-    setValues: React.Dispatch<React.SetStateAction<IInvoice>>
+interface IInvoiceFormProps<T> {
+    values: T
+    setValues: React.Dispatch<React.SetStateAction<T>>
     handleInputChange: (
         event: React.ChangeEvent<HTMLInputElement>,
         isForce?: boolean
@@ -16,32 +19,37 @@ interface IInvoiceFormProps {
     review?: boolean
 }
 
-const InvoiceForm: React.FC<IInvoiceFormProps> = ({
+const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
     values,
     setValues,
     handleInputChange,
     review = false,
 }) => {
-    const roomList = ['701', '702', '703', '704', '705']
+    const [roomList, setRoomList] = React.useState<IRoom[]>([])
 
-    const { type, roomName, cron, quantity, unitPrice, price } = values
+    React.useEffect(() => {
+        ;(async () => {
+            const currentHostelId = getItem('currentHostelId')
+            const result = await getRoomNamesByHostelId(currentHostelId)
+            setRoomList(result ?? [])
+        })()
+    }, [])
+
+    const { invoiceType, roomId, quantity, unitPrice, price } = values
     React.useEffect(() => {
         setValues({
             ...values,
-            type: type,
-            roomName: roomName,
-            cron: cron,
-            quantity: type === 'Service' ? 1 : quantity,
-            unitPrice: type === 'Service' ? 0 : unitPrice,
-            price:
-                type === 'Service'
-                    ? price
-                    : quantity && unitPrice
-                    ? quantity * unitPrice
-                    : price,
+            invoiceType: invoiceType,
+            roomId: roomId,
+            quantity:
+                invoiceType === 'Service' || invoiceType === 'House'
+                    ? 1
+                    : quantity,
+            unitPrice: unitPrice,
+            price: quantity * unitPrice,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type, roomName, cron, quantity, unitPrice, price])
+    }, [invoiceType, roomId, quantity, unitPrice, price])
 
     const fields: IField[] = [
         {
@@ -55,6 +63,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             label: 'Amount',
             name: 'price',
             type: 'number',
+            disabled: true,
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
             multiline: false,
@@ -63,8 +72,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             label: 'Detail',
             name: 'content',
             type: 'text',
-            required: type === 'Service' ? true : false,
-            multiline: true,
+            required: invoiceType === 'Service' ? true : false,
+            multiline: false,
         },
     ]
 
@@ -76,8 +85,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                     <div style={{ width: '350px' }}>
                         <InputField
                             label="Room Name"
-                            name="roomName"
-                            value={roomName}
+                            name="roomId"
+                            value={roomId}
                             required={true}
                             select
                             onChange={handleInputChange}
@@ -85,16 +94,16 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                 readOnly: review,
                             }}
                         >
-                            {roomList.map((option, index) => (
-                                <MenuItem key={index} value={option}>
-                                    {option}
+                            {roomList.map((room) => (
+                                <MenuItem key={room?.id} value={room?.id}>
+                                    {room?.roomName}
                                 </MenuItem>
                             ))}
                         </InputField>
                         <InputField
                             label="Type"
-                            name="type"
-                            value={type}
+                            name="invoiceType"
+                            value={invoiceType}
                             required={true}
                             select
                             onChange={handleInputChange}
@@ -103,23 +112,6 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                             }}
                         >
                             {InvoiceType.map((option, index) => (
-                                <MenuItem key={index} value={option.name}>
-                                    {option.name}
-                                </MenuItem>
-                            ))}
-                        </InputField>
-                        <InputField
-                            label="Repeat by"
-                            name="cron"
-                            value={cron}
-                            required={true}
-                            select
-                            onChange={handleInputChange}
-                            InputProps={{
-                                readOnly: review,
-                            }}
-                        >
-                            {InvoiceCron.map((option, index) => (
                                 <MenuItem key={index} value={option.name}>
                                     {option.name}
                                 </MenuItem>
@@ -154,7 +146,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                     value={quantity}
                                     type="number"
                                     required
-                                    disabled={type === 'Service' ? true : false}
+                                    disabled={
+                                        invoiceType === 'Service' ||
+                                        invoiceType === 'House'
+                                            ? true
+                                            : false
+                                    }
                                     onChange={handleInputChange}
                                     sx={{
                                         width: 140,
@@ -185,7 +182,6 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                     value={unitPrice}
                                     type="number"
                                     required
-                                    disabled={type === 'Service' ? true : false}
                                     onChange={handleInputChange}
                                     sx={{
                                         width: 140,
@@ -214,7 +210,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                 key={index}
                                 label={field.label}
                                 name={field.name}
-                                value={values[field.name]}
+                                value={values[field.name] as any}
                                 type={field.type}
                                 required={field.required}
                                 disabled={field.disabled}
