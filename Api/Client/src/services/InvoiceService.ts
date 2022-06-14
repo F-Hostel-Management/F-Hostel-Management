@@ -16,6 +16,8 @@ export const getInvoices = async (
     page: number
 ): Promise<IInvoice[]> => {
     const currentHostelId = getItem('currentHostelId')
+    const currentRoomId = getItem('currentRoomId')
+
     const builder = createBuilder<IInvoice>()
         .select(
             'id',
@@ -33,7 +35,9 @@ export const getInvoices = async (
     const result: IInvoice[] = await get('Invoices', builder)
 
     return result.filter(
-        (invoice) => invoice.room?.hostelId === currentHostelId
+        (invoice) =>
+            invoice.room?.hostelId === currentHostelId ||
+            invoice.room?.id == currentRoomId
     )
 }
 
