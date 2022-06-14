@@ -18,11 +18,12 @@ import { fetchInvoices, fetchNumberOfInvoice } from '../../slices/invoiceSlice'
 import { IInvoice } from '../../interface/IInvoice'
 import { formatDate } from '../../utils/FormatDate'
 import { getItem } from '../../utils/LocalStorageUtils'
+import { getUserRole } from '../../slices/authSlice'
 
 interface IInvoicesProps {}
 
 const Invoices: FC<IInvoicesProps> = () => {
-    const role: ERole = 1
+    const role = useAppSelector(getUserRole)
     const { renderCell, createColumn, renderValueGetter } = useGridData()
 
     const [loading, setLoading] = useState<boolean>(true)

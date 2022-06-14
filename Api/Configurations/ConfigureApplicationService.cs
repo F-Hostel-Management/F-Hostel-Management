@@ -23,6 +23,7 @@ namespace Api.Configurations
             services.AddScoped<IAuthorizationServices, AuthorizationServices>();
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IPaymentService, VnPayService>();
             services.AddScoped<IHtml2PdfService, Html2PdfService>();
             services.AddScoped<HandleNotificationRequestService>();
             services.AddScoped<HandleCommitmentRequestService>();
