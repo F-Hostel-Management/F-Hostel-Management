@@ -4,7 +4,7 @@ export interface IInvoice {
     id?: string
     invoiceCode?: string
     roomName?: string
-    createDate?: string
+    createDate?: string | number
     dueDate?: string
     type?: string
     price?: number

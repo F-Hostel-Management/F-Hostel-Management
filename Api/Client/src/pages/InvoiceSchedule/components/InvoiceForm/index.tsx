@@ -33,8 +33,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
         quantity,
         unitPrice,
         price,
-        dueDate,
+        paymentDate,
         createDate,
+        overdueDays,
     } = values
     React.useEffect(() => {
         setValues({
@@ -44,8 +45,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             cron: cron,
             quantity: type === 'Service' ? 1 : quantity,
             unitPrice: type === 'Service' ? 0 : unitPrice,
-            dueDate: dueDate,
+            paymentDate: paymentDate,
             createDate: createDate,
+            overdueDays: overdueDays,
             price:
                 type === 'Service'
                     ? price
@@ -54,7 +56,17 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                     : price,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [type, roomName, cron, quantity, unitPrice, price, dueDate, createDate])
+    }, [
+        type,
+        roomName,
+        cron,
+        quantity,
+        unitPrice,
+        price,
+        paymentDate,
+        createDate,
+        overdueDays,
+    ])
 
     const fields: IField[] = [
         {
@@ -138,101 +150,68 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                 </MenuItem>
                             ))}
                         </InputField>
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <InputField
-                                    label="Date Created"
-                                    name="createDate"
-                                    value={createDate}
-                                    type={cron === 'Month' ? 'number' : 'text'}
-                                    required
-                                    select={cron === 'Month' ? false : true}
-                                    onChange={handleInputChange}
-                                    sx={{
-                                        width: 140,
-                                        ml: 2,
-                                        mt: 3,
-                                        mb: 2,
-                                        '& .MuiInputLabel-root': {
-                                            fontSize: '1.6rem',
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            fontSize: '1.6rem',
-                                            height: '3rem',
-                                        },
-                                        '& .MuiInputAdornment-root > .MuiTypography-root':
-                                            {
-                                                fontSize: '1.3rem',
-                                            },
-                                    }}
-                                    InputProps={{
-                                        readOnly: review,
-                                        endAdornment:
-                                            cron === 'Month' ? (
-                                                <InputAdornment position="end">
-                                                    days
-                                                </InputAdornment>
-                                            ) : (
-                                                ''
-                                            ),
-                                    }}
-                                >
-                                    {DaysOfTheWeek.map((option, index) => (
-                                        <MenuItem key={index} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </InputField>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <InputField
-                                    label="Payment Date"
-                                    name="paymentDate"
-                                    value={dueDate}
-                                    type={cron === 'Month' ? 'number' : 'text'}
-                                    select={cron === 'Month' ? false : true}
-                                    required
-                                    onChange={handleInputChange}
-                                    sx={{
-                                        width: 140,
-                                        mt: 3,
-                                        mb: 2,
-                                        '& .MuiInputLabel-root': {
-                                            fontSize: '1.6rem',
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            fontSize: '1.6rem',
-                                            height: '3rem',
-                                        },
-                                        '& .MuiInputAdornment-root > .MuiTypography-root':
-                                            {
-                                                fontSize: '1.3rem',
-                                            },
-                                    }}
-                                    InputProps={{
-                                        readOnly: review,
-                                        endAdornment:
-                                            cron === 'Month' ? (
-                                                <InputAdornment position="end">
-                                                    days
-                                                </InputAdornment>
-                                            ) : (
-                                                ''
-                                            ),
-                                    }}
-                                >
-                                    {DaysOfTheWeek.map((option, index) => (
-                                        <MenuItem key={index} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </InputField>
-                            </Grid>
-                        </Grid>
+                        <InputField
+                            label="Date Created"
+                            name="createDate"
+                            value={createDate}
+                            type={cron === 'Month' ? 'number' : 'text'}
+                            required
+                            select={cron === 'Month' ? false : true}
+                            onChange={handleInputChange}
+                            inputProps={{ min: 1, max: 31 }}
+                        >
+                            {DaysOfTheWeek.map((option, index) => (
+                                <MenuItem key={index} value={option}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </InputField>
+                        <InputField
+                            label="Payment Date"
+                            name="paymentDate"
+                            value={paymentDate}
+                            type="number"
+                            required
+                            onChange={handleInputChange}
+                            InputProps={{
+                                readOnly: review,
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        days
+                                    </InputAdornment>
+                                ),
+                            }}
+                            inputProps={
+                                cron === 'Month'
+                                    ? { min: 1, max: 31 }
+                                    : { min: 1, max: 7 }
+                            }
+                        />
                     </div>
                 </Styled.GridForm>
                 <Styled.GridForm item xs={12} md={6}>
                     <div style={{ width: '350px' }}>
+                        <InputField
+                            label="Number of days allowed to be overdue"
+                            name="overdueDays"
+                            value={overdueDays}
+                            type="number"
+                            required
+                            onChange={handleInputChange}
+                            InputProps={{
+                                readOnly: review,
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        days
+                                    </InputAdornment>
+                                ),
+                            }}
+                            inputProps={
+                                cron === 'Month'
+                                    ? { min: 1, max: 31 }
+                                    : { min: 0, max: 7 }
+                            }
+                        />
                         <Grid container>
                             <Grid item xs={6}>
                                 <InputField

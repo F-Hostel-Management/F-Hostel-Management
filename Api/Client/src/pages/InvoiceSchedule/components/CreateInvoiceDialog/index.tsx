@@ -19,10 +19,10 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
         type: 'House',
         price: 0,
         content: '',
-        cron: 'None',
+        cron: 'Month',
         quantity: 1,
         unitPrice: 0,
-        createDate: '',
+        createDate: 'Monday',
         overdueDays: 0,
     }
 
