@@ -5,6 +5,7 @@ export interface IFacility {
     hostelId: string
     price: number
     quantity: number
+    numberSelected?: number
 }
 
 export interface IFacilityValues {
@@ -13,4 +14,9 @@ export interface IFacilityValues {
     price: number
     quantity: number
     hostelId: string
+}
+
+export interface IFacilityDescription {
+    quantity: number
+    details: string
 }

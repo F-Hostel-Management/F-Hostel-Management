@@ -10,7 +10,7 @@ interface IInputFieldProps {
     startAdornment?: any
     endAdornment?: any
     inputProps?: Record<string, any>
-    widthProps?: number
+    width?: number
     [x: string | number | symbol]: unknown
 }
 
@@ -23,7 +23,7 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
     startAdornment,
     endAdornment,
     inputProps,
-    widthProps,
+    width = 300,
     ...others
 }) => {
     return (
@@ -37,7 +37,7 @@ const InputField: React.FunctionComponent<IInputFieldProps> = ({
             variant="outlined"
             size="small"
             sx={{
-                width: widthProps ? widthProps : 300,
+                width: { width },
                 '& .MuiInputLabel-root': {
                     fontSize: '1.6rem',
                 },
