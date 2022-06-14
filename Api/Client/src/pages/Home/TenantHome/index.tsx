@@ -43,13 +43,6 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
                                 <RoomCard key={room?.id} room={room} />
                             ))}
                         </React.Fragment>
-                        <Routes>
-                            <Route
-                                path="/joinRoom/:sixDigitsCode"
-                                element={<ConfirmCommitmentDialog />}
-                            />
-                            <Route path="*" element={<NotFound />} />
-                        </Routes>
                         {openScanQr && (
                             <ScanQrCodeDialog
                                 openDialog={openScanQr}
@@ -59,6 +52,11 @@ const TenantHome: FC<ITenantHomeProps> = ({ rooms }) => {
                     </Styled.HomeContainer>
                 }
             />
+            <Route
+                path="/joinRoom/:sixDigitsCode"
+                element={<ConfirmCommitmentDialog />}
+            />
+            <Route path="*" element={<NotFound />} />
         </Routes>
     )
 }
