@@ -8,6 +8,7 @@ import { formatDate } from '../../../../utils/FormatDate'
 import { parseContent } from '../../../../utils/InvoiceUtils'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
+import InvoiceStatus from '../InvoiceStatus'
 import { Payment } from '../Payment'
 import * as Styled from './styles'
 
@@ -80,7 +81,13 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
                     {rowData.tenantPaid ? rowData.tenantPaid?.name : 'None'}
                 </Typography>
             </Styled.InfoDetail>
-            <Payment />
+            <Styled.Payment>
+                {rowData.tenantPaid ? (
+                    <InvoiceStatus rowData={rowData}></InvoiceStatus>
+                ) : (
+                    <Payment invoiceId={rowData?.id} />
+                )}
+            </Styled.Payment>
             <Divider variant="middle" sx={{ m: 4 }} />
             <InvoiceForm
                 values={values}

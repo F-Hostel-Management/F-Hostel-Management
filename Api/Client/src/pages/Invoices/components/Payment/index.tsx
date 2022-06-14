@@ -1,26 +1,33 @@
-import { Button } from '@mui/material'
-import React from 'react'
+import { Button, Link } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import PaidIcon from '@mui/icons-material/Paid'
 import { RestCaller } from '../../../../utils/RestCaller'
-import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 interface IPaymentProps {
-    invoice: IInvoiceProps
+    invoiceId?: string
 }
 
 export const Payment = (props: IPaymentProps) => {
+    const [value, setValue] = useState('')
     const getPaymentUrlAsync = async () => {
-        await RestCaller.get(
-            `Invoices/create-vnpay?invoiceId=${props.invoice.id}`
+        let res = await RestCaller.post(
+            `Invoices/create-vnpay?invoiceId=${props.invoiceId}`
         )
+        setValue(res.result)
     }
+    useEffect(() => {
+        getPaymentUrlAsync()
+    }, [props.invoiceId])
+    const handleVnPayClick = () => {}
     return (
         <>
-            <Button
-                variant="contained"
-                endIcon={<PaidIcon sx={{ fontSize: '1.3rem' }} />}
-            >
-                Pay the bill
-            </Button>
+            <Link href={value}>
+                <Button
+                    variant="contained"
+                    endIcon={<PaidIcon sx={{ fontSize: '1.3rem' }} />}
+                >
+                    Pay the bill
+                </Button>{' '}
+            </Link>
         </>
         // <IconButtonCustom
         //     textColor="#fff"

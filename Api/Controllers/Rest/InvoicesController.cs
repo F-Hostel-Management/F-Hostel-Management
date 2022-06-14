@@ -11,6 +11,7 @@ using Domain.Enums;
 using Google.Apis.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -115,7 +116,7 @@ public class InvoicesController : BaseRestController
 
 
     [HttpPost("create-vnpay")]
-    [Authorize(Roles = nameof(Role.Tenant))]
+    // [Authorize(Roles = nameof(Role.Tenant))]
     public async Task<IActionResult> CreateVnPayBill(Guid invoiceId)
     {
         var invoice = await _invoiceRepository.FindByIdAsync(invoiceId);
@@ -125,11 +126,12 @@ public class InvoicesController : BaseRestController
     }
 
     [HttpGet("callback-vnpay")]
-    [Authorize(Roles = nameof(Role.Tenant))]
+    // [Authorize(Roles = nameof(Role.Tenant))]
     public async Task<IActionResult> CallbackVnPay()
     {
-        var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(Request.QueryString.Value);
+        var queryDictionary = QueryHelpers.ParseQuery(Request.QueryString.Value);
         await _paymentService.ProcessCallback(queryDictionary, CurrentUserID);
-        return Redirect($"{_appSettings.VnPayConfig.FrontendCallBack}{Request.QueryString.Value}");
+        string url = QueryHelpers.AddQueryString(_appSettings.VnPayConfig.FrontendCallBack, queryDictionary);
+        return Redirect(url);
     }
 }

@@ -176,9 +176,9 @@ public class VnPayService : IPaymentService
         AddRequestData("vnp_OrderInfo", "Thanh toan don hang:" + invoiceEntity.Id);
         AddRequestData("vnp_OrderType", "other"); //default value: other
         AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
-        AddRequestData("vnp_TxnRef",
-            invoiceEntity.Id
-                .ToString()); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
+        var txnRef = invoiceEntity.Id + "|" + DateTime.Now.Millisecond;
+        AddRequestData("vnp_TxnRef", txnRef
+        ); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 
         //Add Params of 2.1.0 Version
         AddRequestData("vnp_ExpireDate", "20230924083000");
@@ -212,68 +212,74 @@ public class VnPayService : IPaymentService
 
     public async Task ProcessCallback(Dictionary<string, StringValues> queryData, Guid tenantPaidId)
     {
+        string msg = "";
+        int isSuccess = 0;
         if (queryData.Count > 0)
+        {
+            string vnp_HashSecret = _options.VnPayConfig.HashSecret; //Chuoi bi mat
+            var vnpayData = queryData;
+            _responseData.Clear();
+
+            foreach (string s in vnpayData.Keys)
             {
-                string vnp_HashSecret = _options.VnPayConfig.HashSecret; //Chuoi bi mat
-                var vnpayData = queryData;
-                _responseData.Clear();
-                 
-                foreach (string s in vnpayData.Keys)
+                //get all querystring data
+                if (!string.IsNullOrEmpty(s) && s.StartsWith("vnp_"))
                 {
-                    //get all querystring data
-                    if (!string.IsNullOrEmpty(s) && s.StartsWith("vnp_"))
-                    {
-                        AddResponseData(s, vnpayData[s]);
-                    }
+                    AddResponseData(s, vnpayData[s]);
                 }
-                //vnp_TxnRef: Ma don hang merchant gui VNPAY tai command=pay    
-                //vnp_TransactionNo: Ma GD tai he thong VNPAY
-                //vnp_ResponseCode:Response code from VNPAY: 00: Thanh cong, Khac 00: Xem tai lieu
-                //vnp_SecureHash: HmacSHA512 cua du lieu tra ve
+            }
+            //vnp_TxnRef: Ma don hang merchant gui VNPAY tai command=pay    
+            //vnp_TransactionNo: Ma GD tai he thong VNPAY
+            //vnp_ResponseCode:Response code from VNPAY: 00: Thanh cong, Khac 00: Xem tai lieu
+            //vnp_SecureHash: HmacSHA512 cua du lieu tra ve
 
-                Guid invoiceId = Guid.Parse(GetResponseData("vnp_TxnRef"));
-                long vnpayTranId = Convert.ToInt64(GetResponseData("vnp_TransactionNo"));
-                string vnp_ResponseCode = GetResponseData("vnp_ResponseCode");
-                string vnp_TransactionStatus = GetResponseData("vnp_TransactionStatus");
-                String vnp_SecureHash = queryData["vnp_SecureHash"];
-                String TerminalID = queryData["vnp_TmnCode"];
-                long vnp_Amount = Convert.ToInt64(GetResponseData("vnp_Amount"))/100;
-                String bankCode = queryData["vnp_BankCode"];
+            Guid invoiceId = Guid.Parse(GetResponseData("vnp_TxnRef").Split('|')[0]);
+            long vnpayTranId = Convert.ToInt64(GetResponseData("vnp_TransactionNo"));
+            string vnp_ResponseCode = GetResponseData("vnp_ResponseCode");
+            string vnp_TransactionStatus = GetResponseData("vnp_TransactionStatus");
+            String vnp_SecureHash = queryData["vnp_SecureHash"];
+            String TerminalID = queryData["vnp_TmnCode"];
+            long vnp_Amount = Convert.ToInt64(GetResponseData("vnp_Amount")) / 100;
+            String bankCode = queryData["vnp_BankCode"];
 
-                bool checkSignature = ValidateSignature(vnp_SecureHash, vnp_HashSecret);
-                if (checkSignature)
+            bool checkSignature = ValidateSignature(vnp_SecureHash, vnp_HashSecret);
+            if (checkSignature)
+            {
+                if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                 {
-                    if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
+                    var invoice = await _invoiceRepo.FindByIdAsync(invoiceId);
+                    if (invoice is not null && invoice.TenantPaid is null)
                     {
-                        var invoice = await _invoiceRepo.FindByIdAsync(invoiceId);
-                        if (invoice is not null && invoice.TenantPaid is null)
-                        {
-                            invoice.TenantPaidId = tenantPaidId;
-                            await _invoiceRepo.UpdateAsync(invoice);
-                        }
+                        invoice.TenantPaidId = tenantPaidId;
+                        await _invoiceRepo.UpdateAsync(invoice);
                     }
-                    else
-                    {
-                        var msg = string.Format("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}",
-                            invoiceId, vnpayTranId, vnp_ResponseCode);
-                        throw new BadRequestException(msg);
-                        //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
-                        // displayMsg.InnerText = "Có lỗi xảy ra trong quá trình xử lý.Mã lỗi: " + vnp_ResponseCode;
-                        // log.InfoFormat("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}", orderId, vnpayTranId, vnp_ResponseCode);
-                    }
-                    // displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;
-                    // displayTxnRef.InnerText = "Mã giao dịch thanh toán:" + orderId.ToString();
-                    // displayVnpayTranNo.InnerText = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
-                    // displayAmount.InnerText = "Số tiền thanh toán (VND):" + vnp_Amount.ToString();
-                    // displayBankCode.InnerText = "Ngân hàng thanh toán:" + bankCode;
+
+                    isSuccess = 1;
                 }
                 else
                 {
-                    throw new BadRequestException("There is an error during the process!");
-                    // log.InfoFormat("Invalid signature, InputData={0}", Request.RawUrl);
-                    // displayMsg.InnerText = "Có lỗi xảy ra trong quá trình xử lý";
+                    msg = string.Format("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}",
+                        invoiceId, vnpayTranId, vnp_ResponseCode);
+                    // throw new BadRequestException(msg);
+                    //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
+                    // displayMsg.InnerText = "Có lỗi xảy ra trong quá trình xử lý.Mã lỗi: " + vnp_ResponseCode;
+                    // log.InfoFormat("Thanh toan loi, OrderId={0}, VNPAY TranId={1},ResponseCode={2}", orderId, vnpayTranId, vnp_ResponseCode);
                 }
+                // displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;
+                // displayTxnRef.InnerText = "Mã giao dịch thanh toán:" + orderId.ToString();
+                // displayVnpayTranNo.InnerText = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
+                // displayAmount.InnerText = "Số tiền thanh toán (VND):" + vnp_Amount.ToString();
+                // displayBankCode.InnerText = "Ngân hàng thanh toán:" + bankCode;
             }
+            else
+            {
+                msg = "There is an error during the process!";
+                // log.InfoFormat("Invalid signature, InputData={0}", Request.RawUrl);
+                // displayMsg.InnerText = "Có lỗi xảy ra trong quá trình xử lý";
+            }
+        }
 
+        queryData.Add("be_msg", msg);
+        queryData.Add("isSuccess", isSuccess.ToString());
     }
 }
