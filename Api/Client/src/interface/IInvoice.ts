@@ -15,4 +15,6 @@ export interface IInvoice {
     cron?: string
     quantity?: number
     unitPrice?: number
+    overdueDays?: number
+    paymentDate?: number
 }
