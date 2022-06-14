@@ -41,6 +41,36 @@ public class CommitmentEntity : BaseEntity
 
     //public string Content { get; set; }
 
+    // dictionary
+    public string OwnerName { get; set; }
+    public string OwnerDateOfBirth { get; set; }
+    public string OwnerCitizenIdentity { get; set; }
+    public string OwnerAddress { get; set; }
+    public string OwnerPhone { get; set; }
+
+    public string TenantName { get; set; }
+    public string TenantDateOfBirth { get; set; }
+    public string TenantCitizenIdentity { get; set; }
+    public string TeantAddress { get; set; }
+    public string TenantPhone { get; set; }
+
+    public string RoomName { get; set; }
+    public string RoomArea { get; set; }
+    public string RoomLength { get; set; }
+    public string RoomWidth { get; set; }
+    public string NumOfDoors { get; set; }
+    public string NumOfWindows { get; set; }
+    public string NumOfBathRooms { get; set; }
+    public string NumOfWCs { get; set; }
+    public string MaximumPeople { get; set; }
+    public string RoomPriceText { get; set; }
+    public string HostelAddress { get; set; }
+
+    public string CompensationText { get; set; }
+
+
+
+
     /*navigation props*/
 
     // 1 scaffolding M commitment

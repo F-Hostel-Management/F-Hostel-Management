@@ -20,14 +20,14 @@ public class NotificationsController : BaseRestController
     private readonly IGenericRepository<NotificationTransaction> _transactionRepository;
     private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
     private readonly IAuthorizationServices _authorServices;
-    private readonly HandleNotificationRequest _reqHandler;
+    private readonly HandleNotificationRequestService _reqHandler;
 
     public NotificationsController
         (IGenericRepository<NotificationEntity> notificationsRepository,
         IGenericRepository<NotificationTransaction> transactionRepository,
         IGenericRepository<CommitmentEntity> commitmentRepository,
         IAuthorizationServices authorServices,
-        HandleNotificationRequest reqHandler)
+        HandleNotificationRequestService reqHandler)
     {
         _notificationsRepository = notificationsRepository;
         _transactionRepository = transactionRepository;
