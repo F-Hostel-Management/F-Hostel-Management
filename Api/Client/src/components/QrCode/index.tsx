@@ -1,5 +1,6 @@
 import { FunctionComponent } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { QRCodeCanvas } from 'qrcode.react'
+import { downloadBase64Image } from '../../utils/DownloadUtils'
 
 interface IProps {
     size: number
@@ -7,8 +8,17 @@ interface IProps {
 }
 
 const QrCode: FunctionComponent<IProps> = ({ size, link }: IProps) => {
+    const onClick = () => {
+        const element = document.querySelector(
+            '#qr-canvas'
+        ) as HTMLCanvasElement
+        const url = element?.toDataURL()
+        downloadBase64Image('qr.png', url)
+    }
+
     return (
-        <QRCodeSVG
+        <QRCodeCanvas
+            id="qr-canvas"
             bgColor={'#FFFFFF'}
             fgColor={'#17A2B8'}
             size={size}
@@ -17,6 +27,7 @@ const QrCode: FunctionComponent<IProps> = ({ size, link }: IProps) => {
                 padding: '10px',
                 background: '#FFFFFF',
             }}
+            onClick={onClick}
         />
     )
 }
