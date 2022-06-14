@@ -1,33 +1,46 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useForm } from '../../../../hooks/useForm'
-import { IInvoice } from '../../../../interface/IInvoice'
+import { createInvoice } from '../../../../services/InvoiceService'
+import { formatContent } from '../../../../utils/InvoiceUtils'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
     openDialog: boolean
     handleCloseDialog: () => void
-    reloadData?: () => Promise<void>
+    reloadData: () => Promise<void>
 }
 
 const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
     openDialog,
     handleCloseDialog,
+    reloadData,
 }) => {
-    const initialValues: IInvoice = {
-        roomName: '',
+    const initialValues: IInvoiceProps = {
+        roomId: '',
         dueDate: '',
-        type: 'House',
+        invoiceType: 'House',
         price: 0,
         content: '',
-        cron: 'None',
         quantity: 1,
         unitPrice: 0,
     }
 
-    const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInvoice>(initialValues)
+    const { values, setValues, handleInputChange } =
+        useForm<IInvoiceProps>(initialValues)
     const handleCreateSubmit = async () => {
-        //....api
+        await createInvoice({
+            roomId: values.roomId,
+            content: formatContent({
+                content: values.content,
+                quantity: values.quantity,
+                unitPrice: values.unitPrice,
+            }),
+            dueDate: new Date(values.dueDate ?? ''),
+            invoiceType: values.invoiceType,
+            price: values.price,
+        })
+        reloadData()
         handleCloseDialog()
     }
 
