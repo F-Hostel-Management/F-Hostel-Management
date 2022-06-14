@@ -47,7 +47,7 @@ const InvoiceSchedule: FC<IInvoiceScheduleProps> = () => {
         <Fragment>
             <DataGridCustom
                 loading={loading}
-                title="All Invoice"
+                title="All Invoice Schedule"
                 rows={rows}
                 columns={columns}
                 pageSize={pageSize}
