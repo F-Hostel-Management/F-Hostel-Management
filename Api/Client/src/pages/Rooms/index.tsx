@@ -3,7 +3,6 @@ import DataGridCustom from '../../components/DataGridCustom'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
 import { ERole } from '../../utils/enums'
-import ToolbarChildren from './components/ToolbarChildren'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import {
     setPage,
@@ -12,11 +11,12 @@ import {
 } from '../../slices/tableSlice'
 import { getItem } from '../../utils/LocalStorageUtils'
 import { fetchRoomList } from '../../slices/roomSlice'
-import { createColumns } from './components/Columns'
-import CreateCRoomDialog from './components/Dialog/CreateRoomDialog'
 import { Route, Routes } from 'react-router-dom'
 import NotFound from '../NotFound'
 import RoomDetails from '../RoomDetails'
+import ToolbarChildren from './components/Table/ToolbarChildren'
+import { createColumns } from './components/Table/Columns'
+import CreateCRoomDialog from './components/Dialog/CreateRoomDialog'
 
 interface IRoomsProps {}
 
@@ -81,7 +81,7 @@ const Rooms: FC<IRoomsProps> = () => {
                     </>
                 }
             />
-            <Route path="/details" element={<RoomDetails />} />
+            <Route path="/details/:roomId" element={<RoomDetails />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     )
