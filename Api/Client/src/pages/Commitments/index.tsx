@@ -61,7 +61,7 @@ const Commitments: FC<ICommitmentsProps> = () => {
                 setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfCommitment}
                 toolbarChildren={
-                    role != ERole.TENANT_ROLE ? (
+                    role !== ERole.TENANT_ROLE ? (
                         <ToolbarChildren handleOpenCreate={handleOpenCreate} />
                     ) : null
                 }
