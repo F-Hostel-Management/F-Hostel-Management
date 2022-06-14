@@ -17,7 +17,7 @@ export const Payment = (props: IPaymentProps) => {
     useEffect(() => {
         getPaymentUrlAsync()
     }, [props.invoiceId])
-    const handleVnPayClick = () => {}
+    // const handleVnPayClick = () => {}
     return (
         <>
             <Link href={value}>

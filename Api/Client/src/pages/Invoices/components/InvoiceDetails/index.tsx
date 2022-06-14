@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import { useForm } from '../../../../hooks/useForm'
 import { IInvoice } from '../../../../interface/IInvoice'
+import { getInvoiceStatus } from '../../../../services/InvoiceService'
 import { formatDate } from '../../../../utils/FormatDate'
 import { parseContent } from '../../../../utils/InvoiceUtils'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
@@ -82,7 +83,7 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
                 </Typography>
             </Styled.InfoDetail>
             <Styled.Payment>
-                {rowData.tenantPaid ? (
+                {getInvoiceStatus(rowData).label != 'Unpaid' ? (
                     <InvoiceStatus rowData={rowData}></InvoiceStatus>
                 ) : (
                     <Payment invoiceId={rowData?.id} />
