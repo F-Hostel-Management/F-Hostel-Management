@@ -27,9 +27,9 @@ public class InvoicesController : BaseRestController
     private readonly IInvoiceService _invoiceService;
     private readonly IPaymentService _paymentService;
     private readonly AppSettings _appSettings;
-
+    private readonly IWebHostEnvironment  _appEnv;
     public InvoicesController(IGenericRepository<InvoiceEntity> invoiceRepository, IRoomServices roomService, IGenericRepository<UserEntity> userRepository,
-        IAuthorizationServices authorServices, IInvoiceService invoiceService, IPaymentService paymentService, IOptions<AppSettings> appSettings)
+        IAuthorizationServices authorServices, IInvoiceService invoiceService, IPaymentService paymentService, IOptions<AppSettings> appSettings, IWebHostEnvironment appEnv)
     {
         _invoiceRepository = invoiceRepository;
         _roomService = roomService;
@@ -37,6 +37,7 @@ public class InvoicesController : BaseRestController
         _authorServices = authorServices;
         _invoiceService = invoiceService;
         _paymentService = paymentService;
+        _appEnv = appEnv;
         _appSettings = appSettings.Value;
     }
 
@@ -141,7 +142,12 @@ public class InvoicesController : BaseRestController
     {
         var queryDictionary = QueryHelpers.ParseQuery(Request.QueryString.Value);
         await _paymentService.ProcessCallback(queryDictionary, CurrentUserID);
-        string url = QueryHelpers.AddQueryString(_appSettings.VnPayConfig.FrontendCallBack, queryDictionary);
+        string frontendUrlCallBack = _appSettings.VnPayConfig.FrontendCallBack;
+        if (_appEnv.IsDevelopment())
+        {
+            frontendUrlCallBack = _appSettings.SpaDevServer + frontendUrlCallBack;
+        }
+        string url = QueryHelpers.AddQueryString(frontendUrlCallBack, queryDictionary);
         return Redirect(url);
     }
 }

@@ -8,7 +8,9 @@ using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
 using Domain.Entities.Invoice;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Org.BouncyCastle.Asn1.Ocsp;
@@ -23,10 +25,12 @@ public class VnPayService : IPaymentService
 
     private readonly AppSettings _options;
     private readonly IGenericRepository<InvoiceEntity> _invoiceRepo;
+    private readonly IWebHostEnvironment  _appEnv;
 
-    public VnPayService(IOptions<AppSettings> options, IGenericRepository<InvoiceEntity> invoiceRepo)
+    public VnPayService(IOptions<AppSettings> options, IGenericRepository<InvoiceEntity> invoiceRepo, IWebHostEnvironment appEnv)
     {
         _invoiceRepo = invoiceRepo;
+        _appEnv = appEnv;
         _options = options.Value;
     }
 
@@ -146,7 +150,9 @@ public class VnPayService : IPaymentService
     {
         _requestData.Clear();
         //Get Config Info
-        var vnp_Returnurl = _options.VnPayConfig.ReturnUrl; //URL nhan ket qua tra ve 
+        var vnp_Returnurl = _options.VnPayConfig.ReturnUrl;
+        
+         ; //URL nhan ket qua tra ve 
         var vnp_Url = _options.VnPayConfig.Url; //URL thanh toan cua VNPAY 
         var vnp_TmnCode = _options.VnPayConfig.TmnCode; //Ma website
         var vnp_HashSecret = _options.VnPayConfig.HashSecret; //Chuoi bi mat
