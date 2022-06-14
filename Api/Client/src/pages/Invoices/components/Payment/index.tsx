@@ -1,10 +1,18 @@
 import { Button } from '@mui/material'
 import React from 'react'
 import PaidIcon from '@mui/icons-material/Paid'
-type Props = {}
+import { RestCaller } from '../../../../utils/RestCaller'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
+interface IPaymentProps {
+    invoice: IInvoiceProps
+}
 
-export const Payment = (props: Props) => {
-    const getPaymentUrlAsync = async () => {}
+export const Payment = (props: IPaymentProps) => {
+    const getPaymentUrlAsync = async () => {
+        await RestCaller.get(
+            `Invoices/create-vnpay?invoiceId=${props.invoice.id}`
+        )
+    }
     return (
         <>
             <Button
