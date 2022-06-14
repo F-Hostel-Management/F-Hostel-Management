@@ -1,6 +1,10 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../components/Button/IconButtonCustom'
-import { Edit, Delete } from '@mui/icons-material'
+import {
+    Edit,
+    Delete,
+    MeetingRoom as MeetingRoomIcon,
+} from '@mui/icons-material'
 import { ERoomStatus as Status } from '../../../../utils/enums'
 import { ERole } from '../../../../utils/enums'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
@@ -29,6 +33,14 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     justifyContent: 'space-around',
                 }}
             >
+                <IconButtonCustom
+                    textColor="#fff"
+                    bgrColor="#17A2B8"
+                    sx={{ width: '2.8rem', height: '2.8rem' }}
+                    onClick={handleOpenView}
+                >
+                    <MeetingRoomIcon sx={{ fontSize: '1.3rem' }} />
+                </IconButtonCustom>
                 {role !== ERole.TENANT_ROLE && (
                     <>
                         <IconButtonCustom

@@ -10,6 +10,7 @@ interface IRoomStepperProps {
     setValues: Dispatch<SetStateAction<any>>
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
     resetForm: () => void
+    handleCreateRoom: () => void
 }
 
 const RoomStepper: FC<IRoomStepperProps> = ({
@@ -18,6 +19,7 @@ const RoomStepper: FC<IRoomStepperProps> = ({
     setValues,
     handleInputChange,
     resetForm,
+    handleCreateRoom,
 }) => {
     const steps: IStepper[] = [
         {
@@ -28,7 +30,7 @@ const RoomStepper: FC<IRoomStepperProps> = ({
                     handleInputChange={handleInputChange}
                 />
             ),
-            handleNext: () => console.log('Values commit: ', values),
+            handleNext: handleCreateRoom,
             action: 'Next',
         },
         {

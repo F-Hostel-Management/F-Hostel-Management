@@ -19,6 +19,6 @@ export const createColumns = (
         ),
         createColumn('maximumPeople', 'Maximum People', 200),
         renderCell('status', 'Status', 150, RoomStatus),
-        renderCell('actions', 'Actions', 100, ActionButtons),
+        renderCell('actions', 'Actions', 150, ActionButtons),
     ]
 }
