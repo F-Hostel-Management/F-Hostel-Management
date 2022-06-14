@@ -8,17 +8,34 @@ import { Edit, Delete, Description } from '@mui/icons-material'
 import UpdateInvoiceDialog from '../UpdateInvoiceDialog'
 import InvoiceDetails from '../InvoiceDetails'
 import { IInvoice } from '../../../../interface/IInvoice'
+import { RestCaller } from '../../../../utils/RestCaller'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
+import {
+    fetchInvoices,
+    fetchNumberOfInvoice,
+} from '../../../../slices/invoiceSlice'
+import { getUserRole } from '../../../../slices/authSlice'
 interface IActionButtonsProps {
     rowData: IInvoice
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
-    const role: ERole = 1
+    const role = useAppSelector(getUserRole)
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
-
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+    const dispatch = useAppDispatch()
     const handleDelete = async () => {
+        const result = await RestCaller.delete(`Invoices/${rowData.id}`, {
+            success: { show: true },
+            // loading: true,
+        })
+        if (!result.isError) {
+            dispatch(fetchInvoices({ currentPageSize, currentPage }))
+            dispatch(fetchNumberOfInvoice())
+        }
         handleCloseDelete()
     }
 

@@ -30,7 +30,9 @@ const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
                     link={`${window.location.origin}/home/joinRoom/${code}`}
                     size={200}
                 />
-                <Typography variant="body2">Scan me</Typography>
+                <Typography variant="body2">
+                    Scan me or click to download
+                </Typography>
             </div>
 
             <Divider orientation="vertical" flexItem>
