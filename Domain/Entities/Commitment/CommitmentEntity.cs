@@ -51,7 +51,7 @@ public class CommitmentEntity : BaseEntity
     public string TenantName { get; set; }
     public string TenantDateOfBirth { get; set; }
     public string TenantCitizenIdentity { get; set; }
-    public string TeantAddress { get; set; }
+    public string TenantAddress { get; set; }
     public string TenantPhone { get; set; }
 
     public string RoomName { get; set; }
@@ -66,7 +66,8 @@ public class CommitmentEntity : BaseEntity
     public string RoomPriceText { get; set; }
     public string HostelAddress { get; set; }
 
-    public string CompensationText { get; set; }
+    public string CompensationText
+    { get; set; }
 
 
 
@@ -74,7 +75,7 @@ public class CommitmentEntity : BaseEntity
     /*navigation props*/
 
     // 1 scaffolding M commitment
-    public Guid? CommitmentScaffoldingId { get; set; }
+    public Guid CommitmentScaffoldingId { get; set; }
     public CommitmentScaffolding CommitmentScaffolding { get; set; }
 
     // 1 Commitment (belong to) M Managers

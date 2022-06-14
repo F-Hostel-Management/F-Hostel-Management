@@ -16,7 +16,6 @@ public class HandleCommitmentRequestService
     private readonly IGenericRepository<UserEntity> _userRepository;
     private readonly ICommitmentServices _commitmentServices;
 
-
     public HandleCommitmentRequestService
         (IGenericRepository<CommitmentScaffolding> commitmentScaffoldingRepository,
         ICommitmentServices commitmentServices,
@@ -43,7 +42,7 @@ public class HandleCommitmentRequestService
 
             // fill dictionary for owner
             OwnerName = owner.Name,
-            OwnerDateOfBirth = owner.DateOfBirth.ToString(),
+            OwnerDateOfBirth = owner.DateOfBirth.ToString("dd/MM/yyyy"),
             OwnerCitizenIdentity = owner.CitizenIdentity,
             OwnerAddress = owner.Address,
             OwnerPhone = owner.Phone,
@@ -75,11 +74,87 @@ public class HandleCommitmentRequestService
         {
             commitment.TenantId = tenantId;
             commitment.TenantName = tenant.Name;
-            commitment.TenantDateOfBirth = tenant.DateOfBirth.ToString();
+            commitment.TenantDateOfBirth = tenant.DateOfBirth.ToString("dd/MM/yyyy");
             commitment.TenantCitizenIdentity = tenant.CitizenIdentity;
-            commitment.TeantAddress = tenant.Address;
+            commitment.TenantAddress = tenant.Address;
             commitment.TenantPhone = tenant.Phone;
         };
         return commitment;
+    }
+
+    public async Task<string> GetCommitmentHtml(CommitmentEntity commitment)
+    {
+        CommitmentScaffolding commitmentScaffolding = await _commitmentScaffoldingRepository.FindByIdAsync(commitment.CommitmentScaffoldingId);
+        string commitmentHtml = commitmentScaffolding.Content;
+        var commitmentDictionary = CommitmentDictionaryGenerator(commitment);
+        commitmentHtml = DecodeCommitmentHtml(commitmentDictionary, commitmentHtml);
+        return commitmentHtml;
+    }
+
+    public string DecodeCommitmentHtml(Dictionary<string, string> commitmentDictionary, string commitmentHtml)
+    {
+        if (commitmentDictionary.Count == 0)
+        {
+            return commitmentHtml;
+        }
+        var first = commitmentDictionary.First();
+        commitmentDictionary.Remove(first.Key);
+        if (first.Value == null)
+        {
+            return DecodeCommitmentHtml(commitmentDictionary, commitmentHtml.Replace(first.Key, "Not Availabel"));
+        }
+        return DecodeCommitmentHtml(commitmentDictionary, commitmentHtml.Replace(first.Key, first.Value));
+    }
+
+    private Dictionary<string, string> CommitmentDictionaryGenerator(CommitmentEntity commitment)
+    {
+        Dictionary<string, string> commitmentDictionary = new()
+        {
+            { "{tenantName}", commitment.TenantName },
+            { "{tenantDateOfBirth}", commitment.TenantDateOfBirth },
+            { "{tenantCitizenIdentity}", commitment.TenantCitizenIdentity },
+            { "{teantAddress}", commitment.TenantAddress },
+            { "{tenantPhone}", commitment.TenantPhone },
+
+            { "{ownerName}", commitment.OwnerName },
+            { "{ownerDateOfBirth}", commitment.OwnerDateOfBirth },
+            { "{ownerCitizenIdentity}", commitment.OwnerCitizenIdentity },
+            { "{ownerAddress}", commitment.OwnerAddress },
+            { "{ownerPhone}", commitment.OwnerPhone },
+
+            { "{createDay}", commitment.CreatedDate.ToString("dd") },
+            { "{createMonth}", commitment.CreatedDate.ToString("MM") },
+            { "{createYear}", commitment.CreatedDate.ToString("yyyy") },
+
+            { "{hostelAddress}", commitment.HostelAddress },
+
+            { "{roomName}", commitment.RoomName },
+            { "{roomArea}", commitment.RoomArea },
+            { "{roomLength}", commitment.RoomLength },
+            { "{roomWidth}", commitment.RoomWidth },
+            { "{numOfDoors}", commitment.NumOfDoors },
+            { "{numOfWindows}", commitment.NumOfWindows },
+            { "{numOfBathRooms}", commitment.NumOfBathRooms },
+            { "{numOfWCs}", commitment.NumOfWCs },
+            { "{maximumPeople}", commitment.MaximumPeople },
+
+            { "{startDay}", commitment.StartDate.ToString("dd") },
+            { "{startMonth}", commitment.StartDate.ToString("MM") },
+            { "{startYear}", commitment.StartDate.ToString("yyyy") },
+
+            { "{endDay}", commitment.EndDate.ToString("dd") },
+            { "{endMonth}", commitment.EndDate.ToString("MM") },
+            { "{endYear}", commitment.EndDate.ToString("yyyy") },
+
+            { "{roomPrice}", commitment.Price.ToString() },
+            { "{roomPriceText}", commitment.RoomPriceText },
+
+            { "{paymentDate}", commitment.PaymentDate.ToString() },
+
+            { "{compensation}", commitment.Compensation.ToString() },
+            { "{compensationText}", commitment.CompensationText },
+
+        };
+        return commitmentDictionary;
     }
 }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Utilities;
+﻿namespace Application.Utilities;
 public static class MoneyToTextConverter
 {
     public static string VietnamesedongToTextConverter(double inputNumber, bool suffix = true)
     {
+        if (inputNumber == 0)
+        {
+            return "không đồng";
+        }
         string[] unitNumbers = new string[] { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
         string[] placeValues = new string[] { "", "nghìn", "triệu", "tỷ" };
         bool isNegative = false;

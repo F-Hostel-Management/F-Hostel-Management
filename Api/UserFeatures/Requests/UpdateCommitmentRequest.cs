@@ -6,6 +6,7 @@ namespace Api.UserFeatures.Requests;
 
 public class UpdateCommitmentRequest : IMapTo<CommitmentEntity>
 {
+    public double? Price { get; set; }
     public DateTime? CreatedDate { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }

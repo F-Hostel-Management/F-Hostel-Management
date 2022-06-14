@@ -25,9 +25,10 @@ public static class DatabaseInitializer
 
         await dbContext.FeedRooms();
 
+        await dbContext.FeedCommitmentScaffolding();
+
         await dbContext.FeedTenantsToRoom();
 
-        await dbContext.FeedCommitmentScaffolding();
     }
 
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
@@ -75,31 +76,31 @@ public static class DatabaseInitializer
         }
         await dbContext.SaveChangesAsync();
     }
-/*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
-    {
-        if (dbContext.RoomTypes.Any()) return;
-
-        List<RoomType> _roomTypes = new List<RoomType>
+    /*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
         {
-            new RoomType(){ CategoryName = "Studio"},
-            new RoomType(){ CategoryName = "Library"},
-            new RoomType(){ CategoryName = "BathRoom"},
-            new RoomType(){ CategoryName = "Office"},
-            new RoomType(){ CategoryName = "Singl3"},
-            new RoomType(){ CategoryName = "Doubl3"},
-            new RoomType(){ CategoryName = "Strippl3"},
-            new RoomType(){ CategoryName = "Quad"},
-            new RoomType(){ CategoryName = "Queen"},
-            new RoomType(){ CategoryName = "King"},
-            new RoomType(){ CategoryName = "Twin"},
-        };
+            if (dbContext.RoomTypes.Any()) return;
 
-        foreach (var roomType in _roomTypes)
-        {
-            await dbContext.RoomTypes.AddAsync(roomType);
-        }
-        await dbContext.SaveChangesAsync();
-    }*/
+            List<RoomType> _roomTypes = new List<RoomType>
+            {
+                new RoomType(){ CategoryName = "Studio"},
+                new RoomType(){ CategoryName = "Library"},
+                new RoomType(){ CategoryName = "BathRoom"},
+                new RoomType(){ CategoryName = "Office"},
+                new RoomType(){ CategoryName = "Singl3"},
+                new RoomType(){ CategoryName = "Doubl3"},
+                new RoomType(){ CategoryName = "Strippl3"},
+                new RoomType(){ CategoryName = "Quad"},
+                new RoomType(){ CategoryName = "Queen"},
+                new RoomType(){ CategoryName = "King"},
+                new RoomType(){ CategoryName = "Twin"},
+            };
+
+            foreach (var roomType in _roomTypes)
+            {
+                await dbContext.RoomTypes.AddAsync(roomType);
+            }
+            await dbContext.SaveChangesAsync();
+        }*/
 
     public static async Task FeedHostels(this ApplicationDbContext dbContext)
     {
@@ -186,13 +187,14 @@ public static class DatabaseInitializer
         var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
+        var scaffolding = dbContext.CommitmentScaffoldings.First();
         int code = 1;
         foreach (var tenant in tenants)
         {
             var room = rooms[_rand.Next(rooms.Length)];
             UserEntity owner = owners.FirstOrDefault(owner => owner.Id.Equals(dbContext.Hostels.FirstOrDefault(hostel => hostel.Id.Equals(room.HostelId)).OwnerId));
             // create commitment
-            CommitmentEntity com = new ()
+            CommitmentEntity com = new()
             {
                 Price = _rand.Next(3000, 4000),
                 Tenant = tenant,
@@ -207,9 +209,10 @@ public static class DatabaseInitializer
                 Compensation = _rand.Next(3000, 4000),
                 PaymentDate = _rand.Next(32),
                 CommitmentCode = "DTN" + code++,
+                CommitmentScaffoldingId = scaffolding.Id,
             };
             await dbContext.Commitments.AddAsync(com);
-                
+
 
             // tenant into room
             await dbContext.RoomTenants.AddAsync(
@@ -232,7 +235,7 @@ public static class DatabaseInitializer
         if (dbContext.CommitmentScaffoldings.Any()) return;
         await dbContext.AddAsync(new CommitmentScaffolding()
         {
-            Content = SeedingServices.LoadFileToString("comitment.html"),
+            Content = SeedingServices.LoadFileToString("comitment.html").Trim(),
         });
         await dbContext.SaveChangesAsync();
     }
