@@ -20,6 +20,7 @@ const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
     const textAreaRef = useRef(null)
 
     const copyToClipboard = () => {
+        navigator.clipboard.writeText(code.toString())
         setIsCopied(true)
     }
     return (
@@ -54,7 +55,7 @@ const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
                             >
                                 {isCopied ? (
                                     <BootstrapTooltip title="Copied!">
-                                        <Done />
+                                        <Done color="success" />
                                     </BootstrapTooltip>
                                 ) : (
                                     <ContentCopy />
