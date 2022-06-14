@@ -76,7 +76,7 @@ public class InvoicesController : BaseRestController
         if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
 
         var canModify = await _invoiceService.CanModifyAsync(invoice);
-        if (canModify) throw new BadRequestException($"Can not update when the invoice has been paid");
+        if (!canModify) throw new BadRequestException($"Can not update when the invoice has been paid");
 
         Mapper.Map(request, invoice);
         await _invoiceRepository.UpdateAsync(invoice);
@@ -99,7 +99,7 @@ public class InvoicesController : BaseRestController
         if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
 
         var canModify = await _invoiceService.CanModifyAsync(invoice);
-        if (canModify) throw new BadRequestException($"The invoice has been paid");
+        if (!canModify) throw new BadRequestException($"The invoice has been paid");
 
         var tenant = await _userRepository.FindByIdAsync(tenantId);
         if (tenant == null) throw new NotFoundException($"Tenant not found");

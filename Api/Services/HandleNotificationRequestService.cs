@@ -7,11 +7,11 @@ using Domain.Enums;
 
 namespace Api.Services;
 
-public class HandleNotificationRequest
+public class HandleNotificationRequestService
 {
     private readonly IGenericRepository<NotificationEntity> _notificationsRepository;
 
-    public HandleNotificationRequest
+    public HandleNotificationRequestService
         (IGenericRepository<NotificationEntity> notificationsRepository)
     {
         _notificationsRepository = notificationsRepository;
