@@ -1,7 +1,7 @@
 import { Autocomplete, Checkbox } from '@mui/material'
-import React, { Dispatch, FC, SetStateAction } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect } from 'react'
 import InputField from '../../../../../components/Input/InputField'
-import { useAppSelector } from '../../../../../hooks/reduxHook'
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import {
     IFacility,
     IFacilityDescription,
@@ -10,6 +10,8 @@ import {
     CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon,
     CheckBox as CheckBoxIcon,
 } from '@mui/icons-material'
+import { getItem } from '../../../../../utils/LocalStorageUtils'
+import { fetchFacility } from '../../../../../slices/facilitySlice'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -29,9 +31,16 @@ const FacilityComboBox: FC<IFacilityComboBoxProps> = ({
     descriptions,
     setDescriptions,
 }) => {
+    const dispatch = useAppDispatch()
     const facilities: IFacility[] = useAppSelector(
         ({ facility }) => facility.facilityList
     )
+
+    useEffect(() => {
+        const hostelId = getItem('currentHostelId')
+        dispatch(fetchFacility(hostelId))
+    }, [])
+
     return (
         <Autocomplete
             multiple
@@ -43,28 +52,26 @@ const FacilityComboBox: FC<IFacilityComboBoxProps> = ({
                 setValue((preValue) => {
                     switch (reason) {
                         case 'selectOption': {
-                            const data = newValue.filter((e) =>
-                                preValue.findIndex((p) => p.id === e.id)
-                            )
-                            if (!descriptions[data[0].id]?.quantity) {
-                                setDescriptions({
-                                    ...descriptions,
-                                    [data[0].id]: {
-                                        quantity: 1,
-                                        details: '',
-                                    },
-                                })
-                            }
+                            const difference = newValue.filter(
+                                (x) => !preValue.includes(x)
+                            )[0]
+                            setDescriptions({
+                                ...descriptions,
+                                [difference?.id]: {
+                                    quantity: 1,
+                                    details: '',
+                                },
+                            })
                             break
                         }
                         case 'removeOption': {
-                            const data = preValue.filter((e) =>
-                                newValue.findIndex((p) => p.id === e.id)
-                            )
+                            const difference = preValue.filter(
+                                (x) => !newValue.includes(x)
+                            )[0]
 
                             setDescriptions((preDescription) => {
                                 let tmp = { ...preDescription }
-                                delete tmp[data[0].id]
+                                delete tmp[difference?.id]
                                 return tmp
                             })
                             break

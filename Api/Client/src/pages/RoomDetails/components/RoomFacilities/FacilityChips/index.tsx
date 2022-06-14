@@ -63,7 +63,7 @@ const FacilityChips: FC<IFacilityChipsProps> = ({
                 details,
             },
         })
-        handleCloseDialog()
+        handleClose()
     }
 
     const handleOpen = (facility: IFacility) => {
@@ -73,13 +73,13 @@ const FacilityChips: FC<IFacilityChipsProps> = ({
 
     const handleClose = () => {
         setQuantity(1)
+        setDetails('')
         handleCloseDialog()
     }
 
     return (
         <Fragment>
             {value.map((facility, index) => {
-                console.log(index)
                 return (
                     <Tooltip
                         title="Click to update"
@@ -94,7 +94,7 @@ const FacilityChips: FC<IFacilityChipsProps> = ({
                                         color: '#000',
                                     }}
                                 >
-                                    {descriptions[facility.id].quantity}
+                                    {descriptions[facility.id]?.quantity}
                                 </Avatar>
                             }
                             label={` ${facility.name}`}
@@ -104,7 +104,7 @@ const FacilityChips: FC<IFacilityChipsProps> = ({
                                 margin: '8px 4px',
                                 cursor: 'pointer',
                             }}
-                            color={color[index]}
+                            color={color[index % 4]}
                         />
                     </Tooltip>
                 )

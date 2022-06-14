@@ -1,29 +1,27 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction } from 'react'
 import * as Styled from './styles'
-import { useAppDispatch } from '../../../../hooks/reduxHook'
 import {
     IFacility,
     IFacilityDescription,
 } from '../../../../interface/IFacility'
-import { fetchFacility } from '../../../../slices/facilitySlice'
-import { getItem } from '../../../../utils/LocalStorageUtils'
 import FacilityComboBox from './FacilityComboBox'
 import FacilityChips from './FacilityChips'
 
-interface IRoomFacilitiesProps {}
+interface IRoomFacilitiesProps {
+    value: IFacility[]
+    setValue: Dispatch<SetStateAction<IFacility[]>>
+    descriptions: Record<string, IFacilityDescription>
+    setDescriptions: Dispatch<
+        SetStateAction<Record<string, IFacilityDescription>>
+    >
+}
 
-const RoomFacilities: FC<IRoomFacilitiesProps> = (props) => {
-    const dispatch = useAppDispatch()
-    const hostelId = getItem('currentHostelId')
-
-    const [value, setValue] = useState<IFacility[]>([])
-    const [descriptions, setDescriptions] = useState<
-        Record<string, IFacilityDescription>
-    >({})
-
-    useEffect(() => {
-        dispatch(fetchFacility(hostelId))
-    }, [dispatch, hostelId])
+const RoomFacilities: FC<IRoomFacilitiesProps> = ({
+    value,
+    setValue,
+    descriptions,
+    setDescriptions,
+}) => {
     return (
         <Styled.Container>
             <FacilityComboBox
