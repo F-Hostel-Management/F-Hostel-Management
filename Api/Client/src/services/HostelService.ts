@@ -1,4 +1,5 @@
 import { IHostel } from '../interface/IHostel'
+import { IRoom } from '../interface/IRoom'
 import { ODataCaller } from '../utils/ODataCaller'
 import { RestCaller } from '../utils/RestCaller'
 const { createBuilder, get } = ODataCaller
@@ -69,6 +70,15 @@ const createHostel = async (data = {}) => {
 const uploadImage = async (data: FormData) => {
     return await RestCaller.upload('Hostels/upload-hostel-image', data)
 }
+
+const getRoomNamesByHostelId = async (hostelId: string): Promise<IRoom[]> => {
+    const builder = createBuilder<IHostel>()
+        .filter('id', (e) => e.equals(hostelId))
+        .expand('rooms', (q) => q.select('id', 'roomName'))
+    const result = await get('Hostels', builder, { error: { show: false } })
+    const { rooms } = result[0]
+    return rooms
+}
 export {
     getListHostel,
     getHostelById,
@@ -76,4 +86,5 @@ export {
     uploadImage,
     getRoomOfHostel,
     getOwnerOfHostel,
+    getRoomNamesByHostelId,
 }

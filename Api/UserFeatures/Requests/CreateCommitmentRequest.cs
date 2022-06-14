@@ -17,7 +17,7 @@ public class CreateCommitmentRequest : IMapTo<CommitmentEntity>
     public DateTime StartDate { get; set; }
     [Required]
     public DateTime EndDate { get; set; }
-    /*public Guid? ScaffoldingId { get; set; } */
+    /*public Guid ScaffoldingId { get; set; }*/
     public int? DateOverdue { get; set; }
 
     public double? Compensation { get; set; }

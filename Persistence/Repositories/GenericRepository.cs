@@ -80,8 +80,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
     public virtual async Task UpdateAsync(T updated)
     {
-        //_context.Entry(existing).CurrentValues.SetValues(updated);
-        _context.Entry(updated).State = EntityState.Modified;
+        //_context.Entry(updated).State = EntityState.Modified;
+        _context.Attach(updated).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 

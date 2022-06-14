@@ -7,7 +7,7 @@ namespace Application.Interfaces
 {
     public interface ICommitmentServices
     {
-        Task CreateCommitment(CommitmentEntity commitment, RoomEntity room);
+        Task CreateCommitment(CommitmentEntity commitment);
         Task<IList<CommitmentEntity>> GetCommitmentsForTenant(Guid roomId, Guid tenantId);
         Task<CommitmentEntity> GetCommitment(Guid Id);
         Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status);
@@ -15,9 +15,9 @@ namespace Application.Interfaces
         Task<CommitmentEntity> GetNotExpiredCommitment(Guid Id);
         Task<CommitmentEntity> GetNotExpiredCommitmentByRoom(Guid roomId);
         Task ApprovedCommitment(CommitmentEntity commitment);
-        Task ActivatedCommitment(CommitmentEntity commitment, Guid tenantId);
+        Task ActivatedCommitment(CommitmentEntity commitment);
         Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
-        Task<int> CountForHostel(Guid hostelId);
+        Task<int> CountCommitmentByHostel(Guid hostelId);
 
     }
 }
