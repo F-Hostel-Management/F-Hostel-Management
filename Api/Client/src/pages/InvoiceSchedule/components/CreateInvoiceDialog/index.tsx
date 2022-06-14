@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useForm } from '../../../../hooks/useForm'
-import { IInvoice } from '../../../../interface/IInvoice'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
     openDialog: boolean
@@ -13,10 +13,10 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
-    const initialValues: IInvoice = {
-        roomName: '',
+    const initialValues: IInvoiceProps = {
+        roomId: '',
         paymentDate: 1,
-        type: 'House',
+        invoiceType: 'House',
         price: 0,
         content: '',
         cron: 'Month',
@@ -27,7 +27,7 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
     }
 
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInvoice>(initialValues)
+        useForm<IInvoiceProps>(initialValues)
     const handleCreateSubmit = async () => {
         //....api
         handleCloseDialog()

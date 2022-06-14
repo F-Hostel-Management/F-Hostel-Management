@@ -5,12 +5,12 @@ import { DaysOfTheWeek } from '../../../../constants/Date'
 import { InvoiceCron, InvoiceType } from '../../../../constants/Invoice'
 
 import { IField } from '../../../../interface/IField'
-import { IInvoice } from '../../../../interface/IInvoice'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import * as Styled from './styles'
 
-interface IInvoiceFormProps {
-    values: Record<string, any>
-    setValues: React.Dispatch<React.SetStateAction<IInvoice>>
+interface IInvoiceFormProps<T> {
+    values: T
+    setValues: React.Dispatch<React.SetStateAction<T>>
     handleInputChange: (
         event: React.ChangeEvent<HTMLInputElement>,
         isForce?: boolean
@@ -18,7 +18,7 @@ interface IInvoiceFormProps {
     review?: boolean
 }
 
-const InvoiceForm: React.FC<IInvoiceFormProps> = ({
+const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
     values,
     setValues,
     handleInputChange,
@@ -27,46 +27,30 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
     const roomList = ['701', '702', '703', '704', '705']
 
     const {
-        type,
-        roomName,
-        cron,
+        invoiceType,
+        roomId,
         quantity,
         unitPrice,
         price,
-        paymentDate,
+        cron,
         createDate,
+        paymentDate,
         overdueDays,
     } = values
     React.useEffect(() => {
         setValues({
             ...values,
-            type: type,
-            roomName: roomName,
-            cron: cron,
-            quantity: type === 'Service' ? 1 : quantity,
-            unitPrice: type === 'Service' ? 0 : unitPrice,
-            paymentDate: paymentDate,
-            createDate: createDate,
-            overdueDays: overdueDays,
-            price:
-                type === 'Service'
-                    ? price
-                    : quantity && unitPrice
-                    ? quantity * unitPrice
-                    : price,
+            invoiceType: invoiceType,
+            roomId: roomId,
+            quantity:
+                invoiceType === 'Service' || invoiceType === 'House'
+                    ? 1
+                    : quantity,
+            unitPrice: unitPrice,
+            price: quantity * unitPrice,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        type,
-        roomName,
-        cron,
-        quantity,
-        unitPrice,
-        price,
-        paymentDate,
-        createDate,
-        overdueDays,
-    ])
+    }, [invoiceType, roomId, quantity, unitPrice, price])
 
     const fields: IField[] = [
         {
@@ -88,7 +72,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
             label: 'Detail',
             name: 'content',
             type: 'text',
-            required: type === 'Service' ? true : false,
+            required: invoiceType === 'Service' ? true : false,
             multiline: true,
         },
     ]
@@ -102,7 +86,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                         <InputField
                             label="Room Name"
                             name="roomName"
-                            value={roomName}
+                            value={roomId}
                             required={true}
                             select
                             onChange={handleInputChange}
@@ -119,7 +103,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                         <InputField
                             label="Type"
                             name="type"
-                            value={type}
+                            value={invoiceType}
                             required={true}
                             select
                             onChange={handleInputChange}
@@ -220,7 +204,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                     value={quantity}
                                     type="number"
                                     required
-                                    disabled={type === 'Service' ? true : false}
+                                    disabled={
+                                        invoiceType === 'Service' ? true : false
+                                    }
                                     onChange={handleInputChange}
                                     sx={{
                                         width: 140,
@@ -251,7 +237,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps> = ({
                                     value={unitPrice}
                                     type="number"
                                     required
-                                    disabled={type === 'Service' ? true : false}
+                                    disabled={
+                                        invoiceType === 'Service' ? true : false
+                                    }
                                     onChange={handleInputChange}
                                     sx={{
                                         width: 140,

@@ -48,5 +48,11 @@
   <ItemGroup>
     <None Remove="Client\pnpm-lock.yaml" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <None Update="MockData\comitment.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

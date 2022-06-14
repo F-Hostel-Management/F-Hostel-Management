@@ -18,7 +18,7 @@ public class RoomServices : IRoomServices
         _roomRepository = roomRepository;
         _hostelServices = hostelServices;
     }
-    public async Task Rent(RoomEntity room)
+    public async Task RentThisRoom(RoomEntity room)
     {
         room.RoomStatus = RoomStatus.Rented;
         await _roomRepository.UpdateAsync(room);
@@ -28,14 +28,17 @@ public class RoomServices : IRoomServices
     // not found ==> throw exception
     public async Task<RoomEntity> GetRoom(Guid Id, RoomStatus status)
     {
-        RoomEntity room = await _roomRepository
+        /*RoomEntity room = await _roomRepository
             .FirstOrDefaultAsync(room =>
             room.Id.Equals(Id)
             && room.Status.Equals(status.ToString())
-            );
-
-        return room ??
+            );*/
+        RoomEntity room = await _roomRepository.FindByIdAsync(Id);
+        if (room == null || room.RoomStatus != status)
+        {
             throw new NotFoundException($"Room not found");
+        }
+        return room;  
     }
 
     public async Task<RoomEntity> GetRoom(Guid Id)

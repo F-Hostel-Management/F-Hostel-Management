@@ -2,14 +2,14 @@ import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useAppDispatch } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
-import { IInvoice } from '../../../../interface/IInvoice'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 
 interface IUpdateInvoiceDialogProps {
     openDialog: boolean
     handleOpenDialog: () => void
     handleCloseDialog: () => void
-    rowData: IInvoice
+    rowData: IInvoiceProps
 }
 
 const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
@@ -19,7 +19,7 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
 }) => {
     const dispatch = useAppDispatch()
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInvoice>(rowData)
+        useForm<IInvoiceProps>(rowData)
     const handleSubmit = async () => {
         //api
         handleCloseDialog()

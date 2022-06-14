@@ -6,7 +6,6 @@ import { useDialog } from '../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
 import { Edit, Delete } from '@mui/icons-material'
 import UpdateInvoiceDialog from '../UpdateInvoiceDialog'
-import InvoiceDetails from '../InvoiceDetails'
 import { IInvoice } from '../../../../interface/IInvoice'
 interface IActionButtonsProps {
     rowData: IInvoice
@@ -53,15 +52,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     </>
                 )}
             </div>
-
-            {openView && (
-                <InvoiceDetails
-                    openDialog={openView}
-                    handleOpenDialog={handleOpenView}
-                    handleCloseDialog={handleCloseView}
-                    rowData={rowData}
-                />
-            )}
 
             {openDelete && (
                 <ConfirmDialog

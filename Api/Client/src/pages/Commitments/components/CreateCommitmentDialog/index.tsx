@@ -28,7 +28,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         startDate: '',
         endDate: '',
         roomId: '',
-        overdueDays: 0,
+        dateOverdue: 0,
         compensation: 0,
         price: 0,
         paymentDate: 1,
