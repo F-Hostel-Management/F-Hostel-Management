@@ -14,6 +14,9 @@ import { getItem } from '../../utils/LocalStorageUtils'
 import { fetchRoomList } from '../../slices/roomSlice'
 import { createColumns } from './components/Columns'
 import CreateCRoomDialog from './components/Dialog/CreateRoomDialog'
+import { Route, Routes } from 'react-router-dom'
+import NotFound from '../NotFound'
+import RoomDetails from '../RoomDetails'
 
 interface IRoomsProps {}
 
@@ -43,33 +46,44 @@ const Rooms: FC<IRoomsProps> = () => {
         setLoading(false)
     }, [dispatch, page, pageSize])
     return (
-        <Fragment>
-            <DataGridCustom
-                loading={loading}
-                title="All Rooms"
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                setPageSize={(pageSize: number) =>
-                    dispatch(setPageSize(pageSize))
-                }
-                page={page}
-                setPage={(page: number) => dispatch(setPage(page))}
-                rowsCount={numOfRooms}
-                toolbarChildren={
-                    role != ERole.TENANT_ROLE ? (
-                        <ToolbarChildren handleOpenCreate={handleOpenCreate} />
-                    ) : null
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <>
+                        <DataGridCustom
+                            loading={loading}
+                            title="All Rooms"
+                            rows={rows}
+                            columns={columns}
+                            pageSize={pageSize}
+                            setPageSize={(pageSize: number) =>
+                                dispatch(setPageSize(pageSize))
+                            }
+                            page={page}
+                            setPage={(page: number) => dispatch(setPage(page))}
+                            rowsCount={numOfRooms}
+                            toolbarChildren={
+                                role != ERole.TENANT_ROLE ? (
+                                    <ToolbarChildren
+                                        handleOpenCreate={handleOpenCreate}
+                                    />
+                                ) : null
+                            }
+                        />
+
+                        {openCreate && (
+                            <CreateCRoomDialog
+                                openDialog={openCreate}
+                                handleCloseDialog={handleCloseCreate}
+                            />
+                        )}
+                    </>
                 }
             />
-
-            {openCreate && (
-                <CreateCRoomDialog
-                    openDialog={openCreate}
-                    handleCloseDialog={handleCloseCreate}
-                />
-            )}
-        </Fragment>
+            <Route path="/details" element={<RoomDetails />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
     )
 }
 

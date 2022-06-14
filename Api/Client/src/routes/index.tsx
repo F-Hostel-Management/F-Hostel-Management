@@ -65,7 +65,7 @@ const privateRoutes: IRoute[] = [
         },
     },
     {
-        path: '/home/rooms',
+        path: '/home/rooms/*',
         component: Rooms,
         name: 'Rooms',
         layout: DefaultLayout,
