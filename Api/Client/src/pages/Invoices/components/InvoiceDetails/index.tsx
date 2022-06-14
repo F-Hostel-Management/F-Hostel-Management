@@ -1,8 +1,12 @@
 import { Divider, Typography } from '@mui/material'
+import moment from 'moment'
 import React, { FC } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import { useForm } from '../../../../hooks/useForm'
 import { IInvoice } from '../../../../interface/IInvoice'
+import { formatDate } from '../../../../utils/FormatDate'
+import { parseContent } from '../../../../utils/InvoiceUtils'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 import { Payment } from '../Payment'
 import * as Styled from './styles'
@@ -19,8 +23,17 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
     handleCloseDialog,
     rowData,
 }) => {
-    const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInvoice>(rowData)
+    const initial = parseContent(rowData.content ?? '')
+
+    const { values, setValues, handleInputChange } = useForm<IInvoiceProps>({
+        content: initial.content,
+        dueDate: moment(new Date(rowData.dueDate ?? '')).format('YYYY-MM-DD'),
+        invoiceType: rowData.invoiceType ?? '',
+        roomId: rowData?.room?.id ?? '',
+        price: rowData?.price ?? 0,
+        quantity: initial.quantity,
+        unitPrice: initial.unitPrice,
+    })
     const handleSubmit = async () => {
         //api
         handleCloseDialog()
@@ -42,7 +55,7 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
                         textAlign: 'center',
                     }}
                 >
-                    Creator: Panh {/*userName*/}
+                    Creator: {rowData.manager?.name}
                 </Typography>
                 <Typography
                     variant="body2"
@@ -53,7 +66,7 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
                         textAlign: 'center',
                     }}
                 >
-                    Create Date: 3/4/2021 {/*Create Date*/}
+                    Create Date: {formatDate(new Date(rowData.date ?? ''))}
                 </Typography>
                 <Typography
                     variant="body2"
@@ -63,7 +76,8 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
                         textAlign: 'center',
                     }}
                 >
-                    Tenant Paid: Panh {/**/}
+                    Tenant Paid:{' '}
+                    {rowData.tenantPaid ? rowData.tenantPaid?.name : 'None'}
                 </Typography>
             </Styled.InfoDetail>
             <Payment />

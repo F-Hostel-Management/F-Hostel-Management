@@ -1,18 +1,16 @@
-import { EInvoiceStatus } from '../utils/enums'
+import { IRoom } from './IRoom'
+import { IUser } from './IUser'
 
 export interface IInvoice {
     id?: string
     invoiceCode?: string
-    roomName?: string
-    createDate?: string
-    dueDate?: string
-    type?: string
     price?: number
+    date?: string
+    dueDate?: string
+    invoiceType?: string
     content?: string
+    room?: IRoom
+    manager?: IUser
+    tenantPaid?: IUser
     isDeleted?: boolean
-    status?: EInvoiceStatus
-    creator?: string
-    cron?: string
-    quantity?: number
-    unitPrice?: number
 }

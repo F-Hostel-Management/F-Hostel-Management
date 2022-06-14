@@ -2,47 +2,72 @@ import { GridColDef } from '@mui/x-data-grid'
 import React, { FC, Fragment, useEffect, useState } from 'react'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
-import { IInvoice } from '../../interface/IInvoice'
 import { ERole } from '../../utils/enums'
 import InvoiceStatus from './components/InvoiceStatus'
 import ActionButtons from './components/ActionButtons'
 import DataGridCustom from '../../components/DataGridCustom'
 import ToolbarChildren from './components/ToolbarChildren'
-import { getData, invoices } from '../../utils/MockData'
 import CreateInvoiceDialog from './components/CreateInvoiceDialog'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
+import {
+    setPage,
+    setPageSize,
+    setTableInitialState,
+} from '../../slices/tableSlice'
+import { fetchInvoices, fetchNumberOfInvoice } from '../../slices/invoiceSlice'
+import { IInvoice } from '../../interface/IInvoice'
+import { formatDate } from '../../utils/FormatDate'
 
 interface IInvoicesProps {}
 
 const Invoices: FC<IInvoicesProps> = () => {
     const role: ERole = 1
-    const { renderCell, createColumn } = useGridData()
+    const { renderCell, createColumn, renderValueGetter } = useGridData()
 
-    const [pageSize, setPageSize] = useState<number>(5)
-    const [page, setPage] = useState<number>(0)
-    const [rows, setRows] = useState<IInvoice[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
     const columns: GridColDef[] = [
-        createColumn('id', 'Code', 70),
-        createColumn('roomName', 'Room Name', 100),
-        createColumn('type', 'Type', 100),
-        createColumn('createDate', 'Create Date', 150),
-        createColumn('dueDate', 'Due Date', 150),
+        createColumn('invoiceCode', 'Code', 70),
+        renderValueGetter(
+            'roomName',
+            'Room',
+            100,
+            (params: IInvoice) => params.room?.roomName ?? ''
+        ),
+        createColumn('invoiceType', 'Type', 100),
+        renderValueGetter('date', 'Create date', 150, (params: IInvoice) =>
+            formatDate(new Date(params.date ?? ''))
+        ),
+        renderValueGetter('dueData', 'Due date', 150, (params: IInvoice) =>
+            formatDate(new Date(params.dueDate ?? ''))
+        ),
         createColumn('price', 'Price', 120),
         renderCell('status', 'Status', 130, InvoiceStatus),
         renderCell('actions', 'Actions', 150, ActionButtons),
     ]
 
+    const rows = useAppSelector(({ invoice }) => invoice.invoiceList)
+    const numOfInvoice = useAppSelector(({ invoice }) => invoice.numOfInvoice)
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
+        dispatch(setTableInitialState())
+    }, [dispatch])
+
+    const getInvoicesUI = () => {
         setLoading(true)
-        const FetchData = async () => {
-            const data = getData(page + 1, pageSize, invoices)
-            setRows(data)
-            setLoading(false)
-        }
-        FetchData()
-    }, [page, pageSize])
+        dispatch(fetchInvoices({ currentPageSize, currentPage }))
+        dispatch(fetchNumberOfInvoice())
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        getInvoicesUI()
+    }, [dispatch, currentPageSize, currentPage])
     return (
         <Fragment>
             <DataGridCustom
@@ -50,11 +75,13 @@ const Invoices: FC<IInvoicesProps> = () => {
                 title="All Invoice"
                 rows={rows}
                 columns={columns}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-                page={page}
-                setPage={setPage}
-                rowsCount={27}
+                pageSize={currentPageSize}
+                setPageSize={(pageSize: number) =>
+                    dispatch(setPageSize(pageSize))
+                }
+                page={currentPage}
+                setPage={(page: number) => dispatch(setPage(page))}
+                rowsCount={numOfInvoice}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (
                         <ToolbarChildren handleOpenCreate={handleOpenCreate} />
@@ -66,7 +93,7 @@ const Invoices: FC<IInvoicesProps> = () => {
                 <CreateInvoiceDialog
                     openDialog={openCreate}
                     handleCloseDialog={handleCloseCreate}
-                    // reloadData={() =>)}
+                    reloadData={async () => getInvoicesUI()}
                 />
             )}
         </Fragment>
