@@ -18,7 +18,7 @@ import {
 import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/homeSlice'
 import QrCodeGenerate from '../QrCodeGenerate'
-const baseUrl = import.meta.env.PUBLIC_FRONTEND
+import { ICommitment } from '../../../../interface/ICommitment'
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
     values: Record<string, any>
@@ -30,6 +30,7 @@ interface ICommitmentStepperProps {
     timeSpan: number | null
     handleChange: (e: ChangeEvent<HTMLInputElement>) => void
     sixDigitsCode: any
+    commitment?: ICommitment
 }
 
 const CommitmentStepper: FC<ICommitmentStepperProps> = ({
@@ -43,6 +44,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     timeSpan,
     handleChange,
     sixDigitsCode,
+    commitment,
 }) => {
     const currentHostel = useSelector(getCurrentHostel)
     const [rooms, setRooms] = useState([])
@@ -70,7 +72,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
             const roomList = await getRoomOfHostel(
                 currentHostelId || hostelInfo?.id
             )
-            setRoomInfo(roomList?.[0])
+            setRoomInfo(commitment?.room || roomList?.[0])
             setRooms(roomList)
         })()
     }, [hostelInfo])
@@ -89,6 +91,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     hostelInfo={hostelInfo}
                     setHostelInfo={setHostelInfo}
                     hostelOptions={hostels}
+                    isUpdate={commitment ? true : false}
                 />
             ),
             handleNext: () => console.log('Values commit: ', values),

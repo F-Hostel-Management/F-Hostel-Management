@@ -10,12 +10,12 @@ import QrCode from '../../../../components/QrCode'
 import * as Styled from './styles'
 import { ContentCopy, Done } from '@mui/icons-material'
 import BootstrapTooltip from '../../../../components/BootstrapTooltip'
-const baseUrl = import.meta.env.PUBLIC_FRONTEND
 interface IQrCodeGenerateProps {
     code: number
 }
 
 const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
+    console.log(window.location.origin)
     const [isCopied, setIsCopied] = useState<boolean>(false)
     const textAreaRef = useRef(null)
 
@@ -25,7 +25,10 @@ const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
     return (
         <Styled.Container>
             <div style={{ textAlign: 'center' }}>
-                <QrCode link={`${baseUrl}/home/joinRoom/${code}`} size={200} />
+                <QrCode
+                    link={`${window.location.origin}/home/joinRoom/${code}`}
+                    size={200}
+                />
                 <Typography variant="body2">Scan me</Typography>
             </div>
 

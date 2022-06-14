@@ -116,6 +116,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
 
             {openUpdate && (
                 <UpdateCommitmentDialog
+                    commitment={rowData}
                     openDialog={openUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />

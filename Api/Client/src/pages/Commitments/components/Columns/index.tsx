@@ -6,37 +6,37 @@ import CommitmentStatus from '../CommitmentStatus'
 export const createColumns = (
     renderCell: any,
     createColumn: any,
-    renderValueSetter: any
+    renderValueGetter: any
 ): GridColDef[] => {
     return [
         createColumn('commitmentCode', 'Code', 100),
-        renderValueSetter(
+        renderValueGetter(
             'ownerName',
             'Owner',
             200,
             (params: Record<string, any>) => params.owner?.name
         ),
-        renderValueSetter(
+        renderValueGetter(
             'roomName',
             'Room',
             200,
             (params: Record<string, any>) => params.room?.roomName
         ),
-        renderValueSetter(
+        renderValueGetter(
             'createdDate',
             'Created Date',
             200,
             (params: Record<string, any>) =>
                 formatDate(new Date(params.createdDate))
         ),
-        renderValueSetter(
+        renderValueGetter(
             'startDate',
             'Started Date',
             200,
             (params: Record<string, any>) =>
                 formatDate(new Date(params.startDate))
         ),
-        renderValueSetter(
+        renderValueGetter(
             'endDate',
             'End Date',
             200,

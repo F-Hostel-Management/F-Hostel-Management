@@ -1,40 +1,46 @@
-import { CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material'
-import React, { FC } from 'react'
-
-const icon = <CheckBoxOutlineBlank fontSize="small" />
-const checkedIcon = <CheckBox fontSize="small" />
+import React, { FC, useEffect, useState } from 'react'
+import * as Styled from './styles'
+import { useAppDispatch } from '../../../../hooks/reduxHook'
+import {
+    IFacility,
+    IFacilityDescription,
+} from '../../../../interface/IFacility'
+import { fetchFacility } from '../../../../slices/facilitySlice'
+import { getItem } from '../../../../utils/LocalStorageUtils'
+import FacilityComboBox from './FacilityComboBox'
+import FacilityChips from './FacilityChips'
 
 interface IRoomFacilitiesProps {}
 
 const RoomFacilities: FC<IRoomFacilitiesProps> = (props) => {
+    const dispatch = useAppDispatch()
+    const hostelId = getItem('currentHostelId')
+
+    const [value, setValue] = useState<IFacility[]>([])
+    const [descriptions, setDescriptions] = useState<
+        Record<string, IFacilityDescription>
+    >({})
+
+    useEffect(() => {
+        dispatch(fetchFacility(hostelId))
+    }, [dispatch, hostelId])
     return (
-        <div></div>
-        // <Autocomplete
-        //     multiple
-        //     id="checkboxes-tags-demo"
-        //     options={[]}
-        //     disableCloseOnSelect
-        //     getOptionLabel={(option) => option.title}
-        //     renderOption={(props, option, { selected }) => (
-        //         <li {...props}>
-        //             <Checkbox
-        //                 icon={icon}
-        //                 checkedIcon={checkedIcon}
-        //                 style={{ marginRight: 8 }}
-        //                 checked={selected}
-        //             />
-        //             {option.title}
-        //         </li>
-        //     )}
-        //     style={{ width: 500 }}
-        //     renderInput={(params) => (
-        //         <TextField
-        //             {...params}
-        //             label="Checkboxes"
-        //             placeholder="Favorites"
-        //         />
-        //     )}
-        // />
+        <Styled.Container>
+            <FacilityComboBox
+                value={value}
+                setValue={setValue}
+                descriptions={descriptions}
+                setDescriptions={setDescriptions}
+            />
+            <Styled.PaperMUI elevation={3}>
+                <FacilityChips
+                    value={value}
+                    setValue={setValue}
+                    descriptions={descriptions}
+                    setDescriptions={setDescriptions}
+                />
+            </Styled.PaperMUI>
+        </Styled.Container>
     )
 }
 
