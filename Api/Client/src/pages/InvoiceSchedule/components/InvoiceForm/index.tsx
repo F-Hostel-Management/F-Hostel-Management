@@ -37,6 +37,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         paymentDate,
         overdueDays,
     } = values
+
     React.useEffect(() => {
         setValues({
             ...values,
@@ -77,7 +78,6 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
     ]
 
-    console.log('price: ' + price)
     return (
         <Styled.FormContainer>
             <Grid container>
@@ -85,7 +85,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                     <div style={{ width: '350px' }}>
                         <InputField
                             label="Room Name"
-                            name="roomName"
+                            name="roomId"
                             value={roomId}
                             required={true}
                             select
@@ -102,7 +102,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                         </InputField>
                         <InputField
                             label="Type"
-                            name="type"
+                            name="invoiceType"
                             value={invoiceType}
                             required={true}
                             select
@@ -143,6 +143,17 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                             select={cron === 'Month' ? false : true}
                             onChange={handleInputChange}
                             inputProps={{ min: 1, max: 31 }}
+                            InputProps={{
+                                readOnly: review,
+                                endAdornment:
+                                    cron === 'Month' ? (
+                                        <InputAdornment position="end">
+                                            day of every month
+                                        </InputAdornment>
+                                    ) : (
+                                        ''
+                                    ),
+                            }}
                         >
                             {DaysOfTheWeek.map((option, index) => (
                                 <MenuItem key={index} value={option}>

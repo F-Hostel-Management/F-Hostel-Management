@@ -25,7 +25,7 @@ const InvoiceSchedule: FC<IInvoiceScheduleProps> = () => {
     const columns: GridColDef[] = [
         createColumn('id', 'Code', 70),
         createColumn('roomName', 'Room Name', 100),
-        createColumn('type', 'Type', 100),
+        createColumn('invoiceType', 'Type', 100),
         createColumn('cron', 'Repeat by', 100),
         createColumn('createDate', 'Create Date', 150),
         createColumn('paymentDate', 'Payment Date', 150),
