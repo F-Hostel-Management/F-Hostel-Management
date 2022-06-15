@@ -129,10 +129,10 @@ public class RoomsController : BaseRestController
         await _facilityManagementRepo.UpdateAsync(target);
         return Ok();
     }
-    [HttpDelete("delete-facility")]
-    public async Task<IActionResult> DeleteFacilityFromRoom(DeleteFacilityFromRoomRequest request)
+    [HttpDelete("delete-facility/{id}")]
+    public async Task<IActionResult> DeleteFacilityFromRoom([FromRoute] Guid id)
     {
-        var target = await _facilityManagementRepo.FirstOrDefaultAsync(e => e.Id.Equals(request.FacilityManagementId));
+        var target = await _facilityManagementRepo.FirstOrDefaultAsync(e => e.Id.Equals(id));
         if (target is null)
             throw new BadRequestException("Facility is not valid");
         bool isManagedByCurrentUser = await _authorServices.IsRoomManageByCurrentUser(target.RoomId, CurrentUserID);

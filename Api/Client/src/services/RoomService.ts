@@ -4,6 +4,7 @@ import { ODataCaller } from '../utils/ODataCaller'
 import { RestCaller } from '../utils/RestCaller'
 const { createBuilder, get } = ODataCaller
 
+// Tenant views all rooms which is being rented.
 const getAllRoomOfTenant = async () => {
     const builder = createBuilder<IRoom>().select(
         'id',
@@ -26,6 +27,7 @@ const getAllRoomOfTenant = async () => {
     return result
 }
 
+//Get all rooms of hostel and pagination.
 const getAllRoomOfHostel = async (
     hostelId: string,
     pageSize: number,
@@ -74,8 +76,22 @@ const getRoomById = async (roomId = '') => {
     const builder = createBuilder<IRoom>()
         .filter('id', (e) => e.equals(roomId))
         .select()
-    const result = await get('Rooms', builder)
-    console.log('getRoomById: ', result[0].hostel)
+        .expand('facilityManagements', (e) =>
+            e
+                .select()
+                .expand('facility', (facility) =>
+                    facility.select(
+                        'name',
+                        'price',
+                        'quantity',
+                        'type',
+                        'hostelId'
+                    )
+                )
+        )
+
+    const result = await get(`Rooms/${roomId}/detail`, builder)
+    console.log('getRoomById: ', result[0])
     return result[0]
 }
 
@@ -123,6 +139,18 @@ const addFacilities = async (data = {}) => {
     return result
 }
 
+const updateFacilities = async (data = {}) => {
+    const result = await RestCaller.patch('Rooms/update-facility', data)
+    console.log('updateFacilities: ', result)
+    return result
+}
+
+// const deleteFacilities = async (data = {}) => {
+//     const result = await RestCaller.delete('Rooms/delete-facility', data)
+//     console.log('deleteFacilities: ', result)
+//     return result
+// }
+
 export {
     getAllRoomOfTenant,
     getHostelOfRoom,
@@ -131,4 +159,5 @@ export {
     countRoomOfHostel,
     createRoom,
     addFacilities,
+    updateFacilities,
 }

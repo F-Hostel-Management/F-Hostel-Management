@@ -7,6 +7,6 @@ namespace Application.Interfaces;
 
 public interface IPaymentService
 {
-    string CreatePaymentFromInvoice(InvoiceEntity invoiceEntity);
+    string CreatePaymentFromInvoice(InvoiceEntity invoiceEntity, string origin);
     Task ProcessCallback(Dictionary<string, StringValues> queryString, Guid tenantPaid);
 }

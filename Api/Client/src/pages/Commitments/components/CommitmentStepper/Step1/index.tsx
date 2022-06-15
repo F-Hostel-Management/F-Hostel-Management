@@ -55,7 +55,7 @@ const fields: IField[] = [
         endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
     },
     {
-        label: 'Compensation Money',
+        label: 'Compensation Fee',
         name: 'compensation',
         type: 'number',
         required: true,

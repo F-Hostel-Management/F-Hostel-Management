@@ -1,6 +1,7 @@
 ﻿using Api.UserFeatures.Requests;
 using Application.AppConfig;
 using Application.Exceptions;
+using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
@@ -13,8 +14,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Ocsp;
 
 namespace Api.Controllers.Rest;
 
@@ -132,7 +135,10 @@ public class InvoicesController : BaseRestController
     {
         var invoice = await _invoiceRepository.FindByIdAsync(invoiceId);
         if (invoice == null) throw new NotFoundException($"Invoice not found");
-        string result = _paymentService.CreatePaymentFromInvoice(invoice);
+        var origin = Request.Headers["Origin"];
+        if (string.IsNullOrEmpty(origin))
+            origin = MyHttpContext.AppBaseUrl;
+        string result = _paymentService.CreatePaymentFromInvoice(invoice, origin);
         return Ok(result);
     }
 
@@ -143,10 +149,11 @@ public class InvoicesController : BaseRestController
         var queryDictionary = QueryHelpers.ParseQuery(Request.QueryString.Value);
         await _paymentService.ProcessCallback(queryDictionary, CurrentUserID);
         string frontendUrlCallBack = _appSettings.VnPayConfig.FrontendCallBack;
-        if (_appEnv.IsDevelopment())
-        {
-            frontendUrlCallBack = _appSettings.SpaDevServer + frontendUrlCallBack;
-        }
+        //if (_appEnv.IsDevelopment())
+        //{
+        //    frontendUrlCallBack = _appSettings.SpaDevServer + frontendUrlCallBack;
+        //}
+        
         string url = QueryHelpers.AddQueryString(frontendUrlCallBack, queryDictionary);
         return Redirect(url);
     }

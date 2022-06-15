@@ -3,43 +3,48 @@ import DataGridCustom from '../../../../components/DataGridCustom'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { useDialog } from '../../../../hooks/useDialog'
 import { useGridData } from '../../../../hooks/useGridData'
+import { IFacilityManagement } from '../../../../interface/IFacility'
 import {
     setPage,
     setPageSize,
     setTableInitialState,
 } from '../../../../slices/tableSlice'
 import { ERole } from '../../../../utils/enums'
-import { getItem } from '../../../../utils/LocalStorageUtils'
 import { createColumns } from './Columns'
+import CreateRoomFacilitiesDialog from './Dialog/CreateRoomFacilitiesDialog'
+import ToolbarChildren from './ToolbarChildren'
 
-interface IFacilitiesTableProps {}
+interface IFacilitiesTableProps {
+    rows?: IFacilityManagement[]
+    numOfFacilities?: number
+}
 
-const FacilitiesTable: FC<IFacilitiesTableProps> = (props) => {
+const FacilitiesTable: FC<IFacilitiesTableProps> = ({
+    rows = [],
+    numOfFacilities = 0,
+}) => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
-    const { renderCell, createColumn } = useGridData()
-    const hostelId = getItem('currentHostelId')
     const dispatch = useAppDispatch()
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
+    const isFetchingDetails = useAppSelector(
+        ({ roomDetails }) => roomDetails.isFetchingDetails
+    )
 
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
-    const rows = useAppSelector((e) => e.facility.facilityList)
-    const columns = createColumns(renderCell, createColumn)
-    console.log('Colums: ', columns)
+    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const columns = createColumns(renderCell, createColumn, renderValueGetter)
 
     useEffect(() => {
         dispatch(setTableInitialState())
     }, [dispatch])
 
-    useEffect(() => {
-        // dispatch(fetchFacility(hostelId))
-    }, [page, pageSize, hostelId, dispatch])
     return (
         <Fragment>
             <DataGridCustom
-                loading={true}
+                loading={isFetchingDetails}
                 title="Room Facilities"
-                rows={[]}
+                rows={rows}
                 columns={columns}
                 pageSize={pageSize}
                 setPageSize={(pageSize: number) =>
@@ -47,22 +52,20 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = (props) => {
                 }
                 page={page}
                 setPage={(page: number) => dispatch(setPage(page))}
-                rowsCount={5}
+                rowsCount={numOfFacilities}
                 toolbarChildren={
-                    role != ERole.TENANT_ROLE ? (
-                        <div></div>
-                    ) : // <ToolbarChildren handleOpenCreate={handleOpenCreate} />
-                    null
+                    role !== ERole.TENANT_ROLE ? (
+                        <ToolbarChildren handleOpenCreate={handleOpenCreate} />
+                    ) : null
                 }
             />
 
-            {/* {openCreate && (
-                <CreateFacilityDialog
+            {openCreate && (
+                <CreateRoomFacilitiesDialog
                     openDialog={openCreate}
                     handleCloseDialog={handleCloseCreate}
-                    // reloadData={() =>)}
                 />
-            )} */}
+            )}
         </Fragment>
     )
 }

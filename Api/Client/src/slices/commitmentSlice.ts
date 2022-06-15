@@ -5,11 +5,13 @@ import { getAllCommitmentOfHostel } from '../services/CommitmentService'
 interface ICommitmentState {
     commitmentList: ICommitment[]
     numOfCommitment: number
+    isFetchingCommitments: boolean
 }
 
 const initialState: ICommitmentState = {
     commitmentList: [],
     numOfCommitment: 0,
+    isFetchingCommitments: true,
 }
 
 export const fetchCommitments = createAsyncThunk(
@@ -38,9 +40,17 @@ const commitmentSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchCommitments.fulfilled, (state, action) => {
-            state.commitmentList = action.payload
-        })
+        builder
+            .addCase(fetchCommitments.fulfilled, (state, action) => {
+                state.commitmentList = action.payload
+                state.isFetchingCommitments = false
+            })
+            .addCase(fetchCommitments.pending, (state) => {
+                state.isFetchingCommitments = true
+            })
+            .addCase(fetchCommitments.rejected, (state) => {
+                state.isFetchingCommitments = false
+            })
     },
 })
 
