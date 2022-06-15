@@ -15,7 +15,6 @@ interface IStep1Props {
     hostelInfo: Record<string, any>
     setHostelInfo: any
     hostelOptions: Array<any>
-    isUpdate: boolean
 }
 
 const fields: IField[] = [
@@ -41,7 +40,7 @@ const fields: IField[] = [
     },
     {
         label: 'Allowed of days overdue',
-        name: 'dateOverdue',
+        name: 'overdueDays',
         type: 'number',
         required: true,
         endAdornment: <InputAdornment position="end">days</InputAdornment>,
@@ -73,7 +72,6 @@ const Step1: FC<IStep1Props> = ({
     hostelInfo,
     setHostelInfo,
     hostelOptions,
-    isUpdate,
 }) => {
     useEffect(() => {
         setValues({ ...values, roomId: roomInfo?.id })
@@ -116,11 +114,7 @@ const Step1: FC<IStep1Props> = ({
                     optionLabel="roomName"
                     valueAutocomplete={roomInfo}
                     setValueAutocomplete={setRoomInfo}
-                    disabled={
-                        !hostelInfo ||
-                        !Object.keys(hostelInfo).length ||
-                        isUpdate
-                    }
+                    disabled={!hostelInfo || !Object.keys(hostelInfo).length}
                     defaultValue={roomOptions?.[0]}
                 />
                 {fields.slice(4, 8).map((field) => (

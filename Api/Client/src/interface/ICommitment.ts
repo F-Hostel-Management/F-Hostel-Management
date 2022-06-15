@@ -34,7 +34,7 @@ export interface ICommitmentValues {
     startDate?: string
     endDate?: string
     roomId?: string
-    dateOverdue?: number
+    overdueDays?: number
     compensation?: number
     price?: number
     paymentDate?: number

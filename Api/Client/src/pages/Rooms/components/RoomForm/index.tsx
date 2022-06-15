@@ -12,14 +12,14 @@ const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
     return (
         <Styled.Wrapper>
             <Styled.Side>
-                {values.quantity && (
+                {values.quantity <= 1 && (
                     <InputField
-                        label="Quantity"
-                        name="quantity"
-                        value={values.quantity}
-                        type="number"
+                        key="roomName"
+                        label="Room Name"
+                        name="name"
+                        value={values.name}
+                        type="text"
                         required={true}
-                        inputProps={{ min: 1 }}
                         onChange={handleInputChange}
                     />
                 )}
@@ -33,7 +33,6 @@ const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
                         required={field.required}
                         disabled={field.disabled}
                         endAdornment={field.endAdornment}
-                        inputProps={field.inputProps}
                         onChange={handleInputChange}
                     />
                 ))}
@@ -49,7 +48,6 @@ const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
                         required={field.required}
                         disabled={field.disabled}
                         endAdornment={field.endAdornment}
-                        inputProps={field.inputProps}
                         onChange={handleInputChange}
                     />
                 ))}

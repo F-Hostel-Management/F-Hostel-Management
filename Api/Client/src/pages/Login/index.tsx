@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from '@mui/material'
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import * as Styled from './styles'
 import GoogleIcon from '../../assets/images/GoogleLogo.svg'
@@ -9,8 +10,8 @@ import MicrosoftLogo from '../../assets/images/MicrosoftLogo.svg'
 import FirebaseService from '../../services/FirebaseService'
 import { RestCaller } from '../../utils/RestCaller'
 
+import { useDispatch } from 'react-redux'
 import { doGetProfile } from '../../actions/doGetProfile'
-import { useRouter } from '../../hooks/routerHook'
 
 interface ILoginProps {}
 
@@ -20,7 +21,8 @@ interface IExchangeTokenResponse {
 }
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
-    const { navigateWithRedirect } = useRouter()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const doLogin = async (firebaseToken: string) => {
         const result = await exchangeToken(firebaseToken)
@@ -45,7 +47,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
     }
 
     const redirectFirstTimePage = () => {
-        navigateWithRedirect('/fillInformation')
+        navigate('/fillInformation')
     }
 
     const onSignInGoogle = async () => {

@@ -2,13 +2,7 @@ import React, { FC, MouseEventHandler } from 'react'
 
 import { Link } from 'react-router-dom'
 
-import {
-    ArrowRight,
-    PermIdentity,
-    Key,
-    Language,
-    ExitToApp,
-} from '@mui/icons-material'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import {
     Grid,
     IconButton,
@@ -22,6 +16,10 @@ import {
 
 import { sidebarItemList } from './sidebarItemList'
 import * as Styled from './styles'
+import PermIdentityIcon from '@mui/icons-material/PermIdentity'
+import KeyIcon from '@mui/icons-material/Key'
+import LanguageIcon from '@mui/icons-material/Language'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { logOut } from '../../slices/authSlice'
 import { useAppDispatch } from '../../hooks/reduxHook'
 import { useSelector } from 'react-redux'
@@ -46,10 +44,10 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     }
     const IconButtonList: { items: Array<IIconButtonListProps> } = {
         items: [
-            { icon: <PermIdentity />, path: '/home/profile' },
-            { icon: <Language />, path: '' },
-            { icon: <Key />, path: '' },
-            { icon: <ExitToApp />, path: '', onClick: handleLogout },
+            { icon: <PermIdentityIcon />, path: '/home/profile' },
+            { icon: <LanguageIcon />, path: '' },
+            { icon: <KeyIcon />, path: '' },
+            { icon: <ExitToAppIcon />, path: '', onClick: handleLogout },
         ],
     }
     return (
@@ -145,7 +143,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                                             )}
                                         </Typography>
                                         {selectedIndex === index && (
-                                            <ArrowRight
+                                            <ArrowRightIcon
                                                 color="primary"
                                                 sx={{
                                                     fontSize: '2.4rem',

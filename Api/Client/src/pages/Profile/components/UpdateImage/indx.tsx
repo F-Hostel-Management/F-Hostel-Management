@@ -8,12 +8,9 @@ import {
     Typography,
 } from '@mui/material'
 import React, { Dispatch, FC, SetStateAction } from 'react'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
 import { IUser } from '../../../../interface/IUser'
-import {
-    FileUpload,
-    KeyboardArrowLeft,
-    KeyboardArrowRight,
-} from '@mui/icons-material'
+import { KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 import { useTheme } from '@mui/material/styles'
 
 interface IUpdateImage {
@@ -104,7 +101,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
                                 onChange={handleChooseImage[activeStep]}
                             ></input>
 
-                            <FileUpload
+                            <FileUploadIcon
                                 htmlColor="#a7a7a7"
                                 sx={{
                                     width: '20%',

@@ -17,6 +17,6 @@ export const IconButton = styled(Button)<IIconButtonProps>`
         rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px 5px 0px;
     &:hover {
         background-color: ${(props) =>
-            LightenDarkenColor(props.bgrColor, -20)} !important;
+            LightenDarkenColor(props.bgrColor, -40)} !important;
     }
 `

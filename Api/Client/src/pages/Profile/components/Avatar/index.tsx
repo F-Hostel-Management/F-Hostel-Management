@@ -3,7 +3,8 @@ import React, { Dispatch, SetStateAction } from 'react'
 
 import { ROLES } from '../../../FillInformation/constants'
 import * as Styled from './styles'
-import { CameraAlt, PersonOutlineOutlined } from '@mui/icons-material'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 interface IAvatarProps {
     values: Record<string, any>
     setValues: Dispatch<SetStateAction<any>>
@@ -34,7 +35,7 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                         <div>
                             {avatar === undefined ? (
                                 <Styled.IconAvatar>
-                                    <PersonOutlineOutlined
+                                    <PersonOutlineOutlinedIcon
                                         htmlColor="#a7a7a7"
                                         sx={{ width: '100%', height: '100%' }}
                                     />
@@ -48,7 +49,7 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                             )}
                             <Styled.Text>
                                 <div>
-                                    <CameraAlt htmlColor="#ffffff" />
+                                    <CameraAltIcon htmlColor="#ffffff" />
                                     <Typography
                                         variant="body2"
                                         sx={{

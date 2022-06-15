@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import CardShorten from '../../../../components/Card/CardShorten'
 import DonutChart from '../../../../components/Chart/DonutChart'
-import { FiberManualRecord } from '@mui/icons-material'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { Typography } from '@mui/material'
 
 import * as Styled from './styles'
@@ -23,7 +23,7 @@ const TenantAgeChart: FC<ITenantAgeChartProps> = (props) => {
                     return (
                         <Styled.Item>
                             <Styled.LeftPartItem>
-                                <FiberManualRecord
+                                <FiberManualRecordIcon
                                     sx={{ color: colors[index] }}
                                 />
                                 <Typography variant="caption">

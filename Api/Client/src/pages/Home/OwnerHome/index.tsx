@@ -2,7 +2,8 @@ import * as React from 'react'
 
 import Greeting from '../components/Greeting'
 import HostelCard from '../components/Card/HostelCard'
-import { AddCircle, Description } from '@mui/icons-material'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import DescriptionIcon from '@mui/icons-material/Description'
 import { Button } from '@mui/material'
 
 import * as Styled from './styles'
@@ -31,7 +32,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
                     <Button
                         variant="outlined"
                         color="primary"
-                        startIcon={<Description />}
+                        startIcon={<DescriptionIcon />}
                         onClick={handleOpenCreateCommit}
                     >
                         CREATE COMMITMENT
@@ -40,7 +41,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
                         <Button
                             variant="contained"
                             color="primary"
-                            startIcon={<AddCircle />}
+                            startIcon={<AddCircleIcon />}
                             onClick={handleOpenCreateHostel}
                         >
                             CREATE HOSTEL

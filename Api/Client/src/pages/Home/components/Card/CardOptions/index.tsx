@@ -1,6 +1,8 @@
 import React, { FC, Fragment, useState } from 'react'
 
-import { DeleteForever, Edit, MoreVert } from '@mui/icons-material'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import EditIcon from '@mui/icons-material/Edit'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 import {
     IconButton,
     ListItemIcon,
@@ -37,7 +39,7 @@ const CardOptions: FC<ICardOptionsProps> = () => {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
             >
-                <MoreVert />
+                <MoreVertIcon />
             </IconButton>
             <Menu
                 anchorEl={anchorEl}
@@ -76,13 +78,13 @@ const CardOptions: FC<ICardOptionsProps> = () => {
             >
                 <MenuItem onClick={handleOpenUpdate}>
                     <ListItemIcon>
-                        <Edit fontSize="small" />
+                        <EditIcon fontSize="small" />
                     </ListItemIcon>
                     <Typography variant="body2">Update</Typography>
                 </MenuItem>
                 <MenuItem onClick={handleOpenDelete}>
                     <ListItemIcon>
-                        <DeleteForever fontSize="small" />
+                        <DeleteForeverIcon fontSize="small" />
                     </ListItemIcon>
                     <Typography variant="body2">Delete</Typography>
                 </MenuItem>

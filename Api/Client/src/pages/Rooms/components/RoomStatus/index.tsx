@@ -10,7 +10,7 @@ const RoomStatus: React.FunctionComponent<IRoomStatusProps> = ({ rowData }) => {
     let color = 'default'
     switch (rowData?.status) {
         case Status.Rented: {
-            color = 'purple'
+            color = 'warning'
             break
         }
         case Status.Available: {

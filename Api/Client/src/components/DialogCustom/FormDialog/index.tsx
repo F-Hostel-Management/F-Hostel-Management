@@ -24,7 +24,7 @@ const FormDialog: React.FunctionComponent<IFormDialogProps> = ({
     maxWidth = 'xl',
     ...others
 }) => {
-    const handlerWrapper = (e: React.FormEvent<HTMLFormElement>) => {
+    const handlerWrapper = (e: React.FormEvent<any>) => {
         e.preventDefault()
         if (handleSubmit) handleSubmit(e)
     }

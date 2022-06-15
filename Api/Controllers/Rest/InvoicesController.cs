@@ -1,13 +1,23 @@
 ﻿using Api.UserFeatures.Requests;
+using Application.AppConfig;
 using Application.Exceptions;
+using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Invoice;
+using Domain.Enums;
+using Google.Apis.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Ocsp;
 
 namespace Api.Controllers.Rest;
 
@@ -18,15 +28,20 @@ public class InvoicesController : BaseRestController
     private readonly IRoomServices _roomService;
     private readonly IAuthorizationServices _authorServices;
     private readonly IInvoiceService _invoiceService;
-
+    private readonly IPaymentService _paymentService;
+    private readonly AppSettings _appSettings;
+    private readonly IWebHostEnvironment  _appEnv;
     public InvoicesController(IGenericRepository<InvoiceEntity> invoiceRepository, IRoomServices roomService, IGenericRepository<UserEntity> userRepository,
-        IAuthorizationServices authorServices, IInvoiceService invoiceService)
+        IAuthorizationServices authorServices, IInvoiceService invoiceService, IPaymentService paymentService, IOptions<AppSettings> appSettings, IWebHostEnvironment appEnv)
     {
         _invoiceRepository = invoiceRepository;
         _roomService = roomService;
         _userRepository = userRepository;
         _authorServices = authorServices;
         _invoiceService = invoiceService;
+        _paymentService = paymentService;
+        _appEnv = appEnv;
+        _appSettings = appSettings.Value;
     }
 
     /// <summary>
@@ -101,5 +116,45 @@ public class InvoicesController : BaseRestController
         await _invoiceRepository.UpdateAsync(invoice);
 
         return Ok();
+    }
+
+
+    [HttpDelete("{Id}")]
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    public async Task<IActionResult> DeleteInvoiceAsync([FromRoute] Guid Id)
+    {
+        var invoice = await _invoiceRepository.FindByIdAsync(Id);
+        if (invoice is null) throw new NotFoundException($"Invoice not found");
+        await _invoiceRepository.DeleteSoftAsync(Id);
+        return Ok("Delete invoice successfully");
+    }
+
+    [HttpPost("create-vnpay")]
+    // [Authorize(Roles = nameof(Role.Tenant))]
+    public async Task<IActionResult> CreateVnPayBill(Guid invoiceId)
+    {
+        var invoice = await _invoiceRepository.FindByIdAsync(invoiceId);
+        if (invoice == null) throw new NotFoundException($"Invoice not found");
+        var origin = Request.Headers["Origin"];
+        if (string.IsNullOrEmpty(origin))
+            origin = MyHttpContext.AppBaseUrl;
+        string result = _paymentService.CreatePaymentFromInvoice(invoice, origin);
+        return Ok(result);
+    }
+
+    [HttpGet("callback-vnpay")]
+    // [Authorize(Roles = nameof(Role.Tenant))]
+    public async Task<IActionResult> CallbackVnPay()
+    {
+        var queryDictionary = QueryHelpers.ParseQuery(Request.QueryString.Value);
+        await _paymentService.ProcessCallback(queryDictionary, CurrentUserID);
+        string frontendUrlCallBack = _appSettings.VnPayConfig.FrontendCallBack;
+        //if (_appEnv.IsDevelopment())
+        //{
+        //    frontendUrlCallBack = _appSettings.SpaDevServer + frontendUrlCallBack;
+        //}
+        
+        string url = QueryHelpers.AddQueryString(frontendUrlCallBack, queryDictionary);
+        return Redirect(url);
     }
 }

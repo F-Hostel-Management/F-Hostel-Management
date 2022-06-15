@@ -2,21 +2,16 @@ import * as React from 'react'
 import { useSelector } from 'react-redux'
 
 import { Navigate, Outlet } from 'react-router-dom'
-import { useRouter } from '../hooks/routerHook'
 import { AppState } from '../stores/reduxStore'
 
-interface IPublicRouteProps {}
+interface IPublicRouteProps {
+}
 
 const PublicRoute: React.FunctionComponent<IPublicRouteProps> = () => {
     const isAuthenticated = useSelector(
         (state: AppState) => state.auth.isAuthenticated
     )
-    const { getGoBackWithRedirect } = useRouter()
-    return isAuthenticated ? (
-        <Navigate to={getGoBackWithRedirect('/home')} />
-    ) : (
-        <Outlet />
-    )
+    return isAuthenticated ? <Navigate to="/home" /> : <Outlet />
 }
 
 export default PublicRoute

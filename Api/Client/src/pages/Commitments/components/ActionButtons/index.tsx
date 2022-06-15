@@ -1,6 +1,8 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../components/Button/IconButtonCustom'
-import { Edit, Delete, Description, QrCode } from '@mui/icons-material'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import DescriptionIcon from '@mui/icons-material/Description'
 import { ECommitmentStatus as Status } from '../../../../utils/enums'
 import { ERole } from '../../../../utils/enums'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
@@ -9,6 +11,7 @@ import { Typography } from '@mui/material'
 import CommitmentDetails from '../CommitmentDetails'
 import DialogCustom from '../../../../components/DialogCustom'
 import UpdateCommitmentDialog from '../UpdateCommitmentDialog'
+import QrCodeIcon from '@mui/icons-material/QrCode'
 import CommitmentQrCode from '../CommitmentQrCode'
 import { ICommitment } from '../../../../interface/ICommitment'
 interface IActionButtonsProps {
@@ -38,7 +41,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     sx={{ width: '2.8rem', height: '2.8rem' }}
                     onClick={handleOpenView}
                 >
-                    <Description sx={{ fontSize: '1.6rem' }} />
+                    <DescriptionIcon sx={{ fontSize: '1.6rem' }} />
                 </IconButtonCustom>
                 {role !== ERole.TENANT_ROLE && (
                     <>
@@ -49,7 +52,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             disabled={rowData.status !== Status.Pending}
                             onClick={handleOpenUpdate}
                         >
-                            <Edit sx={{ fontSize: '1.3rem' }} />
+                            <EditIcon sx={{ fontSize: '1.3rem' }} />
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -61,7 +64,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             }
                             onClick={handleOpenCreateQrCode}
                         >
-                            <QrCode sx={{ fontSize: '1.3rem' }} />
+                            <QrCodeIcon sx={{ fontSize: '1.3rem' }} />
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -70,7 +73,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             disabled={rowData.status === Status.Active}
                             onClick={handleOpenDelete}
                         >
-                            <Delete sx={{ fontSize: '1.6rem' }} />
+                            <DeleteIcon sx={{ fontSize: '1.6rem' }} />
                         </IconButtonCustom>
                     </>
                 )}
@@ -116,7 +119,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
 
             {openUpdate && (
                 <UpdateCommitmentDialog
-                    commitment={rowData}
                     openDialog={openUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />

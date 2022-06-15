@@ -1,6 +1,6 @@
 import { Button } from '@mui/material'
 import React, { FC } from 'react'
-import { AddCircle } from '@mui/icons-material'
+import AddCircleIcon from '@mui/icons-material/AddCircle'
 
 interface IToolbarChildrenProps {
     handleOpenCreate: any
@@ -10,7 +10,7 @@ const ToolbarChildren: FC<IToolbarChildrenProps> = ({ handleOpenCreate }) => {
     return (
         <Button
             variant="contained"
-            startIcon={<AddCircle />}
+            startIcon={<AddCircleIcon />}
             size="small"
             sx={{ margin: '8px' }}
             onClick={handleOpenCreate}

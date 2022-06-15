@@ -17,14 +17,12 @@ export enum ECommitmentStatus {
     Active = 'Active',
 }
 
+export enum ERoomType {
+    'Single',
+    'Double',
+}
+
 export enum ERoomStatus {
     Available = 'Available',
     Rented = 'Rented',
-}
-
-export enum EInvoiceStatus {
-    Pending = 'Pending',
-    Unpaid = 'Unpaid',
-    Paid = 'Paid',
-    Overdue = 'Overdue',
 }

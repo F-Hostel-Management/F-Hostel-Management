@@ -40,8 +40,7 @@
                 "argsIgnorePattern": "^_"
             }
         ],
-        "react/react-in-jsx-scope": "off",
-        "react-hooks/exhaustive-deps": "off"
+        "react/react-in-jsx-scope": "off"
     },
     "settings": {
         "import/resolver": {

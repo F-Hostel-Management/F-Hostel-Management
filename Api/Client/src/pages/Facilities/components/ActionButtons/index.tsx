@@ -1,6 +1,7 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../components/Button/IconButtonCustom'
-import { Edit, Delete } from '@mui/icons-material'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { ERole } from '../../../../utils/enums'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../hooks/useDialog'
@@ -47,7 +48,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             sx={{ width: '2.8rem', height: '2.8rem' }}
                             onClick={handleOpenUpdate}
                         >
-                            <Edit sx={{ fontSize: '1.3rem' }} />
+                            <EditIcon sx={{ fontSize: '1.3rem' }} />
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -55,7 +56,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             sx={{ width: '2.8rem', height: '2.8rem' }}
                             onClick={handleOpenDelete}
                         >
-                            <Delete sx={{ fontSize: '1.6rem' }} />
+                            <DeleteIcon sx={{ fontSize: '1.6rem' }} />
                         </IconButtonCustom>
                     </>
                 )}

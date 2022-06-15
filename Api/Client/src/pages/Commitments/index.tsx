@@ -7,7 +7,7 @@ import { useDialog } from '../../hooks/useDialog'
 import CreateCommitmentDialog from './components/CreateCommitmentDialog'
 import ToolbarChildren from './components/ToolbarChildren'
 
-import { createColumns } from './components/Columns'
+import { createColumns } from './components/Table'
 import { getItem } from '../../utils/LocalStorageUtils'
 interface ICommitmentsProps {}
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
@@ -19,7 +19,7 @@ import {
 } from '../../slices/tableSlice'
 
 const Commitments: FC<ICommitmentsProps> = () => {
-    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
+    const role: ERole = 1
     const dispatch = useAppDispatch()
 
     const { renderCell, createColumn, renderValueGetter } = useGridData()

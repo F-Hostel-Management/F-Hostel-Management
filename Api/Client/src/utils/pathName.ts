@@ -9,5 +9,4 @@ export const pathNames: pathName = {
     commitments: 'Commitments',
     rooms: 'Rooms',
     facilities: 'Facilities',
-    details: 'Details',
 }

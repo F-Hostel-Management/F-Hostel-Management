@@ -1,12 +1,11 @@
 import React, { useState, FC, useEffect } from 'react'
 
 import CardWithImage from '../../../../../components/Card/CardWithImage'
-import { Typography, Button } from '@mui/material'
+import { Typography, Button, Chip } from '@mui/material'
 import { IRoom } from '../../../../../interface/IRoom'
 import { getHostelOfRoom } from '../../../../../services/RoomService'
 import { IHostel } from '../../../../../interface/IHostel'
-import { setItem } from '../../../../../utils/LocalStorageUtils'
-import { useNavigate } from 'react-router-dom'
+import { ERoomStatus } from '../../../../../utils/enums'
 const urlImage = import.meta.env.PUBLIC_FIREBASE_STORAGE_IMAGE
 
 interface IRoomCardProps {
@@ -14,22 +13,13 @@ interface IRoomCardProps {
 }
 
 const RoomCard: FC<IRoomCardProps> = ({ room }) => {
-    let navigate = useNavigate()
-
     const [hostel, setHostel] = useState<IHostel>()
-
     useEffect(() => {
         if (!('id' in room)) return
         ;(async () => {
             setHostel(await getHostelOfRoom(room?.id))
         })()
     }, [])
-
-    const handleClickDetail = () => {
-        setItem('currentRoomId', room?.id)
-        navigate('dashboard')
-    }
-
     return (
         <CardWithImage
             image={{
@@ -65,7 +55,7 @@ const RoomCard: FC<IRoomCardProps> = ({ room }) => {
                         </span>
                         {hostel?.name}
                     </Typography>
-                    <Typography variant="body2" mb={1}>
+                    {/* <Typography variant="body2" mb={1}>
                         <span
                             style={{
                                 width: '80px',
@@ -77,8 +67,8 @@ const RoomCard: FC<IRoomCardProps> = ({ room }) => {
                         <span>
                             {room.area} m<sup>2</sup>
                         </span>
-                    </Typography>
-                    {/* <Typography
+                    </Typography> */}
+                    <Typography
                         variant="body2"
                         sx={{ display: 'flex', alignItems: 'center' }}
                     >
@@ -99,7 +89,7 @@ const RoomCard: FC<IRoomCardProps> = ({ room }) => {
                             }
                             sx={{ minWidth: '80px' }}
                         />
-                    </Typography> */}
+                    </Typography>
                 </React.Fragment>
             }
             actions={
@@ -107,8 +97,8 @@ const RoomCard: FC<IRoomCardProps> = ({ room }) => {
                     <Button
                         variant="contained"
                         color="primary"
+                        disabled={room.status !== ERoomStatus.Available}
                         size="small"
-                        onClick={handleClickDetail}
                     >
                         Details
                     </Button>

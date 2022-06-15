@@ -3,12 +3,10 @@ import * as React from 'react'
 import { up } from 'styled-breakpoints'
 import { useBreakpoint } from 'styled-breakpoints/react-styled'
 
-import {
-    Menu,
-    MailOutline,
-    NotificationsNone,
-    Settings,
-} from '@mui/icons-material'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import MenuIcon from '@mui/icons-material/Menu'
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import SettingsIcon from '@mui/icons-material/Settings'
 import { Avatar, Badge, Grid, IconButton, Typography } from '@mui/material'
 import * as colorTheme from '@mui/material/colors'
 
@@ -74,7 +72,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                             style={{ marginLeft: '16px' }}
                             onClick={handleShowSidebar}
                         >
-                            <Menu />
+                            <MenuIcon />
                         </IconButton>
                     </Styled.NavbarMain>
                     <Styled.NavActionList>
@@ -85,7 +83,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                                 max={9}
                                 sx={{ margin: '0 8px' }}
                             >
-                                <NotificationsNone color="action" />
+                                <NotificationsNoneIcon color="action" />
                             </Badge>
                         </li>
                         <li>
@@ -95,7 +93,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                                 max={9}
                                 sx={{ margin: '0 8px' }}
                             >
-                                <MailOutline color="action" />
+                                <MailOutlineIcon color="action" />
                             </Badge>
                         </li>
                         <li>
@@ -114,7 +112,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                         </li>
                         <li>
                             <IconButton color="gray">
-                                <Settings />
+                                <SettingsIcon />
                             </IconButton>
                         </li>
                     </Styled.NavActionList>

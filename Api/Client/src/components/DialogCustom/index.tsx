@@ -4,7 +4,7 @@ import Dialog, { DialogProps } from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
-import { Close } from '@mui/icons-material'
+import CloseIcon from '@mui/icons-material/Close'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -38,7 +38,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
                         color: (theme) => theme.palette.grey[500],
                     }}
                 >
-                    <Close />
+                    <CloseIcon />
                 </IconButton>
             ) : null}
         </DialogTitle>
