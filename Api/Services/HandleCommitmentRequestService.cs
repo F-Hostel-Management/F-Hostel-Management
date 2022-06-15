@@ -7,6 +7,7 @@ using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
+using Domain.Extensions;
 
 namespace Api.Services;
 
@@ -82,14 +83,15 @@ public class HandleCommitmentRequestService
         return commitment;
     }
 
-    public async Task<string> GetCommitmentHtml(CommitmentEntity commitment)
+    public async Task<string> GetCommitmentHtmlBase64(CommitmentEntity commitment)
     {
         CommitmentScaffolding commitmentScaffolding = await _commitmentScaffoldingRepository.FindByIdAsync(commitment.CommitmentScaffoldingId);
         string commitmentHtml = commitmentScaffolding.Content;
         var commitmentDictionary = CommitmentDictionaryGenerator(commitment);
         commitmentHtml = DecodeCommitmentHtml(commitmentDictionary, commitmentHtml);
-        return commitmentHtml;
+        return commitmentHtml.EncodeBase64();
     }
+
 
     public string DecodeCommitmentHtml(Dictionary<string, string> commitmentDictionary, string commitmentHtml)
     {

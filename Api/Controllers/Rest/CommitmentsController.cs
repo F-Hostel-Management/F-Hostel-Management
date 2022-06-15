@@ -106,7 +106,7 @@ public class CommitmentsController : BaseRestController
         {
             throw new ForbiddenException("Forbidden");
         }       
-        var response = await _reqHandler.GetCommitmentHtml(commitment);
+        var response = await _reqHandler.GetCommitmentHtmlBase64(commitment);
         return Ok(response);
     }
 
@@ -175,7 +175,7 @@ public class CommitmentsController : BaseRestController
             commitment = await _reqHandler.FillCommitmentForTenant(commitment, CurrentUserID, Mapper);
             await _commitmentRepository.UpdateAsync(commitment);
         }
-        var response = await _reqHandler.GetCommitmentHtml(commitment);
+        var response = await _reqHandler.GetCommitmentHtmlBase64(commitment);
         return Ok(response);
     }
 
