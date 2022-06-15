@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react'
+import React, { FC, Fragment, useEffect } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useGridData } from '../../hooks/useGridData'
 
@@ -30,8 +30,10 @@ const Commitments: FC<ICommitmentsProps> = () => {
     const numOfCommitment = useAppSelector(
         ({ commitment }) => commitment.numOfCommitment
     )
+    const loading = useAppSelector(
+        ({ commitment }) => commitment.isFetchingCommitments
+    )
 
-    const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
     useEffect(() => {
@@ -40,10 +42,8 @@ const Commitments: FC<ICommitmentsProps> = () => {
 
     // Check currentHostelId in localStorage
     useEffect(() => {
-        setLoading(true)
         const currentHostelId = getItem('currentHostelId')
         dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
-        setLoading(false)
     }, [dispatch, page, pageSize])
 
     return (

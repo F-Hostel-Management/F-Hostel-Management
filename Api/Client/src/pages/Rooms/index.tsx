@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react'
+import React, { FC, Fragment, useEffect } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
@@ -27,12 +27,12 @@ const Rooms: FC<IRoomsProps> = () => {
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
     const numOfRooms = useAppSelector(({ room }) => room.numOfRooms)
+    const loading = useAppSelector(({ room }) => room.isFetchingRooms)
 
     const rows = useAppSelector(({ room }) => room.roomList)
     const { renderCell, createColumn, renderValueGetter } = useGridData()
     const columns = createColumns(renderCell, createColumn, renderValueGetter)
 
-    const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
     useEffect(() => {
@@ -40,10 +40,8 @@ const Rooms: FC<IRoomsProps> = () => {
     }, [dispatch])
 
     useEffect(() => {
-        setLoading(true)
         const hostelId = getItem('currentHostelId')
         dispatch(fetchRoomList({ hostelId, pageSize, page }))
-        setLoading(false)
     }, [dispatch, page, pageSize])
     return (
         <Routes>

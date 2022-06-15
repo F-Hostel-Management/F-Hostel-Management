@@ -4,10 +4,12 @@ import { getRoomById } from '../services/RoomService'
 
 interface IRoomDetailsState {
     roomDetails: IRoom
+    isFetchingDetails: boolean
 }
 
 const initialState: IRoomDetailsState = {
     roomDetails: {},
+    isFetchingDetails: true,
 }
 
 export const fetchRoomDetails = createAsyncThunk(
@@ -30,9 +32,17 @@ const roomDetailsSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchRoomDetails.fulfilled, (state, action) => {
-            state.roomDetails = action.payload
-        })
+        builder
+            .addCase(fetchRoomDetails.fulfilled, (state, action) => {
+                state.roomDetails = action.payload
+                state.isFetchingDetails = false
+            })
+            .addCase(fetchRoomDetails.pending, (state) => {
+                state.isFetchingDetails = true
+            })
+            .addCase(fetchRoomDetails.rejected, (state) => {
+                state.isFetchingDetails = false
+            })
     },
 })
 

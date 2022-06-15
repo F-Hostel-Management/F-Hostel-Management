@@ -10,7 +10,6 @@ import {
     setTableInitialState,
 } from '../../../../slices/tableSlice'
 import { ERole } from '../../../../utils/enums'
-import { getItem } from '../../../../utils/LocalStorageUtils'
 import { createColumns } from './Columns'
 import CreateRoomFacilitiesDialog from './Dialog/CreateRoomFacilitiesDialog'
 import ToolbarChildren from './ToolbarChildren'
@@ -25,27 +24,25 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
     numOfFacilities = 0,
 }) => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
-    const hostelId = getItem('currentHostelId')
     const dispatch = useAppDispatch()
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
+    const isFetchingDetails = useAppSelector(
+        ({ roomDetails }) => roomDetails.isFetchingDetails
+    )
 
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
     const { renderCell, createColumn, renderValueGetter } = useGridData()
     const columns = createColumns(renderCell, createColumn, renderValueGetter)
-    console.log('Colums: ', columns)
 
     useEffect(() => {
         dispatch(setTableInitialState())
     }, [dispatch])
 
-    useEffect(() => {
-        // dispatch(fetchFacility(hostelId))
-    }, [page, pageSize, hostelId, dispatch])
     return (
         <Fragment>
             <DataGridCustom
-                loading={false}
+                loading={isFetchingDetails}
                 title="Room Facilities"
                 rows={rows}
                 columns={columns}

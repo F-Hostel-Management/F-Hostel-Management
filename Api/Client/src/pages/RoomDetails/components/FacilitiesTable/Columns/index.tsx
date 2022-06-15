@@ -20,13 +20,14 @@ export const createColumns = (
             200,
             (params: IFacilityManagement) => params.facility.type
         ),
-        createColumn('quantity', 'Quantity', 100),
+        createColumn('quantity', 'Quantity', 150),
         renderValueGetter(
             'price',
             'Price',
-            200,
+            150,
             (params: IFacilityManagement) => params.facility.price
         ),
+        createColumn('description', 'Description', 400),
         renderCell('actions', 'Actions', 130, ActionButtons),
     ]
 }
