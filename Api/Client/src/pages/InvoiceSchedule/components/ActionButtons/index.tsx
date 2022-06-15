@@ -6,9 +6,9 @@ import { useDialog } from '../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
 import { Edit, Delete } from '@mui/icons-material'
 import UpdateInvoiceDialog from '../UpdateInvoiceDialog'
-import { IInvoice } from '../../../../interface/IInvoice'
+import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 interface IActionButtonsProps {
-    rowData: IInvoice
+    rowData: IInvoiceProps
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
