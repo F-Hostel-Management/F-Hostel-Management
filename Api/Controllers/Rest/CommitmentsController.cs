@@ -223,14 +223,6 @@ public class CommitmentsController : BaseRestController
         {
             pendingCom.ManagerId = CurrentUserID;
         }
-        if (uComReq.Price != null)
-        {
-            pendingCom.RoomPriceText = MoneyToTextConverter.VietnamesedongToTextConverter((double)uComReq.Price);
-        }
-        if (uComReq.Compensation != null)
-        {
-            pendingCom.CompensationText = MoneyToTextConverter.VietnamesedongToTextConverter((double)uComReq.Compensation);
-        }
         await _commitmentServices.UpdatePendingCommitment(pendingCom);
         return Ok();
     }

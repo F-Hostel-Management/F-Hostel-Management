@@ -57,13 +57,8 @@ public class HandleCommitmentRequestService
             NumOfWCs = room.NumOfWCs.ToString(),
             NumOfWindows = room.NumOfWindows.ToString(),
             MaximumPeople = room.MaximumPeople.ToString(),
-            RoomPriceText = MoneyToTextConverter.VietnamesedongToTextConverter(req.Price),
             HostelAddress = hostel.Address,
         };
-        if (req.Compensation != null)
-        {
-            commitment.CompensationText = MoneyToTextConverter.VietnamesedongToTextConverter((double)req.Compensation);
-        }
         Mapper.Map(req, commitment);
         return commitment;
     }
@@ -149,12 +144,12 @@ public class HandleCommitmentRequestService
             { "{endYear}", commitment.EndDate.ToString("yyyy") },
 
             { "{roomPrice}", commitment.Price.ToString() },
-            { "{roomPriceText}", commitment.RoomPriceText },
+            { "{roomPriceText}", MoneyToTextConverter.VietnamesedongToTextConverter(commitment.Price) },
 
             { "{paymentDate}", commitment.PaymentDate.ToString() },
 
             { "{compensation}", commitment.Compensation.ToString() },
-            { "{compensationText}", commitment.CompensationText },
+            { "{compensationText}", MoneyToTextConverter.VietnamesedongToTextConverter(commitment.Compensation) },
 
         };
         return commitmentDictionary;

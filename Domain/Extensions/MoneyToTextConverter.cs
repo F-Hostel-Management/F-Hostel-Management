@@ -1,4 +1,4 @@
-﻿namespace Application.Utilities;
+﻿namespace Domain.Extensions;
 public static class MoneyToTextConverter
 {
     public static string VietnamesedongToTextConverter(double inputNumber, bool suffix = true)

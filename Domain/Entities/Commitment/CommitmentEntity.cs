@@ -20,9 +20,9 @@ public class CommitmentEntity : BaseEntity
     [Required]
     public DateTime EndDate { get; set; }
 
-    public int? DateOverdue { get; set; }
+    public int DateOverdue { get; set; } = 0;
 
-    public double? Compensation { get; set; }
+    public double Compensation { get; set; } = 0;
 
     [Column("Commitment Status")]
     public string Status
@@ -37,7 +37,7 @@ public class CommitmentEntity : BaseEntity
     [Range(1, 31)]
     public int PaymentDate { get; set; }
 
-    public double Price { get; set; }
+    public double Price { get; set; } = 0;
 
     //public string Content { get; set; }
 
@@ -63,13 +63,7 @@ public class CommitmentEntity : BaseEntity
     public string NumOfBathRooms { get; set; }
     public string NumOfWCs { get; set; }
     public string MaximumPeople { get; set; }
-    public string RoomPriceText { get; set; }
     public string HostelAddress { get; set; }
-
-    public string CompensationText
-    { get; set; }
-
-
 
 
     /*navigation props*/
