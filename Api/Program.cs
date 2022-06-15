@@ -1,6 +1,7 @@
 using Api.Configurations;
 using Api.Filters;
 using Application.AppConfig;
+using Application.Extensions;
 using AutoWrapper;
 using Domain.Constants;
 using Domain.Enums;
@@ -28,7 +29,7 @@ var configuration = builder.Configuration;
     services.AddAutoMapper(Assembly.GetExecutingAssembly());
     services.AddOData();
     services.AddCronService();
-
+    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
     services.AddJwtService();
@@ -84,7 +85,7 @@ var app = builder.Build();
     }
     app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { IsApiOnly = false, ShowIsErrorFlagForSuccessfulResponse = true, WrapWhenApiPathStartsWith = "/server"});
     app.UseRouting();
-
+    app.UseHttpContext();
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();

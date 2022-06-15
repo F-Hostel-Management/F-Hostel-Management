@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using Application.AppConfig;
 using Application.Exceptions;
+using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Application.Utilities;
@@ -146,11 +147,11 @@ public class VnPayService : IPaymentService
         }
     }
 
-    public string CreatePaymentFromInvoice(InvoiceEntity invoiceEntity)
+    public string CreatePaymentFromInvoice(InvoiceEntity invoiceEntity, string origin)
     {
         _requestData.Clear();
         //Get Config Info
-        var vnp_Returnurl = _options.VnPayConfig.ReturnUrl;
+        var vnp_Returnurl = origin + _options.VnPayConfig.ReturnUrl;
         
          ; //URL nhan ket qua tra ve 
         var vnp_Url = _options.VnPayConfig.Url; //URL thanh toan cua VNPAY 

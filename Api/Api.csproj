@@ -54,5 +54,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Extenstions\" />
+  </ItemGroup>
 
 </Project>
