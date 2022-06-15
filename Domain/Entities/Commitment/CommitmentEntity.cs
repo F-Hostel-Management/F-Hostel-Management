@@ -43,13 +43,13 @@ public class CommitmentEntity : BaseEntity
 
     // dictionary
     public string OwnerName { get; set; }
-    public string OwnerDateOfBirth { get; set; }
+    public DateTime OwnerDateOfBirth { get; set; }
     public string OwnerCitizenIdentity { get; set; }
     public string OwnerAddress { get; set; }
     public string OwnerPhone { get; set; }
 
     public string TenantName { get; set; }
-    public string TenantDateOfBirth { get; set; }
+    public DateTime TenantDateOfBirth { get; set; }
     public string TenantCitizenIdentity { get; set; }
     public string TenantAddress { get; set; }
     public string TenantPhone { get; set; }

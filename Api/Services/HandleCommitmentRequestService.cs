@@ -43,7 +43,7 @@ public class HandleCommitmentRequestService
 
             // fill dictionary for owner
             OwnerName = owner.Name,
-            OwnerDateOfBirth = owner.DateOfBirth.ToString("dd/MM/yyyy"),
+            OwnerDateOfBirth = owner.DateOfBirth,
             OwnerCitizenIdentity = owner.CitizenIdentity,
             OwnerAddress = owner.Address,
             OwnerPhone = owner.Phone,
@@ -70,7 +70,7 @@ public class HandleCommitmentRequestService
         {
             commitment.TenantId = tenantId;
             commitment.TenantName = tenant.Name;
-            commitment.TenantDateOfBirth = tenant.DateOfBirth.ToString("dd/MM/yyyy");
+            commitment.TenantDateOfBirth = tenant.DateOfBirth;
             commitment.TenantCitizenIdentity = tenant.CitizenIdentity;
             commitment.TenantAddress = tenant.Address;
             commitment.TenantPhone = tenant.Phone;
@@ -78,11 +78,11 @@ public class HandleCommitmentRequestService
         return commitment;
     }
 
-    public async Task<string> GetCommitmentHtmlBase64(CommitmentEntity commitment)
+    public async Task<string> GetCommitmentHtmlBase64(CommitmentEntity commitment, Guid userId)
     {
         CommitmentScaffolding commitmentScaffolding = await _commitmentScaffoldingRepository.FindByIdAsync(commitment.CommitmentScaffoldingId);
         string commitmentHtml = commitmentScaffolding.Content;
-        var commitmentDictionary = CommitmentDictionaryGenerator(commitment);
+        var commitmentDictionary = await CommitmentDictionaryGenerator(commitment, userId);
         commitmentHtml = DecodeCommitmentHtml(commitmentDictionary, commitmentHtml);
         return commitmentHtml.EncodeBase64();
     }
@@ -103,18 +103,19 @@ public class HandleCommitmentRequestService
         return DecodeCommitmentHtml(commitmentDictionary, commitmentHtml.Replace(first.Key, first.Value));
     }
 
-    private Dictionary<string, string> CommitmentDictionaryGenerator(CommitmentEntity commitment)
+    private async Task<Dictionary<string, string>> CommitmentDictionaryGenerator(CommitmentEntity commitment, Guid userId)
     {
+        UserEntity user = await _userRepository.FindByIdAsync(userId);
         Dictionary<string, string> commitmentDictionary = new()
         {
             { "{tenantName}", commitment.TenantName },
-            { "{tenantDateOfBirth}", commitment.TenantDateOfBirth },
+            { "{tenantDateOfBirth}", commitment.TenantDateOfBirth.ToString("dd/MM/yyyy") },
             { "{tenantCitizenIdentity}", commitment.TenantCitizenIdentity },
             { "{teantAddress}", commitment.TenantAddress },
             { "{tenantPhone}", commitment.TenantPhone },
 
             { "{ownerName}", commitment.OwnerName },
-            { "{ownerDateOfBirth}", commitment.OwnerDateOfBirth },
+            { "{ownerDateOfBirth}", commitment.OwnerDateOfBirth.ToString("dd/MM/yyyy") },
             { "{ownerCitizenIdentity}", commitment.OwnerCitizenIdentity },
             { "{ownerAddress}", commitment.OwnerAddress },
             { "{ownerPhone}", commitment.OwnerPhone },
@@ -152,6 +153,13 @@ public class HandleCommitmentRequestService
             { "{compensationText}", MoneyToTextConverter.VietnamesedongToTextConverter(commitment.Compensation) },
 
         };
+        if (user.Role == Role.Tenant && !commitment.TenantId.Equals(userId))
+        {
+            commitmentDictionary["{tenantPhone}"] = commitment.TenantPhone.Mask(2, commitment.TenantPhone.Length - 2 - 2);
+            commitmentDictionary["{tenantCitizenIdentity}"] = commitment.TenantCitizenIdentity.Mask(2, commitment.TenantCitizenIdentity.Length - 2 - 2);
+            commitmentDictionary["{teantAddress}"] = null;
+            commitmentDictionary["{tenantDateOfBirth}"] = "XX/XX/" + commitment.TenantDateOfBirth.ToString("yyyy"); ;
+        }
         return commitmentDictionary;
     }
 }
