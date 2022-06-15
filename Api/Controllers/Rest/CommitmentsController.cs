@@ -194,16 +194,16 @@ public class CommitmentsController : BaseRestController
             GetJoiningCode(req.SixDigitsJoiningCode);
         _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
-        CommitmentEntity com =
+        CommitmentEntity commitment =
             await _joiningCodeServices.GetCommitment(joiningCode);
 
         // activate commitment
-        if (com.TenantId is null)
+        if (commitment.RoomTenants.Count == 0)
         {
-            await _commitmentServices.ActivatedCommitment(com);
+            await _commitmentServices.ActivatedCommitment(commitment);
         }
         // get into room
-        await _tenantServices.GetIntoRoom(com, CurrentUserID);
+        await _tenantServices.GetIntoRoom(commitment, CurrentUserID);
         return Ok();
     }
 
