@@ -130,7 +130,7 @@ public class RoomsController : BaseRestController
         return Ok();
     }
     [HttpDelete("delete-facility")]
-    public async Task<IActionResult> DeleteFacilityFromRoom(DeleteFacilityFromRoomRequest request)
+    public async Task<IActionResult> DeleteFacilityFromRoom([FromRoute] DeleteFacilityFromRoomRequest request)
     {
         var target = await _facilityManagementRepo.FirstOrDefaultAsync(e => e.Id.Equals(request.FacilityManagementId));
         if (target is null)
