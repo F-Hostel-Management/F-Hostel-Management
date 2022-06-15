@@ -48,6 +48,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
             width="100%"
             height="100%"
             color="#F06D06"
+            elevation={3}
             style={{ backgroundColor: '#FFFFFF', minHeight: '500px' }}
         >
             <Styled.DataGrid

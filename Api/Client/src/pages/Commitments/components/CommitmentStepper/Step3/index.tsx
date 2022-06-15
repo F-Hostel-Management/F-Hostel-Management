@@ -23,7 +23,7 @@ const Step3: FC<IStep3Props> = ({ timeSpan, handleChange }) => {
                 <InputField
                     label="Time Span"
                     name="timeSpan"
-                    value={timeSpan}
+                    value={timeSpan || ''}
                     onChange={handleChange}
                     type="number"
                     required={true}

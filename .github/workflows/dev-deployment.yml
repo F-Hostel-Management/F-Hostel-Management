@@ -21,6 +21,7 @@ jobs:
           envkey_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET}}
           envkey_PUBLIC_FIREBASE_MESSAGE_SENDER_ID: ${{ secrets.FIREBASE_MESSAGE_SENDER_ID }}
           envkey_PUBLIC_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          envkey_PUBLIC_FIREBASE_STORAGE_IMAGE: ${{ secrets.FIREBASE_STORAGE_IMAGE }}
           directory: Api/Client
           file_name: .env
           fail_on_empty: true

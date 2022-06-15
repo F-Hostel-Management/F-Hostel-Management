@@ -28,7 +28,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         startDate: '',
         endDate: '',
         roomId: '',
-        overdueDays: 0,
+        dateOverdue: 0,
         compensation: 0,
         price: 0,
         paymentDate: 1,
@@ -55,17 +55,20 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     }
 
     const handleSubmitStep3 = async () => {
-        await approveCommitment({
+        let response = await approveCommitment({
             commitmentId: commitmentId,
         })
-        const response = await getJoiningCode({
-            commitmentId: commitmentId,
-            timeSpan,
-        })
+
         if (!response.isError) {
-            setSixDigitsCode(response.result.sixDigitsCode)
-            const currentHostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+            response = await getJoiningCode({
+                commitmentId: commitmentId,
+                timeSpan,
+            })
+            if (!response.isError) {
+                setSixDigitsCode(response.result.sixDigitsCode)
+                const currentHostelId = getItem('currentHostelId')
+                dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+            }
         }
     }
 

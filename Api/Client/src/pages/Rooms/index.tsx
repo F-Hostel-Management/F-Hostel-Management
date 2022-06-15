@@ -1,70 +1,87 @@
-import { GridColDef } from '@mui/x-data-grid'
-import React, { FC, Fragment, useEffect, useState } from 'react'
+import React, { FC, Fragment, useEffect } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
-import { IRoom } from '../../interface/IRoom'
 import { ERole } from '../../utils/enums'
-import RoomStatus from './components/RoomStatus'
-import ToolbarChildren from './components/ToolbarChildren'
-import ActionButtons from './components/ActionButtons'
-import CreateCRoomDialog from './components/CreateRoomDialog'
-import { getUserRole } from '../../slices/authSlice'
-import { useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
+import {
+    setPage,
+    setPageSize,
+    setTableInitialState,
+} from '../../slices/tableSlice'
+import { getItem } from '../../utils/LocalStorageUtils'
+import { fetchRoomList } from '../../slices/roomSlice'
+import { Route, Routes } from 'react-router-dom'
+import NotFound from '../NotFound'
+import RoomDetails from '../RoomDetails'
+import ToolbarChildren from './components/Table/ToolbarChildren'
+import { createColumns } from './components/Table/Columns'
+import CreateCRoomDialog from './components/Dialog/CreateRoomDialog'
+
 interface IRoomsProps {}
 
 const Rooms: FC<IRoomsProps> = () => {
-    const role = useSelector(getUserRole)
+    const dispatch = useAppDispatch()
 
-    const { renderCell, createColumn } = useGridData()
-    const [pageSize, setPageSize] = useState<number>(5)
-    const [page, setPage] = useState<number>(0)
-    const [rows, setRows] = useState<IRoom[]>([])
-    const [loading, setLoading] = useState<boolean>(true)
+    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
+    const numOfRooms = useAppSelector(({ room }) => room.numOfRooms)
+    const loading = useAppSelector(({ room }) => room.isFetchingRooms)
+
+    const rows = useAppSelector(({ room }) => room.roomList)
+    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
-    const columns: GridColDef[] = [
-        createColumn('id', 'Code', 50),
-        createColumn('roomNumber', 'Room Name', 120),
-        createColumn('type', 'Type', 100),
-        createColumn('numberOfBathRoom', 'BathRoom', 100),
-        createColumn('numberOfToilet', 'Toilet', 100),
-        createColumn('area', 'Area', 100),
-        renderCell('status', 'Status', 130, RoomStatus),
-        renderCell('actions', 'Actions', 130, ActionButtons),
-    ]
+    useEffect(() => {
+        dispatch(setTableInitialState())
+    }, [dispatch])
 
     useEffect(() => {
-        setLoading(true)
-        const FetchData = async () => {}
-        FetchData()
-    }, [page, pageSize])
+        const hostelId = getItem('currentHostelId')
+        dispatch(fetchRoomList({ hostelId, pageSize, page }))
+    }, [dispatch, page, pageSize])
     return (
-        <Fragment>
-            <DataGridCustom
-                loading={loading}
-                title="All Rooms"
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-                page={page}
-                setPage={setPage}
-                rowsCount={27}
-                toolbarChildren={
-                    role != ERole.TENANT_ROLE ? (
-                        <ToolbarChildren handleOpenCreate={handleOpenCreate} />
-                    ) : null
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <>
+                        <DataGridCustom
+                            loading={loading}
+                            title="All Rooms"
+                            rows={rows}
+                            columns={columns}
+                            pageSize={pageSize}
+                            setPageSize={(pageSize: number) =>
+                                dispatch(setPageSize(pageSize))
+                            }
+                            page={page}
+                            setPage={(page: number) => dispatch(setPage(page))}
+                            rowsCount={numOfRooms}
+                            toolbarChildren={
+                                role != ERole.TENANT_ROLE ? (
+                                    <ToolbarChildren
+                                        handleOpenCreate={handleOpenCreate}
+                                    />
+                                ) : null
+                            }
+                        />
+
+                        {openCreate && (
+                            <CreateCRoomDialog
+                                openDialog={openCreate}
+                                handleCloseDialog={handleCloseCreate}
+                            />
+                        )}
+                    </>
                 }
             />
-
-            {openCreate && (
-                <CreateCRoomDialog
-                    openDialog={openCreate}
-                    handleCloseDialog={handleCloseCreate}
-                />
-            )}
-        </Fragment>
+            <Route path="/details/:roomId" element={<RoomDetails />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
     )
 }
 

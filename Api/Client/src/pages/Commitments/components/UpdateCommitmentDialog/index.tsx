@@ -2,32 +2,48 @@ import React, { ChangeEvent, FC, useState } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
-import { ICommitmentValues } from '../../../../interface/ICommitment'
 import {
-    createCommitment,
+    ICommitment,
+    ICommitmentValues,
+} from '../../../../interface/ICommitment'
+import {
     approveCommitment,
     getJoiningCode,
+    updateCommitment,
 } from '../../../../services/CommitmentService'
+import moment from 'moment'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
+import { getItem } from '../../../../utils/LocalStorageUtils'
+import { fetchCommitments } from '../../../../slices/commitmentSlice'
 interface IUpdateCommitmentDialogProps {
+    commitment: ICommitment
     openDialog: boolean
     handleCloseDialog: () => void
 }
 
 const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
+    commitment,
     openDialog,
     handleCloseDialog,
 }) => {
+    const dispatch = useAppDispatch()
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
+
     const initialValues: ICommitmentValues = {
-        startDate: '',
-        endDate: '',
-        roomId: '',
-        overdueDays: 0,
-        compensation: 0,
-        price: 0,
-        paymentDate: 1,
+        startDate: moment(new Date(commitment.startDate || ''))
+            .format('YYYY-MM-DD')
+            .toString(),
+        endDate: moment(new Date(commitment.endDate || ''))
+            .format('YYYY-MM-DD')
+            .toString(),
+        roomId: commitment.roomId,
+        dateOverdue: commitment.dateOverdue,
+        compensation: commitment.compensation,
+        price: commitment.price,
+        paymentDate: commitment.paymentDate,
     }
 
-    const [commitment, setCommitment] = useState<any>(null)
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
     const [timeSpan, setTimeSpan] = useState<number>(0)
@@ -39,16 +55,24 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
 
     // create commitment
     const handleSubmitStep2 = async () => {
-        const response = await createCommitment(values)
-        setCommitment(response.result)
+        const response = await updateCommitment(commitment.id, values)
+        if (!response.isError) {
+            const currentHostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        }
     }
 
     const handleSubmitStep3 = async () => {
-        await approveCommitment({
-            commitmentId: commitment?.id,
+        let response = await approveCommitment({
+            commitmentId: commitment.id,
         })
-        const response = await getJoiningCode({
-            commitmentId: commitment?.id,
+        if (!response.isError) {
+            const currentHostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        }
+
+        response = await getJoiningCode({
+            commitmentId: commitment.id,
             timeSpan,
         })
         setSixDigitsCode(response.result.sixDigitsCode)
@@ -56,7 +80,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
 
     return (
         <DialogCustom
-            title="Create Commitment"
+            title="Update Commitment"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
         >
@@ -71,6 +95,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
                 timeSpan={timeSpan}
                 handleChange={handleChange}
                 sixDigitsCode={sixDigitsCode}
+                commitment={commitment}
             />
         </DialogCustom>
     )

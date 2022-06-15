@@ -18,7 +18,9 @@ import {
 import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/homeSlice'
 import QrCodeGenerate from '../QrCodeGenerate'
-const baseUrl = import.meta.env.PUBLIC_FRONTEND
+import { ICommitment } from '../../../../interface/ICommitment'
+import { ERoomStatus } from '../../../../utils/enums'
+import { IRoom } from '../../../../interface/IRoom'
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
     values: Record<string, any>
@@ -30,6 +32,7 @@ interface ICommitmentStepperProps {
     timeSpan: number | null
     handleChange: (e: ChangeEvent<HTMLInputElement>) => void
     sixDigitsCode: any
+    commitment?: ICommitment
 }
 
 const CommitmentStepper: FC<ICommitmentStepperProps> = ({
@@ -43,6 +46,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     timeSpan,
     handleChange,
     sixDigitsCode,
+    commitment,
 }) => {
     const currentHostel = useSelector(getCurrentHostel)
     const [rooms, setRooms] = useState([])
@@ -67,13 +71,16 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
         const currentHostelId = localStorage.getItem('currentHostelId')
         if (!hostelInfo && !currentHostelId) return
         ;(async () => {
-            const roomList = await getRoomOfHostel(
+            let roomList = await getRoomOfHostel(
                 currentHostelId || hostelInfo?.id
             )
-            setRoomInfo(roomList?.[0])
+            roomList = roomList.filter(
+                (room: IRoom) => room.status === ERoomStatus.Available
+            )
+            setRoomInfo(commitment?.room || roomList?.[0])
             setRooms(roomList)
         })()
-    }, [hostelInfo])
+    }, [commitment?.room, hostelInfo])
 
     const steps: IStepper[] = [
         {
@@ -89,6 +96,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     hostelInfo={hostelInfo}
                     setHostelInfo={setHostelInfo}
                     hostelOptions={hostels}
+                    isUpdate={commitment ? true : false}
                 />
             ),
             handleNext: () => console.log('Values commit: ', values),

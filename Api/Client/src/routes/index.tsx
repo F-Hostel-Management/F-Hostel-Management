@@ -2,7 +2,6 @@ import DefaultLayout from '../components/Layout/DefaultLayout'
 import HomeLayout from '../components/Layout/HomeLayout'
 import { IRoute } from '../interface/IRoute'
 
-import About from '../pages/About'
 import Commitments from '../pages/Commitments'
 import Dashboard from '../pages/Dashboard'
 import Home from '../pages/Home'
@@ -11,14 +10,10 @@ import Profile from '../pages/Profile'
 import FillInformation from '../pages/FillInformation'
 import Rooms from '../pages/Rooms'
 import Facilities from '../pages/Facilities'
+import Invoices from '../pages/Invoices'
+import { PaymentCallback } from '../pages/Invoices/components/Payment/Callback'
 
 const publicRoutes: IRoute[] = [
-    {
-        path: '/about',
-        component: About,
-        name: 'About',
-        layout: null,
-    },
     {
         path: '/login',
         component: Login,
@@ -71,7 +66,7 @@ const privateRoutes: IRoute[] = [
         },
     },
     {
-        path: '/home/rooms',
+        path: '/home/rooms/*',
         component: Rooms,
         name: 'Rooms',
         layout: DefaultLayout,
@@ -86,6 +81,24 @@ const privateRoutes: IRoute[] = [
         layout: DefaultLayout,
         props: {
             title: 'Facilities',
+        },
+    },
+    {
+        path: '/home/invoices',
+        component: Invoices,
+        name: 'Invoices',
+        layout: DefaultLayout,
+        props: {
+            title: 'Invoices',
+        },
+    },
+    {
+        path: '/home/invoices/callback',
+        component: PaymentCallback,
+        name: 'VnPay Result',
+        layout: DefaultLayout,
+        props: {
+            title: 'VnPay Result',
         },
     },
 ]

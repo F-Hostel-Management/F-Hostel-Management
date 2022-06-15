@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react'
+import React, { FC, Fragment, useEffect } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useGridData } from '../../hooks/useGridData'
 
@@ -7,7 +7,7 @@ import { useDialog } from '../../hooks/useDialog'
 import CreateCommitmentDialog from './components/CreateCommitmentDialog'
 import ToolbarChildren from './components/ToolbarChildren'
 
-import { createColumns } from './components/Table'
+import { createColumns } from './components/Columns'
 import { getItem } from '../../utils/LocalStorageUtils'
 interface ICommitmentsProps {}
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
@@ -19,7 +19,7 @@ import {
 } from '../../slices/tableSlice'
 
 const Commitments: FC<ICommitmentsProps> = () => {
-    const role: ERole = 1
+    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
     const dispatch = useAppDispatch()
 
     const { renderCell, createColumn, renderValueGetter } = useGridData()
@@ -30,8 +30,10 @@ const Commitments: FC<ICommitmentsProps> = () => {
     const numOfCommitment = useAppSelector(
         ({ commitment }) => commitment.numOfCommitment
     )
+    const loading = useAppSelector(
+        ({ commitment }) => commitment.isFetchingCommitments
+    )
 
-    const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 
     useEffect(() => {
@@ -40,10 +42,8 @@ const Commitments: FC<ICommitmentsProps> = () => {
 
     // Check currentHostelId in localStorage
     useEffect(() => {
-        setLoading(true)
         const currentHostelId = getItem('currentHostelId')
         dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
-        setLoading(false)
     }, [dispatch, page, pageSize])
 
     return (
@@ -61,7 +61,7 @@ const Commitments: FC<ICommitmentsProps> = () => {
                 setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfCommitment}
                 toolbarChildren={
-                    role != ERole.TENANT_ROLE ? (
+                    role !== ERole.TENANT_ROLE ? (
                         <ToolbarChildren handleOpenCreate={handleOpenCreate} />
                     ) : null
                 }

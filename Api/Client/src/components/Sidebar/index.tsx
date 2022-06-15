@@ -1,8 +1,14 @@
-import React, { FC, MouseEventHandler } from 'react'
+import React, { FC, MouseEventHandler, useEffect, useState } from 'react'
 
 import { Link } from 'react-router-dom'
 
-import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import {
+    ArrowRight,
+    PermIdentity,
+    Key,
+    Language,
+    ExitToApp,
+} from '@mui/icons-material'
 import {
     Grid,
     IconButton,
@@ -14,16 +20,13 @@ import {
     Typography,
 } from '@mui/material'
 
-import { sidebarItemList } from './sidebarItemList'
+import { ISidebarItem, sidebarItemList } from './sidebarItemList'
 import * as Styled from './styles'
-import PermIdentityIcon from '@mui/icons-material/PermIdentity'
-import KeyIcon from '@mui/icons-material/Key'
-import LanguageIcon from '@mui/icons-material/Language'
-import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import { logOut } from '../../slices/authSlice'
-import { useAppDispatch } from '../../hooks/reduxHook'
+import { getUserRole, logOut } from '../../slices/authSlice'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../stores/reduxStore'
+import { ERole } from '../../utils/enums'
 interface ISidebarProps {
     isShownSidebar: boolean
 }
@@ -33,6 +36,22 @@ interface IIconButtonListProps {
     onClick?: MouseEventHandler<any> | undefined
 }
 const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
+    const role = useAppSelector(getUserRole)
+    const [target, setTarget] = useState<
+        Array<{
+            groupLabel: string
+            items: Array<ISidebarItem>
+        }>
+    >([])
+    useEffect(() => {
+        if (role == ERole.TENANT_ROLE) {
+            setTarget(sidebarItemList['tenant'])
+            // setTarget('tenant')
+        } else {
+            setTarget(sidebarItemList['owner'])
+            // setTarget('owner')
+        }
+    }, [role])
     const [selectedIndex, setSelectedIndex] = React.useState(0)
     const currentUser = useSelector((state: AppState) => state.auth.currentUser)
     const dispatch = useAppDispatch()
@@ -44,10 +63,10 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     }
     const IconButtonList: { items: Array<IIconButtonListProps> } = {
         items: [
-            { icon: <PermIdentityIcon />, path: '/home/profile' },
-            { icon: <LanguageIcon />, path: '' },
-            { icon: <KeyIcon />, path: '' },
-            { icon: <ExitToAppIcon />, path: '', onClick: handleLogout },
+            { icon: <PermIdentity />, path: '/home/profile' },
+            { icon: <Language />, path: '' },
+            { icon: <Key />, path: '' },
+            { icon: <ExitToApp />, path: '', onClick: handleLogout },
         ],
     }
     return (
@@ -76,7 +95,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                     </Styled.SidebarActionWrapper>
                 </React.Fragment>
             )}
-            {sidebarItemList['owner'].map((group, index) => (
+            {target.map((group, index) => (
                 <List
                     key={index}
                     sx={{
@@ -143,7 +162,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                                             )}
                                         </Typography>
                                         {selectedIndex === index && (
-                                            <ArrowRightIcon
+                                            <ArrowRight
                                                 color="primary"
                                                 sx={{
                                                     fontSize: '2.4rem',

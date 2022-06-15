@@ -18,6 +18,7 @@ const ScanQrCodeDialog: FC<IScanQrCodeDialogProps> = ({
     const handleStep1 = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         navigate(`joinRoom/${scanResult}`)
+        handleCloseDialog()
     }
 
     return (

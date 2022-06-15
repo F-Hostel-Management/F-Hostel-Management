@@ -3,7 +3,6 @@ import { ISuccessResponse } from '../interface/serviceResponse'
 import {
     defaultHttpToastConfig,
     HttpToast,
-    HttpToastConfig,
     HttpToastConfigPartial,
 } from './HttpToast'
 
@@ -95,7 +94,7 @@ export const RestCaller = {
                 toast: config,
             })
             .then(responseBody),
-    delete: (url: string, config?: HttpToastConfig) =>
+    delete: (url: string, config?: HttpToastConfigPartial) =>
         instance.delete(url, { toast: config }).then(responseBody),
     upload: (url: string, form: FormData, config?: HttpToastConfigPartial) =>
         instance
