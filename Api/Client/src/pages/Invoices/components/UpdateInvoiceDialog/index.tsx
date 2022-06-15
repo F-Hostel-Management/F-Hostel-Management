@@ -15,7 +15,6 @@ import InvoiceForm from '../InvoiceForm'
 
 interface IUpdateInvoiceDialogProps {
     openDialog: boolean
-    handleOpenDialog: () => void
     handleCloseDialog: () => void
     rowData: IInvoice
 }

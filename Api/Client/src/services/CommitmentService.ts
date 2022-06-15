@@ -66,21 +66,61 @@ const getTenantOfCommitment = async (commitmentId = '') => {
 
 // REST Caller
 const createCommitment = async (data = {}) => {
-    const result = await RestCaller.post('Commitments', data)
+    const result = await RestCaller.post('Commitments', data, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'Commitment is created.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
     console.log('createCommitment: ', result)
     return result
 }
 
 const updateCommitment = async (id = '', data = {}) => {
     const result = await RestCaller.patch(`Commitments/${id}`, data)
-    console.log('updateCommitment: ', result)
+    console.log('updateCommitment: ', result, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'Commitment is updated.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
     return result
 }
 
 const approveCommitment = async (data = {}) => {
     const response = await RestCaller.patch(
         'Commitments/owner-approved-commitment/status',
-        data
+        data,
+        {
+            loading: {
+                show: true,
+                message: 'Progressing...',
+            },
+            success: {
+                show: true,
+                message: 'Commitment is approved.',
+            },
+            error: {
+                show: true,
+                message: 'Failed! Please, try again.',
+            },
+        }
     )
     console.log('approveCommitment: ', response)
     return response
@@ -89,7 +129,21 @@ const approveCommitment = async (data = {}) => {
 const activateCommitment = async (data = {}) => {
     const response = await RestCaller.patch(
         'Commitments/tenant-activate-commitment/status',
-        data
+        data,
+        {
+            loading: {
+                show: true,
+                message: 'Progressing...',
+            },
+            success: {
+                show: true,
+                message: 'You have already joined room.',
+            },
+            error: {
+                show: true,
+                message: 'Failed! Please, try again.',
+            },
+        }
     )
     console.log('approveCommitment: ', response)
     return response

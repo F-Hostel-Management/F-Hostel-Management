@@ -118,7 +118,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
             {openUpdate && (
                 <UpdateInvoiceDialog
                     openDialog={openUpdate}
-                    handleOpenDialog={handleOpenUpdate}
                     handleCloseDialog={handleCloseUpdate}
                     rowData={rowData}
                 />

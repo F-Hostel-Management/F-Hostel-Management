@@ -1,27 +1,34 @@
 import React, { FC, Fragment } from 'react'
-import IconButtonCustom from '../../../../components/Button/IconButtonCustom'
+import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
 import {
     Edit,
     Delete,
     MeetingRoom as MeetingRoomIcon,
 } from '@mui/icons-material'
-import { ERoomStatus as Status } from '../../../../utils/enums'
-import { ERole } from '../../../../utils/enums'
-import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
-import { useDialog } from '../../../../hooks/useDialog'
+import { ERoomStatus as Status } from '../../../../../utils/enums'
+import { ERole } from '../../../../../utils/enums'
+import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
+import { useDialog } from '../../../../../hooks/useDialog'
 import { Typography } from '@mui/material'
-import DialogCustom from '../../../../components/DialogCustom'
-import { useAppSelector } from '../../../../hooks/reduxHook'
-import UpdateRoomDialog from '../Dialog/UpdateRoomDialog'
+import { useAppSelector } from '../../../../../hooks/reduxHook'
+import UpdateRoomDialog from '../../Dialog/UpdateRoomDialog'
+import { useNavigate } from 'react-router-dom'
+import { IRoom } from '../../../../../interface/IRoom'
 interface IActionButtonsProps {
-    rowData: any
+    rowData: IRoom
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
+
+    const navigate = useNavigate()
+
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
-    const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
+
+    const handleClickRoomDetails = () => {
+        navigate(`details/${rowData.id}`)
+    }
 
     return (
         <Fragment>
@@ -37,7 +44,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     textColor="#fff"
                     bgrColor="#17A2B8"
                     sx={{ width: '2.8rem', height: '2.8rem' }}
-                    onClick={handleOpenView}
+                    onClick={handleClickRoomDetails}
                 >
                     <MeetingRoomIcon sx={{ fontSize: '1.3rem' }} />
                 </IconButtonCustom>
@@ -63,25 +70,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     </>
                 )}
             </div>
-
-            {openView && (
-                <DialogCustom
-                    title="Commitment Details"
-                    openDialog={openView}
-                    handleCloseDialog={handleCloseView}
-                    maxWidth="xl"
-                >
-                    <div
-                        style={{
-                            minHeight: '100px',
-                            width: '80%',
-                            margin: 'auto',
-                        }}
-                    >
-                        {/* <CommitmentDetails /> */}
-                    </div>
-                </DialogCustom>
-            )}
 
             {openDelete && (
                 <ConfirmDialog

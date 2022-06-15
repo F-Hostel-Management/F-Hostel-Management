@@ -1,4 +1,5 @@
 import { ERoomStatus } from '../utils/enums'
+import { IFacilityManagement } from './IFacility'
 import { IHostel } from './IHostel'
 
 export interface IRoom {
@@ -18,6 +19,7 @@ export interface IRoom {
     status?: ERoomStatus
     maximumPeople?: number
     isDeleted?: boolean
+    facilityManagements?: IFacilityManagement[]
 }
 
 export interface IRoomValues {

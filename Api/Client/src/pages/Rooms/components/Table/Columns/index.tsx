@@ -1,6 +1,6 @@
 import { GridColDef } from '@mui/x-data-grid'
+import RoomStatus from '../../RoomStatus'
 import ActionButtons from '../ActionButtons'
-import RoomStatus from '../RoomStatus'
 
 export const createColumns = (
     renderCell: any,

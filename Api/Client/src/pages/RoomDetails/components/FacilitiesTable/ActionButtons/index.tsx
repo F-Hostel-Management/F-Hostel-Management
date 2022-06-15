@@ -7,6 +7,7 @@ import { getItem } from '../../../../../utils/LocalStorageUtils'
 import { Edit as EditICon, Delete as DeleteICon } from '@mui/icons-material'
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
 import { Typography } from '@mui/material'
+import UpdateFacilityDialog from '../Dialog/UpdateFacilityDialog'
 
 interface IActionButtonsProps {
     rowData: any
@@ -51,6 +52,14 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     </>
                 )}
             </div>
+
+            {openUpdate && (
+                <UpdateFacilityDialog
+                    openDialog={openUpdate}
+                    handleCloseDialog={handleCloseUpdate}
+                    facilityManagements={rowData}
+                />
+            )}
 
             {openDelete && (
                 <ConfirmDialog
