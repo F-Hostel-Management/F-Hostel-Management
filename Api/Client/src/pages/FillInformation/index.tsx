@@ -636,6 +636,8 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     console.log('hello')
     const [role, setRole] = useState<string>('Tenant')
 
+    const [loading, setLoading] = useState<boolean>(false)
+
     const [activeStep, setActiveStep] = React.useState(0)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
@@ -692,6 +694,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
     const handleNext = () => {
         if (activeStep === STEPS.length - 1) {
+            setLoading(true)
             ;(async () => {
                 await callApi()
             })()
@@ -709,6 +712,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     }
 
     const handleBack = () => {
+        setLoading(false)
         setActiveStep((prevActiveStep) => prevActiveStep - 1)
     }
 
@@ -819,7 +823,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                     Back
                                 </Button>
                                 <Box sx={{ flex: '1 1 auto' }} />
-                                <Button onClick={handleNext}>
+                                <Button onClick={handleNext} disabled={loading}>
                                     {activeStep === STEPS.length - 1
                                         ? 'Finish'
                                         : 'Next'}
