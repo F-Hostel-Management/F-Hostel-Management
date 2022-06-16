@@ -44,7 +44,7 @@ public class AuthorizationServices : IAuthorizationServices
         {
             return false;
         }
-        return this.IsCommitmentStillValid(commitment);
+        return IsCommitmentStillValid(commitment);
     }
 
     public async Task<bool> IsHostelManagedByCurrentUser(Guid hostelId, Guid userId)

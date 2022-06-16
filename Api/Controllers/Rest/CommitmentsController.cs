@@ -130,9 +130,6 @@ public class CommitmentsController : BaseRestController
         return Ok();
     }
 
-
-    // commitment expired ==> com.status => expired => remove all invoice schedules
-
     /// <summary>
     /// owner || manager create a joining code for approved, active commitment
     /// </summary>
