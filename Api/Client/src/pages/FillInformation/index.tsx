@@ -664,37 +664,46 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             phone: information.phoneNo,
             taxCode: information.taxCode,
         }
+        setLoading(true)
         const firstTimeRes = await RestCaller.post(
             'Authentication/first-time-login',
-            body
+            body,
+            {
+                loading: {
+                    show: true,
+                },
+                success: {
+                    show: true,
+                    message: 'First time login was successful',
+                },
+            }
         )
-
+        setLoading(false)
         if (firstTimeRes.isError) return
 
-        console.log('url: ' + information.imgCard.get(0))
-        const uploadRes = await RestCaller.upload(
-            'Users/upload-identification-card',
-            (() => {
-                const formData = new FormData()
-                formData.append(
-                    'FrontIdentification',
-                    information.imgCard.get(0) as File
-                )
-                formData.append(
-                    'BackIdentification',
-                    information.imgCard.get(1) as File
-                )
-                return formData
-            })()
-        )
-
-        if (uploadRes.isError) return
+        if (information.imgCard.get(0) && information.imgCard.get(1)) {
+            const uploadRes = await RestCaller.upload(
+                'Users/upload-identification-card',
+                (() => {
+                    const formData = new FormData()
+                    formData.append(
+                        'FrontIdentification',
+                        information.imgCard.get(0) as File
+                    )
+                    formData.append(
+                        'BackIdentification',
+                        information.imgCard.get(1) as File
+                    )
+                    return formData
+                })()
+            )
+            if (uploadRes.isError) return
+        }
         await doGetProfile()
     }
 
     const handleNext = () => {
         if (activeStep === STEPS.length - 1) {
-            setLoading(true)
             ;(async () => {
                 await callApi()
             })()
@@ -757,8 +766,8 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                                     return (
                                         <React.Fragment>
                                             <Typography sx={{ mt: 2, mb: 1 }}>
-                                                All steps completed -
-                                                you&apos;re finished
+                                                All steps completed - you are
+                                                finished
                                             </Typography>
                                         </React.Fragment>
                                     )
