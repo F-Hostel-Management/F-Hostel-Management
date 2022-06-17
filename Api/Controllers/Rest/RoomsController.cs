@@ -178,6 +178,8 @@ public class RoomsController : BaseRestController
             schedule.IsDeleted = true;
         }
         await _invoiceScheduleRepository.UpdateRangeAsync(schedules);
+        room.RoomStatus = RoomStatus.Available;
+        await _roomsRepository.UpdateAsync(room);
         return Ok();
     }
 }
