@@ -17,7 +17,10 @@ public static class SeedingServices
 
     public static dynamic LoadFileToString(string f)
     {
-        string contents = File.ReadAllText("./MockData/" + f);
-        return contents;
+        using (StreamReader r = new StreamReader("./MockData/" + f))
+        {
+            string contents = r.ReadToEnd();
+            return contents;
+        }
     }
 }

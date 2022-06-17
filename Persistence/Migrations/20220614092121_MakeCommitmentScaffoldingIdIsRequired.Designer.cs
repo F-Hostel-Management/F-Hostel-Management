@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220614092121_MakeCommitmentScaffoldingIdIsRequired")]
+    partial class MakeCommitmentScaffoldingIdIsRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,13 +36,16 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("CommitmentScaffoldingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Compensation")
+                    b.Property<double?>("Compensation")
                         .HasColumnType("float");
+
+                    b.Property<string>("CompensationText")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DateOverdue")
+                    b.Property<int?>("DateOverdue")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
@@ -79,8 +84,8 @@ namespace Infrastructure.Migrations
                     b.Property<string>("OwnerCitizenIdentity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("OwnerDateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("OwnerDateOfBirth")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -109,6 +114,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("RoomName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RoomPriceText")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RoomWidth")
                         .HasColumnType("nvarchar(max)");
 
@@ -119,14 +127,14 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Commitment Status");
 
-                    b.Property<string>("TenantAddress")
+                    b.Property<string>("TeantAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TenantCitizenIdentity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TenantDateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("TenantDateOfBirth")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier");

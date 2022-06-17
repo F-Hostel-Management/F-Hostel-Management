@@ -3,6 +3,7 @@ using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Utilities;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Commitment;
@@ -52,7 +53,7 @@ public class CommitmentsController : BaseRestController
     /// <param name="comReq"></param>
     /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
-    [HttpPost]
+    [HttpPost()]
     public async Task<IActionResult> CreateCommitment(CreateCommitmentRequest comReq)
     {
 
@@ -81,6 +82,32 @@ public class CommitmentsController : BaseRestController
         await _roomServices.RentThisRoom(room);
 
         return Ok(comitment.Id);
+    }
+
+
+    [Authorize]
+    [HttpGet("get-commitment-html/{comId}")]
+    public async Task<IActionResult> GetCommitmentHtmlById([FromRoute] Guid comId)
+    {
+        CommitmentEntity commitment = await _commitmentRepository.FindByIdAsync(comId);
+        if (commitment is null)
+        {
+            throw new NotFoundException("Commitment not found");
+        }
+        bool isManagedByCurrentUser;
+        if (CurrentUserRole.Equals(Role.Tenant.ToString()))
+        {
+            isManagedByCurrentUser = await _authorServices.IsCurrentUserRentingTheRoom(commitment, CurrentUserID);
+        } else
+        {
+            isManagedByCurrentUser = await _authorServices.IsHostelManagedByCurrentUser(commitment.HostelId, CurrentUserID);
+        }
+        if (!isManagedByCurrentUser)
+        {
+            throw new ForbiddenException("Forbidden");
+        }       
+        var response = await _reqHandler.GetCommitmentHtmlBase64(commitment, CurrentUserID);
+        return Ok(response);
     }
 
     /// <summary>
@@ -134,7 +161,7 @@ public class CommitmentsController : BaseRestController
     /// </summary>
     /// <param name="SixDigitsCode"></param>
     /// <returns></returns>
-    [AllowAnonymous]
+    [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("get-commitment-by-joiningCode/{SixDigitsCode}")]
     public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
     {
@@ -143,7 +170,13 @@ public class CommitmentsController : BaseRestController
         _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
         CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
-        return Ok(commitment);
+        if (commitment.RoomTenants.Count == 0)
+        {
+            commitment = await _reqHandler.FillCommitmentForTenant(commitment, CurrentUserID, Mapper);
+            await _commitmentRepository.UpdateAsync(commitment);
+        }
+        var response = await _reqHandler.GetCommitmentHtmlBase64(commitment, CurrentUserID);
+        return Ok(response);
     }
 
     /// <summary>
@@ -161,17 +194,16 @@ public class CommitmentsController : BaseRestController
             GetJoiningCode(req.SixDigitsJoiningCode);
         _joiningCodeServices.ValidateJoiningCode(joiningCode);
 
-        CommitmentEntity com =
+        CommitmentEntity commitment =
             await _joiningCodeServices.GetCommitment(joiningCode);
 
         // activate commitment
-        if (com.TenantId is null)
+        if (commitment.RoomTenants.Count == 0)
         {
-            com = await _reqHandler.FillCommitmentForTenant(com, CurrentUserID, Mapper);
-            await _commitmentServices.ActivatedCommitment(com);
+            await _commitmentServices.ActivatedCommitment(commitment);
         }
         // get into room
-        await _tenantServices.GetIntoRoom(com, CurrentUserID);
+        await _tenantServices.GetIntoRoom(commitment, CurrentUserID);
         return Ok();
     }
 
@@ -186,12 +218,12 @@ public class CommitmentsController : BaseRestController
     public async Task<IActionResult> UpdatePendingCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)
     {
         CommitmentEntity pendingCom = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Pending);
-        CommitmentEntity updatedCommitment = Mapper.Map(uComReq, pendingCom);
+        Mapper.Map(uComReq, pendingCom);
         if (CurrentUserRole.Equals(Role.Manager.ToString()))
         {
-            updatedCommitment.ManagerId = CurrentUserID;
+            pendingCom.ManagerId = CurrentUserID;
         }
-        await _commitmentServices.UpdatePendingCommitment(updatedCommitment);
+        await _commitmentServices.UpdatePendingCommitment(pendingCom);
         return Ok();
     }
 

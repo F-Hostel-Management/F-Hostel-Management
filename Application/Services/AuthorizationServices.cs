@@ -1,13 +1,11 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities;
 using Domain.Entities.Commitment;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using Domain.Entities.User;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Services;
 
