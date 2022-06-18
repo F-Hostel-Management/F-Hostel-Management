@@ -18,14 +18,22 @@ import { useTheme } from '@mui/material/styles'
 
 interface IUpdateImage {
     values: IUser
-    setValues: Dispatch<SetStateAction<any>>
+    setValues: Dispatch<SetStateAction<IUser>>
+    setFrontImg: Dispatch<SetStateAction<File | undefined>>
+    setBackImg: Dispatch<SetStateAction<File | undefined>>
 }
 
-const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
+const UpdateImage: FC<IUpdateImage> = ({
+    values,
+    setValues,
+    setFrontImg,
+    setBackImg,
+}) => {
     const theme = useTheme()
     const [activeStep, setActiveStep] = React.useState(0)
     const preview = [values.frontIdentification, values.backIdentification]
     const maxSteps = 2
+    const { frontIdentification } = values
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
     }
@@ -35,6 +43,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
     }
 
     const handleChooseImageFront = (e: any) => {
+        setFrontImg(e.target.files[0])
         setValues({
             ...values,
             frontIdentification: URL.createObjectURL(e.target.files[0]),
@@ -42,6 +51,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
     }
 
     const handleChooseImageBack = (e: any) => {
+        setBackImg(e.target.files[0])
         setValues({
             ...values,
             backIdentification: URL.createObjectURL(e.target.files[0]),
@@ -50,6 +60,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
 
     const handleChooseImage = [handleChooseImageFront, handleChooseImageBack]
 
+    console.log(frontIdentification)
     return (
         <div>
             <Box
@@ -128,12 +139,16 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
                             component="img"
                             height="194"
                             image={preview[activeStep]}
-                            alt="Paella dish"
+                            alt="Identity card"
                         />
                         <label>
                             <input
                                 type="file"
-                                id="avatar"
+                                id={
+                                    activeStep == 0
+                                        ? 'frontIdentification'
+                                        : 'backIdentification'
+                                }
                                 accept="image/png, image/jpeg"
                                 style={{ display: 'none' }}
                                 onChange={handleChooseImage[activeStep]}
