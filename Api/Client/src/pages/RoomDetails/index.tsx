@@ -20,7 +20,7 @@ const RoomDetails: FC<IRoomDetailsProps> = (props) => {
     }, [dispatch])
 
     return (
-        <div>
+        <Styled.Container>
             <Styled.Wrapper>
                 <Details />
             </Styled.Wrapper>
@@ -30,7 +30,7 @@ const RoomDetails: FC<IRoomDetailsProps> = (props) => {
                     numOfFacilities={roomDetails?.facilityManagements?.length}
                 />
             </Styled.Wrapper>
-        </div>
+        </Styled.Container>
     )
 }
 
