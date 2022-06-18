@@ -55,7 +55,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                             <img
                                 src={logo}
                                 alt="logo"
-                                style={{ height: '50px' }}
+                                style={{ height: '40px' }}
                             />
                         )}
                     </Styled.NavbarLogo>
