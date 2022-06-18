@@ -90,7 +90,6 @@ const ScanQrCode: FC<IScanQrCodeProps> = ({
             <Styled.WrapperRight>
                 <Typography variant="body2">
                     <strong>Enter your code:</strong>
-                    {scanResult}
                 </Typography>
                 <InputField
                     name="roomCode"
