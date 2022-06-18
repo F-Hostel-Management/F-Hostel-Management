@@ -56,6 +56,8 @@ public class AuthorizationServices : IAuthorizationServices
         return list.Count == 1;
     }
 
+    
+
 
     public async Task<bool> IsHostelManagedByCurrentUser(HostelEntity hostel, Guid userId)
     {
@@ -108,7 +110,20 @@ public class AuthorizationServices : IAuthorizationServices
 
     public bool IsCommitmentStillValid(CommitmentEntity commitment)
     {
+        // repair when apply cron
         double countLess = commitment.EndDate.Subtract(DateTime.Now).TotalMinutes;
         return countLess > 0;
+    }
+
+    public async Task<HostelEntity> GetHostelThatManagedByCurrentUser(Guid hostelId, Guid userId)
+    {
+        HostelEntity hostel = await _hostelRepository.FindByIdAsync(hostelId);
+        if (hostel == null) throw new NotFoundException($"Hostel not found");
+        bool isManaged = await IsHostelManagedByCurrentUser(hostel, userId);
+        if (!isManaged)
+        {
+            return null;
+        }
+        return hostel;
     }
 }

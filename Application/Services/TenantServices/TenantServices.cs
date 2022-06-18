@@ -33,7 +33,7 @@ public class TenantServices : ITenantServices
     public async Task GetIntoRoom(CommitmentEntity commitment, Guid tenantId)
     {
         var currentTenantsInRoom = await _roomTenantRepository.WhereAsync(rt =>
-            rt.RoomId.Equals(commitment.RoomId));
+            rt.CommitmentId.Equals(commitment.Id));
         
         // check tenant is already in room?
         var tenantInRoom = currentTenantsInRoom.FirstOrDefault(rt =>

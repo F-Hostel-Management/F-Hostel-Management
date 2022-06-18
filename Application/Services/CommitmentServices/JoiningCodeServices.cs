@@ -52,7 +52,7 @@ public class JoiningCodeServices : IJoiningCodeServices
                 jc => jc.SixDigitsCode == SixDigitsCode
             );
         } while (checkedJc != null);
-        joiningCode.SixDigitsCode = random.Next(Min_6_Ditgits, Min_7_Ditgits);
+        joiningCode.SixDigitsCode = SixDigitsCode;
         joiningCode.CreateDate = DateTime.Now;
         await _joiningCodeRepository.CreateAsync(joiningCode);
         return joiningCode;

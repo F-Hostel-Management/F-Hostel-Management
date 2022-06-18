@@ -63,12 +63,11 @@ public class HandleCommitmentRequestService
         return commitment;
     }
 
-    public async Task<CommitmentEntity> FillCommitmentForTenant
-        (CommitmentEntity commitment, Guid tenantId, IMapper Mapper)
+    public CommitmentEntity FillCommitmentForTenant
+        (CommitmentEntity commitment, UserEntity tenant, IMapper Mapper)
     {
-        UserEntity tenant = await _userRepository.FindByIdAsync(tenantId);
         {
-            commitment.TenantId = tenantId;
+            commitment.TenantId = tenant.Id;
             commitment.TenantName = tenant.Name;
             commitment.TenantDateOfBirth = tenant.DateOfBirth;
             commitment.TenantCitizenIdentity = tenant.CitizenIdentity;

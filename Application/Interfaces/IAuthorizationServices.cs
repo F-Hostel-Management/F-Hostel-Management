@@ -14,5 +14,5 @@ public interface IAuthorizationServices
     Task<bool> IsCurrentUserRentingTheRoom(CommitmentEntity commitment, Guid userId);
     Task<RoomEntity> GetRoomThatManagedByCurrentUser(Guid roomId, Guid userId);
     Task VerifiedRoomsInAHostelThatManagedByCurrentUser(IEnumerable<Guid> roomIds, Guid hostelId, Guid userId);
-
+    Task<HostelEntity> GetHostelThatManagedByCurrentUser(Guid hostelId, Guid userId);
 }
