@@ -6,6 +6,7 @@ using Domain.Entities.Commitment;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using Domain.Entities.User;
+using Domain.Enums;
 
 namespace Application.Services;
 
@@ -125,5 +126,15 @@ public class AuthorizationServices : IAuthorizationServices
             return null;
         }
         return hostel;
+    }
+
+    public async Task<bool> IsCommitmentStillValid(Guid commitmentId)
+    {
+        CommitmentEntity entity = await _commitmentRepository.FindByIdAsync(commitmentId);
+        if (entity is null)
+        {
+            throw new NotFoundException("Commitment not found");
+        }
+        return entity.CommitmentStatus == CommitmentStatus.Active;
     }
 }
