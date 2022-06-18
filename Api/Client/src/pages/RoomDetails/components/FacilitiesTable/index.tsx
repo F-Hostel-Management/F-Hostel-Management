@@ -40,7 +40,7 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
     }, [dispatch])
 
     return (
-        <Fragment>
+        <>
             <DataGridCustom
                 loading={isFetchingDetails}
                 title="Room Facilities"
@@ -66,7 +66,7 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
                     handleCloseDialog={handleCloseCreate}
                 />
             )}
-        </Fragment>
+        </>
     )
 }
 

@@ -1,12 +1,11 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
-import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
+import { useAppSelector } from '../../../../../hooks/reduxHook'
 import { useDialog } from '../../../../../hooks/useDialog'
 import { ERole } from '../../../../../utils/enums'
-import { getItem } from '../../../../../utils/LocalStorageUtils'
 import { Edit as EditICon, Delete as DeleteICon } from '@mui/icons-material'
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
-import { Typography } from '@mui/material'
+import { Tooltip, Typography } from '@mui/material'
 import UpdateFacilityDialog from '../Dialog/UpdateFacilityDialog'
 
 interface IActionButtonsProps {
@@ -15,11 +14,8 @@ interface IActionButtonsProps {
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
-    const hostelId = getItem('currentHostelId')
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
-    const [openView, handleOpenView, handleCloseView] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
-    const dispatch = useAppDispatch()
     const handleDelete = async () => {}
     return (
         <>
@@ -39,7 +35,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             sx={{ width: '2.8rem', height: '2.8rem' }}
                             onClick={handleOpenUpdate}
                         >
-                            <EditICon sx={{ fontSize: '1.3rem' }} />
+                            <Tooltip title="Update" placement="top">
+                                <EditICon sx={{ fontSize: '1.3rem' }} />
+                            </Tooltip>
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -47,7 +45,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             sx={{ width: '2.8rem', height: '2.8rem' }}
                             onClick={handleOpenDelete}
                         >
-                            <DeleteICon sx={{ fontSize: '1.6rem' }} />
+                            <Tooltip title="Delete" placement="top">
+                                <DeleteICon sx={{ fontSize: '1.6rem' }} />
+                            </Tooltip>
                         </IconButtonCustom>
                     </>
                 )}

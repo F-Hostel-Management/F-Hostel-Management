@@ -28,6 +28,6 @@ export const createColumns = (
             (params: IFacilityManagement) => params.facility.price
         ),
         createColumn('description', 'Description', 400),
-        renderCell('actions', 'Actions', 130, ActionButtons),
+        renderCell('actions', 'Actions', 100, ActionButtons),
     ]
 }

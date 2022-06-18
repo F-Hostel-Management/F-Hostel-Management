@@ -9,7 +9,7 @@ import { ERoomStatus as Status } from '../../../../../utils/enums'
 import { ERole } from '../../../../../utils/enums'
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../../hooks/useDialog'
-import { Typography } from '@mui/material'
+import { Tooltip, Typography } from '@mui/material'
 import { useAppSelector } from '../../../../../hooks/reduxHook'
 import UpdateRoomDialog from '../../Dialog/UpdateRoomDialog'
 import { useNavigate } from 'react-router-dom'
@@ -46,7 +46,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     sx={{ width: '2.8rem', height: '2.8rem' }}
                     onClick={handleClickRoomDetails}
                 >
-                    <MeetingRoomIcon sx={{ fontSize: '1.3rem' }} />
+                    <Tooltip title="Details" placement="top">
+                        <MeetingRoomIcon sx={{ fontSize: '1.3rem' }} />
+                    </Tooltip>
                 </IconButtonCustom>
                 {role !== ERole.TENANT_ROLE && (
                     <>
@@ -56,7 +58,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             sx={{ width: '2.8rem', height: '2.8rem' }}
                             onClick={handleOpenUpdate}
                         >
-                            <Edit sx={{ fontSize: '1.3rem' }} />
+                            <Tooltip title="Update" placement="top">
+                                <Edit sx={{ fontSize: '1.3rem' }} />
+                            </Tooltip>
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -65,7 +69,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             disabled={rowData.status === Status.Rented}
                             onClick={handleOpenDelete}
                         >
-                            <Delete sx={{ fontSize: '1.6rem' }} />
+                            <Tooltip title="Delete" placement="top">
+                                <Delete sx={{ fontSize: '1.6rem' }} />
+                            </Tooltip>
                         </IconButtonCustom>
                     </>
                 )}
