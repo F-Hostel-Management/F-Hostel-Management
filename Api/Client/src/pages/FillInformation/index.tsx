@@ -34,7 +34,7 @@ import { useRouter } from '../../hooks/routerHook'
 
 // Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
-interface IFillInformationProps {}
+interface IFillInformationProps { }
 interface IPersonInformationProps {
     roleActive: string
     state: IInformation
@@ -528,9 +528,9 @@ const ConfirmInfo: React.FC<IConfirmInfoProps> = ({ stateInfo, stateRole }) => {
                                             key={row.title}
                                             sx={{
                                                 '&:last-child td, &:last-child th':
-                                                    {
-                                                        border: 0,
-                                                    },
+                                                {
+                                                    border: 0,
+                                                },
                                             }}
                                         >
                                             <TableCell
@@ -704,7 +704,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
     const handleNext = () => {
         if (activeStep === STEPS.length - 1) {
-            ;(async () => {
+            ; (async () => {
                 await callApi()
             })()
             return
@@ -730,7 +730,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     }
 
     React.useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             const firebaseToken =
                 await FirebaseService.getInstance().getFirebaseToken()
             if (!firebaseToken) return navigateWithRedirect('/login')
