@@ -9,8 +9,8 @@ export const Wrapper = styled.div`
     justify-content: center;
 
     border: 1px dashed rgba(0, 0, 0, 0.5);
-    min-height: 300px;
-    width: 400px;
+    min-height: 250px;
+    width: 340px;
     margin: 16px auto;
 
     &:hover {
