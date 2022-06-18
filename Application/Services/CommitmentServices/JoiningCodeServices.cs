@@ -1,14 +1,7 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities.Commitment;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services.CommitmentServices;
 
@@ -73,6 +66,12 @@ public class JoiningCodeServices : IJoiningCodeServices
         {
             throw new BadRequestException("Joining code is not exists or expired");
         }
+    }
+
+    public bool IsValid(JoiningCode joiningCode)
+    {
+        double timeSpan = DateTime.Now.Subtract(joiningCode.CreateDate).TotalMinutes;
+        return timeSpan < joiningCode.TimeSpan;
     }
 
     public async Task<CommitmentEntity> GetCommitment(JoiningCode joiningCode)
