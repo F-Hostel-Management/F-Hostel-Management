@@ -5,9 +5,4 @@ export const InvoiceType = [
     { name: 'House' },
 ]
 
-export const InvoiceCron = [
-    { name: 'None' },
-    { name: 'Week' },
-    { name: 'Month' },
-    { name: 'Year' },
-]
+export const InvoiceCron = [{ name: 'Week' }, { name: 'Month' }]

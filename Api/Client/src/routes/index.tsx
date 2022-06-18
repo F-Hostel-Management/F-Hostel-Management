@@ -11,6 +11,7 @@ import FillInformation from '../pages/FillInformation'
 import Rooms from '../pages/Rooms'
 import Facilities from '../pages/Facilities'
 import Invoices from '../pages/Invoices'
+import InvoiceSchedule from '../pages/InvoiceSchedule'
 import { PaymentCallback } from '../pages/Invoices/components/Payment/Callback'
 
 const publicRoutes: IRoute[] = [
@@ -90,6 +91,15 @@ const privateRoutes: IRoute[] = [
         layout: DefaultLayout,
         props: {
             title: 'Invoices',
+        },
+    },
+    {
+        path: '/home/schedulingInvoices',
+        component: InvoiceSchedule,
+        name: 'InvoicesSchedule',
+        layout: DefaultLayout,
+        props: {
+            title: 'Invoices Schedule',
         },
     },
     {
