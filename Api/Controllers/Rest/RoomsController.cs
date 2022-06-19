@@ -154,7 +154,7 @@ public class RoomsController : BaseRestController
         return Ok();
     }
 
-    [HttpGet("{roomId}/checkout")]
+    [HttpPost("{roomId}/checkout")]
     public async Task<IActionResult> CheckoutThisRoom([FromRoute] Guid roomId)
     {
         RoomEntity room = await _roomsRepository.FindByIdAsync(roomId);
