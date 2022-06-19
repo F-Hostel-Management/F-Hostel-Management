@@ -370,12 +370,16 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                             component="img"
                                             height="194"
                                             image={preview[activeStep]}
-                                            alt="Paella dish"
+                                            alt="Citizen Identity"
                                         />
                                         <label>
                                             <input
                                                 type="file"
-                                                id="avatar"
+                                                id={
+                                                    activeStep == 0
+                                                        ? 'FrontIdentification'
+                                                        : 'BackIdentification'
+                                                }
                                                 accept="image/png, image/jpeg"
                                                 style={{ display: 'none' }}
                                                 onChange={(e) => {
