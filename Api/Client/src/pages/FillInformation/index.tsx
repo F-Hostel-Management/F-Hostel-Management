@@ -31,6 +31,7 @@ import { IFirstTimeBody, IInformation } from './interfaces'
 import { GENDERS, ROLES, STEPS } from './constants'
 import { doGetProfile } from '../../actions/doGetProfile'
 import { useRouter } from '../../hooks/routerHook'
+import { showError } from '../../utils/Toast'
 
 // Props & type
 type InputFieldType = React.ChangeEvent<HTMLInputElement>
@@ -186,6 +187,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                     })
                                 }
                                 autoFocus
+                                required
                             />
 
                             <InputField
@@ -211,6 +213,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                     shrink: true,
                                 }}
                                 type="date"
+                                required
                             />
 
                             <InputField
@@ -223,6 +226,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                     })
                                 }
                                 select
+                                required
                             >
                                 {GENDERS.map((option, index) => (
                                     <MenuItem key={index} value={option}>
@@ -241,6 +245,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                     })
                                 }
                                 type="number"
+                                required
                             />
 
                             <InputField
@@ -253,6 +258,7 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                     })
                                 }
                                 type="number"
+                                required
                             />
                         </Grid>
 
@@ -633,12 +639,13 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         taxCode: '',
         imgCard: new Map<number, File>(),
     })
-    console.log('hello')
+
     const [role, setRole] = useState<string>('Tenant')
 
     const [loading, setLoading] = useState<boolean>(false)
 
     const [activeStep, setActiveStep] = React.useState(0)
+    const [uploadImg, setUploadImg] = React.useState<boolean>(false)
     const [skipped, setSkipped] = React.useState(new Set<number>())
 
     const { navigateWithRedirect } = useRouter()
@@ -665,21 +672,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             taxCode: information.taxCode,
         }
         setLoading(true)
-        const firstTimeRes = await RestCaller.post(
-            'Authentication/first-time-login',
-            body,
-            {
-                loading: {
-                    show: true,
-                },
-                success: {
-                    show: true,
-                    message: 'First time login was successful',
-                },
-            }
-        )
-        setLoading(false)
-        if (firstTimeRes.isError) return
+        setTimeout(() => setLoading(false), 5000)
 
         if (information.imgCard.get(0) && information.imgCard.get(1)) {
             const uploadRes = await RestCaller.upload(
@@ -697,8 +690,32 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                     return formData
                 })()
             )
-            if (uploadRes.isError) return
+            if (uploadRes) {
+                showError('Upload image failed')
+                return
+            }
+        } else {
+            showError('Please upload 2 sides of Citizen Identity')
+
+            return
         }
+
+        const firstTimeRes = await RestCaller.post(
+            'Authentication/first-time-login',
+            body,
+            {
+                loading: {
+                    show: true,
+                },
+                success: {
+                    show: true,
+                    message: 'First time login was successful',
+                },
+            }
+        )
+
+        if (firstTimeRes.isError) return
+
         await doGetProfile()
     }
 
@@ -710,14 +727,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             return
         }
 
-        let newSkipped = skipped
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values())
-            newSkipped.delete(activeStep)
-        }
-
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
-        setSkipped(newSkipped)
     }
 
     const handleBack = () => {
@@ -759,6 +769,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                             )
                         })}
                     </Stepper>
+
                     <Styled.MainStep>
                         {(() => {
                             switch (activeStep) {
@@ -801,45 +812,30 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                         })()}
                     </Styled.MainStep>
 
-                    {activeStep === STEPS.length ? (
-                        <React.Fragment>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    pt: 2,
-                                }}
+                    <React.Fragment>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                pt: 2,
+                            }}
+                        >
+                            <Button
+                                color="inherit"
+                                disabled={activeStep === 0}
+                                onClick={handleBack}
+                                sx={{ mr: 1 }}
                             >
-                                <Box sx={{ flex: '1 1 auto' }} />
-                                <Button onClick={handleReset}>Reset</Button>
-                            </Box>
-                        </React.Fragment>
-                    ) : (
-                        <React.Fragment>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    pt: 2,
-                                }}
-                            >
-                                <Button
-                                    color="inherit"
-                                    disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    sx={{ mr: 1 }}
-                                >
-                                    Back
-                                </Button>
-                                <Box sx={{ flex: '1 1 auto' }} />
-                                <Button onClick={handleNext} disabled={loading}>
-                                    {activeStep === STEPS.length - 1
-                                        ? 'Finish'
-                                        : 'Next'}
-                                </Button>
-                            </Box>
-                        </React.Fragment>
-                    )}
+                                Back
+                            </Button>
+                            <Box sx={{ flex: '1 1 auto' }} />
+                            <Button onClick={handleNext} disabled={loading}>
+                                {activeStep === STEPS.length - 1
+                                    ? 'Finish'
+                                    : 'Next'}
+                            </Button>
+                        </Box>
+                    </React.Fragment>
                 </Box>
             </Styled.MyPaper>
         </Styled.Container>
