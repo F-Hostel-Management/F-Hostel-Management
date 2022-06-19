@@ -4,6 +4,8 @@ import { IUser } from './IUser'
 export interface IInvoice {
     id?: string
     invoiceCode?: string
+    quantity?: number
+    unitPrice?: number
     price?: number
     date?: string
     dueDate?: string

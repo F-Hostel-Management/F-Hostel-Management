@@ -6,7 +6,6 @@ import { useForm } from '../../../../hooks/useForm'
 import { IInvoice } from '../../../../interface/IInvoice'
 import { getInvoiceStatus } from '../../../../services/InvoiceService'
 import { formatDate } from '../../../../utils/FormatDate'
-import { parseContent } from '../../../../utils/InvoiceUtils'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 import InvoiceStatus from '../InvoiceStatus'
@@ -25,16 +24,15 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
     handleCloseDialog,
     rowData,
 }) => {
-    const initial = parseContent(rowData.content ?? '')
-
     const { values, setValues, handleInputChange } = useForm<IInvoiceProps>({
-        content: initial.content,
+        content: rowData?.content ?? '',
         dueDate: moment(new Date(rowData.dueDate ?? '')).format('YYYY-MM-DD'),
         invoiceType: rowData.invoiceType ?? '',
         roomId: rowData?.room?.id ?? '',
         price: rowData?.price ?? 0,
-        quantity: initial.quantity,
-        unitPrice: initial.unitPrice,
+        quantity: rowData.quantity ?? 0,
+        lastQuantity: 0,
+        unitPrice: rowData?.unitPrice ?? 0,
     })
     const handleSubmit = async () => {
         //api
@@ -91,6 +89,7 @@ const InvoiceDetails: FC<IInvoiceDetailsProps> = ({
             </Styled.Payment>
             <Divider variant="middle" sx={{ m: 4 }} />
             <InvoiceForm
+                id={rowData?.id ?? ''}
                 values={values}
                 setValues={setValues}
                 handleInputChange={handleInputChange}

@@ -49,7 +49,9 @@ const Invoices: FC<IInvoicesProps> = () => {
         renderCell('actions', 'Actions', 150, ActionButtons),
     ]
 
-    const rows = useAppSelector(({ invoice }) => invoice.invoiceList)
+    const rows = useAppSelector(({ invoice }) =>
+        invoice.invoiceList.filter((invoice) => invoice.price !== 0)
+    )
     const numOfInvoice = useAppSelector(({ invoice }) => invoice.numOfInvoice)
     const currentPage = useAppSelector(({ table }) => table.page)
     const currentPageSize = useAppSelector(({ table }) => table.pageSize)
