@@ -1,10 +1,10 @@
 import { Button, MenuItem, Grid } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 import InputField from '../../../../components/Input/InputField'
 import { IUser } from '../../../../interface/IUser'
 import { RestCaller } from '../../../../utils/RestCaller'
-import { showSuccess } from '../../../../utils/Toast'
+import { showError, showSuccess } from '../../../../utils/Toast'
 import { IProfileFormInfo } from '../../interface'
 import UpdateImage from '../UpdateImage/indx'
 import * as Styled from './styles'
@@ -23,6 +23,9 @@ const FormInfo: React.FC<IFormInfoProps> = ({
     handleInputChange,
     setValues,
 }) => {
+    const [frontImg, setFrontImg] = useState<File>()
+    const [backImg, setBackImg] = useState<File>()
+
     const onSaveProfile = async () => {
         const body: IProfileFormInfo = {
             citizenIdentity: values.citizenIdentity,
@@ -35,31 +38,35 @@ const FormInfo: React.FC<IFormInfoProps> = ({
         }
         const profileResult = await RestCaller.patch('Users/update-user', body)
 
-        const { frontIdentification, backIdentification } = values
-        const uploadFrontIdentification = await RestCaller.upload(
-            'Users/upload-identification-card',
-            (() => {
-                const formData = new FormData()
-                formData.append(
-                    'FrontIdentification',
-                    frontIdentification as string
-                )
-                return formData
-            })()
-        )
-        const uploadBackIdentification = await RestCaller.upload(
-            'Users/upload-identification-card',
-            (() => {
-                const formData = new FormData()
-                formData.append(
-                    'BackIdentification',
-                    backIdentification as string
-                )
-                return formData
-            })()
-        )
-        // if (profileResult.isError) return
-        showSuccess('ok')
+        console.log('front: ' + frontImg)
+        console.log('back: ' + backImg)
+        if (frontImg && backImg) {
+            const uploadIdentificationCard = await RestCaller.upload(
+                'Users/upload-identification-card',
+                (() => {
+                    const formData = new FormData()
+                    formData.append('FrontIdentification', frontImg)
+                    formData.append('BackIdentification', backImg)
+                    return formData
+                })()
+            )
+            if (!profileResult.isError && !uploadIdentificationCard.isError) {
+                showSuccess('Update successfully')
+                return
+            }
+        } else if (!frontImg && backImg) {
+            showError('Please upload 2 sides of identity card')
+            return
+        } else if (frontImg && !backImg) {
+            showError('Please upload 2 sides of identity card')
+            return
+        }
+
+        if (profileResult.isError) {
+            showError('Update failed')
+            return
+        }
+        showSuccess('Update successfully')
     }
     return (
         <Styled.FormContainer>
@@ -73,6 +80,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 value={values.name}
                                 onChange={handleInputChange}
                                 autoFocus
+                                required
                             />
 
                             <InputField
@@ -90,6 +98,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 value={values.dateOfBirth}
                                 onChange={handleInputChange}
                                 type="date"
+                                required
                             />
                             <InputField
                                 label="Gender"
@@ -97,6 +106,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 name="gender"
                                 onChange={handleInputChange}
                                 select
+                                required
                             >
                                 {GENDERS.map((option, index) => (
                                     <MenuItem key={index} value={index}>
@@ -113,6 +123,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 ) => handleInputChange(event, true)}
                                 type="number"
                                 name="phone"
+                                required
                             />
                             <InputField
                                 label="Address"
@@ -132,10 +143,13 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 ) => handleInputChange(event, true)}
                                 type="number"
                                 name="citizenIdentity"
+                                required
                             />
                             <UpdateImage
                                 values={values}
                                 setValues={setValues}
+                                setFrontImg={setFrontImg}
+                                setBackImg={setBackImg}
                             />
                         </div>
                     </Grid>
