@@ -3,6 +3,7 @@ import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useAppDispatch } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
 import { IInvoiceSchedule } from '../../../../interface/IInvoice'
+import { updateInvoiceSchedule } from '../../../../services/InvoiceScheduleService'
 import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import InvoiceForm from '../InvoiceForm'
 
@@ -30,8 +31,15 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
             price: rowData?.price ?? 0,
         })
     const handleSubmit = async () => {
-        //api
-        console.log(values)
+        await updateInvoiceSchedule({
+            id: rowData?.id ?? '',
+            content: values.content,
+            cron: values.cron,
+            createDate: values.createDate,
+            paymentDate: values.paymentDate,
+            invoiceType: values.invoiceType,
+            price: values.price,
+        })
         handleCloseDialog()
     }
     return (

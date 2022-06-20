@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useForm } from '../../../../hooks/useForm'
+import { createInvoiceSchedule } from '../../../../services/InvoiceScheduleService'
 import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
@@ -26,8 +27,15 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IInvoiceScheduleProps>(initialValues)
     const handleCreateSubmit = async () => {
-        //....api
-        console.log(values)
+        await createInvoiceSchedule({
+            content: values.content,
+            cron: values.cron,
+            createDate: values.createDate,
+            paymentDate: values.paymentDate,
+            invoiceType: values.invoiceType,
+            price: values.price,
+            roomId: values.roomId,
+        })
         handleCloseDialog()
     }
 

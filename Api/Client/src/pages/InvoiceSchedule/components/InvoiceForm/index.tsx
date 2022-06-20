@@ -2,7 +2,7 @@ import { Grid, InputAdornment, MenuItem } from '@mui/material'
 import * as React from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { DaysOfTheWeek } from '../../../../constants/Date'
-import { InvoiceCron, InvoiceType } from '../../../../constants/Invoice'
+import { InvoiceCron, InvoiceScheduleType } from '../../../../constants/Invoice'
 
 import { IField } from '../../../../interface/IField'
 import { IRoom } from '../../../../interface/IRoom'
@@ -99,7 +99,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                                 readOnly: review,
                             }}
                         >
-                            {InvoiceType.map((option, index) => (
+                            {InvoiceScheduleType.map((option, index) => (
                                 <MenuItem key={index} value={option.name}>
                                     {option.name}
                                 </MenuItem>
