@@ -35,6 +35,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return _entity;
     }
 
+    public virtual async Task DeleteAsync(T _entity)
+    {
+        dbSet.Remove(_entity);
+        await _context.SaveChangesAsync();
+    }
+
     public virtual async Task<T> DeleteSoftAsync(Guid id)
     {
         T _entity = await FindByIdAsync(id);
