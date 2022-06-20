@@ -2,14 +2,15 @@ import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useAppDispatch } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
-import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
+import { IInvoiceSchedule } from '../../../../interface/IInvoice'
+import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import InvoiceForm from '../InvoiceForm'
 
 interface IUpdateInvoiceDialogProps {
     openDialog: boolean
     handleOpenDialog: () => void
     handleCloseDialog: () => void
-    rowData: IInvoiceProps
+    rowData: IInvoiceSchedule
 }
 
 const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
@@ -19,9 +20,18 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
 }) => {
     const dispatch = useAppDispatch()
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInvoiceProps>(rowData)
+        useForm<IInvoiceScheduleProps>({
+            roomId: rowData?.room?.id ?? '',
+            cron: rowData?.cron ?? '',
+            createDate: rowData?.createDate ?? 1,
+            paymentDate: rowData?.paymentDate ?? 1,
+            content: rowData?.content ?? '',
+            invoiceType: rowData?.invoiceType ?? '',
+            price: rowData?.price ?? 0,
+        })
     const handleSubmit = async () => {
         //api
+        console.log(values)
         handleCloseDialog()
     }
     return (
