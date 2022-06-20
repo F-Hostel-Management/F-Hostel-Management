@@ -6,6 +6,7 @@ using Domain.Entities.Commitment;
 using Domain.Entities.Hostel;
 using Domain.Entities.Room;
 using Domain.Entities.User;
+using Domain.Enums;
 
 namespace Application.Services;
 
@@ -44,7 +45,7 @@ public class AuthorizationServices : IAuthorizationServices
         {
             return false;
         }
-        return this.IsCommitmentStillValid(commitment);
+        return IsCommitmentStillValid(commitment);
     }
 
     public async Task<bool> IsHostelManagedByCurrentUser(Guid hostelId, Guid userId)
@@ -55,6 +56,8 @@ public class AuthorizationServices : IAuthorizationServices
             , "HostelManagements");
         return list.Count == 1;
     }
+
+    
 
 
     public async Task<bool> IsHostelManagedByCurrentUser(HostelEntity hostel, Guid userId)
@@ -108,7 +111,30 @@ public class AuthorizationServices : IAuthorizationServices
 
     public bool IsCommitmentStillValid(CommitmentEntity commitment)
     {
+        // repair when apply cron
         double countLess = commitment.EndDate.Subtract(DateTime.Now).TotalMinutes;
         return countLess > 0;
+    }
+
+    public async Task<HostelEntity> GetHostelThatManagedByCurrentUser(Guid hostelId, Guid userId)
+    {
+        HostelEntity hostel = await _hostelRepository.FindByIdAsync(hostelId);
+        if (hostel == null) throw new NotFoundException($"Hostel not found");
+        bool isManaged = await IsHostelManagedByCurrentUser(hostel, userId);
+        if (!isManaged)
+        {
+            return null;
+        }
+        return hostel;
+    }
+
+    public async Task<bool> IsCommitmentStillValid(Guid commitmentId)
+    {
+        CommitmentEntity entity = await _commitmentRepository.FindByIdAsync(commitmentId);
+        if (entity is null)
+        {
+            throw new NotFoundException("Commitment not found");
+        }
+        return entity.CommitmentStatus == CommitmentStatus.Active;
     }
 }

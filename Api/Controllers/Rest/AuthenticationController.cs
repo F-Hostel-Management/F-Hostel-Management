@@ -13,10 +13,10 @@ namespace Api.Controllers.Rest
     [AllowAnonymous]
     public class AuthenticationController : BaseRestController
     {
-        private readonly IAuthenticationService authenticationService;
+        private readonly IAuthenticationServices authenticationService;
         private readonly IUserService userService;
 
-        public AuthenticationController(IAuthenticationService authenticationService, IUserService userService)
+        public AuthenticationController(IAuthenticationServices authenticationService, IUserService userService)
         {
             this.authenticationService = authenticationService;
             this.userService = userService;
