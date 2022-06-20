@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useForm } from '../../../../hooks/useForm'
 import { createInvoice } from '../../../../services/InvoiceService'
-import { formatContent } from '../../../../utils/InvoiceUtils'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
@@ -22,22 +21,22 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
         invoiceType: 'House',
         price: 0,
         content: '',
+        lastQuantity: 0,
         quantity: 1,
         unitPrice: 0,
     }
 
     const { values, setValues, handleInputChange } =
         useForm<IInvoiceProps>(initialValues)
+
     const handleCreateSubmit = async () => {
         await createInvoice({
             roomId: values.roomId,
-            content: formatContent({
-                content: values.content,
-                quantity: values.quantity,
-                unitPrice: values.unitPrice,
-            }),
+            content: values.content,
             dueDate: new Date(values.dueDate ?? ''),
             invoiceType: values.invoiceType,
+            quantity: values.quantity,
+            unitPrice: values.unitPrice,
             price: values.price,
         })
         reloadData()
