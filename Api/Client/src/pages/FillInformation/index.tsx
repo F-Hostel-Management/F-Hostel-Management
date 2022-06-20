@@ -675,8 +675,23 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             phone: information.phoneNo,
             taxCode: information.taxCode,
         }
+
+        const firstTimeRes = await RestCaller.post(
+            'Authentication/first-time-login',
+            body,
+            {
+                loading: {
+                    show: true,
+                },
+                success: {
+                    show: true,
+                    message: 'First time login was successful',
+                },
+            }
+        )
         setLoading(true)
         setTimeout(() => setLoading(false), 5000)
+        if (firstTimeRes.isError) return
 
         if (information.imgCard.get(0) && information.imgCard.get(1)) {
             const uploadRes = await RestCaller.upload(
@@ -694,7 +709,7 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                     return formData
                 })()
             )
-            if (uploadRes) {
+            if (uploadRes.isError) {
                 showError('Upload image failed')
                 return
             }
@@ -704,27 +719,15 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             return
         }
 
-        const firstTimeRes = await RestCaller.post(
-            'Authentication/first-time-login',
-            body,
-            {
-                loading: {
-                    show: true,
-                },
-                success: {
-                    show: true,
-                    message: 'First time login was successful',
-                },
-            }
-        )
-
-        if (firstTimeRes.isError) return
-
         await doGetProfile()
     }
 
     const handleNext = () => {
         if (activeStep === STEPS.length - 1) {
+            if (!(information.imgCard.get(0) && information.imgCard.get(1))) {
+                showError('Please upload 2 sides of Citizen Identity')
+                return
+            }
             ;(async () => {
                 await callApi()
             })()
