@@ -145,11 +145,24 @@ const updateFacilities = async (data = {}) => {
     return result
 }
 
-// const deleteFacilities = async (data = {}) => {
-//     const result = await RestCaller.delete('Rooms/delete-facility', data)
-//     console.log('deleteFacilities: ', result)
-//     return result
-// }
+const deleteFacilities = async (id = '') => {
+    const result = await RestCaller.delete(`Rooms/delete-facility/${id}`, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'Facility is deleted.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
+    console.log('deleteFacilities: ', result)
+    return result
+}
 
 export {
     getAllRoomOfTenant,
@@ -160,4 +173,5 @@ export {
     createRoom,
     addFacilities,
     updateFacilities,
+    deleteFacilities,
 }

@@ -1,22 +1,31 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
-import { useAppSelector } from '../../../../../hooks/reduxHook'
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import { useDialog } from '../../../../../hooks/useDialog'
 import { ERole } from '../../../../../utils/enums'
 import { Edit as EditICon, Delete as DeleteICon } from '@mui/icons-material'
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
 import { Tooltip, Typography } from '@mui/material'
 import UpdateFacilityDialog from '../Dialog/UpdateFacilityDialog'
+import { IFacilityManagement } from '../../../../../interface/IFacility'
+import { deleteFacilities } from '../../../../../services/RoomService'
+import { fetchRoomDetails } from '../../../../../slices/roomDetailsSlice'
 
 interface IActionButtonsProps {
-    rowData: any
+    rowData: IFacilityManagement
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
+    const dispatch = useAppDispatch()
+
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
-    const handleDelete = async () => {}
+    const handleDelete = async () => {
+        await deleteFacilities(rowData.id)
+        handleCloseDelete()
+        dispatch(fetchRoomDetails(rowData.roomId))
+    }
     return (
         <>
             <div
