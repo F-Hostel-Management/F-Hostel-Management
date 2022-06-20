@@ -3,7 +3,7 @@ using FirebaseAdmin.Auth;
 
 namespace Application.Interfaces
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationServices
     {
         
         //Task<UserEntity> SignUpNewUserAsync(string email, string name, Role role);

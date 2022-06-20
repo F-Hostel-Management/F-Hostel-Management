@@ -19,6 +19,8 @@ public class RoomsController : BaseRestController
     private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IAuthorizationServices _authorServices;
+    private readonly IInvoiceScheduleServices _invoiceScheduleServices;
+    private readonly IRoomServices _roomServices;
     private readonly IGenericRepository<FacilityEntity> _facilityRepo;
     private readonly IGenericRepository<FacilityManagement> _facilityManagementRepo;
     private readonly IGenericRepository<InvoiceScheduleEntity> _invoiceScheduleRepository;
@@ -28,6 +30,8 @@ public class RoomsController : BaseRestController
         IGenericRepository<CommitmentEntity> commitmentRepository,
         ICommitmentServices commitmentServices,
         IAuthorizationServices authorServices,
+        IRoomServices roomServices,
+        IInvoiceScheduleServices invoiceScheduleServices,
         IGenericRepository<FacilityEntity> facilityRepo,
         IGenericRepository<FacilityManagement> facilityManagementRepo,
         IGenericRepository<InvoiceScheduleEntity> invoiceScheduleRepository)
@@ -36,6 +40,8 @@ public class RoomsController : BaseRestController
         _commitmentRepository = commitmentRepository;
         _commitmentServices = commitmentServices;
         _authorServices = authorServices;
+        _roomServices = roomServices;
+        _invoiceScheduleServices = invoiceScheduleServices;
         _facilityRepo = facilityRepo;
         _facilityManagementRepo = facilityManagementRepo;
         _invoiceScheduleRepository = invoiceScheduleRepository;
@@ -83,6 +89,25 @@ public class RoomsController : BaseRestController
         return Ok(room);
     }
 
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpDelete("{roomId}")]
+    public async Task<IActionResult> DeleteRoomAsync([FromRoute] Guid roomId)
+    {
+        RoomEntity room = await _authorServices.GetRoomThatManagedByCurrentUser(roomId, CurrentUserID);
+        if (room is null)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        // resolve commitment
+        bool hasCommitment = await _roomServices.HasCommitment(roomId);
+        if (hasCommitment)
+        {
+            throw new BadRequestException("Resolve commitment first");
+        }
+        await _invoiceScheduleServices.DeleteInvoicesScheduleByRoomId(roomId);
+        await _roomsRepository.DeleteSoftAsync(room);
+        return Ok();
+    }
 
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{roomId}/get-list-commitment-of-room-for-tenant")]

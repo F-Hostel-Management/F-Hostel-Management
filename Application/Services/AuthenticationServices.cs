@@ -1,20 +1,17 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities;
-using Domain.Enums;
 using FirebaseAdmin.Auth;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Services
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationServices : IAuthenticationServices
     {
         private readonly IGenericRepository<UserEntity> _userRepository;
         private readonly ITokenService _tokenService;
 
-        public AuthenticationService(IGenericRepository<UserEntity> userRepository, ITokenService tokenService)
+        public AuthenticationServices(IGenericRepository<UserEntity> userRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
