@@ -1,7 +1,12 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
 import { createInvoiceSchedule } from '../../../../services/InvoiceScheduleService'
+import {
+    fetchInvoiceSchedules,
+    fetchNumberOfInvoiceSchedule,
+} from '../../../../slices/invoiceScheduleSlice'
 import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
@@ -14,6 +19,10 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
+    const dispatch = useAppDispatch()
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+
     const initialValues: IInvoiceScheduleProps = {
         roomId: '',
         content: '',
@@ -36,6 +45,8 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
             price: values.price,
             roomId: values.roomId,
         })
+        dispatch(fetchInvoiceSchedules({ currentPageSize, currentPage }))
+        dispatch(fetchNumberOfInvoiceSchedule())
         handleCloseDialog()
     }
 

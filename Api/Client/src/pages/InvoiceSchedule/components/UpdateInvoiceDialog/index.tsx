@@ -1,9 +1,13 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
-import { useAppDispatch } from '../../../../hooks/reduxHook'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
 import { IInvoiceSchedule } from '../../../../interface/IInvoice'
 import { updateInvoiceSchedule } from '../../../../services/InvoiceScheduleService'
+import {
+    fetchInvoiceSchedules,
+    fetchNumberOfInvoiceSchedule,
+} from '../../../../slices/invoiceScheduleSlice'
 import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import InvoiceForm from '../InvoiceForm'
 
@@ -20,7 +24,10 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
     rowData,
 }) => {
     const dispatch = useAppDispatch()
-    const { values, setValues, handleInputChange, resetForm } =
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+
+    const { values, setValues, handleInputChange } =
         useForm<IInvoiceScheduleProps>({
             roomId: rowData?.room?.id ?? '',
             cron: rowData?.cron ?? '',
@@ -40,6 +47,8 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
             invoiceType: values.invoiceType,
             price: values.price,
         })
+        dispatch(fetchInvoiceSchedules({ currentPageSize, currentPage }))
+        dispatch(fetchNumberOfInvoiceSchedule())
         handleCloseDialog()
     }
     return (
@@ -55,6 +64,7 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
                 values={values}
                 setValues={setValues}
                 handleInputChange={handleInputChange}
+                isUpdate={true}
             />
         </FormDialog>
     )

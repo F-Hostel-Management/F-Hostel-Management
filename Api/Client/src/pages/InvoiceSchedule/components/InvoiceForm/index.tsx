@@ -19,6 +19,7 @@ interface IInvoiceFormProps<T> {
         isForce?: boolean
     ) => void
     review?: boolean
+    isUpdate?: boolean
 }
 
 const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
@@ -26,6 +27,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
     setValues,
     handleInputChange,
     review = false,
+    isUpdate,
 }) => {
     const [roomList, setRoomList] = React.useState<IRoom[]>([])
 
@@ -79,7 +81,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                             select
                             onChange={handleInputChange}
                             InputProps={{
-                                readOnly: review,
+                                readOnly: review || isUpdate,
                             }}
                         >
                             {roomList.map((room) => (
