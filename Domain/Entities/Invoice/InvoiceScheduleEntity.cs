@@ -9,6 +9,8 @@ public class InvoiceScheduleEntity : BaseEntity
 {
     public double Price { get; set; }
     public string Cron { get; set; }
+    public int CreateDate { get; set; }
+    public int PaymentDate { get; set; }
     public string Content { get; set; }
     public string InvoiceType { get; set; }
 

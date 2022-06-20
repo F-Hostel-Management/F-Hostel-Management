@@ -11,6 +11,7 @@ namespace Domain.Entities.Commitment;
 [Table("Commitments")]
 public class CommitmentEntity : BaseEntity
 {
+    public bool CanModify { get; set; } = true;
     public string CommitmentCode { get; set; }
 
     [Required]

@@ -56,4 +56,20 @@ public class RoomServices : IRoomServices
 
         return room.RoomTenants.Any(roomTenant => roomTenant.TenantId == userId);
     }
+
+    public async Task<bool> HasCommitment(Guid roomId)
+    {
+        var room = (await _roomRepository.WhereAsync(room => room.Id.Equals(roomId), new string[] { "Commitments" })).FirstOrDefault();
+        if (room is null)
+        {
+            throw new Exception($"Room not found");
+        }
+
+        var lastestCommitment = room.Commitments.OrderByDescending(com => com.EndDate).FirstOrDefault();
+        if (lastestCommitment == null || lastestCommitment.CommitmentStatus == CommitmentStatus.Expired)
+        {
+            return false;
+        }
+        return true;
+    }
 }
