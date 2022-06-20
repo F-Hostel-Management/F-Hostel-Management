@@ -39,6 +39,5 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<CommitmentEntity> Commitments { get; set; }
     public DbSet<JoiningCode> JoiningCodes { get; set; }
-    public DbSet<CommitmentScaffolding> CommitmentScaffoldings { get; set; }
 
 }

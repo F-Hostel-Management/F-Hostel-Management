@@ -28,17 +28,13 @@ public class RoomServices : IRoomServices
     // not found ==> throw exception
     public async Task<RoomEntity> GetRoom(Guid Id, RoomStatus status)
     {
-        /*RoomEntity room = await _roomRepository
-            .FirstOrDefaultAsync(room =>
-            room.Id.Equals(Id)
-            && room.Status.Equals(status.ToString())
-            );*/
-        RoomEntity room = await _roomRepository.FindByIdAsync(Id);
+        RoomEntity room = await _roomRepository.FindByIdAsync(Id, new string[] { "Hostel", "Commitments",
+        "RoomTenants", "FacilityManagements", "Commitments"});
         if (room == null || room.RoomStatus != status)
         {
-            throw new NotFoundException($"Room not found");
+            return null;
         }
-        return room;  
+        return room;
     }
 
     public async Task<RoomEntity> GetRoom(Guid Id)
@@ -51,7 +47,7 @@ public class RoomServices : IRoomServices
 
     public async Task<bool> HasTenant(Guid roomId, Guid userId)
     {
-        var room = (await _roomRepository.WhereAsync(room => room.Id == roomId, new string[] {"RoomTenants"})).FirstOrDefault();
+        var room = (await _roomRepository.WhereAsync(room => room.Id == roomId, new string[] { "RoomTenants" })).FirstOrDefault();
         if (room == null) throw new NotFoundException($"Room not found");
 
         return room.RoomTenants.Any(roomTenant => roomTenant.TenantId == userId);

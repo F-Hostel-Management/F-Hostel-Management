@@ -11,7 +11,6 @@ namespace Domain.Entities.Commitment;
 [Table("Commitments")]
 public class CommitmentEntity : BaseEntity
 {
-    public bool CanModify { get; set; } = true;
     public string CommitmentCode { get; set; }
 
     [Required]
@@ -40,38 +39,10 @@ public class CommitmentEntity : BaseEntity
 
     public double Price { get; set; } = 0;
 
-    //public string Content { get; set; }
-
-    // dictionary
-    public string OwnerName { get; set; }
-    public DateTime OwnerDateOfBirth { get; set; }
-    public string OwnerCitizenIdentity { get; set; }
-    public string OwnerAddress { get; set; }
-    public string OwnerPhone { get; set; }
-
-    public string TenantName { get; set; }
-    public DateTime TenantDateOfBirth { get; set; }
-    public string TenantCitizenIdentity { get; set; }
-    public string TenantAddress { get; set; }
-    public string TenantPhone { get; set; }
-
-    public string RoomName { get; set; }
-    public string RoomArea { get; set; }
-    public string RoomLength { get; set; }
-    public string RoomWidth { get; set; }
-    public string NumOfDoors { get; set; }
-    public string NumOfWindows { get; set; }
-    public string NumOfBathRooms { get; set; }
-    public string NumOfWCs { get; set; }
-    public string MaximumPeople { get; set; }
-    public string HostelAddress { get; set; }
-
+    // img
+    
 
     /*navigation props*/
-
-    // 1 scaffolding M commitment
-    public Guid CommitmentScaffoldingId { get; set; }
-    public CommitmentScaffolding CommitmentScaffolding { get; set; }
 
     // 1 Commitment (belong to) M Managers
     public Guid? ManagerId { get; set; }

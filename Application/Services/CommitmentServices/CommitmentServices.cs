@@ -54,7 +54,6 @@ public class CommitmentServices : ICommitmentServices
     public async Task ActivatedCommitment(CommitmentEntity commitment)
     {
         commitment.CommitmentStatus = CommitmentStatus.Active;
-        commitment.CanModify = false;
         await _commitmentRepository.UpdateAsync(commitment);
     }
 
