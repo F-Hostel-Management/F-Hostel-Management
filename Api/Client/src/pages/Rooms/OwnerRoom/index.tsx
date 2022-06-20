@@ -17,6 +17,7 @@ import RoomDetails from '../../RoomDetails'
 import ToolbarChildren from '../components/Table/ToolbarChildren'
 import { createColumns } from '../components/Table/Columns'
 import CreateCRoomDialog from '../components/Dialog/CreateRoomDialog'
+import { IRoom } from '../../../interface/IRoom'
 
 interface IOwnerRoomsProps {}
 
@@ -30,8 +31,7 @@ const OwnerRooms: FC<IOwnerRoomsProps> = () => {
     const loading = useAppSelector(({ room }) => room.isFetchingRooms)
 
     const rows = useAppSelector(({ room }) => room.roomList)
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
-    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+    const columns = createColumns(useGridData<IRoom>())
 
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
 

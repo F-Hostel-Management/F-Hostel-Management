@@ -65,12 +65,9 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
             <Styled.Container>
                 <HeaderDefault
                     isShownSidebar={isShownSidebar}
-                    setIsShownSidebar={(state = !isShownSidebar) =>
-                        setIsShownSidebar(state)
-                    }
-                    setIsSidebarMobile={(state = !isSidebarMobile) =>
-                        setIsSidebarMobile(state)
-                    }
+                    setIsShownSidebar={setIsShownSidebar}
+                    isSidebarMobile={isSidebarMobile}
+                    setIsSidebarMobile={setIsSidebarMobile}
                 />
                 <Grid
                     container

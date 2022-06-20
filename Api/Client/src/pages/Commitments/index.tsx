@@ -17,14 +17,19 @@ import {
     setPageSize,
     setTableInitialState,
 } from '../../slices/tableSlice'
+import { IRoom } from '../../interface/IRoom'
 
 const Commitments: FC<ICommitmentsProps> = () => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
     const dispatch = useAppDispatch()
 
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const { renderCell, createColumn, renderValueGetter } = useGridData<IRoom>()
     const rows = useAppSelector(({ commitment }) => commitment.commitmentList)
-    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+    const columns = createColumns({
+        renderCell,
+        createColumn,
+        renderValueGetter,
+    })
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
     const numOfCommitment = useAppSelector(

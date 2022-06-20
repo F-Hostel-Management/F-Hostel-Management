@@ -1,25 +1,25 @@
-import React, { FC } from 'react'
+import React, { ReactNode } from 'react'
 
 import CustomNoRowsOverlay from './Custom/CustomNoRowsOverlay'
 import CustomPagination from './Custom/CustomPagination'
 import CustomToolbar from './Custom/CustomToolbar'
 import * as Styled from './styles'
 
-interface IDataGridCustomProps {
+interface IDataGridCustomProps<T> {
     loading: boolean
     title: string
-    rows: Array<any>
+    rows: T[]
     columns: Array<any>
     pageSize: number
-    setPageSize: any
+    setPageSize: (pageSize: number) => void
     page: number
-    setPage: any
+    setPage: (page: number) => void
     rowsCount: number
     rowsPerPageOptions?: number[]
-    toolbarChildren?: any
+    toolbarChildren?: ReactNode
 }
 
-const DataGridCustom: FC<IDataGridCustomProps> = ({
+const DataGridCustom = <T extends Record<string, any>>({
     loading,
     title,
     rows,
@@ -31,7 +31,7 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
     rowsCount,
     rowsPerPageOptions = [5, 10, 25, 100],
     toolbarChildren,
-}) => {
+}: IDataGridCustomProps<T>) => {
     const Toolbar = () => (
         <CustomToolbar title={title}>{toolbarChildren}</CustomToolbar>
     )
@@ -51,29 +51,29 @@ const DataGridCustom: FC<IDataGridCustomProps> = ({
             style={{ backgroundColor: '#FFFFFF' }}
         >
             <Styled.DataGrid
+                aria-label="Table"
                 loading={loading}
                 rows={rows}
                 columns={columns}
-                aria-label="Table demo"
+                // server pagination
                 pagination
                 paginationMode="server"
+                onPageChange={(newPage) => setPage(newPage)}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 page={page}
                 pageSize={pageSize}
                 rowsPerPageOptions={rowsPerPageOptions}
                 rowCount={rowsCount}
+                // disable
                 disableColumnFilter
                 disableDensitySelector={true}
-                // onCellClick={(params, event, details) =>
-                //     console.log(params.row)
-                // }
-                onPageChange={(newPage) => setPage(newPage)}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                disableSelectionOnClick
+                // custom
                 components={{
                     NoRowsOverlay: CustomNoRowsOverlay,
                     Pagination: Pagination,
                     Toolbar: Toolbar,
                 }}
-                disableSelectionOnClick
                 sx={{ fontSize: '1.4rem', cursor: 'text' }}
             />
         </Styled.DataGridContainer>

@@ -8,7 +8,7 @@ interface IFormDialogProps {
     action: string
     openDialog: boolean
     handleCloseDialog: () => void
-    handleSubmit: React.FormEventHandler<any> | undefined
+    handleSubmit: React.FormEventHandler<HTMLFormElement>
     children: any
     [x: string | number | symbol]: unknown
     maxWidth?: DialogProps['maxWidth']

@@ -24,7 +24,8 @@ interface IInvoicesProps {}
 
 const Invoices: FC<IInvoicesProps> = () => {
     const role = useAppSelector(getUserRole)
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const { renderCell, createColumn, renderValueGetter } =
+        useGridData<IInvoice>()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
@@ -35,13 +36,13 @@ const Invoices: FC<IInvoicesProps> = () => {
             'roomName',
             'Room',
             100,
-            (params: IInvoice) => params.room?.roomName ?? ''
+            (params) => params.room?.roomName ?? ''
         ),
         createColumn('invoiceType', 'Type', 100),
-        renderValueGetter('date', 'Create date', 150, (params: IInvoice) =>
+        renderValueGetter('date', 'Create date', 150, (params) =>
             formatDate(new Date(params.date ?? ''))
         ),
-        renderValueGetter('dueData', 'Due date', 150, (params: IInvoice) =>
+        renderValueGetter('dueData', 'Due date', 150, (params) =>
             formatDate(new Date(params.dueDate ?? ''))
         ),
         createColumn('price', 'Price', 120),

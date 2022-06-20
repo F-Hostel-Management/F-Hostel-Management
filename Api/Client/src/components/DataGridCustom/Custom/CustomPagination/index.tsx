@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { MenuItem, Select, Typography } from '@mui/material'
+import { MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 import Pagination from '@mui/material/Pagination'
 import {
     gridPageCountSelector,
@@ -15,7 +15,7 @@ import * as Styled from './styles'
 interface ICustomPaginationProps {
     rowsPerPageOptions: number[]
     pageSize: number
-    setPageSize: any
+    setPageSize: (pageSize: number) => void
 }
 
 const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = ({
@@ -28,9 +28,9 @@ const CustomPagination: React.FunctionComponent<ICustomPaginationProps> = ({
     const pageCount = useGridSelector(apiRef, gridPageCountSelector)
     const rowsCount = useGridSelector(apiRef, gridRowCountSelector)
 
-    const handleChangePageSize = (event: { target: { value: any } }) => {
-        setPageSize(event.target.value)
-        apiRef.current.setPageSize(event.target.value)
+    const handleChangePageSize = (event: SelectChangeEvent<number>) => {
+        setPageSize(Number(event.target.value))
+        apiRef.current.setPageSize(Number(event.target.value))
     }
     return (
         <Styled.Container>

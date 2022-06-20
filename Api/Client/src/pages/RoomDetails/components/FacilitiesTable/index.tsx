@@ -32,8 +32,7 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
     )
 
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
-    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+    const columns = createColumns(useGridData<IFacilityManagement>())
 
     useEffect(() => {
         dispatch(setTableInitialState())
