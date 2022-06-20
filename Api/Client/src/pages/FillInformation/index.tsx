@@ -649,8 +649,11 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     const [loading, setLoading] = useState<boolean>(false)
 
     const [activeStep, setActiveStep] = React.useState(0)
-    const [uploadImg, setUploadImg] = React.useState<boolean>(false)
     const [skipped, setSkipped] = React.useState(new Set<number>())
+
+    const [firstTimeLoginCheck, setFirstTimeLoginCheck] = useState(false)
+    const [uploadIdentificationCardCheck, setUploadIdentificationCardCheck] =
+        useState(false)
 
     const { navigateWithRedirect } = useRouter()
 
@@ -658,10 +661,10 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
         return skipped.has(step)
     }
 
-    const callApi = async () => {
+    const doFirstTimeLogin = async (): Promise<boolean> => {
+        if (firstTimeLoginCheck) return true
         const firebaseToken =
             await FirebaseService.getInstance().getFirebaseToken()
-        console.log(firebaseToken)
         const body: IFirstTimeBody = {
             firebaseToken,
             role: ROLES.findIndex((r) => r.name === role),
@@ -674,34 +677,6 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             ),
             phone: information.phoneNo,
             taxCode: information.taxCode,
-        }
-        setLoading(true)
-        setTimeout(() => setLoading(false), 5000)
-
-        if (information.imgCard.get(0) && information.imgCard.get(1)) {
-            const uploadRes = await RestCaller.upload(
-                'Users/upload-identification-card',
-                (() => {
-                    const formData = new FormData()
-                    formData.append(
-                        'FrontIdentification',
-                        information.imgCard.get(0) as File
-                    )
-                    formData.append(
-                        'BackIdentification',
-                        information.imgCard.get(1) as File
-                    )
-                    return formData
-                })()
-            )
-            if (uploadRes) {
-                showError('Upload image failed')
-                return
-            }
-        } else {
-            showError('Please upload 2 sides of Citizen Identity')
-
-            return
         }
 
         const firstTimeRes = await RestCaller.post(
@@ -717,11 +692,61 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
                 },
             }
         )
+        if (firstTimeRes.isError) return false
 
-        if (firstTimeRes.isError) return
-
-        await doGetProfile()
+        return true
     }
+
+    const doUploadIdentificationCard = async (): Promise<boolean> => {
+        if (uploadIdentificationCardCheck) return true
+        if (information.imgCard.get(0) && information.imgCard.get(1)) {
+            const uploadRes = await RestCaller.upload(
+                'Users/upload-identification-card',
+                (() => {
+                    const formData = new FormData()
+                    formData.append(
+                        'FrontIdentification',
+                        information.imgCard.get(0) as File
+                    )
+                    formData.append(
+                        'BackIdentification',
+                        information.imgCard.get(1) as File
+                    )
+                    return formData
+                })(),
+                {
+                    error: {
+                        show: false,
+                    },
+                }
+            )
+            if (uploadRes.isError) {
+                showError('Upload image failed')
+                return false
+            }
+        } else {
+            showError('Please upload 2 sides of Citizen Identity')
+            return false
+        }
+
+        return true
+    }
+
+    const callApi = async () => {
+        setLoading(true)
+        const firstTimeLogin = await doFirstTimeLogin()
+        setFirstTimeLoginCheck(firstTimeLogin)
+
+        if (firstTimeLogin) {
+            const uploadIdentificationCard = await doUploadIdentificationCard()
+            setUploadIdentificationCardCheck(uploadIdentificationCard)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        if (firstTimeLoginCheck && uploadIdentificationCardCheck) doGetProfile()
+    }, [firstTimeLoginCheck, uploadIdentificationCardCheck])
 
     const handleNext = () => {
         if (activeStep === STEPS.length - 1) {
