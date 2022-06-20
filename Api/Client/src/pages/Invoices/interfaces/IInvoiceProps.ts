@@ -2,9 +2,10 @@ export interface IInvoiceProps {
     roomId: string
     dueDate: string
     invoiceType: string
+    quantity: number
+    lastQuantity: number
+    unitPrice: number
     price: number
     content: string
-    quantity: number
-    unitPrice: number
     [key: string]: any
 }

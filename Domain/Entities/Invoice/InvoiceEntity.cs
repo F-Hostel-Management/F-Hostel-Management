@@ -8,6 +8,8 @@ namespace Domain.Entities.Invoice;
 public class InvoiceEntity : BaseEntity
 {
     public string InvoiceCode { get; set; }
+    public double Quantity { get; set; }
+    public double UnitPrice { get; set; }
     public double Price { get; set; }
     public DateTime Date { get; set; }
     public DateTime DueDate { get; set; }
