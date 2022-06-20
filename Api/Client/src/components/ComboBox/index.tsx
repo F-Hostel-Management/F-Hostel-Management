@@ -48,7 +48,7 @@ const ComboBox = <T extends Record<string, any>>({
                     height: '3rem',
                 },
             }}
-            getOptionLabel={(option) => option[optionLabel]?.toString()}
+            getOptionLabel={(option) => option[optionLabel]?.toString() || ''}
             PaperComponent={CustomPaper}
             renderInput={(params) => (
                 <InputField
