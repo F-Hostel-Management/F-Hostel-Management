@@ -24,5 +24,6 @@ public static class ConfigureCronService
         });
         services.AddQuartzHostedService();
         services.AddScoped<InvoiceScheduleJob>();
+        services.AddScoped<CommitmentJob>();
     }
 }

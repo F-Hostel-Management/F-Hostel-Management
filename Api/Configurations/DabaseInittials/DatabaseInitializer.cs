@@ -120,6 +120,7 @@ public static class DatabaseInitializer
                     Name = mockHostel.Name,
                     NumOfRooms = mockHostel.NumOfRooms,
                     Owner = owners[_rand.Next(owners.Length)],
+                    QrTimeSpan = _rand.Next(15, 30)
                 });
         }
         await dbContext.SaveChangesAsync();
@@ -204,7 +205,8 @@ public static class DatabaseInitializer
                 CreatedDate = DateTime.Now,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
-                CommitmentStatus = (CommitmentStatus)2,
+                CommitmentStatus = CommitmentStatus.Active,
+                CanModify = false,
                 DateOverdue = _rand.Next(1, 6),
                 Compensation = _rand.Next(3000, 4000),
                 PaymentDate = _rand.Next(32),

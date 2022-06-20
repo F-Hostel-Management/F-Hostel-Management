@@ -14,10 +14,10 @@ namespace Application.Interfaces
         Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id);
         Task<CommitmentEntity> GetNotExpiredCommitment(Guid Id);
         Task<CommitmentEntity> GetNotExpiredCommitmentByRoom(Guid roomId);
+        Task<CommitmentEntity> GetLatestCommitmentByRoom(Guid roomId);
         Task ApprovedCommitment(CommitmentEntity commitment);
         Task ActivatedCommitment(CommitmentEntity commitment);
         Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
         Task<int> CountCommitmentByHostel(Guid hostelId);
-
     }
 }

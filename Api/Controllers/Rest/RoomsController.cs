@@ -4,7 +4,9 @@ using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
+using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
+using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Room;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -15,20 +17,29 @@ namespace Api.Controllers.Rest;
 public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
-    private readonly IHostelServices _hostelServices;
+    private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IAuthorizationServices _authorServices;
     private readonly IGenericRepository<FacilityEntity> _facilityRepo;
     private readonly IGenericRepository<FacilityManagement> _facilityManagementRepo;
+    private readonly IGenericRepository<InvoiceScheduleEntity> _invoiceScheduleRepository;
 
-    public RoomsController(IGenericRepository<RoomEntity> roomsRepository, IHostelServices hostelServices, ICommitmentServices commitmentServices, IAuthorizationServices authorServices, IGenericRepository<FacilityEntity> facilityRepo, IGenericRepository<FacilityManagement> facilityManagementRepo)
+    public RoomsController
+        (IGenericRepository<RoomEntity> roomsRepository, 
+        IGenericRepository<CommitmentEntity> commitmentRepository, 
+        ICommitmentServices commitmentServices, 
+        IAuthorizationServices authorServices, 
+        IGenericRepository<FacilityEntity> facilityRepo, 
+        IGenericRepository<FacilityManagement> facilityManagementRepo,
+        IGenericRepository<InvoiceScheduleEntity> invoiceScheduleRepository)
     {
         _roomsRepository = roomsRepository;
-        _hostelServices = hostelServices;
+        _commitmentRepository = commitmentRepository;
         _commitmentServices = commitmentServices;
         _authorServices = authorServices;
         _facilityRepo = facilityRepo;
         _facilityManagementRepo = facilityManagementRepo;
+        _invoiceScheduleRepository = invoiceScheduleRepository;
     }
 
 
@@ -140,6 +151,35 @@ public class RoomsController : BaseRestController
             throw new ForbiddenException("");
         target.IsDeleted = true;
         await _facilityManagementRepo.UpdateAsync(target);
+        return Ok();
+    }
+
+    [HttpGet("{roomId}/checkout")]
+    public async Task<IActionResult> CheckoutThisRoom([FromRoute] Guid roomId)
+    {
+        RoomEntity room = await _roomsRepository.FindByIdAsync(roomId);
+        if (room is null)
+        {
+            throw new NotFoundException("Room not found");
+        }
+
+        // set commitment to expired (if any)
+        CommitmentEntity latestCommitment = await _commitmentServices.GetLatestCommitmentByRoom(roomId);
+        if (latestCommitment.CommitmentStatus != CommitmentStatus.Expired)
+        {
+            latestCommitment.CommitmentStatus = CommitmentStatus.Expired;
+            await _commitmentRepository.UpdateAsync(latestCommitment);
+        }
+
+        // remove all invoice schedule
+        var schedules = await _invoiceScheduleRepository.WhereAsync(entity => entity.RoomId.Equals(roomId));
+        foreach (var schedule in schedules)
+        {
+            schedule.IsDeleted = true;
+        }
+        await _invoiceScheduleRepository.UpdateRangeAsync(schedules);
+        room.RoomStatus = RoomStatus.Available;
+        await _roomsRepository.UpdateAsync(room);
         return Ok();
     }
 }
