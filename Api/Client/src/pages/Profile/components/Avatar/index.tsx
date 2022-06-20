@@ -1,23 +1,48 @@
 import { Typography } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 
 import { ROLES } from '../../../FillInformation/constants'
 import * as Styled from './styles'
 import { CameraAlt, PersonOutlineOutlined } from '@mui/icons-material'
+import { RestCaller } from '../../../../utils/RestCaller'
 interface IAvatarProps {
     values: Record<string, any>
     setValues: Dispatch<SetStateAction<any>>
 }
 
 const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
+    const [avt, setAvt] = useState<File>()
+
+    const { name, role, avatar } = values
+
+    const callApi = async () => {
+        if (!avt) return
+        const uploadAvatar = await RestCaller.upload(
+            'Users/upload-avatar',
+            (() => {
+                const formData = new FormData()
+                formData.append('Avatar', avt)
+                return formData
+            })()
+        )
+
+        if (uploadAvatar.isError) return
+    }
     const handleChooseImage = (e: any) => {
+        setAvt(e.target.files[0])
+
         setValues({
             ...values,
             avatar: URL.createObjectURL(e.target.files[0]),
         })
     }
 
-    const { name, role, avatar } = values
+    React.useEffect(() => {
+        ;(async () => {
+            await callApi()
+        })()
+        return
+    })
 
     return (
         <div>
@@ -32,7 +57,7 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                 <div>
                     <Styled.Avatar elevation={0} square>
                         <div>
-                            {avatar === undefined ? (
+                            {avatar === null ? (
                                 <Styled.IconAvatar>
                                     <PersonOutlineOutlined
                                         htmlColor="#a7a7a7"
@@ -44,6 +69,7 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                                     src={avatar}
                                     height="auto"
                                     width="100%"
+                                    alt="avatar"
                                 ></img>
                             )}
                             <Styled.Text>
