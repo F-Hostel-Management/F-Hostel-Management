@@ -20,10 +20,6 @@ public class CommitmentEntity : BaseEntity
     [Required]
     public DateTime EndDate { get; set; }
 
-    public int DateOverdue { get; set; } = 0;
-
-    public double Compensation { get; set; } = 0;
-
     [Column("Commitment Status")]
     public string Status
     {
@@ -40,7 +36,7 @@ public class CommitmentEntity : BaseEntity
     public double Price { get; set; } = 0;
 
     // img
-    
+    public virtual ICollection<CommitmentImages> Images { get; set; }
 
     /*navigation props*/
 

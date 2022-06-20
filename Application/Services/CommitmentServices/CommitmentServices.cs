@@ -2,8 +2,8 @@
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Entities.Commitment;
-using Domain.Entities.Room;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.CommitmentServices;
 
@@ -11,13 +11,15 @@ namespace Application.Services.CommitmentServices;
 public class CommitmentServices : ICommitmentServices
 {
     public readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
-
+    private readonly ICloudStorage _cloudStorage;
 
     public CommitmentServices(
-        IGenericRepository<CommitmentEntity> commitmentRepository
+        IGenericRepository<CommitmentEntity> commitmentRepository,
+        ICloudStorage cloudStorage
         )
     {
         _commitmentRepository = commitmentRepository;
+        _cloudStorage = cloudStorage;
     }
 
     public async Task CreateCommitment(CommitmentEntity commitment)
@@ -121,5 +123,10 @@ public class CommitmentServices : ICommitmentServices
             throw new NotFoundException("Commitment not found");
         }
         return commitments.First();
+    }
+
+    public Task<ICollection<CommitmentImages>> UploadCommitment(Guid commitmentId, List<IFormFile> imgs)
+    {
+        throw new NotImplementedException();
     }
 }

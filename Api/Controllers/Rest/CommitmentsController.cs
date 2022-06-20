@@ -1,9 +1,7 @@
-﻿using Api.Services;
-using Api.UserFeatures.Requests;
+﻿using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using Application.Utilities;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Entities.Commitment;
@@ -49,13 +47,7 @@ public class CommitmentsController : BaseRestController
         _roomRepository = roomRepository;
         _userRepository = userRepository;
     }
-    /// <summary>
-    /// owner || manager create a commitment of room |
-    /// commitment status ==> pending |
-    /// room status ==> rent
-    /// </summary>
-    /// <param name="comReq"></param>
-    /// <returns></returns>
+
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost()]
     public async Task<IActionResult> CreateCommitment(CreateCommitmentRequest comReq)
@@ -97,6 +89,21 @@ public class CommitmentsController : BaseRestController
         return Ok(commitment.Id);
     }
 
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPost("{commitmentId}/upload-commitment-imanges")]
+    public async Task<IActionResult> UploadCommitmentImages(Guid commitmentId, List<IFormFile> imgs)
+    {
+        var commitment = await _commitmentServices.GetCommitment(commitmentId);
+        bool isAuthorized = await _authorServices.IsRoomManageByCurrentUser(commitment.RoomId, CurrentUserID);
+        if (!isAuthorized)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+
+        commitment.Images = await _commitmentServices.UploadCommitment(commitmentId, imgs);
+        await _commitmentRepository.UpdateAsync(commitment);
+        return Ok(commitment.Images);
+    }
 
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpPatch("owner-approved-commitment/{comId}/status")]

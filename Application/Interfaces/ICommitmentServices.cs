@@ -2,6 +2,7 @@
 using Domain.Entities.Commitment;
 using Domain.Entities.Room;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Interfaces
 {
@@ -19,5 +20,6 @@ namespace Application.Interfaces
         Task ActivatedCommitment(CommitmentEntity commitment);
         Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
         Task<int> CountCommitmentByHostel(Guid hostelId);
+        Task<ICollection<CommitmentImages>> UploadCommitment(Guid commitmentId, List<IFormFile> imgs);
     }
 }
