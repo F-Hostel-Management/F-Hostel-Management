@@ -28,7 +28,7 @@ public class CommitmentServices : ICommitmentServices
 
     public async Task CreateCommitment(CommitmentEntity commitment)
     {
-        commitment.CommitmentStatus = CommitmentStatus.Pending;
+        commitment.CommitmentStatus = CommitmentStatus.Active;
         await _commitmentRepository.CreateAsync(commitment);
     }
 
@@ -52,51 +52,12 @@ public class CommitmentServices : ICommitmentServices
         return coms;
     }
 
-    public async Task ApprovedCommitment(CommitmentEntity commitment)
-    {
-        commitment.CommitmentStatus = CommitmentStatus.Approved;
-        await _commitmentRepository.UpdateAsync(commitment);
-    }
-    public async Task ActivatedCommitment(CommitmentEntity commitment)
-    {
-        commitment.CommitmentStatus = CommitmentStatus.Active;
-        await _commitmentRepository.UpdateAsync(commitment);
-    }
-
     public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
     {
         CommitmentEntity com = await _commitmentRepository.FindByIdAsync(commitmentId);
         return com ??
           throw new NotFoundException("Commitment Not Found Or Already Expired");
 
-    }
-
-    public async Task<CommitmentEntity> GetNotExpiredCommitment(Guid Id)
-    {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com =>
-            com.Id.Equals(Id)
-            && !com.Status.Equals(CommitmentStatus.Expired.ToString())
-            );
-        return com ??
-           throw new NotFoundException("Commitment Not Found Or Already Expired");
-    }
-
-    public async Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id)
-    {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com =>
-            com.Id.Equals(Id)
-            && (com.Status.Equals(CommitmentStatus.Active.ToString()) ||
-                com.Status.Equals(CommitmentStatus.Approved.ToString()))
-            );
-        return com ??
-           throw new NotFoundException("Commitment Not Found Or Already Expired");
-    }
-
-    public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)
-    {
-        await _commitmentRepository.UpdateAsync(updatedCommitment);
     }
 
     public async Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status)

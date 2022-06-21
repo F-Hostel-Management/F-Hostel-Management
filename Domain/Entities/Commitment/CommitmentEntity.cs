@@ -28,7 +28,7 @@ public class CommitmentEntity : BaseEntity
     }
 
     [NotMapped]
-    public CommitmentStatus CommitmentStatus { get; set; }
+    public CommitmentStatus CommitmentStatus { get; set; } = CommitmentStatus.Active;
 
     [Range(1, 31)]
     public int PaymentDate { get; set; }
@@ -43,10 +43,6 @@ public class CommitmentEntity : BaseEntity
     // 1 Commitment (belong to) M Managers
     public Guid? ManagerId { get; set; }
     public UserEntity Manager { get; set; }
-
-    // 1 tenants M commitment
-    public Guid? TenantId { get; set; }
-    public UserEntity Tenant { get; set; }
 
     // 1 Owner M commitment
     [Required]

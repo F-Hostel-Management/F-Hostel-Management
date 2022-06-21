@@ -195,7 +195,6 @@ public static class DatabaseInitializer
             CommitmentEntity com = new()
             {
                 Price = _rand.Next(3000, 4000),
-                Tenant = tenant,
                 Owner = owner,
                 Room = room,
                 HostelId = room.HostelId,

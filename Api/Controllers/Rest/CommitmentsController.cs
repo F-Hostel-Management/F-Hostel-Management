@@ -116,9 +116,9 @@ public class CommitmentsController : BaseRestController
                           com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
         if (commitment == null)
         {
-            throw new BadRequestException("Commitment not found");
+            throw new NotFoundException("Commitment not found");
         }
-        
+
         bool isAuthorized = await _authorServices.IsHostelManagedByCurrentUser(commitment.HostelId, CurrentUserID);
         if (!isAuthorized)
         {
@@ -142,23 +142,9 @@ public class CommitmentsController : BaseRestController
                   com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
         if (commitment == null)
         {
-            throw new BadRequestException("Commitment not found");
+            throw new NotFoundException("Commitment not found");
         }
         return Ok(commitment.Images.Select(img => img.ImgUrl));
-    }
-
-
-
-    [Authorize(Roles = nameof(Role.Owner))]
-    [HttpPatch("owner-approved-commitment/{comId}/status")]
-    public async Task<IActionResult> OwnerApprovedCommitment
-        ([FromRoute] Guid comId)
-    {
-        // get pending commitment
-        CommitmentEntity com = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Pending);
-
-        await _commitmentServices.ApprovedCommitment(com);
-        return Ok();
     }
 
 
@@ -167,8 +153,12 @@ public class CommitmentsController : BaseRestController
     public async Task<IActionResult> CreateJoiningCode
         ([FromRoute] Guid comId)
     {
-        CommitmentEntity com = await _commitmentServices.GetApprovedOrActiveCommitment(comId);
-        HostelEntity hostel = await _authorServices.GetHostelThatManagedByCurrentUser(com.HostelId, CurrentUserID);
+        CommitmentEntity commitment = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Active);
+        if (commitment is null)
+        {
+            throw new NotFoundException("Commitment not found");
+        }
+        HostelEntity hostel = await _authorServices.GetHostelThatManagedByCurrentUser(commitment.HostelId, CurrentUserID);
         if (hostel == null)
         {
             throw new ForbiddenException("Forbidden");
@@ -184,58 +174,49 @@ public class CommitmentsController : BaseRestController
 
 
     [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpGet("get-commitment-by-joiningCode/{SixDigitsCode}")]
+    [HttpGet("validate-joiningCode/{SixDigitsCode}")]
     public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
     {
         // validate joining code
         JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
+        if (joiningCode is null)
+        {
+            throw new NotFoundException("Joining code is not exists or expired");
+        }
         _joiningCodeServices.ValidateJoiningCode(joiningCode);
-
-        CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
-
-        var response = "commitment img";
-        return Ok(commitment);
+        return Ok();
     }
 
 
     [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpPatch("tenant-activate-commitment/{SixDigitsCode}/status")]
-    public async Task<IActionResult> TenantActivateCommitment
-    ([FromRoute] int SixDigitsCode)
+    [HttpPatch("get-into-room/{SixDigitsCode}/status")]
+    public async Task<IActionResult> TenantActivateCommitment([FromRoute] int SixDigitsCode)
     {
-        // validate joining code
+        // validate joining code again
         JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
-        _joiningCodeServices.ValidateJoiningCode(joiningCode);
-
-        CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
-        if (commitment.TenantId is null)
+        if (joiningCode is null)
         {
-            await _commitmentServices.ActivatedCommitment(commitment);
-            commitment.TenantId = CurrentUserID;
+            throw new NotFoundException("Joining code is not exists or expired");
         }
+        _joiningCodeServices.ValidateJoiningCode(joiningCode);
+        CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
 
         // get into room
         await _tenantServices.GetIntoRoom(commitment, CurrentUserID);
         return Ok();
     }
 
-    /// <summary>
-    /// owner || manager update pending commitment
-    /// </summary>
-    /// <param name="comId"></param>
-    /// <param name="uComReq"></param>
-    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPatch("{comId}")]
-    public async Task<IActionResult> UpdatePendingCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)
+    public async Task<IActionResult> UpdateCommitment([FromRoute] Guid comId, UpdateCommitmentRequest uComReq)
     {
-        CommitmentEntity pendingCom = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Pending);
-        Mapper.Map(uComReq, pendingCom);
+        CommitmentEntity entity = await _commitmentServices.GetCommitment(comId, CommitmentStatus.Active);
+        Mapper.Map(uComReq, entity);
         if (CurrentUserRole.Equals(Role.Manager.ToString()))
         {
-            pendingCom.ManagerId = CurrentUserID;
+            entity.ManagerId = CurrentUserID;
         }
-        await _commitmentServices.UpdatePendingCommitment(pendingCom);
+        await _commitmentRepository.UpdateAsync(entity);
         return Ok();
     }
 
@@ -243,17 +224,22 @@ public class CommitmentsController : BaseRestController
     [HttpDelete("{comId}")]
     public async Task<IActionResult> DeleteCommitment([FromRoute] Guid comId)
     {
-        var com = await _commitmentServices.GetCommitment(comId);
-        if (com.CommitmentStatus == CommitmentStatus.Active || com.CommitmentStatus == CommitmentStatus.Expired)
+        var commitment = await _commitmentRepository.FindByIdAsync(comId, new string[] { "RoomTenants" });
+        if (commitment is null)
         {
-            return BadRequest();
+            throw new NotFoundException("Commitment not found");
         }
-        com.IsDeleted = true;
-        await _commitmentRepository.UpdateAsync(com);
 
-        RoomEntity room = await _roomServices.GetRoom(com.RoomId);
-        room.RoomStatus = RoomStatus.Available;
-
+        if (commitment.CommitmentStatus == CommitmentStatus.Active && commitment.RoomTenants.Any())
+        {
+            throw new BadRequestException("Cannot delete current commitment of room that has tenant(s)");
+        }
+        else if (commitment.CommitmentStatus == CommitmentStatus.Active && !commitment.RoomTenants.Any())
+        {
+            RoomEntity room = await _roomServices.GetRoom(commitment.RoomId);
+            await _roomServices.ReleaseRoom(room);
+        } 
+        await _commitmentRepository.DeleteSoftAsync(commitment);
         return Ok();
     }
 }

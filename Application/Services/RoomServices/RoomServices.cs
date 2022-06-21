@@ -1,10 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
-using AutoWrapper.Wrappers;
 using Domain.Entities.Room;
 using Domain.Enums;
-using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.RoomServices;
 
@@ -67,5 +65,11 @@ public class RoomServices : IRoomServices
             return false;
         }
         return true;
+    }
+
+    public async Task ReleaseRoom(RoomEntity room)
+    {
+        room.RoomStatus = RoomStatus.Available;
+        await _roomRepository.UpdateAsync(room);
     }
 }
