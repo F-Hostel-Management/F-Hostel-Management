@@ -9,6 +9,9 @@ import {
     WcOutlined as WcOutlinedIcon,
 } from '@mui/icons-material'
 import { useAppSelector } from '../../../../hooks/reduxHook'
+import { useDialog } from '../../../../hooks/useDialog'
+import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
+import { checkoutRoom } from '../../../../services/RoomService'
 
 interface IDetailsProps {}
 
@@ -16,6 +19,11 @@ const Details: FC<IDetailsProps> = (props) => {
     const roomDetails = useAppSelector(
         ({ roomDetails }) => roomDetails.roomDetails
     )
+    const [openCheckout, handleOpenCheckout, handleCloseCheckout] = useDialog()
+    const handleCheckout = async () => {
+        await checkoutRoom(roomDetails.id)
+        handleCloseCheckout()
+    }
     console.log(roomDetails)
     return (
         <Paper elevation={3}>
@@ -64,10 +72,45 @@ const Details: FC<IDetailsProps> = (props) => {
                     </Styled.List>
                 </Styled.Side>
                 <div style={{ marginTop: '32px' }}>
-                    <Button variant="outlined" color="primary">
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        sx={{ marginRight: 4 }}
+                    >
                         View Commitment
                     </Button>
+                    <Button
+                        variant="outlined"
+                        color="orange"
+                        onClick={handleOpenCheckout}
+                    >
+                        Checkout
+                    </Button>
                 </div>
+                {openCheckout && (
+                    <ConfirmDialog
+                        title="Checkout Room"
+                        openDialog={openCheckout}
+                        handleOpenDialog={handleOpenCheckout}
+                        handleCloseDialog={handleCloseCheckout}
+                        maxWidth="sm"
+                        handleConfirm={handleCheckout}
+                    >
+                        <div style={{ minHeight: '100px' }}>
+                            <Typography
+                                variant="h6"
+                                mb={1}
+                                sx={{ fontWeight: '600' }}
+                            >
+                                Are you sure ?
+                            </Typography>
+                            <Typography variant="body2">
+                                Do yo really want to checkout this room. This
+                                process can not be undone.
+                            </Typography>
+                        </div>
+                    </ConfirmDialog>
+                )}
             </Styled.Container>
         </Paper>
     )
