@@ -1,6 +1,7 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Utilities;
 using Domain.Entities.Commitment;
 using Domain.Enums;
 using Microsoft.AspNetCore.Http;
@@ -125,8 +126,19 @@ public class CommitmentServices : ICommitmentServices
         return commitments.First();
     }
 
-    public Task<ICollection<CommitmentImages>> UploadCommitment(Guid commitmentId, List<IFormFile> imgs)
+    public async Task<ICollection<CommitmentImages>> UploadCommitment(CommitmentEntity commitment, List<IFormFile> imgFormFiles)
     {
-        throw new NotImplementedException();
+        ICollection<CommitmentImages> images = new List<CommitmentImages>();
+        for (int i = 0; i < imgFormFiles.Count; i++)
+        {
+            string fileNameForStorage = FilePathUtil.FormFileName($"C{i}_" + commitment.Id.ToString(), imgFormFiles[i].FileName);
+            var imgUrl = await _cloudStorage.UploadFileAsync(imgFormFiles[i], fileNameForStorage);
+            images.Add(new CommitmentImages()
+            {
+                ImgUrl = imgUrl,
+                CommitmentId = commitment.Id
+            });
+        }
+        return images;
     }
 }

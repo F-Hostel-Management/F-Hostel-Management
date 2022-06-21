@@ -91,7 +91,7 @@ public class CommitmentsController : BaseRestController
 
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost("{commitmentId}/upload-commitment-imanges")]
-    public async Task<IActionResult> UploadCommitmentImages(Guid commitmentId, List<IFormFile> imgs)
+    public async Task<IActionResult> UploadCommitmentImages(Guid commitmentId,[FromForm] UploadCommitmentImagesRequest uploadCommitmentImagesRequest)
     {
         var commitment = await _commitmentServices.GetCommitment(commitmentId);
         bool isAuthorized = await _authorServices.IsRoomManageByCurrentUser(commitment.RoomId, CurrentUserID);
@@ -100,7 +100,7 @@ public class CommitmentsController : BaseRestController
             throw new ForbiddenException("Forbidden");
         }
 
-        commitment.Images = await _commitmentServices.UploadCommitment(commitmentId, imgs);
+        commitment.Images = await _commitmentServices.UploadCommitment(commitment, uploadCommitmentImagesRequest.ImgsFormFiles);
         await _commitmentRepository.UpdateAsync(commitment);
         return Ok(commitment.Images);
     }

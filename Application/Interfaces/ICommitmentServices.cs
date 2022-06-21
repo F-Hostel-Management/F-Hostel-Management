@@ -20,6 +20,6 @@ namespace Application.Interfaces
         Task ActivatedCommitment(CommitmentEntity commitment);
         Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
         Task<int> CountCommitmentByHostel(Guid hostelId);
-        Task<ICollection<CommitmentImages>> UploadCommitment(Guid commitmentId, List<IFormFile> imgs);
+        Task<ICollection<CommitmentImages>> UploadCommitment(CommitmentEntity commitment, List<IFormFile> imgFormFiles);
     }
 }
