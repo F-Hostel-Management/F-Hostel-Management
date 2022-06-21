@@ -1,5 +1,7 @@
 import { IRoomTenant } from '../interface/IRoomTenant'
 import { ODataCaller } from '../utils/ODataCaller'
+import { RestCaller } from '../utils/RestCaller'
+import { setToastConfig } from '../utils/Toast'
 const { createBuilder, get } = ODataCaller
 
 const getAllTenants = async (
@@ -34,4 +36,13 @@ const countTenantsOfHostel = async (hostelId: string) => {
     ).length
 }
 
-export { getAllTenants, countTenantsOfHostel }
+const removeTenantFromRoom = async (id = '') => {
+    const result = await RestCaller.delete(
+        `RoomTenants/${id}`,
+        setToastConfig('Tenant is removed from room.')
+    )
+    console.log('removeTenantFromRoom: ', result)
+    return result
+}
+
+export { getAllTenants, countTenantsOfHostel, removeTenantFromRoom }

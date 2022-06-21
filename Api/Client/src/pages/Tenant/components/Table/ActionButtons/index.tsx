@@ -2,15 +2,18 @@ import { Tooltip, Typography } from '@mui/material'
 import React, { FC, Fragment } from 'react'
 
 import { Delete as DeleteIcon } from '@mui/icons-material'
-import { IUser } from '../../../../../interface/IUser'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import { useDialog } from '../../../../../hooks/useDialog'
 import { ERole } from '../../../../../utils/enums'
 import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
+import { removeTenantFromRoom } from '../../../../../services/TenantService'
+import { IRoomTenant } from '../../../../../interface/IRoomTenant'
+import { fetchTenantList } from '../../../../../slices/tenantSlide'
+import { getItem } from '../../../../../utils/LocalStorageUtils'
 
 interface IActionButtonsProps {
-    rowData: IUser
+    rowData: IRoomTenant
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
@@ -22,7 +25,16 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
 
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
 
-    const handleDeleteRoom = async () => {}
+    const handleDeleteRoom = async () => {
+        ;(async () => {
+            const response = await removeTenantFromRoom(rowData.id)
+            if (!response.isError) {
+                const hostelId = getItem('currentHostelId')
+                dispatch(fetchTenantList({ hostelId, pageSize, page }))
+                handleCloseDelete()
+            }
+        })()
+    }
 
     return (
         <Fragment>
@@ -59,8 +71,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             Are you sure ?
                         </Typography>
                         <Typography variant="body1">
-                            Do yo really want to kick this {rowData.name}. This
-                            process can not be undone.
+                            Do yo really want to kick {rowData.tenant.name} from{' '}
+                            {rowData.room.roomName}. This process can not be
+                            undone.
                         </Typography>
                     </div>
                 </ConfirmDialog>
