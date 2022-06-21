@@ -25,7 +25,7 @@ export const createColumns = ({
         renderValueGetter('price', 'Price', 150, (params) =>
             params.facility.price.toString()
         ),
-        createColumn('description', 'Description', 400),
+        createColumn('description', 'Description', 300),
         renderCell('actions', 'Actions', 100, ActionButtons),
     ]
 }

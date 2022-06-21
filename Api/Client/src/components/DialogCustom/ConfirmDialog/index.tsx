@@ -13,7 +13,7 @@ interface IConfirmDialogProps {
     handleOpenDialog: () => void
     handleCloseDialog: () => void
     maxWidth?: DialogProps['maxWidth']
-    handleConfirm?: () => void
+    handleConfirm: () => void
     children?: any
 }
 

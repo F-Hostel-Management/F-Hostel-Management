@@ -44,23 +44,22 @@ const Details: FC<IDetailsProps> = (props) => {
                     </Typography>
                     <Styled.List>
                         <Styled.Item>
-                            <SensorDoorOutlinedIcon /> Doors(
+                            <SensorDoorOutlinedIcon />: Doors (
                             {roomDetails.numOfDoors})
                         </Styled.Item>
                         <Styled.Item>
-                            <WindowIcon />
-                            Windows({roomDetails.numOfWindows})
+                            <WindowIcon />: Windows({roomDetails.numOfWindows})
                         </Styled.Item>
                         <Styled.Item>
-                            <BedOutlinedIcon /> Bedrooms(
+                            <BedOutlinedIcon />: Bedrooms(
                             {roomDetails.numOfBedRooms})
                         </Styled.Item>
                         <Styled.Item>
-                            <BathtubOutlinedIcon />
-                            Bathrooms({roomDetails.numOfBathRooms})
+                            <BathtubOutlinedIcon />: Bathrooms(
+                            {roomDetails.numOfBathRooms})
                         </Styled.Item>
                         <Styled.Item>
-                            <WcOutlinedIcon /> Toilet({roomDetails.numOfWCs})
+                            <WcOutlinedIcon />: Toilet({roomDetails.numOfWCs})
                         </Styled.Item>
                     </Styled.List>
                 </Styled.Side>

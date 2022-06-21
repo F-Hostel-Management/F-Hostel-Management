@@ -64,7 +64,7 @@ const DataGridCustom = <T extends Record<string, any>>({
                 pageSize={pageSize}
                 rowsPerPageOptions={rowsPerPageOptions}
                 rowCount={rowsCount}
-                // disable
+                // disabled
                 disableColumnFilter
                 disableDensitySelector={true}
                 disableSelectionOnClick
