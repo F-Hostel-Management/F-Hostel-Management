@@ -10,9 +10,11 @@ export interface IHostel {
     hostelManagements?: any
     ownerId?: string
     owner?: IUser
+    tenant?: IUser[]
     imgPath?: string
     rooms?: IRoom[]
     isDeleted?: boolean
+    [x: string | number | symbol]: any
 }
 
 export interface IHostelValues {
@@ -21,4 +23,5 @@ export interface IHostelValues {
     ownerId?: string
     imgPath?: string
     image?: File
+    [x: string | number | symbol]: any
 }

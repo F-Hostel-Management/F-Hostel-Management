@@ -7,4 +7,5 @@ export interface IRoute {
     layout: ElementType | null
     props?: Object
     force?: boolean
+    [x: string | number | symbol]: any
 }
