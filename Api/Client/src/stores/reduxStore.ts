@@ -7,6 +7,7 @@ import facilityReducer from '../slices/facilitySlice'
 import invoiceReducer from '../slices/invoiceSlice'
 import invoiceScheduleReducer from '../slices/invoiceScheduleSlice'
 import roomDetailsReducer from '../slices/roomDetailsSlice'
+import managerReducer from '../slices/managerSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
         facility: facilityReducer,
         invoice: invoiceReducer,
         invoiceSchedule: invoiceScheduleReducer,
+        manager: managerReducer,
     },
 })
 

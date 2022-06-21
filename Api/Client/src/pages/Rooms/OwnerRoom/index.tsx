@@ -4,11 +4,7 @@ import { useDialog } from '../../../hooks/useDialog'
 import { useGridData } from '../../../hooks/useGridData'
 import { ERole } from '../../../utils/enums'
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHook'
-import {
-    setPage,
-    setPageSize,
-    setTableInitialState,
-} from '../../../slices/tableSlice'
+import { setTableInitialState } from '../../../slices/tableSlice'
 import { getItem } from '../../../utils/LocalStorageUtils'
 import { fetchRoomList } from '../../../slices/roomSlice'
 import { Route, Routes } from 'react-router-dom'
@@ -54,12 +50,12 @@ const OwnerRooms: FC<IOwnerRoomsProps> = () => {
                             title="All Rooms"
                             rows={rows}
                             columns={columns}
-                            pageSize={pageSize}
-                            setPageSize={(pageSize: number) =>
-                                dispatch(setPageSize(pageSize))
-                            }
-                            page={page}
-                            setPage={(page: number) => dispatch(setPage(page))}
+                            // pageSize={pageSize}
+                            // setPageSize={(pageSize: number) =>
+                            //     dispatch(setPageSize(pageSize))
+                            // }
+                            // page={page}
+                            // setPage={(page: number) => dispatch(setPage(page))}
                             rowsCount={numOfRooms}
                             toolbarChildren={
                                 role != ERole.TENANT_ROLE ? (
