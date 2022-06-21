@@ -21,5 +21,6 @@ namespace Application.Interfaces
         Task UpdatePendingCommitment(CommitmentEntity updatedCommitment);
         Task<int> CountCommitmentByHostel(Guid hostelId);
         Task<ICollection<CommitmentImages>> UploadCommitment(CommitmentEntity commitment, List<IFormFile> imgFormFiles);
+        Task DeleteCommitmentImage(CommitmentImages target);
     }
 }

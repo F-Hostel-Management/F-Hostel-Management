@@ -12,14 +12,17 @@ namespace Application.Services.CommitmentServices;
 public class CommitmentServices : ICommitmentServices
 {
     public readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
+    public readonly IGenericRepository<CommitmentImages> _commitmentImagesRepository;
     private readonly ICloudStorage _cloudStorage;
 
     public CommitmentServices(
         IGenericRepository<CommitmentEntity> commitmentRepository,
+        IGenericRepository<CommitmentImages> commitmentImagesRepository,
         ICloudStorage cloudStorage
         )
     {
         _commitmentRepository = commitmentRepository;
+        _commitmentImagesRepository = commitmentImagesRepository;
         _cloudStorage = cloudStorage;
     }
 
@@ -140,5 +143,12 @@ public class CommitmentServices : ICommitmentServices
             });
         }
         return images;
+    }
+
+    public async Task DeleteCommitmentImage(CommitmentImages target)
+    {
+        if (!string.IsNullOrEmpty(target.ImgUrl))
+            _ = _cloudStorage.DeleteFileAsync(target.ImgUrl);
+        await _commitmentImagesRepository.DeleteSoftAsync(target);
     }
 }

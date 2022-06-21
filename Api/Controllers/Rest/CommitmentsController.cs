@@ -23,6 +23,7 @@ public class CommitmentsController : BaseRestController
     private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
     private readonly IGenericRepository<RoomEntity> _roomRepository;
     private readonly IGenericRepository<UserEntity> _userRepository;
+    private readonly IGenericRepository<CommitmentImages> _commitmentImagesRepository;
 
 
 
@@ -35,7 +36,8 @@ public class CommitmentsController : BaseRestController
         IAuthorizationServices authorServices,
         IGenericRepository<CommitmentEntity> commitmentRepository,
         IGenericRepository<RoomEntity> roomRepository,
-        IGenericRepository<UserEntity> userRepository)
+        IGenericRepository<UserEntity> userRepository,
+        IGenericRepository<CommitmentImages> commitmentImagesRepository)
     {
         _tenantServices = tenantServices;
         _hostelServices = hostelServices;
@@ -46,6 +48,7 @@ public class CommitmentsController : BaseRestController
         _commitmentRepository = commitmentRepository;
         _roomRepository = roomRepository;
         _userRepository = userRepository;
+        _commitmentImagesRepository = commitmentImagesRepository;
     }
 
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
@@ -90,8 +93,8 @@ public class CommitmentsController : BaseRestController
     }
 
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
-    [HttpPost("{commitmentId}/upload-commitment-imanges")]
-    public async Task<IActionResult> UploadCommitmentImages(Guid commitmentId,[FromForm] UploadCommitmentImagesRequest uploadCommitmentImagesRequest)
+    [HttpPost("{commitmentId}/upload-commitment-images")]
+    public async Task<IActionResult> UploadCommitmentImages(Guid commitmentId, [FromForm] UploadCommitmentImagesRequest uploadCommitmentImagesRequest)
     {
         var commitment = await _commitmentServices.GetCommitment(commitmentId);
         bool isAuthorized = await _authorServices.IsRoomManageByCurrentUser(commitment.RoomId, CurrentUserID);
@@ -102,8 +105,36 @@ public class CommitmentsController : BaseRestController
 
         commitment.Images = await _commitmentServices.UploadCommitment(commitment, uploadCommitmentImagesRequest.ImgsFormFiles);
         await _commitmentRepository.UpdateAsync(commitment);
-        return Ok(commitment.Images);
+        return Ok(commitment.Images.Select(img => img.ImgUrl));
     }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpDelete("{commitmentId}/delete-commitment-image")]
+    public async Task<IActionResult> DeleteCommitmentImageAsync([FromRoute] Guid commitmentId, DeleteCommitmentImageRequest deleteCommitmentImageRequest)
+    {
+        var commitment = (await _commitmentRepository.WhereAsync(com =>
+                            com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
+        if (commitment == null)
+        {
+            throw new BadRequestException("Commitment not found");
+        }
+        bool isAuthorized = await _authorServices.IsHostelManagedByCurrentUser(commitment.HostelId, CurrentUserID);
+        if (!isAuthorized)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+
+        var target = commitment.Images.FirstOrDefault(img => img.ImgUrl.Equals(deleteCommitmentImageRequest.ImgUrl));
+        if (target is null)
+        {
+            throw new BadRequestException("An image does not exist");
+        }
+        await _commitmentServices.DeleteCommitmentImage(target);
+        
+        return Ok();
+    }
+
+
 
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpPatch("owner-approved-commitment/{comId}/status")]
