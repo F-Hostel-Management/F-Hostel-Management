@@ -21,6 +21,7 @@ namespace Api.Configurations
             services.AddScoped<IRoomServices, RoomServices>();
             services.AddScoped<ITenantServices, TenantServices>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAssignmentService, AssignmentService>();
             services.AddScoped<IAuthorizationServices, AuthorizationServices>();
             services.AddSingleton<ICloudStorage, GoogleCloudStorageService>();
             services.AddScoped<IInvoiceService, InvoiceServices>();

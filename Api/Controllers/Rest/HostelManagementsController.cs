@@ -19,13 +19,15 @@ public class HostelManagementsController:BaseRestController
     private readonly IGenericRepository<UserEntity> _userRepo;
     private readonly IGenericRepository<HostelManagement> _managementRepo;
     private readonly IMailService _mailService;
+    private readonly IAssignmentService _assignmentService;
 
-    public HostelManagementsController(IAuthorizationServices authorizationServices, IGenericRepository<UserEntity> userRepo, IGenericRepository<HostelManagement> managementRepo, IMailService mailService)
+    public HostelManagementsController(IAuthorizationServices authorizationServices, IGenericRepository<UserEntity> userRepo, IGenericRepository<HostelManagement> managementRepo, IMailService mailService, IAssignmentService assignmentService)
     {
         _authorizationServices = authorizationServices;
         _userRepo = userRepo;
         _managementRepo = managementRepo;
         _mailService = mailService;
+        _assignmentService = assignmentService;
     }
 
     [HttpPost("assign")]
@@ -53,7 +55,9 @@ public class HostelManagementsController:BaseRestController
     [Authorize(Roles = nameof(Role.Tenant))]
     public async Task<IActionResult> ConfirmManager(ConfirmManagerRequest request)
     {
-        return Ok();
+        var isAccept = await _assignmentService.AcceptInvitation(request.Token);
+        if (!isAccept) throw new BadRequestException("Something went wrongs!");
+        return Ok("Accept invitation successfully!");
     }
     
     [HttpPost("remove")]
