@@ -4,6 +4,7 @@ using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220620144702_RemoveCommitmentScaffoldingAndDictionary")]
+    partial class RemoveCommitmentScaffoldingAndDictionary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,8 +33,14 @@ namespace Infrastructure.Migrations
                     b.Property<string>("CommitmentCode")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Compensation")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DateOverdue")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -65,6 +73,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Commitment Status");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HostelId");
@@ -75,29 +86,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Commitments", (string)null);
-                });
+                    b.HasIndex("TenantId");
 
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentImages", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CommitmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ImgUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommitmentId");
-
-                    b.ToTable("CommitmentImages", (string)null);
+                    b.ToTable("Commitments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Commitment.JoiningCode", b =>
@@ -126,7 +117,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("CommitmentId")
                         .IsUnique();
 
-                    b.ToTable("JoiningCodes", (string)null);
+                    b.ToTable("JoiningCodes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityEntity", b =>
@@ -157,7 +148,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("HostelId");
 
-                    b.ToTable("Facilities", (string)null);
+                    b.ToTable("Facilities");
                 });
 
             modelBuilder.Entity("Domain.Entities.Facility.FacilityManagement", b =>
@@ -187,7 +178,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("FacilityManagements", (string)null);
+                    b.ToTable("FacilityManagements");
                 });
 
             modelBuilder.Entity("Domain.Entities.Hostel.HostelManagement", b =>
@@ -213,7 +204,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("HostelManagents", (string)null);
+                    b.ToTable("HostelManagents");
                 });
 
             modelBuilder.Entity("Domain.Entities.HostelEntity", b =>
@@ -247,7 +238,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Hostels", (string)null);
+                    b.ToTable("Hostels");
                 });
 
             modelBuilder.Entity("Domain.Entities.Invoice.InvoiceEntity", b =>
@@ -280,17 +271,11 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TenantPaidId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -300,7 +285,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantPaidId");
 
-                    b.ToTable("Invoices", (string)null);
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Domain.Entities.InvoiceSchedule.InvoiceScheduleEntity", b =>
@@ -311,9 +296,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CreateDate")
-                        .HasColumnType("int");
 
                     b.Property<string>("Cron")
                         .HasColumnType("nvarchar(max)");
@@ -327,9 +309,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("ManagerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PaymentDate")
-                        .HasColumnType("int");
-
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -342,7 +321,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("InvoiceSchedules", (string)null);
+                    b.ToTable("InvoiceSchedules");
                 });
 
             modelBuilder.Entity("Domain.Entities.Message.MessageEntity", b =>
@@ -369,7 +348,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationEntity", b =>
@@ -409,7 +388,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Notification.NotificationTransaction", b =>
@@ -433,7 +412,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("NotificationTransaction", (string)null);
+                    b.ToTable("NotificationTransaction");
                 });
 
             modelBuilder.Entity("Domain.Entities.Room.RoomEntity", b =>
@@ -489,7 +468,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("HostelId");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Domain.Entities.Ticket.TicketEntity", b =>
@@ -519,7 +498,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Tickets", (string)null);
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Domain.Entities.User.RoomTenant", b =>
@@ -550,7 +529,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("RoomTenants", (string)null);
+                    b.ToTable("RoomTenants");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserEntity", b =>
@@ -613,7 +592,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
@@ -641,6 +620,11 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.UserEntity", "Tenant")
+                        .WithMany("TenantCommitments")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Hostel");
 
                     b.Navigation("Manager");
@@ -648,17 +632,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("Owner");
 
                     b.Navigation("Room");
-                });
 
-            modelBuilder.Entity("Domain.Entities.Commitment.CommitmentImages", b =>
-                {
-                    b.HasOne("Domain.Entities.Commitment.CommitmentEntity", "Commitment")
-                        .WithMany("Images")
-                        .HasForeignKey("CommitmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Commitment");
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("Domain.Entities.Commitment.JoiningCode", b =>
@@ -901,8 +876,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Commitment.CommitmentEntity", b =>
                 {
-                    b.Navigation("Images");
-
                     b.Navigation("JoiningCode");
 
                     b.Navigation("RoomTenants");
@@ -972,6 +945,8 @@ namespace Infrastructure.Migrations
                     b.Navigation("OwnerCommitments");
 
                     b.Navigation("RoomTenants");
+
+                    b.Navigation("TenantCommitments");
 
                     b.Navigation("TenantPaidInvoices");
 

@@ -104,7 +104,6 @@ public class RoomsController : BaseRestController
         {
             throw new BadRequestException("Resolve commitment first");
         }
-        await _invoiceScheduleServices.DeleteInvoicesScheduleByRoomId(roomId);
         await _roomsRepository.DeleteSoftAsync(room);
         return Ok();
     }

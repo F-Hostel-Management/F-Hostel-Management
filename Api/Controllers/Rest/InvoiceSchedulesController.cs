@@ -65,4 +65,20 @@ public class InvoiceSchedulesController : BaseRestController
 
         return Ok();
     }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteInvoiceScheduleAsync(Guid id)
+    {
+        var invoice = await _invoiceScheduleRepository.FindByIdAsync(id);
+        if (invoice == null) throw new NotFoundException($"Invoice not found");
+
+        var roomId = invoice.RoomId;
+        var hasPermission = await _authorizationService.IsRoomManageByCurrentUser(roomId, CurrentUserID);
+        if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
+
+        await _invoiceScheduleRepository.DeleteSoftAsync(invoice);
+
+        return Ok();
+    }
 }

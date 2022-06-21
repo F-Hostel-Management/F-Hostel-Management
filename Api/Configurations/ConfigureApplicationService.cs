@@ -29,8 +29,9 @@ namespace Api.Configurations
             services.AddScoped<IPaymentService, VnPayService>();
             services.AddScoped<IHtml2PdfService, Html2PdfService>();
             services.AddScoped<HandleNotificationRequestService>();
-            services.AddScoped<HandleCommitmentRequestService>();
+            // services.AddScoped<HandleCommitmentRequestService>();
             services.AddTransient<IMailService, MailService>();
+
         }
     }
 }
