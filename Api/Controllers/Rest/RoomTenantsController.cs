@@ -10,6 +10,12 @@ namespace Api.Controllers.Rest;
 public class RoomTenantsController : BaseRestController
 {
     private readonly IGenericRepository<RoomTenant> _roomTenantRepository;
+
+    public RoomTenantsController(IGenericRepository<RoomTenant> roomTenantRepository)
+    {
+        _roomTenantRepository = roomTenantRepository;
+    }
+
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> KickAsync(Guid id)
