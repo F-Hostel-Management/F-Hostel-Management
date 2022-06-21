@@ -1,12 +1,15 @@
 import { GridColDef } from '@mui/x-data-grid'
-import React from 'react'
+import React, { useEffect } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
-import { IManager } from '../../interface/IManager'
+import { IManagement } from '../../interface/IManager'
 import { getUserRole } from '../../slices/authSlice'
-import { getGridData } from '../../slices/managerSlice'
+import {
+    fetchHostelAssignmentList,
+    getGridData,
+} from '../../slices/managerSlice'
 import { ERole } from '../../utils/enums'
 import ActionButtons from './components/ActionButtons'
 import { AssignmentDialog } from './components/AssignmentDialog'
@@ -22,19 +25,33 @@ export const ManagerPage = (props: Props) => {
     const role = useAppSelector(getUserRole)
     const gridData = useAppSelector(getGridData)
     const dispatch = useAppDispatch()
-
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+    useEffect(() => {
+        dispatch(fetchHostelAssignmentList({ currentPage, currentPageSize }))
+    }, [])
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
     const { renderCell, createColumn, renderValueGetter } =
-        useGridData<IManager>()
+        useGridData<IManagement>()
     const columns: GridColDef[] = [
         createColumn('id', 'Id', 10),
-        createColumn('avatar', 'Avatar', 250),
-        createColumn('name', 'Name', 250),
-        createColumn('phone', 'Phone', 120),
+        renderValueGetter(
+            'avatar',
+            'Avatar',
+            250,
+            (params) => params.manager.avatar
+        ),
+        renderValueGetter('name', 'Name', 250, (params) => params.manager.name),
+        renderValueGetter(
+            'phone',
+            'Phone',
+            250,
+            (params) => params.manager.phone
+        ),
         renderCell('actions', 'Actions', 200, ActionButtons),
     ]
     return (
-        <ManagerPageContainer elevation={3}>
+        <ManagerPageContainer>
             <DataGridCustom
                 loading={gridData.loading}
                 title="All Managers"

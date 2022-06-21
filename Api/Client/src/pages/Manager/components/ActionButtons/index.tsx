@@ -4,17 +4,13 @@ import { ERole } from '../../../../utils/enums'
 import { useDialog } from '../../../../hooks/useDialog'
 import { Description } from '@mui/icons-material'
 
-import { RestCaller } from '../../../../utils/RestCaller'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
-import {
-    fetchInvoices,
-    fetchNumberOfInvoice,
-} from '../../../../slices/invoiceSlice'
+
 import { getUserRole } from '../../../../slices/authSlice'
-import { IManager } from '../../../../interface/IManager'
+import { IManagement } from '../../../../interface/IManager'
 import { ManagerDetail } from '../ManagerDetail'
 interface IActionButtonsProps {
-    rowData: IManager
+    rowData: IManagement
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
@@ -25,17 +21,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const currentPage = useAppSelector(({ table }) => table.page)
     const currentPageSize = useAppSelector(({ table }) => table.pageSize)
     const dispatch = useAppDispatch()
-    const handleDelete = async () => {
-        const result = await RestCaller.delete(`Invoices/${rowData.id}`, {
-            success: { show: true },
-            // loading: true,
-        })
-        if (!result.isError) {
-            dispatch(fetchInvoices({ currentPageSize, currentPage }))
-            dispatch(fetchNumberOfInvoice())
-        }
-        handleCloseDelete()
-    }
+    const handleDelete = async () => {}
 
     return (
         <Fragment>
@@ -62,7 +48,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     openDialog={openView}
                     handleOpenDialog={handleOpenView}
                     handleCloseDialog={handleCloseView}
-                    rowData={rowData}
+                    rowData={rowData.manager}
                 />
             )}
         </Fragment>

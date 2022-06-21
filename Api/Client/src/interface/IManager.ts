@@ -4,3 +4,9 @@ export interface IManager {
     avatar: string
     id: string
 }
+
+export interface IManagement {
+    hostelId: string
+    manager: IManager
+    id: string
+}
