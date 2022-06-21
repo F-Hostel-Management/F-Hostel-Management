@@ -741,7 +741,8 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
             const uploadIdentificationCard = await doUploadIdentificationCard()
             setUploadIdentificationCardCheck(uploadIdentificationCard)
         }
-        setLoading(false)
+        setTimeout(() => setLoading(false), 5000)
+        // setLoading(false)
     }
 
     useEffect(() => {
@@ -750,8 +751,10 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
 
     const handleNext = () => {
         if (activeStep === STEPS.length - 1) {
+            setLoading(true)
             if (!(information.imgCard.get(0) && information.imgCard.get(1))) {
                 showError('Please upload 2 sides of Citizen Identity')
+                setTimeout(() => setLoading(false), 5000)
                 return
             }
             ;(async () => {
