@@ -37,11 +37,11 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
         endDate: moment(new Date(commitment.endDate || ''))
             .format('YYYY-MM-DD')
             .toString(),
-        roomId: commitment.roomId,
-        dateOverdue: commitment.dateOverdue,
-        compensation: commitment.compensation,
-        price: commitment.price,
-        paymentDate: commitment.paymentDate,
+        roomId: commitment.roomId || '',
+        dateOverdue: commitment.dateOverdue || 0,
+        compensation: commitment.compensation || 0,
+        price: commitment.price || 0,
+        paymentDate: commitment.paymentDate || 0,
     }
 
     const { values, setValues, handleInputChange, resetForm } =

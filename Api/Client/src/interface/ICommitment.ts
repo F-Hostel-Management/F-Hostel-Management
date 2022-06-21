@@ -31,11 +31,12 @@ export interface ICommitment {
 }
 
 export interface ICommitmentValues {
-    startDate?: string
-    endDate?: string
-    roomId?: string
-    dateOverdue?: number
-    compensation?: number
-    price?: number
-    paymentDate?: number
+    startDate: string
+    endDate: string
+    roomId: string
+    dateOverdue: number
+    compensation: number
+    price: number
+    paymentDate: number
+    [x: string | number | symbol]: unknown
 }

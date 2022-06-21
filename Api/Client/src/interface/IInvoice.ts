@@ -4,6 +4,8 @@ import { IUser } from './IUser'
 export interface IInvoice {
     id?: string
     invoiceCode?: string
+    quantity?: number
+    unitPrice?: number
     price?: number
     date?: string
     dueDate?: string
@@ -17,15 +19,13 @@ export interface IInvoice {
 
 export interface IInvoiceSchedule {
     id?: string
-    invoiceCode?: string
     price?: number
-    date?: string
+    cron?: string
+    createDate?: number
     paymentDate?: number
     invoiceType?: string
     content?: string
     room?: IRoom
     manager?: IUser
-    tenantPaid?: IUser
     isDeleted?: boolean
-    cron?: string
 }

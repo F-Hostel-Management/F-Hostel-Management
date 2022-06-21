@@ -9,11 +9,14 @@ import { ERoomStatus as Status } from '../../../../../utils/enums'
 import { ERole } from '../../../../../utils/enums'
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../../hooks/useDialog'
-import { Typography } from '@mui/material'
-import { useAppSelector } from '../../../../../hooks/reduxHook'
+import { Tooltip, Typography } from '@mui/material'
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import UpdateRoomDialog from '../../Dialog/UpdateRoomDialog'
 import { useNavigate } from 'react-router-dom'
 import { IRoom } from '../../../../../interface/IRoom'
+import { deleteRoom } from '../../../../../services/RoomService'
+import { fetchRoomList } from '../../../../../slices/roomSlice'
+import { getItem } from '../../../../../utils/LocalStorageUtils'
 interface IActionButtonsProps {
     rowData: IRoom
 }
@@ -22,12 +25,24 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
 
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
 
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
 
     const handleClickRoomDetails = () => {
         navigate(`details/${rowData.id}`)
+    }
+
+    const handleDeleteRoom = async () => {
+        const hostelId = getItem('currentHostelId')
+        const response = await deleteRoom(rowData.id)
+        if (!response.isError) {
+            dispatch(fetchRoomList({ hostelId, pageSize, page }))
+            handleCloseDelete()
+        }
     }
 
     return (
@@ -46,7 +61,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     sx={{ width: '2.8rem', height: '2.8rem' }}
                     onClick={handleClickRoomDetails}
                 >
-                    <MeetingRoomIcon sx={{ fontSize: '1.3rem' }} />
+                    <Tooltip title="Details" placement="top">
+                        <MeetingRoomIcon sx={{ fontSize: '1.3rem' }} />
+                    </Tooltip>
                 </IconButtonCustom>
                 {role !== ERole.TENANT_ROLE && (
                     <>
@@ -56,7 +73,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             sx={{ width: '2.8rem', height: '2.8rem' }}
                             onClick={handleOpenUpdate}
                         >
-                            <Edit sx={{ fontSize: '1.3rem' }} />
+                            <Tooltip title="Update" placement="top">
+                                <Edit sx={{ fontSize: '1.3rem' }} />
+                            </Tooltip>
                         </IconButtonCustom>
                         <IconButtonCustom
                             textColor="#fff"
@@ -65,7 +84,9 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             disabled={rowData.status === Status.Rented}
                             onClick={handleOpenDelete}
                         >
-                            <Delete sx={{ fontSize: '1.6rem' }} />
+                            <Tooltip title="Delete" placement="top">
+                                <Delete sx={{ fontSize: '1.6rem' }} />
+                            </Tooltip>
                         </IconButtonCustom>
                     </>
                 )}
@@ -77,6 +98,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
+                    handleConfirm={handleDeleteRoom}
                 >
                     <div style={{ minHeight: '100px' }}>
                         <Typography variant="h3" mb={1}>

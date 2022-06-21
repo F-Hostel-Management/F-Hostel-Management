@@ -64,7 +64,7 @@ public class HandleCommitmentRequestService
     }
 
     public CommitmentEntity FillCommitmentForTenant
-        (CommitmentEntity commitment, UserEntity tenant, IMapper Mapper)
+        (CommitmentEntity commitment, UserEntity tenant)
     {
         {
             commitment.TenantId = tenant.Id;

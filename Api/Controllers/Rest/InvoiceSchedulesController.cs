@@ -29,6 +29,9 @@ public class InvoiceSchedulesController : BaseRestController
     [HttpPost("{roomId}")]
     public async Task<IActionResult> CreateInvoiceScheduleAsync(Guid roomId, CreateInvoiceScheduleRequest request)
     {
+        if (!request.Cron.Equals("Month") && !request.Cron.Equals("Week"))
+            throw new BadRequestException("Cron not supported");
+
         var room = await _roomRepository.FindByIdAsync(roomId);
         if (room == null) throw new NotFoundException($"Room not found");
 
@@ -47,6 +50,9 @@ public class InvoiceSchedulesController : BaseRestController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateInvoiceScheduleAsync(Guid id, UpdateInvoiceScheduleRequest request)
     {
+        if (!request.Cron.Equals("Month") && !request.Cron.Equals("Week"))
+            throw new BadRequestException("Cron not supported");
+
         var invoice = await _invoiceScheduleRepository.FindByIdAsync(id);
         if (invoice == null) throw new NotFoundException($"Invoice not found");
 

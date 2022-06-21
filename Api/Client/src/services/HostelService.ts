@@ -5,14 +5,9 @@ import { RestCaller } from '../utils/RestCaller'
 const { createBuilder, get } = ODataCaller
 
 const getListHostel = async () => {
-    const builder = createBuilder<IHostel>().select(
-        'id',
-        'address',
-        'name',
-        'numOfRooms',
-        'imgPath',
-        'ownerId'
-    )
+    const builder = createBuilder<IHostel>()
+        .select('id', 'address', 'name', 'numOfRooms', 'imgPath', 'owner')
+        .expand('owner', (owner) => owner.select('name'))
     const result = await get('Hostels', builder)
     console.log('getListHostel: ', result)
     return result
@@ -64,7 +59,20 @@ const getOwnerOfHostel = async (hostelId = '') => {
 }
 
 const createHostel = async (data = {}) => {
-    return await RestCaller.post('Hostels/create-hostel', data)
+    return await RestCaller.post('Hostels/create-hostel', data, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'Hostel is created.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
 }
 
 const uploadImage = async (data: FormData) => {

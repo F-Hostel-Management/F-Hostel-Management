@@ -354,11 +354,17 @@ namespace Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TenantPaidId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -380,6 +386,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CreateDate")
+                        .HasColumnType("int");
+
                     b.Property<string>("Cron")
                         .HasColumnType("nvarchar(max)");
 
@@ -391,6 +400,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("ManagerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PaymentDate")
+                        .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");

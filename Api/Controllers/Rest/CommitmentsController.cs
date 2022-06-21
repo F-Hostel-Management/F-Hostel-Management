@@ -78,7 +78,7 @@ public class CommitmentsController : BaseRestController
         if (comReq.Tenant != null)
         {
             UserEntity tenant = Mapper.Map<UserEntity>(comReq.Tenant);
-            commitment = _reqHandler.FillCommitmentForTenant(commitment, tenant, Mapper);
+            commitment = _reqHandler.FillCommitmentForTenant(commitment, tenant);
             commitment.CanModify = false;
         }
         await _commitmentServices.CreateCommitment(commitment);
@@ -166,7 +166,7 @@ public class CommitmentsController : BaseRestController
         if (commitment.CanModify)
         {
             UserEntity tenant = await _userRepository.FindByIdAsync(CurrentUserID);
-            commitment = _reqHandler.FillCommitmentForTenant(commitment, tenant, Mapper);
+            commitment = _reqHandler.FillCommitmentForTenant(commitment, tenant);
             await _commitmentRepository.UpdateAsync(commitment);
         }
         var response = await _reqHandler.GetCommitmentHtmlBase64(commitment, CurrentUserID);

@@ -40,7 +40,7 @@ export function useForm<Type>(initialValue: Type) {
 }
 
 interface IFormProps {
-    children: any
+    children?: any
     [x: string | number | symbol]: unknown
 }
 

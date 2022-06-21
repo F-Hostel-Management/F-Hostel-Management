@@ -101,6 +101,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
+                    handleConfirm={() => {}}
                 >
                     <div style={{ minHeight: '100px' }}>
                         <Typography variant="h3" mb={1}>

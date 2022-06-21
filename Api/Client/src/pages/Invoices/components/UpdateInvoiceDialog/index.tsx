@@ -9,7 +9,6 @@ import {
     fetchInvoices,
     fetchNumberOfInvoice,
 } from '../../../../slices/invoiceSlice'
-import { formatContent, parseContent } from '../../../../utils/InvoiceUtils'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 
@@ -28,26 +27,24 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
     const currentPage = useAppSelector(({ table }) => table.page)
     const currentPageSize = useAppSelector(({ table }) => table.pageSize)
 
-    const initial = parseContent(rowData.content ?? '')
     const { values, setValues, handleInputChange } = useForm<IInvoiceProps>({
-        content: initial.content,
+        content: rowData?.content ?? '',
         dueDate: moment(new Date(rowData.dueDate ?? '')).format('YYYY-MM-DD'),
         invoiceType: rowData.invoiceType ?? '',
         roomId: rowData?.room?.id ?? '',
         price: rowData?.price ?? 0,
-        quantity: initial.quantity,
-        unitPrice: initial.unitPrice,
+        quantity: rowData?.quantity ?? 0,
+        lastQuantity: 0,
+        unitPrice: rowData?.unitPrice ?? 0,
     })
     const handleSubmit = async () => {
         await updateInvoice({
             id: rowData.id ?? '',
-            content: formatContent({
-                content: values.content,
-                quantity: values.quantity,
-                unitPrice: values.unitPrice,
-            }),
+            content: values.content,
             dueDate: new Date(values.dueDate),
             invoiceType: values.invoiceType,
+            quantity: values.quantity,
+            unitPrice: values.unitPrice,
             price: values.price,
         })
         dispatch(fetchInvoices({ currentPageSize, currentPage }))
@@ -64,6 +61,7 @@ const UpdateInvoiceDialog: FC<IUpdateInvoiceDialogProps> = ({
             maxWidth="md"
         >
             <InvoiceForm
+                id={rowData?.id ?? ''}
                 values={values}
                 setValues={setValues}
                 handleInputChange={handleInputChange}

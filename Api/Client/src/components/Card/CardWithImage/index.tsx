@@ -22,10 +22,12 @@ const CardWithImage: FC<ICardWithImageProps> = ({
 }) => {
     return (
         <Styled.CardContainer>
-            <Styled.CardImage src={image.src} alt={image.alt} />
+            <Styled.CardImage>
+                <Styled.Image src={image.src} alt={image.alt} />
+            </Styled.CardImage>
 
             <Styled.CardContentMUI>
-                <React.Fragment>{content}</React.Fragment>
+                <Styled.Content>{content}</Styled.Content>
                 <CardActions
                     sx={{
                         width: '100%',

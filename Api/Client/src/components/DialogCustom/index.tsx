@@ -47,10 +47,10 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
 
 interface IDialogCustomProps {
     title: string
-    openDialog: any
-    handleCloseDialog: any
-    children: any
+    openDialog: boolean
+    handleCloseDialog: () => void
     maxWidth?: DialogProps['maxWidth']
+    children?: any
 }
 const DialogCustom: FC<IDialogCustomProps> = ({
     title,
