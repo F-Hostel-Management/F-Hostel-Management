@@ -73,6 +73,30 @@ public class HostelsController : BaseRestController
         Mapper.Map(updateHostelRequest, hostel);
         await _hostelRepository.UpdateAsync(hostel);
         return Ok();
+    } 
+    
+    [Authorize(Roles = nameof(Role.Owner))]
+    [HttpDelete("{hostelId}")]
+    public async Task<IActionResult> DeleteHostelAsync([FromRoute] Guid hostelId)
+    {
+        var hostel = await _hostelRepository.FindByIdAsync(hostelId, new string[] { "Commitments" });
+        if (hostel is null)
+        {
+            throw new NotFoundException("Hostel not found");
+        }
+        var isAuthorized = await _authorServices.IsHostelManagedByCurrentUser(hostelId, CurrentUserID);
+        if (!isAuthorized)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        var validCommitments = hostel.Commitments.Where(commitment => commitment.CommitmentStatus == CommitmentStatus.Active);
+        if (validCommitments.Any())
+        {
+            throw new BadRequestException("The room is still rented, cannot delete the hostel");
+        }
+
+        await _hostelRepository.DeleteSoftAsync(hostel);
+        return Ok();
     }
 
     [HttpPatch("{hostelId}/timespan")]
