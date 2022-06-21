@@ -2,6 +2,7 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Models;
 using Domain.Entities;
 using Domain.Entities.Hostel;
 using Domain.Enums;
@@ -17,12 +18,14 @@ public class HostelManagementsController:BaseRestController
     private readonly IAuthorizationServices _authorizationServices;
     private readonly IGenericRepository<UserEntity> _userRepo;
     private readonly IGenericRepository<HostelManagement> _managementRepo;
+    private readonly IMailService _mailService;
 
-    public HostelManagementsController(IAuthorizationServices authorizationServices, IGenericRepository<UserEntity> userRepo, IGenericRepository<HostelManagement> managementRepo)
+    public HostelManagementsController(IAuthorizationServices authorizationServices, IGenericRepository<UserEntity> userRepo, IGenericRepository<HostelManagement> managementRepo, IMailService mailService)
     {
         _authorizationServices = authorizationServices;
         _userRepo = userRepo;
         _managementRepo = managementRepo;
+        _mailService = mailService;
     }
 
     [HttpPost("assign")]
@@ -38,6 +41,11 @@ public class HostelManagementsController:BaseRestController
         if (target is null) throw new BadRequestException("Email does not exist in the system");
         
         //todo send email
+        var mail = new MailRequest();
+        mail.Body = "Hello";
+        mail.ToEmail = "huybui479@gmail.com";
+        mail.Subject = "Invitation";
+        await _mailService.SendMailAsync(mail);
         return Ok("Success");
     }
 
