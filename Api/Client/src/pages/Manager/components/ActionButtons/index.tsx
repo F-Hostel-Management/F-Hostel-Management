@@ -11,8 +11,8 @@ import {
     fetchNumberOfInvoice,
 } from '../../../../slices/invoiceSlice'
 import { getUserRole } from '../../../../slices/authSlice'
-import { ManagerAssignmentDetail } from '../ManagerAssignmentDetail'
 import { IManager } from '../../../../interface/IManager'
+import { ManagerDetail } from '../ManagerDetail'
 interface IActionButtonsProps {
     rowData: IManager
 }
@@ -58,7 +58,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
             </div>
 
             {openView && (
-                <ManagerAssignmentDetail
+                <ManagerDetail
                     openDialog={openView}
                     handleOpenDialog={handleOpenView}
                     handleCloseDialog={handleCloseView}

@@ -8,7 +8,7 @@ interface IManagerDetailProps extends IDialogOperator {
     rowData: IManager
 }
 
-export const ManagerAssignmentDetail = ({
+export const ManagerDetail = ({
     openDialog,
     handleCloseDialog,
     rowData,
