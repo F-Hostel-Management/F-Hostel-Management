@@ -10,7 +10,7 @@ interface IDataGridContainerProps {
 }
 export const DataGridContainer = styled(Paper)<IDataGridContainerProps>`
     width: ${(prop) => (prop.width ? prop.width : '100%')};
-    height: ${(prop) => (prop.height ? prop.height : '600px')};
+    height: ${(prop) => (prop.height ? prop.height : '500px')};
     padding: 1.5rem;
     border-bottom: 1px solid #dee4ec;
     border-radius: 8px;

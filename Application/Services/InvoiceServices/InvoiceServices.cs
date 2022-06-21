@@ -3,7 +3,7 @@ using Domain.Entities.Invoice;
 
 namespace Application.Services;
 
-public class InvoiceService : IInvoiceService
+public class InvoiceServices : IInvoiceService
 {
     public async Task<bool> CanModifyAsync(InvoiceEntity invoice)
     {

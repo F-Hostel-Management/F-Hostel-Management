@@ -29,6 +29,9 @@ public class InvoiceSchedulesController : BaseRestController
     [HttpPost("{roomId}")]
     public async Task<IActionResult> CreateInvoiceScheduleAsync(Guid roomId, CreateInvoiceScheduleRequest request)
     {
+        if (!request.Cron.Equals("Month") && !request.Cron.Equals("Week"))
+            throw new BadRequestException("Cron not supported");
+
         var room = await _roomRepository.FindByIdAsync(roomId);
         if (room == null) throw new NotFoundException($"Room not found");
 
@@ -47,6 +50,9 @@ public class InvoiceSchedulesController : BaseRestController
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateInvoiceScheduleAsync(Guid id, UpdateInvoiceScheduleRequest request)
     {
+        if (!request.Cron.Equals("Month") && !request.Cron.Equals("Week"))
+            throw new BadRequestException("Cron not supported");
+
         var invoice = await _invoiceScheduleRepository.FindByIdAsync(id);
         if (invoice == null) throw new NotFoundException($"Invoice not found");
 
@@ -56,6 +62,22 @@ public class InvoiceSchedulesController : BaseRestController
 
         Mapper.Map(request, invoice);
         await _invoiceScheduleRepository.UpdateAsync(invoice);
+
+        return Ok();
+    }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteInvoiceScheduleAsync(Guid id)
+    {
+        var invoice = await _invoiceScheduleRepository.FindByIdAsync(id);
+        if (invoice == null) throw new NotFoundException($"Invoice not found");
+
+        var roomId = invoice.RoomId;
+        var hasPermission = await _authorizationService.IsRoomManageByCurrentUser(roomId, CurrentUserID);
+        if (!hasPermission) throw new ForbiddenException($"User is not the owner or manager of the room");
+
+        await _invoiceScheduleRepository.DeleteSoftAsync(invoice);
 
         return Ok();
     }

@@ -21,5 +21,6 @@ public class CreateCommitmentRequest : IMapTo<CommitmentEntity>
     public int? DateOverdue { get; set; }
 
     public double? Compensation { get; set; }
+    public CreateGuestUserRequest Tenant { get; set; }
 
 }

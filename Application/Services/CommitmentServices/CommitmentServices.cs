@@ -54,6 +54,7 @@ public class CommitmentServices : ICommitmentServices
     public async Task ActivatedCommitment(CommitmentEntity commitment)
     {
         commitment.CommitmentStatus = CommitmentStatus.Active;
+        commitment.CanModify = false;
         await _commitmentRepository.UpdateAsync(commitment);
     }
 
@@ -109,5 +110,17 @@ public class CommitmentServices : ICommitmentServices
         var list = await _commitmentRepository.WhereAsync(com =>
         com.HostelId.Equals(hostelId));
         return list.Count;
+    }
+
+    public async Task<CommitmentEntity> GetLatestCommitmentByRoom(Guid roomId)
+    {
+        var commitments = (await _commitmentRepository.WhereAsync(c =>
+            c.RoomId.Equals(roomId))).OrderByDescending(com => com.EndDate);
+
+        if (!commitments.Any())
+        {
+            throw new NotFoundException("Commitment not found");
+        }
+        return commitments.First();
     }
 }
