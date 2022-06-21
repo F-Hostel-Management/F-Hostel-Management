@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Api.UserFeatures.Requests;
 
-public class CreateHostelRequest : IMapTo<HostelEntity>
+public class CreateOrUpdateHostelRequest : IMapTo<HostelEntity>
 {
     public string Address { get; set; }
     public string Name { get; set; }
