@@ -7,16 +7,31 @@ import { Typography } from '@mui/material'
 import { Edit, Delete } from '@mui/icons-material'
 import UpdateInvoiceDialog from '../UpdateInvoiceDialog'
 import { IInvoiceSchedule } from '../../../../interface/IInvoice'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
+import { getUserRole } from '../../../../slices/authSlice'
+import { deleteInvoiceSchedule } from '../../../../services/InvoiceScheduleService'
+import {
+    fetchInvoiceSchedules,
+    fetchNumberOfInvoiceSchedule,
+} from '../../../../slices/invoiceScheduleSlice'
 interface IActionButtonsProps {
     rowData: IInvoiceSchedule
 }
 
 const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
-    const role: ERole = 1
+    const role = useAppSelector(getUserRole)
+
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
 
+    const dispatch = useAppDispatch()
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+
     const handleDelete = async () => {
+        await deleteInvoiceSchedule(rowData?.id ?? '')
+        dispatch(fetchInvoiceSchedules({ currentPageSize, currentPage }))
+        dispatch(fetchNumberOfInvoiceSchedule())
         handleCloseDelete()
     }
 

@@ -101,3 +101,10 @@ export const updateInvoiceSchedule = async ({
         { loading: { show: true }, success: { show: true } }
     )
 }
+
+export const deleteInvoiceSchedule = async (id: string) => {
+    await RestCaller.delete(`InvoiceSchedules/${id}`, {
+        loading: { show: true },
+        success: { show: true },
+    })
+}
