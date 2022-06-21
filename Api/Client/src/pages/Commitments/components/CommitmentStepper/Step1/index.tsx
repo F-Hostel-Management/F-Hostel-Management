@@ -1,20 +1,26 @@
-import React, { FC, useEffect } from 'react'
+import React, { ChangeEvent, FC, useEffect } from 'react'
 import * as Styled from './styles'
 import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
 import { IField } from '../../../../../interface/IField'
 import { InputAdornment } from '@mui/material'
 import { getItem } from '../../../../../utils/LocalStorageUtils'
+import { IRoom } from '../../../../../interface/IRoom'
+import { IHostel } from '../../../../../interface/IHostel'
+import { ICommitmentValues } from '../../../../../interface/ICommitment'
 interface IStep1Props {
-    values: any
-    setValues: any
-    handleInputChange: any
-    roomInfo: Record<string, any>
-    setRoomInfo: any
-    roomOptions: Array<any>
-    hostelInfo: Record<string, any>
-    setHostelInfo: any
-    hostelOptions: Array<any>
+    values: ICommitmentValues
+    setValues: (values: ICommitmentValues) => void
+    handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
+
+    roomInfo: IRoom
+    setRoomInfo: (roomInfo: IRoom) => void
+    roomOptions: IRoom[]
+
+    hostelInfo: IHostel
+    setHostelInfo: (hostelInfo: IHostel) => void
+    hostelOptions: IHostel[]
+
     isUpdate: boolean
 }
 
@@ -76,7 +82,7 @@ const Step1: FC<IStep1Props> = ({
     isUpdate,
 }) => {
     useEffect(() => {
-        setValues({ ...values, roomId: roomInfo?.id })
+        setValues({ ...values, roomId: roomInfo?.id || '' })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomInfo])
     const currentHostelId = getItem('currentHostelId')

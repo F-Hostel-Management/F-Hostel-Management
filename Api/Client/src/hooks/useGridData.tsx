@@ -1,29 +1,29 @@
 import { GridRenderCellParams, GridColDef } from '@mui/x-data-grid'
-import { ElementType } from 'react'
+import { ElementType, ReactNode } from 'react'
 
-export interface IUseGridData {
+export interface IUseGridData<T> {
     createColumn: (
         field: string,
-        headerName: string,
+        headerName: string | ReactNode,
         width: number
     ) => GridColDef
 
     renderCell: (
         field: string,
-        headerName: string,
+        headerName: string | ReactNode,
         width: number,
         component: ElementType
     ) => GridColDef
 
     renderValueGetter: (
         field: string,
-        headerName: string,
+        headerName: string | ReactNode,
         width: number,
-        getValue: (params: Record<string, any>) => string
+        getValue: (params: T) => string
     ) => GridColDef
 }
 
-export const useGridData = (): IUseGridData => {
+export const useGridData = <T extends Record<string, any>>() => {
     const createColumn = (
         field: string,
         headerName: string,
@@ -58,7 +58,7 @@ export const useGridData = (): IUseGridData => {
         field: string,
         headerName: string,
         width: number,
-        getValue: (params: Record<string, any>) => string
+        getValue: (params: T) => string
     ): GridColDef => {
         return {
             field: field,
@@ -70,5 +70,5 @@ export const useGridData = (): IUseGridData => {
         }
     }
 
-    return { renderCell, createColumn, renderValueGetter }
+    return { renderCell, createColumn, renderValueGetter } as IUseGridData<T>
 }

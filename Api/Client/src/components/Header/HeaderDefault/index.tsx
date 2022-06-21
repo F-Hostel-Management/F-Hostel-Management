@@ -18,22 +18,24 @@ import Logo from '../../Logo'
 
 interface IHeaderDefaultProps {
     isShownSidebar: boolean
-    setIsShownSidebar: any
-    setIsSidebarMobile: any
+    setIsShownSidebar: (isShownSidebar: boolean) => void
+    isSidebarMobile: boolean
+    setIsSidebarMobile: (isSidebarMobile: boolean) => void
 }
 
 const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
     isShownSidebar,
     setIsShownSidebar,
+    isSidebarMobile,
     setIsSidebarMobile,
 }) => {
     const screen = useBreakpoint(up('lg'))
     const handleShowSidebar = () => {
         if (screen) {
-            setIsShownSidebar()
+            setIsShownSidebar(!isShownSidebar)
             setIsSidebarMobile(false)
         } else {
-            setIsSidebarMobile()
+            setIsSidebarMobile(!isSidebarMobile)
             setIsShownSidebar(true)
         }
     }
@@ -55,7 +57,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                             <img
                                 src={logo}
                                 alt="logo"
-                                style={{ height: '50px' }}
+                                style={{ height: '40px' }}
                             />
                         )}
                     </Styled.NavbarLogo>

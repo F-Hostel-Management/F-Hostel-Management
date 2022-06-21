@@ -32,15 +32,14 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
     )
 
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
-    const columns = createColumns(renderCell, createColumn, renderValueGetter)
+    const columns = createColumns(useGridData<IFacilityManagement>())
 
     useEffect(() => {
         dispatch(setTableInitialState())
     }, [dispatch])
 
     return (
-        <Fragment>
+        <>
             <DataGridCustom
                 loading={isFetchingDetails}
                 title="Room Facilities"
@@ -66,7 +65,7 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
                     handleCloseDialog={handleCloseCreate}
                 />
             )}
-        </Fragment>
+        </>
     )
 }
 

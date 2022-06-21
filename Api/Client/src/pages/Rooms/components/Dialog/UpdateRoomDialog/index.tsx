@@ -3,6 +3,9 @@ import FormDialog from '../../../../../components/DialogCustom/FormDialog'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import { useForm } from '../../../../../hooks/useForm'
 import { IRoom, IRoomValues } from '../../../../../interface/IRoom'
+import { updateRoom } from '../../../../../services/RoomService'
+import { fetchRoomList } from '../../../../../slices/roomSlice'
+import { getItem } from '../../../../../utils/LocalStorageUtils'
 import RoomForm from '../../RoomForm'
 
 interface IUpdateRoomDialogProps {
@@ -34,10 +37,20 @@ const UpdateRoomDialog: FC<IUpdateRoomDialogProps> = ({
         height: room.height || 0,
         hostelId: room.hostelId || '',
     }
-    const { values, setValues, handleInputChange, resetForm } =
-        useForm<IRoomValues>(initialValues)
+    const { values, handleInputChange } = useForm<IRoomValues>(initialValues)
 
-    const handleUpdateRoom = async () => {}
+    const handleUpdateRoom = async () => {
+        const hostelId = getItem('currentHostelId')
+        const response = await updateRoom(room.id, {
+            ...values,
+            area: values?.length * values?.width,
+            hostelId,
+        })
+        if (!response.isError) {
+            dispatch(fetchRoomList({ hostelId, pageSize, page }))
+            handleCloseDialog()
+        }
+    }
     return (
         <FormDialog
             title="Update Room"
