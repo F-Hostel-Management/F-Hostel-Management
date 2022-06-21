@@ -113,11 +113,12 @@ public class CommitmentsController : BaseRestController
     public async Task<IActionResult> DeleteCommitmentImageAsync([FromRoute] Guid commitmentId, DeleteCommitmentImageRequest deleteCommitmentImageRequest)
     {
         var commitment = (await _commitmentRepository.WhereAsync(com =>
-                            com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
+                          com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
         if (commitment == null)
         {
             throw new BadRequestException("Commitment not found");
         }
+        
         bool isAuthorized = await _authorServices.IsHostelManagedByCurrentUser(commitment.HostelId, CurrentUserID);
         if (!isAuthorized)
         {
@@ -130,8 +131,20 @@ public class CommitmentsController : BaseRestController
             throw new BadRequestException("An image does not exist");
         }
         await _commitmentServices.DeleteCommitmentImage(target);
-        
         return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("{commitmentId}/get-commitment-images")]
+    public async Task<IActionResult> GetAllCommitmentImagesAsync([FromRoute] Guid commitmentId)
+    {
+        var commitment = (await _commitmentRepository.WhereAsync(com =>
+                  com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
+        if (commitment == null)
+        {
+            throw new BadRequestException("Commitment not found");
+        }
+        return Ok(commitment.Images.Select(img => img.ImgUrl));
     }
 
 
