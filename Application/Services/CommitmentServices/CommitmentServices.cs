@@ -1,9 +1,10 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Utilities;
 using Domain.Entities.Commitment;
-using Domain.Entities.Room;
 using Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.Services.CommitmentServices;
 
@@ -11,18 +12,23 @@ namespace Application.Services.CommitmentServices;
 public class CommitmentServices : ICommitmentServices
 {
     public readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
-
+    public readonly IGenericRepository<CommitmentImages> _commitmentImagesRepository;
+    private readonly ICloudStorage _cloudStorage;
 
     public CommitmentServices(
-        IGenericRepository<CommitmentEntity> commitmentRepository
+        IGenericRepository<CommitmentEntity> commitmentRepository,
+        IGenericRepository<CommitmentImages> commitmentImagesRepository,
+        ICloudStorage cloudStorage
         )
     {
         _commitmentRepository = commitmentRepository;
+        _commitmentImagesRepository = commitmentImagesRepository;
+        _cloudStorage = cloudStorage;
     }
 
     public async Task CreateCommitment(CommitmentEntity commitment)
     {
-        commitment.CommitmentStatus = CommitmentStatus.Pending;
+        commitment.CommitmentStatus = CommitmentStatus.Active;
         await _commitmentRepository.CreateAsync(commitment);
     }
 
@@ -46,52 +52,12 @@ public class CommitmentServices : ICommitmentServices
         return coms;
     }
 
-    public async Task ApprovedCommitment(CommitmentEntity commitment)
-    {
-        commitment.CommitmentStatus = CommitmentStatus.Approved;
-        await _commitmentRepository.UpdateAsync(commitment);
-    }
-    public async Task ActivatedCommitment(CommitmentEntity commitment)
-    {
-        commitment.CommitmentStatus = CommitmentStatus.Active;
-        commitment.CanModify = false;
-        await _commitmentRepository.UpdateAsync(commitment);
-    }
-
     public async Task<CommitmentEntity> GetCommitment(Guid commitmentId)
     {
         CommitmentEntity com = await _commitmentRepository.FindByIdAsync(commitmentId);
         return com ??
           throw new NotFoundException("Commitment Not Found Or Already Expired");
 
-    }
-
-    public async Task<CommitmentEntity> GetNotExpiredCommitment(Guid Id)
-    {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com =>
-            com.Id.Equals(Id)
-            && !com.Status.Equals(CommitmentStatus.Expired.ToString())
-            );
-        return com ??
-           throw new NotFoundException("Commitment Not Found Or Already Expired");
-    }
-
-    public async Task<CommitmentEntity> GetApprovedOrActiveCommitment(Guid Id)
-    {
-        CommitmentEntity com = await _commitmentRepository
-            .FirstOrDefaultAsync(com =>
-            com.Id.Equals(Id)
-            && (com.Status.Equals(CommitmentStatus.Active.ToString()) ||
-                com.Status.Equals(CommitmentStatus.Approved.ToString()))
-            );
-        return com ??
-           throw new NotFoundException("Commitment Not Found Or Already Expired");
-    }
-
-    public async Task UpdatePendingCommitment(CommitmentEntity updatedCommitment)
-    {
-        await _commitmentRepository.UpdateAsync(updatedCommitment);
     }
 
     public async Task<CommitmentEntity> GetCommitment(Guid Id, CommitmentStatus status)
@@ -122,5 +88,28 @@ public class CommitmentServices : ICommitmentServices
             throw new NotFoundException("Commitment not found");
         }
         return commitments.First();
+    }
+
+    public async Task<ICollection<CommitmentImages>> UploadCommitment(CommitmentEntity commitment, List<IFormFile> imgFormFiles)
+    {
+        ICollection<CommitmentImages> images = new List<CommitmentImages>();
+        for (int i = 0; i < imgFormFiles.Count; i++)
+        {
+            string fileNameForStorage = FilePathUtil.FormFileName($"C{i}_" + commitment.Id.ToString(), imgFormFiles[i].FileName);
+            var imgUrl = await _cloudStorage.UploadFileAsync(imgFormFiles[i], fileNameForStorage);
+            images.Add(new CommitmentImages()
+            {
+                ImgUrl = imgUrl,
+                CommitmentId = commitment.Id
+            });
+        }
+        return images;
+    }
+
+    public async Task DeleteCommitmentImage(CommitmentImages target)
+    {
+        if (!string.IsNullOrEmpty(target.ImgUrl))
+            _ = _cloudStorage.DeleteFileAsync(target.ImgUrl);
+        await _commitmentImagesRepository.DeleteSoftAsync(target);
     }
 }
