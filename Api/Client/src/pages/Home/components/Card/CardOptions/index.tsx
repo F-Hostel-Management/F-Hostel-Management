@@ -11,10 +11,13 @@ import {
 import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../../hooks/useDialog'
 import UpdateHostelDialog from '../../Dialog/UpdateHostelDialog'
+import { IHostel } from '../../../../../interface/IHostel'
 
-interface ICardOptionsProps {}
+interface ICardOptionsProps {
+    hostelInfo: IHostel
+}
 
-const CardOptions: FC<ICardOptionsProps> = () => {
+const CardOptions: FC<ICardOptionsProps> = ({ hostelInfo }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
@@ -90,6 +93,7 @@ const CardOptions: FC<ICardOptionsProps> = () => {
 
             {openUpdate && (
                 <UpdateHostelDialog
+                    hostelInfo={hostelInfo}
                     openDialog={openUpdate}
                     handleCloseDialog={handleCloseUpdate}
                 />

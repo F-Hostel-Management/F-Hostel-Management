@@ -39,7 +39,7 @@ const ConfirmDialog: FC<IConfirmDialogProps> = ({
                         autoFocus
                         variant="contained"
                         onClick={handleCloseDialog}
-                        color="gray"
+                        color="secondary"
                         size="small"
                     >
                         Cancel
