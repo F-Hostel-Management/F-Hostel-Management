@@ -1,27 +1,30 @@
 import { Button, MenuItem, Grid } from '@mui/material'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 
-import InputField from '../../../../components/Input/InputField'
-import { IUser } from '../../../../interface/IUser'
-import { RestCaller } from '../../../../utils/RestCaller'
-import { showError, showSuccess } from '../../../../utils/Toast'
-import { IProfileFormInfo } from '../../interface'
-import UpdateImage from '../UpdateImage/indx'
+import InputField from '../Input/InputField'
+import { IUser } from '../../interface/IUser'
+import { RestCaller } from '../../utils/RestCaller'
+import { showError, showSuccess } from '../../utils/Toast'
+import { IProfileFormInfo } from '../../pages/Profile/interface'
+import UpdateImage from '../../pages/Profile/components/UpdateImage/indx'
 import * as Styled from './styles'
 
 interface IFormInfoProps {
     values: IUser
-    setValues: Dispatch<SetStateAction<any>>
-    handleInputChange: (
+    setValues?: Dispatch<SetStateAction<any>>
+    handleInputChange?: (
         event: React.ChangeEvent<HTMLInputElement>,
         isForce?: boolean
     ) => void
+    readonly?: boolean
 }
+const dummyFnc = () => {}
 const GENDERS = ['Male', 'Female', 'Other']
-const FormInfo: React.FC<IFormInfoProps> = ({
+const ProfileInfo: React.FC<IFormInfoProps> = ({
     values,
-    handleInputChange,
-    setValues,
+    handleInputChange = dummyFnc,
+    setValues = dummyFnc,
+    readonly = false,
 }) => {
     const [frontImg, setFrontImg] = useState<File>()
     const [backImg, setBackImg] = useState<File>()
@@ -81,6 +84,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 onChange={handleInputChange}
                                 autoFocus
                                 required
+                                disabled={readonly}
                             />
 
                             <InputField
@@ -90,7 +94,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                disabled
+                                disabled={true}
                             />
                             <InputField
                                 label="Birthday"
@@ -99,6 +103,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 onChange={handleInputChange}
                                 type="date"
                                 required
+                                disabled={readonly}
                             />
                             <InputField
                                 label="Gender"
@@ -107,6 +112,7 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 onChange={handleInputChange}
                                 select
                                 required
+                                disabled={readonly}
                             >
                                 {GENDERS.map((option, index) => (
                                     <MenuItem key={index} value={index}>
@@ -124,12 +130,14 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 type="number"
                                 name="phone"
                                 required
+                                disabled={readonly}
                             />
                             <InputField
                                 label="Address"
                                 value={values.address}
                                 name="address"
                                 onChange={handleInputChange}
+                                disabled={readonly}
                             />
                         </div>
                     </Grid>
@@ -144,29 +152,34 @@ const FormInfo: React.FC<IFormInfoProps> = ({
                                 type="number"
                                 name="citizenIdentity"
                                 required
+                                disabled={readonly}
                             />
                             <UpdateImage
                                 values={values}
                                 setValues={setValues}
                                 setFrontImg={setFrontImg}
                                 setBackImg={setBackImg}
+                                disabled={readonly}
                             />
                         </div>
                     </Grid>
                 </Grid>
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onSaveProfile}
-                    fullWidth
-                    sx={{ mt: 4 }}
-                >
-                    SAVE
-                </Button>
+                {readonly ? (
+                    ''
+                ) : (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={onSaveProfile}
+                        fullWidth
+                        sx={{ mt: 4 }}
+                    >
+                        SAVE
+                    </Button>
+                )}
             </div>
         </Styled.FormContainer>
     )
 }
 
-export default FormInfo
+export default ProfileInfo

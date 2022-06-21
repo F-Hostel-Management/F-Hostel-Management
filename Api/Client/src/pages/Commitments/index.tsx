@@ -12,11 +12,7 @@ import { getItem } from '../../utils/LocalStorageUtils'
 interface ICommitmentsProps {}
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { fetchCommitments } from '../../slices/commitmentSlice'
-import {
-    setPage,
-    setPageSize,
-    setTableInitialState,
-} from '../../slices/tableSlice'
+import { setTableInitialState } from '../../slices/tableSlice'
 import { IRoom } from '../../interface/IRoom'
 
 const Commitments: FC<ICommitmentsProps> = () => {
@@ -58,12 +54,12 @@ const Commitments: FC<ICommitmentsProps> = () => {
                 title="All Commitments"
                 rows={rows}
                 columns={columns}
-                pageSize={pageSize}
-                setPageSize={(pageSize: number) =>
-                    dispatch(setPageSize(pageSize))
-                }
-                page={page}
-                setPage={(page: number) => dispatch(setPage(page))}
+                // pageSize={pageSize}
+                // setPageSize={(pageSize: number) =>
+                //     dispatch(setPageSize(pageSize))
+                // }
+                // page={page}
+                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfCommitment}
                 toolbarChildren={
                     role !== ERole.TENANT_ROLE ? (

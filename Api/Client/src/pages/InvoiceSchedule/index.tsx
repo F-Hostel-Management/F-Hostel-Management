@@ -10,11 +10,7 @@ import ToolbarChildren from './components/ToolbarChildren'
 import CreateInvoiceDialog from './components/CreateInvoiceDialog'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { getUserRole } from '../../slices/authSlice'
-import {
-    setPage,
-    setPageSize,
-    setTableInitialState,
-} from '../../slices/tableSlice'
+import { setTableInitialState } from '../../slices/tableSlice'
 import {
     fetchInvoiceSchedules,
     fetchNumberOfInvoiceSchedule,
@@ -97,12 +93,12 @@ const InvoiceSchedule: FC<IInvoiceScheduleProps> = () => {
                 title="All Invoice Schedule"
                 rows={rows}
                 columns={columns}
-                pageSize={currentPageSize}
-                setPageSize={(pageSize: number) =>
-                    dispatch(setPageSize(pageSize))
-                }
-                page={currentPage}
-                setPage={(page: number) => dispatch(setPage(page))}
+                // pageSize={currentPageSize}
+                // setPageSize={(pageSize: number) =>
+                //     dispatch(setPageSize(pageSize))
+                // }
+                // page={currentPage}
+                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfInvoiceSchedule}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (

@@ -9,12 +9,14 @@ import {
 import { useTheme } from '@mui/material/styles'
 import * as Styled from './styles'
 import { CameraAlt } from '@mui/icons-material'
+import { getImageUrl } from '../../../../utils/ImageUtils'
 
 interface IUpdateImage {
     values: IUser
     setValues: Dispatch<SetStateAction<IUser>>
     setFrontImg: Dispatch<SetStateAction<File | undefined>>
     setBackImg: Dispatch<SetStateAction<File | undefined>>
+    disabled: boolean
 }
 
 const UpdateImage: FC<IUpdateImage> = ({
@@ -22,10 +24,14 @@ const UpdateImage: FC<IUpdateImage> = ({
     setValues,
     setFrontImg,
     setBackImg,
+    disabled,
 }) => {
     const theme = useTheme()
     const [activeStep, setActiveStep] = React.useState(0)
-    const preview = [values.frontIdentification, values.backIdentification]
+    const preview = [
+        getImageUrl(values.frontIdentification),
+        getImageUrl(values.backIdentification),
+    ]
     const maxSteps = 2
     const { frontIdentification } = values
     const handleNext = () => {
@@ -92,13 +98,17 @@ const UpdateImage: FC<IUpdateImage> = ({
 
                 {!preview[activeStep] ? (
                     <label>
-                        <input
-                            type="file"
-                            id="avatar"
-                            accept="image/png, image/jpeg"
-                            style={{ display: 'none' }}
-                            onChange={handleChooseImage[activeStep]}
-                        ></input>
+                        {!disabled ? (
+                            <input
+                                type="file"
+                                id="avatar"
+                                accept="image/png, image/jpeg"
+                                style={{ display: 'none' }}
+                                onChange={handleChooseImage[activeStep]}
+                            ></input>
+                        ) : (
+                            ''
+                        )}
                         <div>
                             <Styled.Image elevation={0} square>
                                 <div>
@@ -126,17 +136,21 @@ const UpdateImage: FC<IUpdateImage> = ({
                     <Styled.Image elevation={0} square>
                         <div>
                             <label>
-                                <input
-                                    type="file"
-                                    id={
-                                        activeStep == 0
-                                            ? 'frontIdentification'
-                                            : 'backIdentification'
-                                    }
-                                    accept="image/png, image/jpeg"
-                                    style={{ display: 'none' }}
-                                    onChange={handleChooseImage[activeStep]}
-                                ></input>
+                                {!disabled ? (
+                                    <input
+                                        type="file"
+                                        id={
+                                            activeStep == 0
+                                                ? 'frontIdentification'
+                                                : 'backIdentification'
+                                        }
+                                        accept="image/png, image/jpeg"
+                                        style={{ display: 'none' }}
+                                        onChange={handleChooseImage[activeStep]}
+                                    ></input>
+                                ) : (
+                                    ''
+                                )}
                                 <div>
                                     <Styled.Img>
                                         <img
@@ -146,18 +160,22 @@ const UpdateImage: FC<IUpdateImage> = ({
                                             width="100%"
                                         />
                                         <Styled.Text>
-                                            <div>
-                                                <CameraAlt htmlColor="#ffffff" />
-                                                <Typography
-                                                    variant="body2"
-                                                    sx={{
-                                                        color: '#e2e2e2',
-                                                        textAlign: 'center',
-                                                    }}
-                                                >
-                                                    Change image
-                                                </Typography>
-                                            </div>
+                                            {!disabled ? (
+                                                <div>
+                                                    <CameraAlt htmlColor="#ffffff" />
+                                                    <Typography
+                                                        variant="body2"
+                                                        sx={{
+                                                            color: '#e2e2e2',
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        Change image
+                                                    </Typography>
+                                                </div>
+                                            ) : (
+                                                ''
+                                            )}
                                         </Styled.Text>
                                     </Styled.Img>
                                 </div>

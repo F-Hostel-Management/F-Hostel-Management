@@ -1,4 +1,6 @@
 import React, { ReactNode } from 'react'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
+import { setPage, setPageSize } from '../../slices/tableSlice'
 
 import CustomNoRowsOverlay from './Custom/CustomNoRowsOverlay'
 import CustomPagination from './Custom/CustomPagination'
@@ -10,10 +12,6 @@ interface IDataGridCustomProps<T> {
     title: string
     rows: T[]
     columns: Array<any>
-    pageSize: number
-    setPageSize: (pageSize: number) => void
-    page: number
-    setPage: (page: number) => void
     rowsCount: number
     rowsPerPageOptions?: number[]
     toolbarChildren?: ReactNode
@@ -24,10 +22,10 @@ const DataGridCustom = <T extends Record<string, any>>({
     title,
     rows,
     columns,
-    pageSize,
-    setPageSize,
-    page,
-    setPage,
+    // pageSize,
+    // setPageSize,
+    // page,
+    // setPage,
     rowsCount,
     rowsPerPageOptions = [5, 10, 25, 100],
     toolbarChildren,
@@ -42,7 +40,9 @@ const DataGridCustom = <T extends Record<string, any>>({
             setPageSize={setPageSize}
         />
     )
-
+    const dispatch = useAppDispatch()
+    const page = useAppSelector(({ table }) => table.page)
+    const pageSize = useAppSelector(({ table }) => table.pageSize)
     return (
         <Styled.DataGridContainer
             width="100%"
@@ -58,8 +58,10 @@ const DataGridCustom = <T extends Record<string, any>>({
                 // server pagination
                 pagination
                 paginationMode="server"
-                onPageChange={(newPage) => setPage(newPage)}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                onPageChange={(newPage) => dispatch(setPage(newPage))}
+                onPageSizeChange={(newPageSize) =>
+                    dispatch(setPageSize(newPageSize))
+                }
                 page={page}
                 pageSize={pageSize}
                 rowsPerPageOptions={rowsPerPageOptions}
