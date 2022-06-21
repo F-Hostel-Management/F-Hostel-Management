@@ -21,7 +21,10 @@ export const ManagerDetail = ({
                 handleCloseDialog={handleCloseDialog}
                 maxWidth="md"
             >
-                <ManagerProfile manager={rowData}></ManagerProfile>
+                <ManagerProfile
+                    manager={rowData}
+                    handleCloseDialog={handleCloseDialog}
+                ></ManagerProfile>
             </DialogCustom>
         </>
     )

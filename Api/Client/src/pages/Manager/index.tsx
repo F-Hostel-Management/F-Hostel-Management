@@ -36,11 +36,17 @@ export const ManagerPage = (props: Props) => {
     const columns: GridColDef[] = [
         createColumn('id', 'Id', 10),
         renderValueGetter(
-            'avatar',
-            'Avatar',
+            'email',
+            'Email',
             250,
-            (params) => params.manager.avatar
+            (params) => params.manager.email
         ),
+        // renderValueGetter(
+        //     'avatar',
+        //     'Avatar',
+        //     250,
+        //     (params) => params.manager.avatar
+        // ),
         renderValueGetter('name', 'Name', 250, (params) => params.manager.name),
         renderValueGetter(
             'phone',

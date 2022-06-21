@@ -7,11 +7,12 @@ export const getHostelAssignmentList = async (
     currentPage: number
 ): Promise<IManagement[]> => {
     const currentHostelId = getItem('currentHostelId')
-    const currentRoomId = getItem('currentRoomId')
+    // const currentRoomId = getItem('currentRoomId')
 
     const builder = createBuilder<IManagement>()
         .select('id')
         .expand('manager')
+        .filter('hostelId', (hostelId) => hostelId.equals(currentHostelId))
         .paginate(currentPageSize, currentPage)
     const result: IManagement[] = await get('HostelManagements', builder)
 

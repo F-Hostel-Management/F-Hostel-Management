@@ -3,6 +3,7 @@ export interface IManager {
     phone: string
     avatar: string
     id: string
+    email: string
 }
 
 export interface IManagement {

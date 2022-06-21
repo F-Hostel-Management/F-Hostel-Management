@@ -16,6 +16,7 @@ const initialState: ManagerState = {
                     phone: '0937046839',
                     id: '1',
                     avatar: '',
+                    email: '',
                 },
                 id: '1',
             },
@@ -29,12 +30,17 @@ const managerSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(
-            fetchHostelAssignmentList.fulfilled,
-            (state, action) => {
+        builder
+            .addCase(fetchHostelAssignmentList.fulfilled, (state, action) => {
+                state.gridData.loading = false
                 state.gridData.rows = action.payload
-            }
-        )
+            })
+            .addCase(fetchHostelAssignmentList.pending, (state, action) => {
+                state.gridData.loading = false
+            })
+            .addCase(fetchHostelAssignmentList.rejected, (state, action) => {
+                state.gridData.loading = false
+            })
     },
 })
 

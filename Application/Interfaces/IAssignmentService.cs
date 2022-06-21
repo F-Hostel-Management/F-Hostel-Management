@@ -5,6 +5,6 @@ namespace Application.Interfaces;
 
 public interface IAssignmentService
 {
-    Task<MailRequest> CreateInvitationMail(UserEntity target, UserEntity invitor, HostelEntity hostelEntity);
+    Task<MailRequest> CreateInvitationMail(UserEntity target, UserEntity invitor, HostelEntity hostelEntity, string origin);
     Task<bool> AcceptInvitation(string token);
 }
