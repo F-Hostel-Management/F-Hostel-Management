@@ -1,7 +1,13 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
-import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
+import { createInvoiceSchedule } from '../../../../services/InvoiceScheduleService'
+import {
+    fetchInvoiceSchedules,
+    fetchNumberOfInvoiceSchedule,
+} from '../../../../slices/invoiceScheduleSlice'
+import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
     openDialog: boolean
@@ -13,23 +19,34 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
     openDialog,
     handleCloseDialog,
 }) => {
-    const initialValues: IInvoiceProps = {
+    const dispatch = useAppDispatch()
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
+
+    const initialValues: IInvoiceScheduleProps = {
         roomId: '',
-        paymentDate: 1,
+        content: '',
         invoiceType: 'House',
         price: 0,
-        content: '',
         cron: 'Month',
-        quantity: 1,
-        unitPrice: 0,
-        createDate: 'Monday',
-        overdueDays: 0,
+        createDate: 1,
+        paymentDate: 1,
     }
 
     const { values, setValues, handleInputChange, resetForm } =
-        useForm<IInvoiceProps>(initialValues)
+        useForm<IInvoiceScheduleProps>(initialValues)
     const handleCreateSubmit = async () => {
-        //....api
+        await createInvoiceSchedule({
+            content: values.content,
+            cron: values.cron,
+            createDate: values.createDate,
+            paymentDate: values.paymentDate,
+            invoiceType: values.invoiceType,
+            price: values.price,
+            roomId: values.roomId,
+        })
+        dispatch(fetchInvoiceSchedules({ currentPageSize, currentPage }))
+        dispatch(fetchNumberOfInvoiceSchedule())
         handleCloseDialog()
     }
 

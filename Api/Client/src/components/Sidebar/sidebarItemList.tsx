@@ -105,6 +105,11 @@ export const sidebarItemList: {
                     label: 'Invoices',
                     path: '/home/invoices',
                 },
+                {
+                    icon: <MeetingRoomTwoTone />,
+                    label: 'Rooms',
+                    path: '/home/rooms',
+                },
             ],
         },
     ],

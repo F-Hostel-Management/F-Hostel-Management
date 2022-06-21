@@ -27,7 +27,6 @@ const UploadHostelImage: FC<IUploadHostelImageProps> = ({
 }) => {
     const handleChooseImageHostel = (e: ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, image: e?.target?.files?.[0] })
-        console.log('file: ', e?.target?.files?.[0])
     }
 
     const [urlImage, setUrlImage] = useState<string>()
@@ -46,10 +45,10 @@ const UploadHostelImage: FC<IUploadHostelImageProps> = ({
 
     return (
         <Styled.Wrapper>
-            <Card sx={{ height: '250px', width: '340px' }}>
+            <Card sx={{ height: '200px', width: '300px' }}>
                 <CardMedia
                     component="img"
-                    height="300"
+                    height="200"
                     image={urlImage || defaultImage}
                     alt="Hostel Image"
                 />

@@ -19,51 +19,40 @@ public class InvoiceScheduleJob : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        var now = DateTime.Now;
         var invoiceSchedules = await _invoiceScheduleRepository.WhereAsync(invoice => invoice.Cron != null);
 
         foreach (var invoiceSchedule in invoiceSchedules)
         {
-            await DoCreateInvoiceJob(now, invoiceSchedule);
-        }
-    }
-
-    private static int IsDayInMonth(InvoiceScheduleEntity invoice)
-    {
-        int day = -1;
-        try
-        {
-            day = Int32.Parse(invoice.Cron);
-        }
-        catch { }
-
-        return day;
-    }
-
-    private async Task DoCreateInvoiceJob(DateTime date, InvoiceScheduleEntity invoice)
-    {
-        int day = IsDayInMonth(invoice);
-        if (day == -1) // day of week
-        {
-            if (date.DayOfWeek.ToString().ToUpper() != invoice.Cron.ToUpper()) return;
-            await CreateInvoice(invoice);
-        }
-        else if (1 <= day && day <= 31) // day of month
-        {
-            if (date.Day.ToString() != invoice.Cron) return;
-            await CreateInvoice(invoice);
+            await CreateInvoice(invoiceSchedule);
         }
     }
 
     private async Task CreateInvoice(InvoiceScheduleEntity invoice)
     {
+        var now = DateTime.Now;
+        var dueDate = DateTime.Now;
+
+        if (invoice.Cron.Equals("Month") && now.Day.Equals(invoice.CreateDate))
+        {
+            dueDate = dueDate.AddDays(invoice.PaymentDate);
+        }
+        else if (invoice.Cron.Equals("Week") && now.DayOfWeek.Equals((DayOfWeek) invoice.CreateDate))
+        {
+            dueDate = dueDate.AddDays(invoice.PaymentDate);
+        }
+        else return;
+
+
         try
         {
             var newInvoice = new InvoiceEntity()
             {
                 InvoiceCode = CodeGeneratorUtil.genarateByNowDateTime(),
                 Content = invoice.Content,
-                Date = DateTime.Now,
+                Date = now,
+                DueDate = dueDate,
+                Quantity = 1,
+                UnitPrice = invoice.Price,
                 Price = invoice.Price,
                 InvoiceType = invoice.InvoiceType,
                 ManagerId = invoice.ManagerId,

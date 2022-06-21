@@ -38,17 +38,26 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
     const [isSidebarMobile, setIsSidebarMobile] = useState<boolean>(false)
 
     useEffect(() => {
-        if (role === ERole.TENANT_ROLE) return
-        const hostelId = localStorage.getItem('currentHostelId')
-        if (!hostelId) {
-            navigate('/home')
-            return
-        } else if (!Object.keys(currentHostel).length) {
-            ;(async () => {
-                const hostel = await getHostelById(hostelId)
-                dispatch(setCurrentHostel(hostel))
-            })()
-        } else return
+        if (role === ERole.TENANT_ROLE) {
+            const roomId = localStorage.getItem('currentRoomId')
+            if (!roomId) {
+                navigate('/home')
+                return
+            }
+        }
+        if (role === ERole.OWNER_ROLE || role === ERole.MANAGER_ROLE) {
+            const hostelId = localStorage.getItem('currentHostelId')
+            if (!hostelId) {
+                navigate('/home')
+                return
+            } else if (!Object.keys(currentHostel).length) {
+                ;(async () => {
+                    const hostel = await getHostelById(hostelId)
+                    dispatch(setCurrentHostel(hostel))
+                })()
+            }
+        }
+        return
     }, [currentHostel])
 
     return (
@@ -56,12 +65,9 @@ const DefaultLayout: FC<IDefaultLayoutProps> = ({ title, children }) => {
             <Styled.Container>
                 <HeaderDefault
                     isShownSidebar={isShownSidebar}
-                    setIsShownSidebar={(state = !isShownSidebar) =>
-                        setIsShownSidebar(state)
-                    }
-                    setIsSidebarMobile={(state = !isSidebarMobile) =>
-                        setIsSidebarMobile(state)
-                    }
+                    setIsShownSidebar={setIsShownSidebar}
+                    isSidebarMobile={isSidebarMobile}
+                    setIsSidebarMobile={setIsSidebarMobile}
                 />
                 <Grid
                     container

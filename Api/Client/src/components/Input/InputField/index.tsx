@@ -4,8 +4,8 @@ import * as React from 'react'
 interface IInputFieldProps {
     name?: string
     label?: string
-    value?: string | number | null
-    onChange?: any
+    value?: string | number | null | undefined | unknown
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
     type?: string
     startAdornment?: any
     endAdornment?: any

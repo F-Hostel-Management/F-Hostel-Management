@@ -2,7 +2,7 @@ import { IField } from '../../../../interface/IField'
 
 export const fields: IField[] = [
     {
-        label: 'Name',
+        label: 'Hostel Name',
         name: 'name',
         type: 'text',
         required: true,
@@ -11,6 +11,12 @@ export const fields: IField[] = [
         label: 'Address',
         name: 'address',
         type: 'text',
+        required: true,
+    },
+    {
+        label: 'Time span of QR code (minutes)',
+        name: 'timeSpan',
+        type: 'number',
         required: true,
     },
 ]

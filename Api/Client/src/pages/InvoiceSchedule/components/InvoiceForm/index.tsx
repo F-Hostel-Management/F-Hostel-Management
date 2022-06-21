@@ -2,10 +2,13 @@ import { Grid, InputAdornment, MenuItem } from '@mui/material'
 import * as React from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { DaysOfTheWeek } from '../../../../constants/Date'
-import { InvoiceCron, InvoiceType } from '../../../../constants/Invoice'
+import { InvoiceCron, InvoiceScheduleType } from '../../../../constants/Invoice'
 
 import { IField } from '../../../../interface/IField'
-import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
+import { IRoom } from '../../../../interface/IRoom'
+import { getRoomNamesByHostelId } from '../../../../services/HostelService'
+import { getItem } from '../../../../utils/LocalStorageUtils'
+import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import * as Styled from './styles'
 
 interface IInvoiceFormProps<T> {
@@ -16,51 +19,38 @@ interface IInvoiceFormProps<T> {
         isForce?: boolean
     ) => void
     review?: boolean
+    isUpdate?: boolean
 }
 
-const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
+const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
     values,
     setValues,
     handleInputChange,
     review = false,
+    isUpdate,
 }) => {
-    const roomList = ['701', '702', '703', '704', '705']
+    const [roomList, setRoomList] = React.useState<IRoom[]>([])
 
-    const {
-        invoiceType,
-        roomId,
-        quantity,
-        unitPrice,
-        price,
-        cron,
-        createDate,
-        paymentDate,
-        overdueDays,
-    } = values
+    React.useEffect(() => {
+        ;(async () => {
+            const currentHostelId = getItem('currentHostelId')
+            const result = await getRoomNamesByHostelId(currentHostelId)
+            setRoomList(result ?? [])
+        })()
+    }, [])
+
+    const { invoiceType, roomId, price, cron, createDate, paymentDate } = values
 
     React.useEffect(() => {
         setValues({
             ...values,
             invoiceType: invoiceType,
             roomId: roomId,
-            quantity:
-                invoiceType === 'Service' || invoiceType === 'House'
-                    ? 1
-                    : quantity,
-            unitPrice: unitPrice,
-            price: quantity * unitPrice,
+            price: price,
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [invoiceType, roomId, quantity, unitPrice, price])
+    }, [invoiceType, roomId, price])
 
     const fields: IField[] = [
-        {
-            label: 'Due Date',
-            name: 'dueDate',
-            type: 'number',
-            required: true,
-            multiline: false,
-        },
         {
             label: 'Amount',
             name: 'price',
@@ -91,12 +81,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                             select
                             onChange={handleInputChange}
                             InputProps={{
-                                readOnly: review,
+                                readOnly: review || isUpdate,
                             }}
                         >
-                            {roomList.map((option, index) => (
-                                <MenuItem key={index} value={option}>
-                                    {option}
+                            {roomList.map((room) => (
+                                <MenuItem key={room?.id} value={room?.id}>
+                                    {room?.roomName}
                                 </MenuItem>
                             ))}
                         </InputField>
@@ -111,7 +101,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                 readOnly: review,
                             }}
                         >
-                            {InvoiceType.map((option, index) => (
+                            {InvoiceScheduleType.map((option, index) => (
                                 <MenuItem key={index} value={option.name}>
                                     {option.name}
                                 </MenuItem>
@@ -156,11 +146,15 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                             }}
                         >
                             {DaysOfTheWeek.map((option, index) => (
-                                <MenuItem key={index} value={option}>
+                                <MenuItem key={index} value={index}>
                                     {option}
                                 </MenuItem>
                             ))}
                         </InputField>
+                    </div>
+                </Styled.GridForm>
+                <Styled.GridForm item xs={12} md={6}>
+                    <div style={{ width: '350px' }}>
                         <InputField
                             label="Payment Date"
                             name="paymentDate"
@@ -176,105 +170,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                     </InputAdornment>
                                 ),
                             }}
-                            inputProps={
-                                cron === 'Month'
-                                    ? { min: 1, max: 31 }
-                                    : { min: 1, max: 7 }
-                            }
                         />
-                    </div>
-                </Styled.GridForm>
-                <Styled.GridForm item xs={12} md={6}>
-                    <div style={{ width: '350px' }}>
-                        <InputField
-                            label="Number of days allowed to be overdue"
-                            name="overdueDays"
-                            value={overdueDays}
-                            type="number"
-                            required
-                            onChange={handleInputChange}
-                            InputProps={{
-                                readOnly: review,
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        days
-                                    </InputAdornment>
-                                ),
-                            }}
-                            inputProps={
-                                cron === 'Month'
-                                    ? { min: 1, max: 31 }
-                                    : { min: 0, max: 7 }
-                            }
-                        />
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <InputField
-                                    label="Quantity"
-                                    name="quantity"
-                                    value={quantity}
-                                    type="number"
-                                    required
-                                    disabled={
-                                        invoiceType === 'Service' ? true : false
-                                    }
-                                    onChange={handleInputChange}
-                                    sx={{
-                                        width: 140,
-                                        ml: 2,
-                                        mt: 3,
-                                        mb: 2,
-                                        '& .MuiInputLabel-root': {
-                                            fontSize: '1.6rem',
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            fontSize: '1.6rem',
-                                            height: '3rem',
-                                        },
-                                        '& .MuiInputAdornment-root > .MuiTypography-root':
-                                            {
-                                                fontSize: '1.3rem',
-                                            },
-                                    }}
-                                    InputProps={{
-                                        readOnly: review,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <InputField
-                                    label="Unit Price"
-                                    name="unitPrice"
-                                    value={unitPrice}
-                                    type="number"
-                                    required
-                                    disabled={
-                                        invoiceType === 'Service' ? true : false
-                                    }
-                                    onChange={handleInputChange}
-                                    sx={{
-                                        width: 140,
-                                        mt: 3,
-                                        mb: 2,
-                                        '& .MuiInputLabel-root': {
-                                            fontSize: '1.6rem',
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            fontSize: '1.6rem',
-                                            height: '3rem',
-                                        },
-                                        '& .MuiInputAdornment-root > .MuiTypography-root':
-                                            {
-                                                fontSize: '1.3rem',
-                                            },
-                                    }}
-                                    InputProps={{
-                                        readOnly: review,
-                                    }}
-                                />
-                            </Grid>
-                        </Grid>
-                        {fields.slice(1, 3).map((field, index) => (
+                        {fields.map((field, index) => (
                             <InputField
                                 key={index}
                                 label={field.label}

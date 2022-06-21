@@ -11,7 +11,7 @@ import * as Styled from './styles'
 import { ContentCopy, Done } from '@mui/icons-material'
 import BootstrapTooltip from '../../../../components/BootstrapTooltip'
 interface IQrCodeGenerateProps {
-    code: number
+    code: string | number
 }
 
 const QrCodeGenerate: FC<IQrCodeGenerateProps> = ({ code }) => {
