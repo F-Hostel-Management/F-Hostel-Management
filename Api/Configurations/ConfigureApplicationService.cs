@@ -31,7 +31,6 @@ namespace Api.Configurations
             services.AddScoped<HandleNotificationRequestService>();
             // services.AddScoped<HandleCommitmentRequestService>();
             services.AddTransient<IMailService, MailService>();
-
         }
     }
 }

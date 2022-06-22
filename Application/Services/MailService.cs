@@ -44,9 +44,10 @@ public class MailService:IMailService
             }
             builder.HtmlBody = mailRequest.Body;
             email.Body = builder.ToMessageBody();
+            email.From.Add( MailboxAddress.Parse(mailSettings.Mail));
             using var smtp = new SmtpClient();
             smtp.Connect(mailSettings.Host, mailSettings.Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(mailSettings.Mail, mailSettings.Password);
+            smtp.Authenticate(mailSettings.UserName, mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
     }
