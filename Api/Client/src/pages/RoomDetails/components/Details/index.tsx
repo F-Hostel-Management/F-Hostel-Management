@@ -11,6 +11,7 @@ import {
 import { useAppSelector } from '../../../../hooks/reduxHook'
 import { useDialog } from '../../../../hooks/useDialog'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
+import { checkoutRoom } from '../../../../services/RoomService'
 
 interface IDetailsProps {}
 
@@ -20,7 +21,7 @@ const Details: FC<IDetailsProps> = (props) => {
     )
     const [openCheckout, handleOpenCheckout, handleCloseCheckout] = useDialog()
     const handleCheckout = async () => {
-        // await checkoutRoom(roomDetails.id)
+        await checkoutRoom(roomDetails.id)
         handleCloseCheckout()
     }
     console.log(roomDetails)

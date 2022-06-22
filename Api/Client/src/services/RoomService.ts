@@ -176,6 +176,7 @@ const deleteFacilities = async (id = '') => {
 const checkoutRoom = async (id = '') => {
     const result = await RestCaller.post(
         `Rooms/${id}/checkout`,
+        '',
         setToastConfig('Checkout successfully.')
     )
     console.log('checkoutRoom: ', result)
