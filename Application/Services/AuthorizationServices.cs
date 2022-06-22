@@ -45,7 +45,7 @@ public class AuthorizationServices : IAuthorizationServices
         {
             return false;
         }
-        return IsCommitmentStillValid(commitment);
+        return commitment.CommitmentStatus != CommitmentStatus.Expired;
     }
 
     public async Task<bool> IsHostelManagedByCurrentUser(Guid hostelId, Guid userId)
@@ -57,7 +57,7 @@ public class AuthorizationServices : IAuthorizationServices
         return list.Count == 1;
     }
 
-    
+
 
 
     public async Task<bool> IsHostelManagedByCurrentUser(HostelEntity hostel, Guid userId)
@@ -107,13 +107,6 @@ public class AuthorizationServices : IAuthorizationServices
             return null;
         }
         return room;
-    }
-
-    public bool IsCommitmentStillValid(CommitmentEntity commitment)
-    {
-        // repair when apply cron
-        double countLess = commitment.EndDate.Subtract(DateTime.Now).TotalMinutes;
-        return countLess > 0;
     }
 
     public async Task<HostelEntity> GetHostelThatManagedByCurrentUser(Guid hostelId, Guid userId)
