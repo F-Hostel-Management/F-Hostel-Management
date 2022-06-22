@@ -17,13 +17,13 @@ public class InvoiceSchedulesController : BaseODataController<InvoiceScheduleEnt
     protected override IQueryable<InvoiceScheduleEntity> GetQuery()
     {
         IQueryable<Guid> rooms = null;
-        if (CurrentUser.Role.Equals(Role.Owner) || CurrentUser.Role.Equals(Role.Manager))
-        {
-            var hostels = db.Hostels
-                 .Where(hostel => hostel.OwnerId.Equals(CurrentUser.OwnerId) || hostel.OwnerId.Equals(CurrentUser.Id))
-                 .Select(hostel => hostel.Id);
-            rooms = db.Rooms.Where(room => hostels.Contains(room.HostelId)).Select(room => room.Id);
-        }
+        var hostels = db.Hostels
+             .Where(hostel =>
+                    hostel.OwnerId.Equals(CurrentUserId) ||
+                    hostel.HostelManagements.Where(hm => hm.ManagerId.Equals(CurrentUserId)).Any())
+             .Select(hostel => hostel.Id);
+        rooms = db.Rooms.Where(room => hostels.Contains(room.HostelId)).Select(room => room.Id);
+
         if (rooms is null) throw new NotFoundException("Not found any room");
         var invoices = db.InvoiceSchedules.Where(invoice => rooms.Contains(invoice.RoomId));
         return invoices;

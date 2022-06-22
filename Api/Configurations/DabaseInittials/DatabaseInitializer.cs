@@ -55,24 +55,6 @@ public static class DatabaseInitializer
                 });
         }
         await dbContext.SaveChangesAsync();
-        await dbContext.FeedOwnerToManagers();
-    }
-
-    public static async Task FeedOwnerToManagers(this ApplicationDbContext dbContext)
-    {
-        if (!dbContext.Users.Any()) return;
-        var managers = dbContext.Users.Where(user => user.RoleString == Role.Manager.ToString()).ToArray();
-        var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
-        if (!managers.Any() || !owners.Any())
-        {
-            return;
-        }
-
-        foreach (var manager in managers)
-        {
-            manager.Owner = owners[_rand.Next(owners.Length)];
-        }
-        await dbContext.SaveChangesAsync();
     }
     /*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
         {
