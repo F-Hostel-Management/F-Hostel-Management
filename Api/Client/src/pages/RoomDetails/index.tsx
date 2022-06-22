@@ -9,7 +9,7 @@ import FacilitiesTable from './components/FacilitiesTable'
 import * as Styled from './styles'
 interface IRoomDetailsProps {}
 
-const RoomDetails: FC<IRoomDetailsProps> = (props) => {
+const RoomDetails: FC<IRoomDetailsProps> = () => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
     const roomDetails = useAppSelector(
         ({ roomDetails }) => roomDetails.roomDetails

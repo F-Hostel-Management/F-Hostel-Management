@@ -41,12 +41,6 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
                 title="Room Facilities"
                 rows={rows}
                 columns={columns}
-                // pageSize={pageSize}
-                // setPageSize={(pageSize: number) =>
-                //     dispatch(setPageSize(pageSize))
-                // }
-                // page={page}
-                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfFacilities}
                 toolbarChildren={
                     role !== ERole.TENANT_ROLE ? (
