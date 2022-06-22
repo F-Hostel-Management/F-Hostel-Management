@@ -6,7 +6,7 @@ import { useForm } from '../../hooks/useForm'
 import { IUser } from '../../interface/IUser'
 import { AppState } from '../../stores/reduxStore'
 import { useSelector } from 'react-redux'
-import FormInfo from './components/FormInfo'
+import FormInfo from '../../components/ProfileInfo'
 import { Navigate } from 'react-router-dom'
 import { Divider, Typography } from '@mui/material'
 

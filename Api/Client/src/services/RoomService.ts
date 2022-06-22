@@ -173,6 +173,15 @@ const deleteFacilities = async (id = '') => {
     return result
 }
 
+const checkoutRoom = async (id = '') => {
+    const result = await RestCaller.post(
+        `Rooms/${id}/checkout`,
+        setToastConfig('Checkout successfully.')
+    )
+    console.log('checkoutRoom: ', result)
+    return result
+}
+
 export {
     // OData
     getAllRoomOfTenant,
@@ -188,4 +197,6 @@ export {
     addFacilities,
     updateFacilities,
     deleteFacilities,
+    //
+    checkoutRoom,
 }

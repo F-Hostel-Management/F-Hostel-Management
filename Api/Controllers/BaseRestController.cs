@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Domain.Entities;
 
 namespace Api.Controllers;
 
@@ -13,7 +14,7 @@ public abstract class BaseRestController : ControllerBase
     protected Guid CurrentUserID => GetUserID();
 
     protected string CurrentUserRole => GetUserRole();
-
+  
     protected Guid GetUserID()
     {
         var userID = HttpContext.User.Claims.FirstOrDefault(a => a.Type == "id");

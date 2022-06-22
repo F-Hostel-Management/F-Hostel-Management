@@ -1,5 +1,6 @@
 ﻿using Api.Filters;
 using Api.UserFeatures.Requests;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
@@ -36,7 +37,7 @@ public class HostelsController : BaseRestController
     /// <returns></returns>
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpPost("create-hostel")]
-    public async Task<IActionResult> CreateHostel(CreateHostelRequest createHostelRequest)
+    public async Task<IActionResult> CreateHostel(CreateOrUpdateHostelRequest createHostelRequest)
     {
         HostelEntity hostel = Mapper.Map<HostelEntity>(createHostelRequest);
         hostel.OwnerId = GetUserID();
@@ -58,6 +59,57 @@ public class HostelsController : BaseRestController
         var target = await _hostelRepository.FirstOrDefaultAsync(e => e.Id.Equals(uploadHostelImageRequest.HostelId));
         await _hostelService.UploadHostelImage(target, uploadHostelImageRequest.Image);
         return Ok(target.ImgPath);
+    }
+
+
+    [HttpPatch("{hostelId}")]
+    public async Task<IActionResult> UpdateHostelAsync([FromRoute] Guid hostelId, CreateOrUpdateHostelRequest updateHostelRequest)
+    {
+        var hostel = await _authorServices.GetHostelThatManagedByCurrentUser(hostelId, CurrentUserID);
+        if (hostel is null)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        Mapper.Map(updateHostelRequest, hostel);
+        await _hostelRepository.UpdateAsync(hostel);
+        return Ok();
+    } 
+    
+    [Authorize(Roles = nameof(Role.Owner))]
+    [HttpDelete("{hostelId}")]
+    public async Task<IActionResult> DeleteHostelAsync([FromRoute] Guid hostelId)
+    {
+        var hostel = await _hostelRepository.FindByIdAsync(hostelId, new string[] { "Commitments" });
+        if (hostel is null)
+        {
+            throw new NotFoundException("Hostel not found");
+        }
+        var isAuthorized = await _authorServices.IsHostelManagedByCurrentUser(hostelId, CurrentUserID);
+        if (!isAuthorized)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        var validCommitments = hostel.Commitments.Where(commitment => commitment.CommitmentStatus == CommitmentStatus.Active);
+        if (validCommitments.Any())
+        {
+            throw new BadRequestException("The room is still rented, cannot delete the hostel");
+        }
+
+        await _hostelRepository.DeleteSoftAsync(hostel);
+        return Ok();
+    }
+
+    [HttpPatch("{hostelId}/timespan")]
+    public async Task<IActionResult> UpdateQrTimeSpanAsync([FromRoute] Guid hostelId, UpdateTimespanRequest updateTimespanRequest)
+    {
+        var hostel = await _authorServices.GetHostelThatManagedByCurrentUser(hostelId, CurrentUserID);
+        if (hostel is null)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        Mapper.Map(updateTimespanRequest, hostel);
+        await _hostelRepository.UpdateAsync(hostel);
+        return Ok();
     }
 }
 

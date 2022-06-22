@@ -9,11 +9,7 @@ import DataGridCustom from '../../components/DataGridCustom'
 import ToolbarChildren from './components/ToolbarChildren'
 import CreateInvoiceDialog from './components/CreateInvoiceDialog'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
-import {
-    setPage,
-    setPageSize,
-    setTableInitialState,
-} from '../../slices/tableSlice'
+import { setTableInitialState } from '../../slices/tableSlice'
 import { fetchInvoices, fetchNumberOfInvoice } from '../../slices/invoiceSlice'
 import { IInvoice } from '../../interface/IInvoice'
 import { formatDate } from '../../utils/FormatDate'
@@ -81,12 +77,12 @@ const Invoices: FC<IInvoicesProps> = () => {
                 title="All Invoice"
                 rows={rows}
                 columns={columns}
-                pageSize={currentPageSize}
-                setPageSize={(pageSize: number) =>
-                    dispatch(setPageSize(pageSize))
-                }
-                page={currentPage}
-                setPage={(page: number) => dispatch(setPage(page))}
+                // pageSize={currentPageSize}
+                // setPageSize={(pageSize: number) =>
+                //     dispatch(setPageSize(pageSize))
+                // }
+                // page={currentPage}
+                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfInvoice}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (

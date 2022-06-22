@@ -8,6 +8,8 @@ namespace Application.AppConfig
         public DbConfig ConnectionStrings { get; set; }
         public JwtSetting JwtSetting { get; set; }
         public VnPayConfig VnPayConfig { get; set; }
+        
+        public MailSettings MailSettings { get; set; }
         public string SpaDevServer { get; set; }
         public string FirebaseConfigPath { get; set; }
         public string GoogleCloudStorageBucket { get; set; }
