@@ -2,7 +2,6 @@ import React, { FC, Fragment, useEffect } from 'react'
 import DataGridCustom from '../../../components/DataGridCustom'
 import { useDialog } from '../../../hooks/useDialog'
 import { useGridData } from '../../../hooks/useGridData'
-import { ERole } from '../../../utils/enums'
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHook'
 import { setTableInitialState } from '../../../slices/tableSlice'
 import { getItem } from '../../../utils/LocalStorageUtils'
@@ -20,7 +19,6 @@ interface IOwnerRoomsProps {}
 const OwnerRooms: FC<IOwnerRoomsProps> = () => {
     const dispatch = useAppDispatch()
 
-    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
     const numOfRooms = useAppSelector(({ room }) => room.numOfRooms)
@@ -50,19 +48,11 @@ const OwnerRooms: FC<IOwnerRoomsProps> = () => {
                             title="All Rooms"
                             rows={rows}
                             columns={columns}
-                            // pageSize={pageSize}
-                            // setPageSize={(pageSize: number) =>
-                            //     dispatch(setPageSize(pageSize))
-                            // }
-                            // page={page}
-                            // setPage={(page: number) => dispatch(setPage(page))}
                             rowsCount={numOfRooms}
                             toolbarChildren={
-                                role != ERole.TENANT_ROLE ? (
-                                    <ToolbarChildren
-                                        handleOpenCreate={handleOpenCreate}
-                                    />
-                                ) : null
+                                <ToolbarChildren
+                                    handleOpenCreate={handleOpenCreate}
+                                />
                             }
                         />
 

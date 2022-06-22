@@ -15,6 +15,7 @@ export interface IInvoice {
     manager?: IUser
     tenantPaid?: IUser
     isDeleted?: boolean
+    [x: string | number | symbol]: any
 }
 
 export interface IInvoiceSchedule {
@@ -28,4 +29,5 @@ export interface IInvoiceSchedule {
     room?: IRoom
     manager?: IUser
     isDeleted?: boolean
+    [x: string | number | symbol]: any
 }

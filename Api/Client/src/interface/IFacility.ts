@@ -7,6 +7,7 @@ export interface IFacility {
     quantity: number
     numberSelected?: number
     description?: string
+    [x: string | number | symbol]: any
 }
 
 export interface IFacilityValues {
@@ -15,11 +16,13 @@ export interface IFacilityValues {
     price: number
     quantity: number
     hostelId: string
+    [x: string | number | symbol]: any
 }
 
 export interface IFacilityDescription {
     quantity: number
     details: string
+    [x: string | number | symbol]: any
 }
 
 export interface IFacilityManagement {
@@ -30,4 +33,5 @@ export interface IFacilityManagement {
     facilityId: string
     id: string
     isDeleted: boolean
+    [x: string | number | symbol]: any
 }
