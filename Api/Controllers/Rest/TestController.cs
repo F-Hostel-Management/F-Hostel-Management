@@ -34,6 +34,8 @@ namespace Api.Controllers.Rest
         {
             var scheduler = await _schedulerFactory.GetScheduler();
             await scheduler.TriggerJob(CronJobKeys.InvoiceSchedule);
+            await scheduler.TriggerJob(CronJobKeys.JoiningCodeSchedule);
+            await scheduler.TriggerJob(CronJobKeys.CommitmentSchedule);
             return Ok();
         }
     }
