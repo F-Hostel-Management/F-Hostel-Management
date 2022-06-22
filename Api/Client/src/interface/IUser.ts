@@ -16,7 +16,6 @@ export interface IUser {
     address?: string
     frontIdentification?: string
     backIdentification?: string
-    tenant: IUser[]
     [x: string | number | symbol]: any
 }
 
