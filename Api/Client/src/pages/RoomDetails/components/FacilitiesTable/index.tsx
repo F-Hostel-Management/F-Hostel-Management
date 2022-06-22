@@ -4,11 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { useDialog } from '../../../../hooks/useDialog'
 import { useGridData } from '../../../../hooks/useGridData'
 import { IFacilityManagement } from '../../../../interface/IFacility'
-import {
-    setPage,
-    setPageSize,
-    setTableInitialState,
-} from '../../../../slices/tableSlice'
+import { setTableInitialState } from '../../../../slices/tableSlice'
 import { ERole } from '../../../../utils/enums'
 import { createColumns } from './Columns'
 import CreateRoomFacilitiesDialog from './Dialog/CreateRoomFacilitiesDialog'
@@ -45,12 +41,6 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
                 title="Room Facilities"
                 rows={rows}
                 columns={columns}
-                pageSize={pageSize}
-                setPageSize={(pageSize: number) =>
-                    dispatch(setPageSize(pageSize))
-                }
-                page={page}
-                setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfFacilities}
                 toolbarChildren={
                     role !== ERole.TENANT_ROLE ? (

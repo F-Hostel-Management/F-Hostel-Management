@@ -58,6 +58,16 @@ const getOwnerOfHostel = async (hostelId = '') => {
     return result?.[0].owner
 }
 
+const getTenantsOfHostel = async (hostelId = '') => {
+    const builder = createBuilder<IHostel>()
+        .filter('id', (e) => e.equals(hostelId))
+        .select('tenant')
+        .expand('tenant', (tenant) => tenant.select())
+    const result = await get('Hostels', builder)
+    console.log('getTenantsOfHostel: ', result?.[0].tenant)
+    return result?.[0].tenant
+}
+
 const createHostel = async (data = {}) => {
     return await RestCaller.post('Hostels/create-hostel', data, {
         loading: {
@@ -94,5 +104,6 @@ export {
     uploadImage,
     getRoomOfHostel,
     getOwnerOfHostel,
+    getTenantsOfHostel,
     getRoomNamesByHostelId,
 }

@@ -13,6 +13,9 @@ import Facilities from '../pages/Facilities'
 import Invoices from '../pages/Invoices'
 import InvoiceSchedule from '../pages/InvoiceSchedule'
 import { PaymentCallback } from '../pages/Invoices/components/Payment/Callback'
+import Tenant from '../pages/Tenant'
+import { ManagerPage } from '../pages/Manager'
+import { InvitationDetail } from '../pages/Manager/components/InvitationDetail'
 
 const publicRoutes: IRoute[] = [
     {
@@ -46,6 +49,15 @@ const privateRoutes: IRoute[] = [
         layout: DefaultLayout,
         props: {
             title: 'Dashboard',
+        },
+    },
+    {
+        path: 'home/tenants',
+        component: Tenant,
+        name: 'Tenants',
+        layout: DefaultLayout,
+        props: {
+            title: 'Tenants',
         },
     },
     {
@@ -91,6 +103,24 @@ const privateRoutes: IRoute[] = [
         layout: DefaultLayout,
         props: {
             title: 'Invoices',
+        },
+    },
+    {
+        path: '/home/managers',
+        component: ManagerPage,
+        name: 'Invoices',
+        layout: DefaultLayout,
+        props: {
+            title: 'Invoices',
+        },
+    },
+    {
+        path: '/invitation',
+        component: InvitationDetail,
+        name: 'Invitation',
+        layout: null,
+        props: {
+            title: 'Invitation',
         },
     },
     {
