@@ -1,11 +1,4 @@
-import React, {
-    FC,
-    ChangeEvent,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-    useState,
-} from 'react'
+import React, { FC, ChangeEvent, useEffect, useState } from 'react'
 import Step1 from './Step1'
 import Step2 from './Step2'
 import Step3 from './Step3'
@@ -18,20 +11,26 @@ import {
 import { useSelector } from 'react-redux'
 import { getCurrentHostel } from '../../../../slices/homeSlice'
 import QrCodeGenerate from '../QrCodeGenerate'
-import { ICommitment } from '../../../../interface/ICommitment'
+import {
+    ICommitment,
+    ICommitmentValues,
+} from '../../../../interface/ICommitment'
 import { ERoomStatus } from '../../../../utils/enums'
 import { IRoom } from '../../../../interface/IRoom'
+import { IHostel } from '../../../../interface/IHostel'
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
-    values: Record<string, any>
-    setValues: Dispatch<SetStateAction<any>>
+    // useForm hook
+    values: ICommitmentValues
+    setValues: (values: ICommitmentValues) => void
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
+    handleChange: (e: ChangeEvent<HTMLInputElement>) => void
     resetForm: () => void
+    // handle submit step
     handleSubmitStep2: () => void
     handleSubmitStep3: () => void
     timeSpan: number | null
-    handleChange: (e: ChangeEvent<HTMLInputElement>) => void
-    sixDigitsCode: any
+    sixDigitsCode: string | number
     commitment?: ICommitment
 }
 
@@ -51,8 +50,8 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     const currentHostel = useSelector(getCurrentHostel)
     const [rooms, setRooms] = useState([])
     const [hostels, setHostels] = useState([])
-    const [roomInfo, setRoomInfo] = useState<any | null>(null)
-    const [hostelInfo, setHostelInfo] = useState<any | null>(null)
+    const [roomInfo, setRoomInfo] = useState<IRoom>({})
+    const [hostelInfo, setHostelInfo] = useState<IHostel>({})
 
     useEffect(() => {
         if (localStorage.getItem('currentHostelId')) {
@@ -72,7 +71,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
         if (!hostelInfo && !currentHostelId) return
         ;(async () => {
             let roomList = await getRoomOfHostel(
-                currentHostelId || hostelInfo?.id
+                currentHostelId || hostelInfo?.id || ''
             )
             roomList = roomList.filter(
                 (room: IRoom) => room.status === ERoomStatus.Available

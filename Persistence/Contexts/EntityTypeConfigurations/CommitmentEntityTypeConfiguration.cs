@@ -31,12 +31,6 @@ namespace Infrastructure.Contexts.EntityTypeConfigurations
                 .HasForeignKey(mi => mi.ManagerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(t => t.Tenant)
-                .WithMany(c => c.TenantCommitments)
-                .HasForeignKey(ti => ti.TenantId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             // 1 com - 1 joining code
             builder
                 .HasOne(jc => jc.JoiningCode)

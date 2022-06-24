@@ -2,14 +2,18 @@ import { Grid, InputAdornment, MenuItem } from '@mui/material'
 import * as React from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { InvoiceType } from '../../../../constants/Invoice'
+import { useAppSelector } from '../../../../hooks/reduxHook'
 import { IField } from '../../../../interface/IField'
 import { IRoom } from '../../../../interface/IRoom'
 import { getRoomNamesByHostelId } from '../../../../services/HostelService'
 import { getItem } from '../../../../utils/LocalStorageUtils'
+import { compareDateInvoiceFunction } from '../../actions/compareDateInvoiceFunction'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
+import _ from 'lodash'
 import * as Styled from './styles'
 
 interface IInvoiceFormProps<T> {
+    id?: string
     values: T
     setValues: React.Dispatch<React.SetStateAction<T>>
     handleInputChange: (
@@ -20,6 +24,7 @@ interface IInvoiceFormProps<T> {
 }
 
 const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
+    id,
     values,
     setValues,
     handleInputChange,
@@ -35,7 +40,27 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         })()
     }, [])
 
-    const { invoiceType, roomId, quantity, unitPrice, price } = values
+    const { invoiceType, roomId, quantity, lastQuantity, unitPrice, price } =
+        values
+    const invoices = useAppSelector(({ invoice }) => {
+        if (id)
+            return invoice.invoiceList.filter(
+                (i) =>
+                    i.invoiceType === invoiceType &&
+                    i.room?.id == roomId &&
+                    i.id != id
+            )
+        else
+            return invoice.invoiceList.filter(
+                (i) => i.invoiceType === invoiceType && i.room?.id == roomId
+            )
+    })
+    React.useEffect(() => {
+        const sortedDateInvoices = invoices.sort(compareDateInvoiceFunction)
+        const _lastQuantity = _.first(sortedDateInvoices)?.quantity ?? 0
+        setValues({ ...values, lastQuantity: _lastQuantity })
+    }, [invoices])
+
     React.useEffect(() => {
         setValues({
             ...values,
@@ -45,8 +70,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                 invoiceType === 'Service' || invoiceType === 'House'
                     ? 1
                     : quantity,
+            lastQuantity:
+                invoiceType === 'Service' || invoiceType === 'House'
+                    ? 0
+                    : lastQuantity,
             unitPrice: unitPrice,
-            price: quantity * unitPrice,
+            price: (quantity - lastQuantity) * unitPrice,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [invoiceType, roomId, quantity, unitPrice, price])
@@ -57,6 +86,15 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
             name: 'dueDate',
             type: 'date',
             required: true,
+            multiline: false,
+        },
+        {
+            label: 'Unit Price',
+            name: 'unitPrice',
+            type: 'number',
+            disabled: false,
+            required: true,
+            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
             multiline: false,
         },
         {
@@ -91,7 +129,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                             select
                             onChange={handleInputChange}
                             InputProps={{
-                                readOnly: review,
+                                readOnly: review || id,
                             }}
                         >
                             {roomList.map((room) => (
@@ -177,14 +215,15 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                             </Grid>
                             <Grid item xs={6}>
                                 <InputField
-                                    label="Unit Price"
-                                    name="unitPrice"
-                                    value={unitPrice}
+                                    label="Last quantity"
+                                    name="lastQuantity"
+                                    value={lastQuantity}
                                     type="number"
-                                    required
+                                    disabled={true}
                                     onChange={handleInputChange}
                                     sx={{
                                         width: 140,
+                                        ml: 0,
                                         mt: 3,
                                         mb: 2,
                                         '& .MuiInputLabel-root': {
@@ -205,7 +244,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                 />
                             </Grid>
                         </Grid>
-                        {fields.slice(1, 3).map((field, index) => (
+                        {fields.slice(1, 4).map((field, index) => (
                             <InputField
                                 key={index}
                                 label={field.label}

@@ -6,10 +6,9 @@ import { useForm } from '../../hooks/useForm'
 import { IUser } from '../../interface/IUser'
 import { AppState } from '../../stores/reduxStore'
 import { useSelector } from 'react-redux'
-import FormInfo from './components/FormInfo'
+import FormInfo from '../../components/ProfileInfo'
 import { Navigate } from 'react-router-dom'
 import { Divider, Typography } from '@mui/material'
-import { RestCaller } from '../../utils/RestCaller'
 
 interface IProfileProps {}
 
@@ -32,30 +31,6 @@ const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
 
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IUser>(initialValues)
-
-    console.log('gender ' + initialValues.gender)
-
-    const callApi = async () => {
-        const { avatar } = values
-        console.log('avt: ' + avatar)
-        const uploadAvatar = await RestCaller.upload(
-            'Users/upload-avatar',
-            (() => {
-                const formData = new FormData()
-                formData.append('Avatar', avatar as string)
-                return formData
-            })()
-        )
-
-        // if (uploadAvatar.isError) return
-    }
-
-    React.useEffect(() => {
-        ;(async () => {
-            await callApi()
-        })()
-        return
-    })
 
     return currentUser == null ? (
         <Navigate to="/login" replace={true} />

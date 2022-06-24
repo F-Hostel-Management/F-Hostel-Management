@@ -8,73 +8,109 @@ import {
     BathtubOutlined as BathtubOutlinedIcon,
     WcOutlined as WcOutlinedIcon,
 } from '@mui/icons-material'
+import { useAppSelector } from '../../../../hooks/reduxHook'
+import { useDialog } from '../../../../hooks/useDialog'
+import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
+import { checkoutRoom } from '../../../../services/RoomService'
 
 interface IDetailsProps {}
 
 const Details: FC<IDetailsProps> = (props) => {
+    const roomDetails = useAppSelector(
+        ({ roomDetails }) => roomDetails.roomDetails
+    )
+    const [openCheckout, handleOpenCheckout, handleCloseCheckout] = useDialog()
+    const handleCheckout = async () => {
+        await checkoutRoom(roomDetails.id)
+        handleCloseCheckout()
+    }
+    console.log(roomDetails)
     return (
         <Paper elevation={3}>
             <Styled.Container>
                 <Styled.Side>
                     <div>
                         <Typography variant="subtitle1">
-                            <strong>Room name: HB Room </strong>
+                            <strong>Name: {roomDetails.roomName} </strong>
                         </Typography>
                         <Styled.List>
                             <Styled.Item>
-                                Area: 25 (m<sup>2</sup>)
+                                Area: {roomDetails.area} (m<sup>2</sup>)
                             </Styled.Item>
-                            <Styled.Item>Length: 5 (m)</Styled.Item>
-                            <Styled.Item>Width: 5 (m)</Styled.Item>
+                            <Styled.Item>
+                                Length: {roomDetails.length} (m)
+                            </Styled.Item>
+                            <Styled.Item>
+                                Width: {roomDetails.width} (m)
+                            </Styled.Item>
                         </Styled.List>
                     </div>
-                    <div>
-                        <Button variant="contained" color="primary">
-                            View Commitments
-                        </Button>
-                    </div>
                 </Styled.Side>
                 <Styled.Side>
                     <Typography variant="subtitle1">
-                        <strong>Room Details</strong>
+                        <strong>Room Details:</strong>
                     </Typography>
                     <Styled.List>
                         <Styled.Item>
-                            <SensorDoorOutlinedIcon /> Doors(1)
+                            <SensorDoorOutlinedIcon />: Doors (
+                            {roomDetails.numOfDoors})
                         </Styled.Item>
                         <Styled.Item>
-                            <WindowIcon />
-                            Windows(2)
+                            <WindowIcon />: Windows({roomDetails.numOfWindows})
                         </Styled.Item>
                         <Styled.Item>
-                            <BedOutlinedIcon /> Bedrooms(2)
+                            <BedOutlinedIcon />: Bedrooms(
+                            {roomDetails.numOfBedRooms})
                         </Styled.Item>
                         <Styled.Item>
-                            <BathtubOutlinedIcon />
-                            Bathrooms(2)
+                            <BathtubOutlinedIcon />: Bathrooms(
+                            {roomDetails.numOfBathRooms})
                         </Styled.Item>
                         <Styled.Item>
-                            <WcOutlinedIcon /> Toilet(2)
+                            <WcOutlinedIcon />: Toilet({roomDetails.numOfWCs})
                         </Styled.Item>
                     </Styled.List>
                 </Styled.Side>
-                <Styled.Side>
-                    <Typography variant="subtitle1">
-                        <strong>Tenants </strong>
-                    </Typography>
-                    <Styled.List>
-                        <Styled.Item>Bùi Ngọc Huy</Styled.Item>
-                        <Styled.Item>Nguyễn Nhật Huy</Styled.Item>
-                        <Styled.Item>Đặng Phương Anh</Styled.Item>
-                        <Styled.Item>Nguyễn Tâm Đắc</Styled.Item>
-                    </Styled.List>
-                    <Typography variant="subtitle1">
-                        <strong>Managers </strong>
-                    </Typography>
-                    <Styled.List>
-                        <Styled.Item>Lê Xuân Đại</Styled.Item>
-                    </Styled.List>
-                </Styled.Side>
+                <div style={{ marginTop: '32px' }}>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        sx={{ marginRight: 4 }}
+                    >
+                        View Commitment
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        color="orange"
+                        onClick={handleOpenCheckout}
+                    >
+                        Checkout
+                    </Button>
+                </div>
+                {openCheckout && (
+                    <ConfirmDialog
+                        title="Checkout Room"
+                        openDialog={openCheckout}
+                        handleOpenDialog={handleOpenCheckout}
+                        handleCloseDialog={handleCloseCheckout}
+                        maxWidth="sm"
+                        handleConfirm={handleCheckout}
+                    >
+                        <div style={{ minHeight: '100px' }}>
+                            <Typography
+                                variant="h6"
+                                mb={1}
+                                sx={{ fontWeight: '600' }}
+                            >
+                                Are you sure ?
+                            </Typography>
+                            <Typography variant="body2">
+                                Do yo really want to checkout this room. This
+                                process can not be undone.
+                            </Typography>
+                        </div>
+                    </ConfirmDialog>
+                )}
             </Styled.Container>
         </Paper>
     )

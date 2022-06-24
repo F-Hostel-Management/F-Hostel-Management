@@ -2,6 +2,7 @@ import { IHostel } from '../interface/IHostel'
 import { IRoom } from '../interface/IRoom'
 import { ODataCaller } from '../utils/ODataCaller'
 import { RestCaller } from '../utils/RestCaller'
+import { setToastConfig } from '../utils/Toast'
 const { createBuilder, get } = ODataCaller
 
 // Tenant views all rooms which is being rented.
@@ -115,49 +116,88 @@ const getHostelOfRoom = async (roomId = '') => {
 }
 
 const createRoom = async (data = {}) => {
-    const result = await RestCaller.post('Rooms', data, {
-        loading: {
-            show: true,
-            message: 'Progressing...',
-        },
-        success: {
-            show: true,
-            message: 'Rooms is created.',
-        },
-        error: {
-            show: true,
-            message: 'Failed! Please, try again.',
-        },
-    })
+    const result = await RestCaller.post(
+        'Rooms',
+        data,
+        setToastConfig('Room is created.')
+    )
     console.log('createRoom: ', result)
     return result
 }
 
+const updateRoom = async (id = '', data = {}) => {
+    const result = await RestCaller.patch(
+        `Rooms/${id}`,
+        data,
+        setToastConfig('Rooms is updated.')
+    )
+    console.log('UpdateRoom: ', result)
+    return result
+}
+
+const deleteRoom = async (id = '') => {
+    const result = await RestCaller.delete(
+        `Rooms/${id}`,
+        setToastConfig('Rooms is deleted.')
+    )
+    console.log('deleteRoom: ', result)
+    return result
+}
+
 const addFacilities = async (data = {}) => {
-    const result = await RestCaller.post('Rooms/add-facility', data)
+    const result = await RestCaller.post(
+        'Rooms/add-facility',
+        data,
+        setToastConfig('Facilities are added.')
+    )
     console.log('addFacilities: ', result)
     return result
 }
 
 const updateFacilities = async (data = {}) => {
-    const result = await RestCaller.patch('Rooms/update-facility', data)
+    const result = await RestCaller.patch(
+        'Rooms/update-facility',
+        data,
+        setToastConfig('Facility is updated.')
+    )
     console.log('updateFacilities: ', result)
     return result
 }
 
-// const deleteFacilities = async (data = {}) => {
-//     const result = await RestCaller.delete('Rooms/delete-facility', data)
-//     console.log('deleteFacilities: ', result)
-//     return result
-// }
+const deleteFacilities = async (id = '') => {
+    const result = await RestCaller.delete(
+        `Rooms/delete-facility/${id}`,
+        setToastConfig('Facility is deleted.')
+    )
+    console.log('deleteFacilities: ', result)
+    return result
+}
+
+const checkoutRoom = async (id = '') => {
+    const result = await RestCaller.post(
+        `Rooms/${id}/checkout`,
+        '',
+        setToastConfig('Checkout successfully.')
+    )
+    console.log('checkoutRoom: ', result)
+    return result
+}
 
 export {
+    // OData
     getAllRoomOfTenant,
     getHostelOfRoom,
     getRoomById,
     getAllRoomOfHostel,
     countRoomOfHostel,
+    // CURD room
     createRoom,
+    updateRoom,
+    deleteRoom,
+    // CURD facility of the room
     addFacilities,
     updateFacilities,
+    deleteFacilities,
+    //
+    checkoutRoom,
 }

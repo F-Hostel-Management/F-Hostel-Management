@@ -9,4 +9,6 @@ public interface IRoomServices
     Task<RoomEntity> GetRoom(Guid Id, RoomStatus status);
     Task<RoomEntity> GetRoom(Guid Id);
     Task<bool> HasTenant(Guid roomId, Guid tenantId);
+    Task<bool> HasCommitment(Guid roomId);
+    Task ReleaseRoom(RoomEntity room);
 }

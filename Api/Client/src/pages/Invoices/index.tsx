@@ -9,11 +9,7 @@ import DataGridCustom from '../../components/DataGridCustom'
 import ToolbarChildren from './components/ToolbarChildren'
 import CreateInvoiceDialog from './components/CreateInvoiceDialog'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
-import {
-    setPage,
-    setPageSize,
-    setTableInitialState,
-} from '../../slices/tableSlice'
+import { setTableInitialState } from '../../slices/tableSlice'
 import { fetchInvoices, fetchNumberOfInvoice } from '../../slices/invoiceSlice'
 import { IInvoice } from '../../interface/IInvoice'
 import { formatDate } from '../../utils/FormatDate'
@@ -24,7 +20,8 @@ interface IInvoicesProps {}
 
 const Invoices: FC<IInvoicesProps> = () => {
     const role = useAppSelector(getUserRole)
-    const { renderCell, createColumn, renderValueGetter } = useGridData()
+    const { renderCell, createColumn, renderValueGetter } =
+        useGridData<IInvoice>()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [openCreate, handleOpenCreate, handleCloseCreate] = useDialog()
@@ -35,13 +32,13 @@ const Invoices: FC<IInvoicesProps> = () => {
             'roomName',
             'Room',
             100,
-            (params: IInvoice) => params.room?.roomName ?? ''
+            (params) => params.room?.roomName ?? ''
         ),
         createColumn('invoiceType', 'Type', 100),
-        renderValueGetter('date', 'Create date', 150, (params: IInvoice) =>
+        renderValueGetter('date', 'Create date', 150, (params) =>
             formatDate(new Date(params.date ?? ''))
         ),
-        renderValueGetter('dueData', 'Due date', 150, (params: IInvoice) =>
+        renderValueGetter('dueData', 'Due date', 150, (params) =>
             formatDate(new Date(params.dueDate ?? ''))
         ),
         createColumn('price', 'Price', 120),
@@ -49,7 +46,9 @@ const Invoices: FC<IInvoicesProps> = () => {
         renderCell('actions', 'Actions', 150, ActionButtons),
     ]
 
-    const rows = useAppSelector(({ invoice }) => invoice.invoiceList)
+    const rows = useAppSelector(({ invoice }) =>
+        invoice.invoiceList.filter((invoice) => invoice.price !== 0)
+    )
     const numOfInvoice = useAppSelector(({ invoice }) => invoice.numOfInvoice)
     const currentPage = useAppSelector(({ table }) => table.page)
     const currentPageSize = useAppSelector(({ table }) => table.pageSize)
@@ -78,12 +77,12 @@ const Invoices: FC<IInvoicesProps> = () => {
                 title="All Invoice"
                 rows={rows}
                 columns={columns}
-                pageSize={currentPageSize}
-                setPageSize={(pageSize: number) =>
-                    dispatch(setPageSize(pageSize))
-                }
-                page={currentPage}
-                setPage={(page: number) => dispatch(setPage(page))}
+                // pageSize={currentPageSize}
+                // setPageSize={(pageSize: number) =>
+                //     dispatch(setPageSize(pageSize))
+                // }
+                // page={currentPage}
+                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfInvoice}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (

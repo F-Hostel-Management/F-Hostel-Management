@@ -6,7 +6,7 @@ interface IIconButtonCustomProps {
     textColor?: string
     bgrColor?: string
     disabled?: boolean
-    children: any
+    children?: any
     [x: string | number | symbol]: unknown
 }
 

@@ -8,7 +8,10 @@ namespace Api.UserFeatures.Requests
     {
         [Required]
         public string InvoiceType { get; set; }
-
+        [Required]
+        public double Quantity { get; set; }
+        [Required]
+        public double UnitPrice { get; set; }
         [Required]
         public double Price { get; set; }
 

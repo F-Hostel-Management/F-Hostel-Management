@@ -27,7 +27,6 @@ public static class DatabaseInitializer
 
         await dbContext.FeedTenantsToRoom();
 
-        await dbContext.FeedCommitmentScaffolding();
     }
 
     public static async Task FeedUsers(this ApplicationDbContext dbContext)
@@ -56,50 +55,32 @@ public static class DatabaseInitializer
                 });
         }
         await dbContext.SaveChangesAsync();
-        await dbContext.FeedOwnerToManagers();
     }
-
-    public static async Task FeedOwnerToManagers(this ApplicationDbContext dbContext)
-    {
-        if (!dbContext.Users.Any()) return;
-        var managers = dbContext.Users.Where(user => user.RoleString == Role.Manager.ToString()).ToArray();
-        var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
-        if (!managers.Any() || !owners.Any())
+    /*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
         {
-            return;
-        }
+            if (dbContext.RoomTypes.Any()) return;
 
-        foreach (var manager in managers)
-        {
-            manager.Owner = owners[_rand.Next(owners.Length)];
-        }
-        await dbContext.SaveChangesAsync();
-    }
-/*    public static async Task FeedRoomTypes(this ApplicationDbContext dbContext)
-    {
-        if (dbContext.RoomTypes.Any()) return;
+            List<RoomType> _roomTypes = new List<RoomType>
+            {
+                new RoomType(){ CategoryName = "Studio"},
+                new RoomType(){ CategoryName = "Library"},
+                new RoomType(){ CategoryName = "BathRoom"},
+                new RoomType(){ CategoryName = "Office"},
+                new RoomType(){ CategoryName = "Singl3"},
+                new RoomType(){ CategoryName = "Doubl3"},
+                new RoomType(){ CategoryName = "Strippl3"},
+                new RoomType(){ CategoryName = "Quad"},
+                new RoomType(){ CategoryName = "Queen"},
+                new RoomType(){ CategoryName = "King"},
+                new RoomType(){ CategoryName = "Twin"},
+            };
 
-        List<RoomType> _roomTypes = new List<RoomType>
-        {
-            new RoomType(){ CategoryName = "Studio"},
-            new RoomType(){ CategoryName = "Library"},
-            new RoomType(){ CategoryName = "BathRoom"},
-            new RoomType(){ CategoryName = "Office"},
-            new RoomType(){ CategoryName = "Singl3"},
-            new RoomType(){ CategoryName = "Doubl3"},
-            new RoomType(){ CategoryName = "Strippl3"},
-            new RoomType(){ CategoryName = "Quad"},
-            new RoomType(){ CategoryName = "Queen"},
-            new RoomType(){ CategoryName = "King"},
-            new RoomType(){ CategoryName = "Twin"},
-        };
-
-        foreach (var roomType in _roomTypes)
-        {
-            await dbContext.RoomTypes.AddAsync(roomType);
-        }
-        await dbContext.SaveChangesAsync();
-    }*/
+            foreach (var roomType in _roomTypes)
+            {
+                await dbContext.RoomTypes.AddAsync(roomType);
+            }
+            await dbContext.SaveChangesAsync();
+        }*/
 
     public static async Task FeedHostels(this ApplicationDbContext dbContext)
     {
@@ -119,6 +100,7 @@ public static class DatabaseInitializer
                     Name = mockHostel.Name,
                     NumOfRooms = mockHostel.NumOfRooms,
                     Owner = owners[_rand.Next(owners.Length)],
+                    QrTimeSpan = _rand.Next(15, 30)
                 });
         }
         await dbContext.SaveChangesAsync();
@@ -192,24 +174,21 @@ public static class DatabaseInitializer
             var room = rooms[_rand.Next(rooms.Length)];
             UserEntity owner = owners.FirstOrDefault(owner => owner.Id.Equals(dbContext.Hostels.FirstOrDefault(hostel => hostel.Id.Equals(room.HostelId)).OwnerId));
             // create commitment
-            CommitmentEntity com = new ()
+            CommitmentEntity com = new()
             {
                 Price = _rand.Next(3000, 4000),
-                Tenant = tenant,
                 Owner = owner,
                 Room = room,
                 HostelId = room.HostelId,
                 CreatedDate = DateTime.Now,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
-                CommitmentStatus = (CommitmentStatus)2,
-                DateOverdue = _rand.Next(1, 6),
-                Compensation = _rand.Next(3000, 4000),
+                CommitmentStatus = CommitmentStatus.Active,
                 PaymentDate = _rand.Next(32),
                 CommitmentCode = "DTN" + code++,
             };
             await dbContext.Commitments.AddAsync(com);
-                
+
 
             // tenant into room
             await dbContext.RoomTenants.AddAsync(
@@ -224,16 +203,6 @@ public static class DatabaseInitializer
             room.RoomStatus = 0;
 
         }
-        await dbContext.SaveChangesAsync();
-    }
-
-    public static async Task FeedCommitmentScaffolding(this ApplicationDbContext dbContext)
-    {
-        if (dbContext.CommitmentScaffoldings.Any()) return;
-        await dbContext.AddAsync(new CommitmentScaffolding()
-        {
-            Content = SeedingServices.LoadFileToString("comitment.html"),
-        });
         await dbContext.SaveChangesAsync();
     }
 }

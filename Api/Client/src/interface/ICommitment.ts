@@ -28,14 +28,16 @@ export interface ICommitment {
     isDeleted?: boolean
     price?: number
     paymentDate?: number
+    [x: string | number | symbol]: any
 }
 
 export interface ICommitmentValues {
-    startDate?: string
-    endDate?: string
-    roomId?: string
-    dateOverdue?: number
-    compensation?: number
-    price?: number
-    paymentDate?: number
+    startDate: string
+    endDate: string
+    roomId: string
+    dateOverdue: number
+    compensation: number
+    price: number
+    paymentDate: number
+    [x: string | number | symbol]: unknown
 }

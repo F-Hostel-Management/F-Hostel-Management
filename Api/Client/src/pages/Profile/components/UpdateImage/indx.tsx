@@ -1,12 +1,4 @@
-import {
-    Box,
-    Button,
-    CardActionArea,
-    CardMedia,
-    MobileStepper,
-    Paper,
-    Typography,
-} from '@mui/material'
+import { Box, Button, MobileStepper, Paper, Typography } from '@mui/material'
 import React, { Dispatch, FC, SetStateAction } from 'react'
 import { IUser } from '../../../../interface/IUser'
 import {
@@ -15,17 +7,33 @@ import {
     KeyboardArrowRight,
 } from '@mui/icons-material'
 import { useTheme } from '@mui/material/styles'
+import * as Styled from './styles'
+import { CameraAlt } from '@mui/icons-material'
+import { getImageUrl } from '../../../../utils/ImageUtils'
 
 interface IUpdateImage {
     values: IUser
-    setValues: Dispatch<SetStateAction<any>>
+    setValues: Dispatch<SetStateAction<IUser>>
+    setFrontImg: Dispatch<SetStateAction<File | undefined>>
+    setBackImg: Dispatch<SetStateAction<File | undefined>>
+    disabled: boolean
 }
 
-const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
+const UpdateImage: FC<IUpdateImage> = ({
+    values,
+    setValues,
+    setFrontImg,
+    setBackImg,
+    disabled,
+}) => {
     const theme = useTheme()
     const [activeStep, setActiveStep] = React.useState(0)
-    const preview = [values.frontIdentification, values.backIdentification]
+    const preview = [
+        getImageUrl(values.frontIdentification),
+        getImageUrl(values.backIdentification),
+    ]
     const maxSteps = 2
+    const { frontIdentification } = values
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
     }
@@ -35,6 +43,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
     }
 
     const handleChooseImageFront = (e: any) => {
+        setFrontImg(e.target.files[0])
         setValues({
             ...values,
             frontIdentification: URL.createObjectURL(e.target.files[0]),
@@ -42,6 +51,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
     }
 
     const handleChooseImageBack = (e: any) => {
+        setBackImg(e.target.files[0])
         setValues({
             ...values,
             backIdentification: URL.createObjectURL(e.target.files[0]),
@@ -50,6 +60,7 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
 
     const handleChooseImage = [handleChooseImageFront, handleChooseImageBack]
 
+    console.log(frontIdentification)
     return (
         <div>
             <Box
@@ -86,16 +97,8 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
                 </Paper>
 
                 {!preview[activeStep] ? (
-                    <CardActionArea
-                        sx={{
-                            height: 255,
-                            maxWidth: 400,
-                            width: '100%',
-                            p: 2,
-                            borderTop: '1px solid #dadada',
-                        }}
-                    >
-                        <label>
+                    <label>
+                        {!disabled ? (
                             <input
                                 type="file"
                                 id="avatar"
@@ -103,53 +106,82 @@ const UpdateImage: FC<IUpdateImage> = ({ values, setValues }) => {
                                 style={{ display: 'none' }}
                                 onChange={handleChooseImage[activeStep]}
                             ></input>
+                        ) : (
+                            ''
+                        )}
+                        <div>
+                            <Styled.Image elevation={0} square>
+                                <div>
+                                    <FileUpload
+                                        htmlColor="#a7a7a7"
+                                        sx={{
+                                            width: '20%',
+                                            height: 'auto',
+                                        }}
+                                    />
 
-                            <FileUpload
-                                htmlColor="#a7a7a7"
-                                sx={{
-                                    width: '20%',
-                                    height: 'auto',
-                                }}
-                            />
-                        </label>
-
-                        <Typography
-                            variant="body2"
-                            sx={{
-                                color: 'grey.600',
-                            }}
-                        >
-                            Upload image
-                        </Typography>
-                    </CardActionArea>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            color: 'grey.600',
+                                        }}
+                                    >
+                                        Upload image
+                                    </Typography>
+                                </div>
+                            </Styled.Image>
+                        </div>
+                    </label>
                 ) : (
-                    <CardActionArea>
-                        <CardMedia
-                            component="img"
-                            height="194"
-                            image={preview[activeStep]}
-                            alt="Paella dish"
-                        />
-                        <label>
-                            <input
-                                type="file"
-                                id="avatar"
-                                accept="image/png, image/jpeg"
-                                style={{ display: 'none' }}
-                                onChange={handleChooseImage[activeStep]}
-                            ></input>
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: 'grey.600',
-                                    p: 1,
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                Change image
-                            </Typography>
-                        </label>
-                    </CardActionArea>
+                    <Styled.Image elevation={0} square>
+                        <div>
+                            <label>
+                                {!disabled ? (
+                                    <input
+                                        type="file"
+                                        id={
+                                            activeStep == 0
+                                                ? 'frontIdentification'
+                                                : 'backIdentification'
+                                        }
+                                        accept="image/png, image/jpeg"
+                                        style={{ display: 'none' }}
+                                        onChange={handleChooseImage[activeStep]}
+                                    ></input>
+                                ) : (
+                                    ''
+                                )}
+                                <div>
+                                    <Styled.Img>
+                                        <img
+                                            src={preview[activeStep]}
+                                            alt="Identity card"
+                                            height="auto"
+                                            width="100%"
+                                        />
+                                        <Styled.Text>
+                                            {!disabled ? (
+                                                <div>
+                                                    <CameraAlt htmlColor="#ffffff" />
+                                                    <Typography
+                                                        variant="body2"
+                                                        sx={{
+                                                            color: '#e2e2e2',
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        Change image
+                                                    </Typography>
+                                                </div>
+                                            ) : (
+                                                ''
+                                            )}
+                                        </Styled.Text>
+                                    </Styled.Img>
+                                </div>
+                            </label>
+                        </div>
+                    </Styled.Image>
                 )}
 
                 <MobileStepper

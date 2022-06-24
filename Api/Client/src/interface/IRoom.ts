@@ -20,6 +20,7 @@ export interface IRoom {
     maximumPeople?: number
     isDeleted?: boolean
     facilityManagements?: IFacilityManagement[]
+    [x: string | number | symbol]: any
 }
 
 export interface IRoomValues {
@@ -36,4 +37,5 @@ export interface IRoomValues {
     width: number
     height: number
     hostelId: string
+    [x: string | number | symbol]: any
 }

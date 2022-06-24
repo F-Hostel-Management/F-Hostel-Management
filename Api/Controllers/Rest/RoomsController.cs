@@ -1,11 +1,13 @@
-﻿using Api.Filters;
-using Api.UserFeatures.Requests;
+﻿using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Constants;
+using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
+using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Room;
+using Domain.Entities.User;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,29 +17,40 @@ namespace Api.Controllers.Rest;
 public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
-    private readonly IHostelServices _hostelServices;
+    private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
+    private readonly IGenericRepository<RoomTenant> _roomTenantRepository;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IAuthorizationServices _authorServices;
+    private readonly IInvoiceScheduleServices _invoiceScheduleServices;
+    private readonly IRoomServices _roomServices;
     private readonly IGenericRepository<FacilityEntity> _facilityRepo;
     private readonly IGenericRepository<FacilityManagement> _facilityManagementRepo;
+    private readonly IGenericRepository<InvoiceScheduleEntity> _invoiceScheduleRepository;
 
-    public RoomsController(IGenericRepository<RoomEntity> roomsRepository, IHostelServices hostelServices, ICommitmentServices commitmentServices, IAuthorizationServices authorServices, IGenericRepository<FacilityEntity> facilityRepo, IGenericRepository<FacilityManagement> facilityManagementRepo)
+    public RoomsController
+        (IGenericRepository<RoomEntity> roomsRepository,
+        IGenericRepository<CommitmentEntity> commitmentRepository,
+        IGenericRepository<RoomTenant> roomTenantRepository,
+        ICommitmentServices commitmentServices,
+        IAuthorizationServices authorServices,
+        IRoomServices roomServices,
+        IInvoiceScheduleServices invoiceScheduleServices,
+        IGenericRepository<FacilityEntity> facilityRepo,
+        IGenericRepository<FacilityManagement> facilityManagementRepo,
+        IGenericRepository<InvoiceScheduleEntity> invoiceScheduleRepository)
     {
         _roomsRepository = roomsRepository;
-        _hostelServices = hostelServices;
+        _commitmentRepository = commitmentRepository;
+        _roomTenantRepository = roomTenantRepository;
         _commitmentServices = commitmentServices;
         _authorServices = authorServices;
+        _roomServices = roomServices;
+        _invoiceScheduleServices = invoiceScheduleServices;
         _facilityRepo = facilityRepo;
         _facilityManagementRepo = facilityManagementRepo;
+        _invoiceScheduleRepository = invoiceScheduleRepository;
     }
 
-
- 
-    /// <summary>
-    /// owner || manager create room of their hostel
-    /// </summary>
-    /// <param name="req"></param>
-    /// <returns></returns>
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
     [HttpPost()]
     public async Task<IActionResult> CreateRoomsAsync(CreateRoomsRequest req)
@@ -66,11 +79,39 @@ public class RoomsController : BaseRestController
         return Ok();
     }
 
-    /// <summary>
-    /// only tenant get their commitments of that room
-    /// </summary>
-    /// <param name="roomId"></param>
-    /// <returns></returns>
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpPatch("{roomId}")]
+    public async Task<IActionResult> UpdateRoomAsync([FromRoute] Guid roomId, UpdateRoomRequest updateRoomReq)
+    {
+        RoomEntity room = await _authorServices.GetRoomThatManagedByCurrentUser(roomId, CurrentUserID);
+        if (room is null)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        Mapper.Map(updateRoomReq, room);
+        await _roomsRepository.UpdateAsync(room);
+        return Ok(room);
+    }
+
+    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [HttpDelete("{roomId}")]
+    public async Task<IActionResult> DeleteRoomAsync([FromRoute] Guid roomId)
+    {
+        RoomEntity room = await _authorServices.GetRoomThatManagedByCurrentUser(roomId, CurrentUserID);
+        if (room is null)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+        // resolve commitment
+        bool hasCommitment = await _roomServices.HasCommitment(roomId);
+        if (hasCommitment)
+        {
+            throw new BadRequestException("Resolve commitment first");
+        }
+        await _roomsRepository.DeleteSoftAsync(room);
+        return Ok();
+    }
+
     [Authorize(Roles = nameof(Role.Tenant))]
     [HttpGet("{roomId}/get-list-commitment-of-room-for-tenant")]
     public async Task<IActionResult> GetCommitmentsForTenant
@@ -104,7 +145,7 @@ public class RoomsController : BaseRestController
             entity.Quantity = facility.Quantity;
             entity.Description = facility.Description;
             entity.RoomId = request.RoomId;
-            
+
             // Mapper.Map(request, entity);
             await _facilityManagementRepo.CreateAsync(entity);
         }
@@ -140,6 +181,50 @@ public class RoomsController : BaseRestController
             throw new ForbiddenException("");
         target.IsDeleted = true;
         await _facilityManagementRepo.UpdateAsync(target);
+        return Ok();
+    }
+
+
+    [Authorize]
+    [HttpPost("{roomId}/checkout")]
+    public async Task<IActionResult> CheckoutThisRoom([FromRoute] Guid roomId)
+    {
+        RoomEntity room = await _roomsRepository.FindByIdAsync(roomId);
+        if (room is null)
+        {
+            throw new NotFoundException("Room not found");
+        }
+        CommitmentEntity latestCommitment = await _commitmentServices.GetLatestCommitmentByRoom(roomId);
+
+        // tenant self-checkout
+        if (CurrentUserRole.Equals(Role.Tenant.ToString()))
+        {
+            bool isTenantAuthorized = await _authorServices.IsCurrentUserRentingTheRoom(latestCommitment, CurrentUserID);
+            if (!isTenantAuthorized)
+            {
+                throw new ForbiddenException("Forbidden");
+            }
+            var roomtenant = await _roomTenantRepository.FirstOrDefaultAsync(rt =>
+                                                       rt.TenantId.Equals(CurrentUserID) && rt.CommitmentId.Equals(latestCommitment.Id));
+            await _roomTenantRepository.DeleteSoftAsync(roomtenant);
+            return Ok();
+        }
+
+        // owner | manager checkout
+        bool isManagerAuthorized = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
+        if (!isManagerAuthorized)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
+
+        // set commitment to expired (if any)
+        if (latestCommitment.CommitmentStatus != CommitmentStatus.Expired)
+        {
+            latestCommitment.CommitmentStatus = CommitmentStatus.Expired;
+            await _commitmentRepository.UpdateAsync(latestCommitment);
+        }
+        await _invoiceScheduleServices.DeleteInvoicesScheduleByRoomId(roomId); // remove all invoice schedules of that room
+        await _roomServices.ReleaseRoom(room);
         return Ok();
     }
 }

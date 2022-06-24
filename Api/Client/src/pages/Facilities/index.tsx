@@ -52,10 +52,10 @@ const Facilities: FC<IFacilitiesProps> = () => {
                 title="All Facilities"
                 rows={rows}
                 columns={columns}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-                page={page}
-                setPage={setPage}
+                // pageSize={pageSize}
+                // setPageSize={setPageSize}
+                // page={page}
+                // setPage={setPage}
                 rowsCount={27}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (

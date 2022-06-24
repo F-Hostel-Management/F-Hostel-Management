@@ -23,6 +23,8 @@ export const getInvoices = async (
         .select(
             'id',
             'invoiceCode',
+            'quantity',
+            'unitPrice',
             'price',
             'date',
             'dueDate',
@@ -45,6 +47,8 @@ export const getInvoices = async (
 interface ICreateInvoiceParams {
     roomId: string
     invoiceType: string
+    quantity: number
+    unitPrice: number
     price: number
     content: string
     dueDate: Date
@@ -52,6 +56,8 @@ interface ICreateInvoiceParams {
 export const createInvoice = async ({
     roomId,
     invoiceType,
+    quantity,
+    unitPrice,
     price,
     content,
     dueDate,
@@ -60,6 +66,8 @@ export const createInvoice = async ({
         `Invoices/${roomId}`,
         {
             invoiceType,
+            quantity,
+            unitPrice,
             price,
             content,
             dueDate,
@@ -71,6 +79,8 @@ export const createInvoice = async ({
 interface IUpdateInvoiceParams {
     id: string
     invoiceType: string
+    quantity: number
+    unitPrice: number
     price: number
     content: string
     dueDate: Date
@@ -78,6 +88,8 @@ interface IUpdateInvoiceParams {
 export const updateInvoice = async ({
     id,
     invoiceType,
+    quantity,
+    unitPrice,
     price,
     content,
     dueDate,
@@ -86,6 +98,8 @@ export const updateInvoice = async ({
         `Invoices/${id}`,
         {
             invoiceType,
+            quantity,
+            unitPrice,
             price,
             content,
             dueDate,
