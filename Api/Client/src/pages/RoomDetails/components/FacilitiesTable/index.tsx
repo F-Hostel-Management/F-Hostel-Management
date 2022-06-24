@@ -39,6 +39,7 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
             <DataGridCustom
                 loading={isFetchingDetails}
                 title="Room Facilities"
+                iconName="facility"
                 rows={rows}
                 columns={columns}
                 rowsCount={numOfFacilities}

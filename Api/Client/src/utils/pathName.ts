@@ -12,4 +12,5 @@ export const pathNames: pathName = {
     details: 'Details',
     profile: 'Profile',
     tenants: 'Tenants',
+    managers: 'Managers',
 }

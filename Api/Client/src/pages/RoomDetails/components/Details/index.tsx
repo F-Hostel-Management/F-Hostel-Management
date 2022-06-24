@@ -29,7 +29,7 @@ const Details: FC<IDetailsProps> = (props) => {
             <Styled.Container>
                 <Styled.Side>
                     <div>
-                        <Typography variant="subtitle1">
+                        <Typography variant="subtitle2">
                             <strong>Name: {roomDetails.roomName} </strong>
                         </Typography>
                         <Styled.List>
@@ -46,7 +46,7 @@ const Details: FC<IDetailsProps> = (props) => {
                     </div>
                 </Styled.Side>
                 <Styled.Side>
-                    <Typography variant="subtitle1">
+                    <Typography variant="subtitle2">
                         <strong>Room Details:</strong>
                     </Typography>
                     <Styled.List>

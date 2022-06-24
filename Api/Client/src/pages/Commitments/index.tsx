@@ -52,6 +52,7 @@ const Commitments: FC<ICommitmentsProps> = () => {
             <DataGridCustom
                 loading={loading}
                 title="All Commitments"
+                iconName="commitment"
                 rows={rows}
                 columns={columns}
                 rowsCount={numOfCommitment}

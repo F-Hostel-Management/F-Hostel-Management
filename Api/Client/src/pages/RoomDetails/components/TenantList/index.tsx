@@ -10,26 +10,41 @@ import {
     ListItemAvatar,
     ListItemText,
     Paper,
+    Typography,
 } from '@mui/material'
 import React, { FC } from 'react'
 import { Delete as DeleteICon } from '@mui/icons-material'
+import Icon from '../../../../components/Icon'
 interface ITenantListProps {}
 
 const TenantList: FC<ITenantListProps> = (props) => {
     return (
         <Paper elevation={3}>
             <Card sx={{ minWidth: '100%' }}>
-                <CardHeader title="Tenant List" sx={{ paddingBottom: 0 }} />
+                <CardHeader
+                    title={
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Icon name="tenant" sx={{ marginRight: '8px' }} />
+                            <Typography variant="subtitle2">
+                                <strong>Tenant List</strong>
+                            </Typography>
+                        </div>
+                    }
+                    sx={{
+                        paddingBottom: 0,
+                    }}
+                />
                 <CardContent sx={{ padding: 0 }}>
                     <List>
                         {[1, 2, 3, 4].map((item) => (
                             <>
+                                <Divider variant="middle" component="li" />
                                 <ListItem>
                                     <ListItemAvatar>
                                         <Avatar
                                             sx={{
-                                                width: 32,
-                                                height: 32,
+                                                width: 36,
+                                                height: 36,
                                                 filter: 'drop-shadow(0px 4px 4px rgba(0,0,0,0.25))',
                                             }}
                                         >
@@ -37,37 +52,25 @@ const TenantList: FC<ITenantListProps> = (props) => {
                                         </Avatar>
                                     </ListItemAvatar>
                                     <ListItemText
-                                        sx={{
-                                            '& .MuiListItemText-multiline': {
-                                                fontSize: '1.3rem',
-                                            },
-                                        }}
-                                        secondary="Le Xuan Dai"
+                                        primary={
+                                            <Typography variant="body2">
+                                                <strong>Le Xuan Dai</strong>
+                                            </Typography>
+                                        }
+                                        secondary={
+                                            <Typography variant="caption">
+                                                0352654331
+                                            </Typography>
+                                        }
                                     />
                                     <IconButton
                                         aria-label="delete"
                                         color="orange"
+                                        size="large"
                                     >
-                                        <DeleteICon
-                                            sx={{ fontSize: '1.6rem' }}
-                                        />
+                                        <DeleteICon sx={{ fontSize: '2rem' }} />
                                     </IconButton>
-                                    {/* <IconButtonCustom
-                                        textColor="#fff"
-                                        bgrColor="#f96332"
-                                        sx={{
-                                            width: '2.8rem',
-                                            height: '2.8rem',
-                                        }}
-                                    >
-                                        <Tooltip title="Delete" placement="top">
-                                            <DeleteICon
-                                                sx={{ fontSize: '1.6rem' }}
-                                            />
-                                        </Tooltip>
-                                    </IconButtonCustom> */}
                                 </ListItem>
-                                <Divider variant="middle" component="li" />
                             </>
                         ))}
                     </List>

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { setPage, setPageSize } from '../../slices/tableSlice'
+import { IconName } from '../Icon'
 
 import CustomNoRowsOverlay from './Custom/CustomNoRowsOverlay'
 import CustomPagination from './Custom/CustomPagination'
@@ -15,6 +16,7 @@ interface IDataGridCustomProps<T> {
     rowsCount: number
     rowsPerPageOptions?: number[]
     toolbarChildren?: ReactNode
+    iconName?: IconName
 }
 
 const DataGridCustom = <T extends Record<string, any>>({
@@ -22,16 +24,15 @@ const DataGridCustom = <T extends Record<string, any>>({
     title,
     rows,
     columns,
-    // pageSize,
-    // setPageSize,
-    // page,
-    // setPage,
     rowsCount,
     rowsPerPageOptions = [5, 10, 25, 100],
     toolbarChildren,
+    iconName,
 }: IDataGridCustomProps<T>) => {
     const Toolbar = () => (
-        <CustomToolbar title={title}>{toolbarChildren}</CustomToolbar>
+        <CustomToolbar title={title} iconName={iconName}>
+            {toolbarChildren}
+        </CustomToolbar>
     )
     const Pagination = () => (
         <CustomPagination

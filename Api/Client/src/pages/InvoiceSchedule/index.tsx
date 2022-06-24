@@ -91,14 +91,9 @@ const InvoiceSchedule: FC<IInvoiceScheduleProps> = () => {
             <DataGridCustom
                 loading={loading}
                 title="All Invoice Schedule"
+                iconName="schedulingInvoice"
                 rows={rows}
                 columns={columns}
-                // pageSize={currentPageSize}
-                // setPageSize={(pageSize: number) =>
-                //     dispatch(setPageSize(pageSize))
-                // }
-                // page={currentPage}
-                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfInvoiceSchedule}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (
