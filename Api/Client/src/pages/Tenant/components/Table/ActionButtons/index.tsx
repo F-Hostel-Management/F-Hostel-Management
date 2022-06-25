@@ -25,7 +25,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
 
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
 
-    const handleDeleteRoom = async () => {
+    const handleKickTenant = async () => {
         ;(async () => {
             const response = await removeTenantFromRoom(rowData.id)
             if (!response.isError) {
@@ -64,7 +64,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
-                    handleConfirm={handleDeleteRoom}
+                    handleConfirm={handleKickTenant}
                 >
                     <div style={{ minHeight: '100px' }}>
                         <Typography variant="h3" mb={1}>

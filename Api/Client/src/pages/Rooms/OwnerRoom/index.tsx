@@ -46,6 +46,7 @@ const OwnerRooms: FC<IOwnerRoomsProps> = () => {
                         <DataGridCustom
                             loading={loading}
                             title="All Rooms"
+                            iconName="room"
                             rows={rows}
                             columns={columns}
                             rowsCount={numOfRooms}
