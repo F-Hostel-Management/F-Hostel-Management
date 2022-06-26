@@ -23,16 +23,12 @@ const getAllCommitmentOfHostel = async (
             'createdDate',
             'startDate',
             'endDate',
-            'dateOverdue',
-            'compensation',
             'status',
-            'commitmentScaffoldingId',
             'joiningCode',
             'paymentDate',
             'price'
         )
         .expand('manager', (e) => e.select('id', 'name'))
-        .expand('tenant', (e) => e.select('id', 'name'))
         .expand('owner', (e) => e.select('id', 'name'))
         .expand('room', (e) => e.select('id', 'roomName'))
         .paginate(pageSize, page)
@@ -44,24 +40,13 @@ const getAllCommitmentOfHostel = async (
 const getCommitmentDetails = async (commitmentId = '') => {
     const builder = createBuilder<ICommitment>()
         .filter('id', (e) => e.equals(commitmentId))
-        .select('owner', 'tenant', 'room', 'hostel')
+        .select('owner', 'room', 'hostel')
         .expand('owner', (owner) => owner.select())
-        .expand('tenant', (tenant) => tenant.select())
         .expand('room', (room) => room.select())
         .expand('hostel', (hostel) => hostel.select())
     const result = await get('Hostels', builder)
     console.log('getTenantOfCommitment: ', result?.[0])
     return result?.[0]
-}
-
-const getTenantOfCommitment = async (commitmentId = '') => {
-    const builder = createBuilder<ICommitment>()
-        .filter('id', (e) => e.equals(commitmentId))
-        .select('tenant')
-        .expand('tenant', (tenant) => tenant.select())
-    const result = await get('Hostels', builder)
-    console.log('getTenantOfCommitment: ', result?.[0].tenant)
-    return result?.[0].tenant
 }
 
 // REST Caller
@@ -82,6 +67,13 @@ const createCommitment = async (data = {}) => {
     })
     console.log('createCommitment: ', result)
     return result
+}
+
+const uploadCommitmentImages = async (id: string, data: FormData) => {
+    return await RestCaller.upload(
+        `Commitments/${id}/upload-commitment-images`,
+        data
+    )
 }
 
 const updateCommitment = async (id = '', data = {}) => {
@@ -126,10 +118,9 @@ const approveCommitment = async (data = {}) => {
     return response
 }
 
-const activateCommitment = async (data = {}) => {
+const activateCommitment = async (code: string) => {
     const response = await RestCaller.patch(
-        'Commitments/tenant-activate-commitment/status',
-        data,
+        `Commitments/get-into-room/${code}/status`,
         {
             loading: {
                 show: true,
@@ -149,8 +140,10 @@ const activateCommitment = async (data = {}) => {
     return response
 }
 
-const getJoiningCode = async (data = {}) => {
-    const response = await RestCaller.post('Commitments/joiningCode', data)
+const getJoiningCode = async (id: string) => {
+    const response = await RestCaller.post(
+        `Commitments/${id}/create-joining-code`
+    )
     console.log('getJoiningCode: ', response)
     return response
 }
@@ -168,6 +161,7 @@ export {
     getNumberCommitmentOfHostel,
     getCommitmentDetails,
     createCommitment,
+    uploadCommitmentImages,
     updateCommitment,
     approveCommitment,
     getJoiningCode,

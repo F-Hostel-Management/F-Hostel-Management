@@ -8,36 +8,31 @@ export interface ICommitment {
     createdDate?: string
     startDate?: string
     endDate?: string
-    dateOverdue?: number
-    compensation?: number
     status?: string
     commitmentStatus?: number
     commitmentScaffoldingId?: string
     commitmentScaffolding?: string
     managerId?: string
     manager?: IUser
-    tenantId?: string
-    tenant?: IUser
     ownerId?: string
     owner?: IUser
     roomId?: string
     room?: IRoom
     joiningCode?: string
+    sixDigitsCode?: string
     hostelId?: string
     hostel?: IHostel
     isDeleted?: boolean
     price?: number
     paymentDate?: number
-    [x: string | number | symbol]: any
 }
 
 export interface ICommitmentValues {
     startDate: string
     endDate: string
     roomId: string
-    dateOverdue: number
-    compensation: number
     price: number
     paymentDate: number
+    images?: File[]
     [x: string | number | symbol]: unknown
 }
