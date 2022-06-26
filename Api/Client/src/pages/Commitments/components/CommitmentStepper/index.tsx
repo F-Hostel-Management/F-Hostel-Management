@@ -1,7 +1,5 @@
 import React, { FC, ChangeEvent, useEffect, useState } from 'react'
 import Step1 from './Step1'
-import Step2 from './Step2'
-import Step3 from './Step3'
 import StepByStep from '../../../../components/StepByStep'
 import { IStepper } from '../../../../interface/IStepper'
 import {
@@ -24,13 +22,9 @@ interface ICommitmentStepperProps {
     values: ICommitmentValues
     setValues: (values: ICommitmentValues) => void
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
-    handleChange: (e: ChangeEvent<HTMLInputElement>) => void
     resetForm: () => void
     // handle submit step
-    handleSubmitStep2: () => void
-    handleSubmitStep3: () => void
-    timeSpan: number | null
-    sixDigitsCode: string | number
+    handleSubmit: () => void
     commitment?: ICommitment
 }
 
@@ -40,11 +34,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     setValues,
     handleInputChange,
     resetForm,
-    handleSubmitStep2,
-    handleSubmitStep3,
-    timeSpan,
-    handleChange,
-    sixDigitsCode,
+    handleSubmit,
     commitment,
 }) => {
     const currentHostel = useSelector(getCurrentHostel)
@@ -83,7 +73,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
 
     const steps: IStepper[] = [
         {
-            name: 'Terms',
+            name: 'Commitment Information',
             component: (
                 <Step1
                     values={values}
@@ -98,38 +88,20 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
                     isUpdate={commitment ? true : false}
                 />
             ),
-            handleNext: () => console.log('Values commit: ', values),
-            action: 'Next',
-        },
-        {
-            name: 'Commitment',
-            component: (
-                <Step2
-                    roomInfo={roomInfo}
-                    values={values}
-                    hostelInfo={hostelInfo}
-                />
-            ),
-            handleNext: handleSubmitStep2,
+            handleNext: handleSubmit,
             action: 'Create',
         },
         {
             name: 'QR code',
             component: (
-                <Step3 timeSpan={timeSpan} handleChange={handleChange} />
+                <QrCodeGenerate code={commitment?.sixDigitsCode || ''} />
             ),
-            handleNext: handleSubmitStep3,
-            action: 'Confirm',
+            handleNext: () => {},
+            action: 'Next',
         },
     ]
 
-    return (
-        <StepByStep
-            steps={steps}
-            handleCloseDialog={handleCloseDialog}
-            finishedStep={<QrCodeGenerate code={sixDigitsCode} />}
-        />
-    )
+    return <StepByStep steps={steps} handleCloseDialog={handleCloseDialog} />
 }
 
 export default CommitmentStepper
