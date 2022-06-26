@@ -61,15 +61,18 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                     formData
                 )
             }
+            // Reload list commitment
+            const currentHostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+
             // get code to create QR Code
             const resCode = await getJoiningCode(resCreate.result)
             if (!resCode.isError) {
                 setCommitment(resCode.result)
+                return true
             }
-            // Reload list commitment
-            const currentHostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
         }
+        return false
     }
 
     return (
@@ -77,6 +80,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
             title="Create Commitment"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
+            maxWidth="lg"
         >
             <CommitmentStepper
                 handleCloseDialog={handleCloseDialog}

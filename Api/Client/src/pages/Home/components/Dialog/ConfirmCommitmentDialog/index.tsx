@@ -1,15 +1,11 @@
 import { Button } from '@mui/material'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DialogCustom from '../../../../../components/DialogCustom'
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
 import { ICommitment } from '../../../../../interface/ICommitment'
-import {
-    activateCommitment,
-    getCommitmentFromCode,
-} from '../../../../../services/CommitmentService'
+import { activateCommitment } from '../../../../../services/CommitmentService'
 import { fetchRoomList } from '../../../../../slices/homeSlice'
-import CommitmentDetails from '../../../../Commitments/components/CommitmentDetails'
 
 interface IConfirmCommitmentDialogProps {}
 
@@ -22,17 +18,15 @@ const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
     const [commitment, setCommitment] = useState<ICommitment>()
     const [openDialog, setOpenDialog] = useState<boolean>(true)
 
-    useEffect(() => {
-        ;(async () => {
-            const response = await getCommitmentFromCode(sixDigitsCode || '')
-            setCommitment(response.result)
-        })()
-    }, [sixDigitsCode])
+    // useEffect(() => {
+    //     ;(async () => {
+    //         const response = await getCommitmentFromCode(sixDigitsCode || '')
+    //         setCommitment(response.result)
+    //     })()
+    // }, [sixDigitsCode])
 
-    const handleStep2 = async () => {
-        const response = await activateCommitment({
-            sixDigitsJoiningCode: sixDigitsCode,
-        })
+    const handleJoinRoom = async () => {
+        const response = await activateCommitment(sixDigitsCode || '')
         if (!response.isError) {
             dispatch(fetchRoomList())
             handleClose()
@@ -60,25 +54,11 @@ const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
                     marginBottom: '16px',
                 }}
             >
-                <div style={{ width: '80%', margin: '16px auto' }}>
-                    <CommitmentDetails
-                        createdDate={commitment?.createdDate}
-                        startDate={commitment?.startDate}
-                        endDate={commitment?.endDate}
-                        overdueDays={commitment?.dateOverdue}
-                        compensation={commitment?.compensation}
-                        owner={commitment?.owner}
-                        tenant={commitment?.tenant || currentUser}
-                        hostelInfo={commitment?.hostel}
-                        roomInfo={commitment?.room}
-                        price={commitment?.price}
-                    />
-                </div>
                 <Button
                     variant="contained"
                     size="small"
                     color="primary"
-                    onClick={handleStep2}
+                    onClick={handleJoinRoom}
                     sx={{ alignSelf: 'flex-end', justifySelf: 'flex-end' }}
                 >
                     Join Room

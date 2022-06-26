@@ -24,7 +24,7 @@ interface ICommitmentStepperProps {
     handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
     resetForm: () => void
     // handle submit step
-    handleSubmit: () => void
+    handleSubmit: () => Promise<boolean> | boolean
     commitment?: ICommitment
 }
 
@@ -96,7 +96,9 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
             component: (
                 <QrCodeGenerate code={commitment?.sixDigitsCode || ''} />
             ),
-            handleNext: () => {},
+            handleNext: () => {
+                return true
+            },
             action: 'Next',
         },
     ]
