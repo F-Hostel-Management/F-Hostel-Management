@@ -109,8 +109,8 @@ public class CommitmentsController : BaseRestController
     }
 
     [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
-    [HttpDelete("{commitmentId}/delete-commitment-image")]
-    public async Task<IActionResult> DeleteCommitmentImageAsync([FromRoute] Guid commitmentId, DeleteCommitmentImageRequest deleteCommitmentImageRequest)
+    [HttpDelete("{commitmentId}/delete-commitment-image/{commitmentImageId}")]
+    public async Task<IActionResult> DeleteCommitmentImageAsync([FromRoute] Guid commitmentId, [FromRoute] Guid commitmentImageId)
     {
         var commitment = (await _commitmentRepository.WhereAsync(com =>
                           com.Id.Equals(commitmentId), new string[] { "Images" })).FirstOrDefault();
@@ -125,7 +125,7 @@ public class CommitmentsController : BaseRestController
             throw new ForbiddenException("Forbidden");
         }
 
-        var target = commitment.Images.FirstOrDefault(img => img.ImgUrl.Equals(deleteCommitmentImageRequest.ImgUrl));
+        var target = commitment.Images.FirstOrDefault(img => img.Id.Equals(commitmentImageId));
         if (target is null)
         {
             throw new BadRequestException("An image does not exist");
