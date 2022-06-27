@@ -31,6 +31,7 @@ const getAllCommitmentOfHostel = async (
         .expand('manager', (e) => e.select('id', 'name'))
         .expand('owner', (e) => e.select('id', 'name'))
         .expand('room', (e) => e.select('id', 'roomName'))
+        .expand('images', (q) => q.select('id', 'imgUrl'))
         .paginate(pageSize, page)
     const result = await get(`Hostels/${hostelId}/get-all-commitments`, builder)
     console.log('getAllCommitmentOfHostel: ', result)
@@ -69,16 +70,17 @@ const createCommitment = async (data = {}) => {
     return result
 }
 
-const uploadCommitmentImages = async (id: string, data: FormData) => {
+const uploadCommitmentImages = async (id = '', data: FormData) => {
     return await RestCaller.upload(
         `Commitments/${id}/upload-commitment-images`,
         data
     )
 }
 
+const deleteCommitmentImage = async (id: string) => {}
+
 const updateCommitment = async (id = '', data = {}) => {
-    const result = await RestCaller.patch(`Commitments/${id}`, data)
-    console.log('updateCommitment: ', result, {
+    const result = await RestCaller.patch(`Commitments/${id}`, data, {
         loading: {
             show: true,
             message: 'Progressing...',
@@ -92,6 +94,7 @@ const updateCommitment = async (id = '', data = {}) => {
             message: 'Failed! Please, try again.',
         },
     })
+    console.log('updateCommitment: ', result)
     return result
 }
 

@@ -47,7 +47,9 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         const formData = new FormData()
         if (values.images?.length) {
             for (let file of values?.images) {
-                formData.append('ImgsFormFiles', file)
+                if (file) {
+                    formData.append('ImgsFormFiles', file)
+                }
             }
         }
         // create commitment and get commitmentId
@@ -62,8 +64,8 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                 )
             }
             // Reload list commitment
-            const currentHostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+            const hostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ hostelId, pageSize, page }))
 
             // get code to create QR Code
             const resCode = await getJoiningCode(resCreate.result)
@@ -80,7 +82,6 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
             title="Create Commitment"
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
-            maxWidth="lg"
         >
             <CommitmentStepper
                 handleCloseDialog={handleCloseDialog}

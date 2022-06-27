@@ -1,5 +1,4 @@
 import React, { FC, ChangeEvent, useEffect, useState } from 'react'
-import Step1 from './Step1'
 import StepByStep from '../../../../components/StepByStep'
 import { IStepper } from '../../../../interface/IStepper'
 import {
@@ -16,6 +15,9 @@ import {
 import { ERoomStatus } from '../../../../utils/enums'
 import { IRoom } from '../../../../interface/IRoom'
 import { IHostel } from '../../../../interface/IHostel'
+import CreateForm from './CreateForm'
+import UpdateForm from './UpdateForm'
+
 interface ICommitmentStepperProps {
     handleCloseDialog: () => void
     // useForm hook
@@ -71,25 +73,28 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
         })()
     }, [commitment?.room, hostelInfo])
 
+    const formProps = {
+        values,
+        setValues,
+        handleInputChange,
+        roomInfo,
+        setRoomInfo,
+        roomOptions: rooms,
+        hostelInfo,
+        setHostelInfo,
+        hostelOptions: hostels,
+    }
+
     const steps: IStepper[] = [
         {
             name: 'Commitment Information',
-            component: (
-                <Step1
-                    values={values}
-                    setValues={setValues}
-                    handleInputChange={handleInputChange}
-                    roomInfo={roomInfo}
-                    setRoomInfo={setRoomInfo}
-                    roomOptions={rooms}
-                    hostelInfo={hostelInfo}
-                    setHostelInfo={setHostelInfo}
-                    hostelOptions={hostels}
-                    isUpdate={commitment ? true : false}
-                />
+            component: commitment ? (
+                <UpdateForm {...formProps} commitment={commitment} />
+            ) : (
+                <CreateForm {...formProps} />
             ),
             handleNext: handleSubmit,
-            action: 'Create',
+            action: commitment ? 'Update' : 'Create',
         },
         {
             name: 'QR code',

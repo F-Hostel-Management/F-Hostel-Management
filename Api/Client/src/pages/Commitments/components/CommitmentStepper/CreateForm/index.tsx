@@ -17,21 +17,6 @@ import { IHostel } from '../../../../../interface/IHostel'
 import { ICommitmentValues } from '../../../../../interface/ICommitment'
 import Icon from '../../../../../components/Icon'
 import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
-interface IStep1Props {
-    values: ICommitmentValues
-    setValues: (values: ICommitmentValues) => void
-    handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
-
-    roomInfo: IRoom
-    setRoomInfo: (roomInfo: IRoom) => void
-    roomOptions: IRoom[]
-
-    hostelInfo: IHostel
-    setHostelInfo: (hostelInfo: IHostel) => void
-    hostelOptions: IHostel[]
-
-    isUpdate: boolean
-}
 
 const fields: IField[] = [
     {
@@ -85,7 +70,21 @@ interface ImageProperties {
     size: string
 }
 
-const Step1: FC<IStep1Props> = ({
+interface ICreateFormProps {
+    values: ICommitmentValues
+    setValues: (values: ICommitmentValues) => void
+    handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
+
+    roomInfo: IRoom
+    setRoomInfo: (roomInfo: IRoom) => void
+    roomOptions: IRoom[]
+
+    hostelInfo: IHostel
+    setHostelInfo: (hostelInfo: IHostel) => void
+    hostelOptions: IHostel[]
+}
+
+const CreateForm: FC<ICreateFormProps> = ({
     values,
     setValues,
     handleInputChange,
@@ -95,10 +94,11 @@ const Step1: FC<IStep1Props> = ({
     hostelInfo,
     setHostelInfo,
     hostelOptions,
-    isUpdate,
 }) => {
     const [images, setImages] = useState<FileList | null>(null)
     const [imageUrls, setImageUrls] = useState<ImageProperties[]>()
+
+    useEffect(() => {}, [])
 
     const onImagesChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
@@ -109,7 +109,9 @@ const Step1: FC<IStep1Props> = ({
     useEffect(() => {
         if (!images || images.length < 1) return
         const newImageUrls: ImageProperties[] = imageUrls ? [...imageUrls] : []
-        const newImages: File[] = values.images ? [...values.images] : []
+        const newImages: Array<File | null> = values.images
+            ? [...values.images]
+            : []
         Array.from(images).forEach((image) => {
             newImageUrls.push({
                 url: URL.createObjectURL(image),
@@ -125,7 +127,9 @@ const Step1: FC<IStep1Props> = ({
     const handleRemoveImage = (index: number) => {
         const newImageUrls: ImageProperties[] = imageUrls ? [...imageUrls] : []
         newImageUrls.splice(index, 1)
-        const newImages: File[] = values.images ? [...values.images] : []
+        const newImages: Array<File | null> = values.images
+            ? [...values.images]
+            : []
         newImages.splice(index, 1)
         setImageUrls(newImageUrls)
         setValues({ ...values, images: newImages })
@@ -174,9 +178,7 @@ const Step1: FC<IStep1Props> = ({
                         valueAutocomplete={roomInfo}
                         setValueAutocomplete={setRoomInfo}
                         disabled={
-                            !hostelInfo ||
-                            !Object.keys(hostelInfo).length ||
-                            isUpdate
+                            !hostelInfo || !Object.keys(hostelInfo).length
                         }
                         defaultValue={roomOptions?.[0]}
                     />
@@ -287,4 +289,4 @@ const Step1: FC<IStep1Props> = ({
     )
 }
 
-export default Step1
+export default CreateForm

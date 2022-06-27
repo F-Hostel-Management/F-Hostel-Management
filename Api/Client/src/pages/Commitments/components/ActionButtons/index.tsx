@@ -46,7 +46,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             textColor="#fff"
                             bgrColor="#495057"
                             sx={{ width: '2.8rem', height: '2.8rem' }}
-                            disabled={rowData.status !== Status.Pending}
                             onClick={handleOpenUpdate}
                         >
                             <Edit sx={{ fontSize: '1.3rem' }} />
