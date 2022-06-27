@@ -121,24 +121,21 @@ const approveCommitment = async (data = {}) => {
     return response
 }
 
-const activateCommitment = async (code: string) => {
-    const response = await RestCaller.patch(
-        `Commitments/get-into-room/${code}/status`,
-        {
-            loading: {
-                show: true,
-                message: 'Progressing...',
-            },
-            success: {
-                show: true,
-                message: 'You have already joined room.',
-            },
-            error: {
-                show: true,
-                message: 'Failed! Please, try again.',
-            },
-        }
-    )
+const activateCommitment = async (data = {}) => {
+    const response = await RestCaller.patch(`Commitments/get-into-room`, data, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'You have already joined room.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
     console.log('approveCommitment: ', response)
     return response
 }
@@ -159,6 +156,15 @@ const getCommitmentFromCode = async (code: string) => {
     return response
 }
 
+// [Role.TENANT]
+const validateJoiningCode = async (data = {}) => {
+    const response = await RestCaller.post(
+        `Commitments/validate-joiningCode`,
+        data
+    )
+    console.log('validateJoiningCode: ', response)
+    return response
+}
 export {
     getAllCommitmentOfHostel,
     getNumberCommitmentOfHostel,
@@ -170,4 +176,5 @@ export {
     getJoiningCode,
     activateCommitment,
     getCommitmentFromCode,
+    validateJoiningCode,
 }
