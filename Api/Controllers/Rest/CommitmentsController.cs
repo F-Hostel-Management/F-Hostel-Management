@@ -174,26 +174,27 @@ public class CommitmentsController : BaseRestController
 
 
     [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpGet("validate-joiningCode/{SixDigitsCode}")]
-    public async Task<IActionResult> GetCommitmentUsingJoiningCode([FromRoute] int SixDigitsCode)
+    [HttpPost("validate-joiningCode")]
+    public async Task<IActionResult> GetCommitmentUsingJoiningCode(ValidateJoiningCodeRequest req)
     {
         // validate joining code
-        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
+        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(req.SixDigitsCode);
         if (joiningCode is null)
         {
             throw new NotFoundException("Joining code is not exists or expired");
         }
         _joiningCodeServices.ValidateJoiningCode(joiningCode);
-        return Ok();
+        CommitmentEntity commitment = await _joiningCodeServices.GetCommitment(joiningCode);
+        return Ok(commitment);
     }
 
 
     [Authorize(Roles = nameof(Role.Tenant))]
-    [HttpPatch("get-into-room/{SixDigitsCode}/status")]
-    public async Task<IActionResult> TenantActivateCommitment([FromRoute] int SixDigitsCode)
+    [HttpPatch("get-into-room")]
+    public async Task<IActionResult> TenantActivateCommitment(ValidateJoiningCodeRequest req)
     {
         // validate joining code again
-        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(SixDigitsCode);
+        JoiningCode joiningCode = await _joiningCodeServices.GetJoiningCode(req.SixDigitsCode);
         if (joiningCode is null)
         {
             throw new NotFoundException("Joining code is not exists or expired");
