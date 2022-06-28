@@ -8,8 +8,6 @@ namespace Domain.Enums;
 
 public enum CommitmentStatus
 {
-    Pending,
-    Approved,
     Active,
     Expired
 }

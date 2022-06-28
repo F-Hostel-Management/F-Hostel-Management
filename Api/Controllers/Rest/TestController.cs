@@ -1,7 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Services.CronService;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Quartz;
 
 namespace Api.Controllers.Rest
 {
@@ -9,11 +11,13 @@ namespace Api.Controllers.Rest
     {
         private readonly IGenericRepository<UserEntity> _userRepository;
         private readonly ITokenService _tokenService;
+        private readonly ISchedulerFactory _schedulerFactory;
 
-        public TestController(IGenericRepository<UserEntity> userRepository, ITokenService tokenService)
+        public TestController(IGenericRepository<UserEntity> userRepository, ITokenService tokenService, ISchedulerFactory schedulerFactory = null)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
+            _schedulerFactory = schedulerFactory;
         }
 
         [HttpGet]
@@ -23,6 +27,16 @@ namespace Api.Controllers.Rest
             if (user == null)
                 return BadRequest();
             return Ok(_tokenService.GetToken(user));
+        }
+
+        [HttpGet("trigger")]
+        public async Task<IActionResult> Trigger()
+        {
+            var scheduler = await _schedulerFactory.GetScheduler();
+            await scheduler.TriggerJob(CronJobKeys.InvoiceSchedule);
+            await scheduler.TriggerJob(CronJobKeys.JoiningCodeSchedule);
+            await scheduler.TriggerJob(CronJobKeys.CommitmentSchedule);
+            return Ok();
         }
     }
 }

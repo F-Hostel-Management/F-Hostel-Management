@@ -18,9 +18,20 @@ public static class ConfigureCronService
             q.UseSimpleTypeLoader();
             q.UseInMemoryStore();
 
-            q.ScheduleJob<InvoiceScheduleJob>(trigger => trigger
-                                                 .WithIdentity("Invoice schedule trigger")
-                                                 .WithCronSchedule(appSettings.Value.Cron));
+            q.AddJob<InvoiceScheduleJob>(CronJobKeys.InvoiceSchedule);
+            q.AddTrigger(trigger => trigger
+                                    .ForJob(CronJobKeys.InvoiceSchedule)
+                                    .WithCronSchedule(appSettings.Value.Cron));
+
+            q.AddJob<CommitmentJob>(CronJobKeys.CommitmentSchedule);
+            q.AddTrigger(trigger => trigger
+                                    .ForJob(CronJobKeys.CommitmentSchedule)
+                                    .WithCronSchedule(appSettings.Value.Cron));
+
+            q.AddJob<JoiningCodeJob>(CronJobKeys.JoiningCodeSchedule);
+            q.AddTrigger(trigger => trigger
+                                    .ForJob(CronJobKeys.JoiningCodeSchedule)
+                                    .WithCronSchedule(appSettings.Value.Cron));
         });
         services.AddQuartzHostedService();
         services.AddScoped<InvoiceScheduleJob>();

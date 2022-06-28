@@ -12,16 +12,11 @@ interface IBreadcrumbProps {}
 const Breadcrumb: FC<IBreadcrumbProps> = () => {
     let location = useLocation()
 
-    function handleClick(
-        event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-    ) {
-        event.preventDefault()
-        console.info('You clicked a breadcrumb.')
-    }
+    const pathNames: string[] = location.pathname
+        .split('/')
+        .filter((path) => pathNameLabels[path])
 
-    const pathNames: string[] = location.pathname.split('/')
-    pathNames.shift()
-    let href = ''
+    let href = window.location.origin
     let breadcrumbs = pathNames.map((path: string, index) => {
         href += '/' + path
         return (
@@ -30,8 +25,11 @@ const Breadcrumb: FC<IBreadcrumbProps> = () => {
                 variant="caption"
                 key={index}
                 color="inherit"
-                href={href}
-                onClick={handleClick}
+                href={
+                    index == pathNames.length - 1 || !pathNameLabels[path]
+                        ? '#'
+                        : href
+                }
             >
                 {index == pathNames.length - 1 ? (
                     <strong> {pathNameLabels[path]}</strong>

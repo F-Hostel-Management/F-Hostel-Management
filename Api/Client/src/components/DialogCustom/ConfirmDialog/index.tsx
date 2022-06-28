@@ -9,12 +9,12 @@ import DialogCustom from '../../DialogCustom'
 
 interface IConfirmDialogProps {
     title: string
-    openDialog: boolean | any
-    handleOpenDialog: any
-    handleCloseDialog: any
-    children: any
+    openDialog: boolean
+    handleOpenDialog: () => void
+    handleCloseDialog: () => void
     maxWidth?: DialogProps['maxWidth']
-    handleConfirm?: () => void
+    handleConfirm: () => void
+    children?: any
 }
 
 const ConfirmDialog: FC<IConfirmDialogProps> = ({

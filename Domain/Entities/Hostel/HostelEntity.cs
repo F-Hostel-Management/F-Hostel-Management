@@ -16,7 +16,7 @@ public class HostelEntity : BaseEntity
     public int? NumOfRooms { get; set; }
     public string ImgPath { get; set; }
 
-    public int QrTimeSpan { get; set; }
+    public int QrTimeSpan { get; set; } = 15;
 
     /*navigation props*/
 

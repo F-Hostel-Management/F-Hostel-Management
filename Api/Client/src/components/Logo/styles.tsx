@@ -10,7 +10,7 @@ export const NavbarLogo = styled.div`
     height: 100%;
 
     & > img {
-        height: 50px;
+        height: 40px;
         width: auto;
     }
 `

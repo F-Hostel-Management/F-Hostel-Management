@@ -1,7 +1,7 @@
+import { down } from 'styled-breakpoints'
 import styled from 'styled-components'
 
 export const Container = styled.div`
-    display: flex;
     padding: 32px;
 `
 
@@ -12,13 +12,19 @@ export const Side = styled.div`
     flex: 1;
 `
 export const List = styled.ul`
-    margin-left: 8px;
+    display: flex;
+    justify-content: space-around;
+    margin: 8px;
     list-style: circle;
+
+    ${down('md')} {
+        flex-direction: column;
+    }
 `
 export const Item = styled.li`
     display: flex;
     align-items: center;
-    opacity: 0.8;
+    opacity: 0.9;
     & > svg {
         margin: 4px 8px 4px 0;
     }

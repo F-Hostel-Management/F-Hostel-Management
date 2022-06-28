@@ -7,6 +7,7 @@ using Domain.Entities.Commitment;
 using Domain.Entities.Facility;
 using Domain.Entities.InvoiceSchedule;
 using Domain.Entities.Room;
+using Domain.Entities.User;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ public class RoomsController : BaseRestController
 {
     private readonly IGenericRepository<RoomEntity> _roomsRepository;
     private readonly IGenericRepository<CommitmentEntity> _commitmentRepository;
+    private readonly IGenericRepository<RoomTenant> _roomTenantRepository;
     private readonly ICommitmentServices _commitmentServices;
     private readonly IAuthorizationServices _authorServices;
     private readonly IInvoiceScheduleServices _invoiceScheduleServices;
@@ -28,6 +30,7 @@ public class RoomsController : BaseRestController
     public RoomsController
         (IGenericRepository<RoomEntity> roomsRepository,
         IGenericRepository<CommitmentEntity> commitmentRepository,
+        IGenericRepository<RoomTenant> roomTenantRepository,
         ICommitmentServices commitmentServices,
         IAuthorizationServices authorServices,
         IRoomServices roomServices,
@@ -38,6 +41,7 @@ public class RoomsController : BaseRestController
     {
         _roomsRepository = roomsRepository;
         _commitmentRepository = commitmentRepository;
+        _roomTenantRepository = roomTenantRepository;
         _commitmentServices = commitmentServices;
         _authorServices = authorServices;
         _roomServices = roomServices;
@@ -104,7 +108,6 @@ public class RoomsController : BaseRestController
         {
             throw new BadRequestException("Resolve commitment first");
         }
-        await _invoiceScheduleServices.DeleteInvoicesScheduleByRoomId(roomId);
         await _roomsRepository.DeleteSoftAsync(room);
         return Ok();
     }
@@ -182,6 +185,7 @@ public class RoomsController : BaseRestController
     }
 
 
+    [Authorize]
     [HttpPost("{roomId}/checkout")]
     public async Task<IActionResult> CheckoutThisRoom([FromRoute] Guid roomId)
     {
@@ -190,24 +194,37 @@ public class RoomsController : BaseRestController
         {
             throw new NotFoundException("Room not found");
         }
+        CommitmentEntity latestCommitment = await _commitmentServices.GetLatestCommitmentByRoom(roomId);
+
+        // tenant self-checkout
+        if (CurrentUserRole.Equals(Role.Tenant.ToString()))
+        {
+            bool isTenantAuthorized = await _authorServices.IsCurrentUserRentingTheRoom(latestCommitment, CurrentUserID);
+            if (!isTenantAuthorized)
+            {
+                throw new ForbiddenException("Forbidden");
+            }
+            var roomtenant = await _roomTenantRepository.FirstOrDefaultAsync(rt =>
+                                                       rt.TenantId.Equals(CurrentUserID) && rt.CommitmentId.Equals(latestCommitment.Id));
+            await _roomTenantRepository.DeleteSoftAsync(roomtenant);
+            return Ok();
+        }
+
+        // owner | manager checkout
+        bool isManagerAuthorized = await _authorServices.IsRoomManageByCurrentUser(roomId, CurrentUserID);
+        if (!isManagerAuthorized)
+        {
+            throw new ForbiddenException("Forbidden");
+        }
 
         // set commitment to expired (if any)
-        CommitmentEntity latestCommitment = await _commitmentServices.GetLatestCommitmentByRoom(roomId);
         if (latestCommitment.CommitmentStatus != CommitmentStatus.Expired)
         {
             latestCommitment.CommitmentStatus = CommitmentStatus.Expired;
             await _commitmentRepository.UpdateAsync(latestCommitment);
         }
-
-        // remove all invoice schedule
-        var schedules = await _invoiceScheduleRepository.WhereAsync(entity => entity.RoomId.Equals(roomId));
-        foreach (var schedule in schedules)
-        {
-            schedule.IsDeleted = true;
-        }
-        await _invoiceScheduleRepository.UpdateRangeAsync(schedules);
-        room.RoomStatus = RoomStatus.Available;
-        await _roomsRepository.UpdateAsync(room);
+        await _invoiceScheduleServices.DeleteInvoicesScheduleByRoomId(roomId); // remove all invoice schedules of that room
+        await _roomServices.ReleaseRoom(room);
         return Ok();
     }
 }

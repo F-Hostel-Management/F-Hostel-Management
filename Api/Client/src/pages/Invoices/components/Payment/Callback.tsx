@@ -10,7 +10,7 @@ export const PaymentCallback = (props: Props) => {
     let isSuccess = Boolean(
         JSON.parse(searchParams.get('isSuccess') ?? 'false')
     )
-    console.log(isSuccess)
+    // console.log(isSuccess)
     const [timer, setTimer] = useState(4)
     useEffect(() => {
         if (timer <= 0) return

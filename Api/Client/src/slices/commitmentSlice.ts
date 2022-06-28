@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICommitment } from '../interface/ICommitment'
-import { getAllCommitmentOfHostel } from '../services/CommitmentService'
+import {
+    getAllCommitmentOfHostel,
+    getNumberCommitmentOfHostel,
+} from '../services/CommitmentService'
 
 interface ICommitmentState {
     commitmentList: ICommitment[]
@@ -14,11 +17,23 @@ const initialState: ICommitmentState = {
     isFetchingCommitments: true,
 }
 
+interface IParams {
+    hostelId: string
+    pageSize: number
+    page: number
+}
 export const fetchCommitments = createAsyncThunk(
     'commitment/fetchCommitments',
-    async (params: any) => {
-        const { currentHostelId, pageSize, page } = params
-        return await getAllCommitmentOfHostel(currentHostelId, pageSize, page)
+    async (params: IParams) => {
+        const { hostelId, pageSize, page } = params
+        return {
+            commitmentList: await getAllCommitmentOfHostel(
+                hostelId,
+                pageSize,
+                page
+            ),
+            numOfCommitment: await getNumberCommitmentOfHostel(hostelId),
+        }
     }
 )
 
@@ -42,7 +57,8 @@ const commitmentSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchCommitments.fulfilled, (state, action) => {
-                state.commitmentList = action.payload
+                state.commitmentList = action.payload.commitmentList
+                state.numOfCommitment = action.payload.numOfCommitment
                 state.isFetchingCommitments = false
             })
             .addCase(fetchCommitments.pending, (state) => {

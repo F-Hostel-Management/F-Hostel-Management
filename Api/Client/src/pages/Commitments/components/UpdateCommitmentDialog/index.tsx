@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
@@ -6,13 +6,15 @@ import {
     ICommitment,
     ICommitmentValues,
 } from '../../../../interface/ICommitment'
-import {
-    approveCommitment,
-    getJoiningCode,
-    updateCommitment,
-} from '../../../../services/CommitmentService'
+
 import moment from 'moment'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
+import {
+    deleteCommitmentImage,
+    getJoiningCode,
+    updateCommitment,
+    uploadCommitmentImages,
+} from '../../../../services/CommitmentService'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 import { fetchCommitments } from '../../../../slices/commitmentSlice'
 interface IUpdateCommitmentDialogProps {
@@ -30,6 +32,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
 
+    // initialValues are current commitment which is selected
     const initialValues: ICommitmentValues = {
         startDate: moment(new Date(commitment.startDate || ''))
             .format('YYYY-MM-DD')
@@ -37,45 +40,76 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
         endDate: moment(new Date(commitment.endDate || ''))
             .format('YYYY-MM-DD')
             .toString(),
-        roomId: commitment.roomId,
-        dateOverdue: commitment.dateOverdue,
-        compensation: commitment.compensation,
-        price: commitment.price,
-        paymentDate: commitment.paymentDate,
+        roomId: commitment.roomId || '',
+        price: commitment.price || 0,
+        paymentDate: commitment.paymentDate || 0,
+        images: commitment?.images?.map(() => null),
+        deletedImg: [],
     }
 
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
-    const [timeSpan, setTimeSpan] = useState<number>(0)
     const [sixDigitsCode, setSixDigitsCode] = useState<any>(null)
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setTimeSpan(Number(e.target.value))
-    }
+    // update commitment
+    // if return false, system can't pass the step
+    const handleSubmit = async () => {
+        const { startDate, endDate, paymentDate, price, ...others } = values
+        let count = 0
 
-    // create commitment
-    const handleSubmitStep2 = async () => {
-        const response = await updateCommitment(commitment.id, values)
-        if (!response.isError) {
-            const currentHostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        // append list image to form data to add new images
+        const formData = new FormData()
+        if (values.images?.length) {
+            for (let file of values?.images) {
+                if (file) {
+                    count++
+                    formData.append('ImgsFormFiles', file)
+                }
+            }
         }
-    }
-
-    const handleSubmitStep3 = async () => {
-        let response = await approveCommitment({
-            commitmentId: commitment.id,
+        // update commitment fields
+        let resCreate = await updateCommitment(commitment.id, {
+            startDate,
+            endDate,
+            paymentDate,
+            price,
         })
-        if (!response.isError) {
-            const currentHostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        if (!resCreate.isError) {
+            formData.append('HostelId', commitment.id || '')
+            // if imageList is not empty, system will upload list new images
+            if (count) {
+                const resUpload = await uploadCommitmentImages(
+                    commitment.id,
+                    formData
+                )
+                if (resUpload.isError) return false
+            }
+
+            // delete images
+            if (values?.deletedImg) {
+                for (let imgUrl of values?.deletedImg) {
+                    const resDelete = await deleteCommitmentImage(
+                        commitment.id,
+                        imgUrl
+                    )
+                    if (resDelete.isError) {
+                        return false
+                    }
+                }
+            }
+
+            // reload list commitments
+            const hostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ hostelId, pageSize, page }))
+
+            // get code to create QR Code
+            const resCode = await getJoiningCode(commitment.id || '')
+            if (!resCode.isError) {
+                setSixDigitsCode(resCode.result.sixDigitsCode)
+                return true
+            } else return false
         }
-
-        response = await getJoiningCode({
-            commitmentId: commitment.id,
-            timeSpan,
-        })
-        setSixDigitsCode(response.result.sixDigitsCode)
+        return false
     }
 
     return (
@@ -90,12 +124,8 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
                 setValues={setValues}
                 handleInputChange={handleInputChange}
                 resetForm={resetForm}
-                handleSubmitStep2={handleSubmitStep2}
-                handleSubmitStep3={handleSubmitStep3}
-                timeSpan={timeSpan}
-                handleChange={handleChange}
-                sixDigitsCode={sixDigitsCode}
-                commitment={commitment}
+                handleSubmit={handleSubmit}
+                commitment={{ ...commitment, sixDigitsCode }}
             />
         </DialogCustom>
     )

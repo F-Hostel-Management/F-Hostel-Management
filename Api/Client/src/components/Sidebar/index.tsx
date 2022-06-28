@@ -1,6 +1,6 @@
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react'
 
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import {
     ArrowRight,
@@ -37,6 +37,10 @@ interface IIconButtonListProps {
 }
 const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
     const role = useAppSelector(getUserRole)
+    let location = useLocation()
+
+    const pathName: string = location.pathname
+
     const [target, setTarget] = useState<
         Array<{
             groupLabel: string
@@ -52,12 +56,10 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
             // setTarget('owner')
         }
     }, [role])
-    const [selectedIndex, setSelectedIndex] = React.useState(0)
+
     const currentUser = useSelector((state: AppState) => state.auth.currentUser)
     const dispatch = useAppDispatch()
-    const handleListItemClick = (index: number) => {
-        setSelectedIndex(index)
-    }
+
     const handleLogout = () => {
         dispatch(logOut())
     }
@@ -120,9 +122,10 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                         <Link to={item.path} key={index} replace={true}>
                             <ListItemButton
                                 selected={
-                                    selectedIndex === index ? true : false
+                                    pathName.indexOf(item.path) !== -1
+                                        ? true
+                                        : false
                                 }
-                                onClick={() => handleListItemClick(index)}
                                 sx={{
                                     margin: '8px 4px',
                                     padding: '10px 12px',
@@ -155,13 +158,14 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                                                 flex: 1,
                                             }}
                                         >
-                                            {selectedIndex === index ? (
+                                            {pathName.indexOf(item.path) !==
+                                            -1 ? (
                                                 <strong>{item.label}</strong>
                                             ) : (
                                                 item.label
                                             )}
                                         </Typography>
-                                        {selectedIndex === index && (
+                                        {pathName.indexOf(item.path) !== -1 && (
                                             <ArrowRight
                                                 color="primary"
                                                 sx={{

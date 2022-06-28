@@ -3,6 +3,7 @@ using Api.UserFeatures.Responses;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -59,6 +60,17 @@ namespace Api.Controllers.Rest
         public async Task<IActionResult> GetCurrentInfo()
         {
             var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(CurrentUserID));
+            GetInfoResponse getInfoResponse = new();
+            Mapper.Map(user, getInfoResponse);
+            return Ok(getInfoResponse);
+        }
+        
+        [HttpGet("{id}")]
+        [Authorize(Roles = nameof(Role.Owner))]
+        public async Task<IActionResult> GetUserInfoById(Guid id)
+        {
+            //todo: authorized
+            var user = await _userRepository.FirstOrDefaultAsync(e => e.Id.Equals(id));
             GetInfoResponse getInfoResponse = new();
             Mapper.Map(user, getInfoResponse);
             return Ok(getInfoResponse);

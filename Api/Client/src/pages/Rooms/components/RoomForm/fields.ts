@@ -19,12 +19,14 @@ export const fields: IField[] = [
         name: 'length',
         type: 'number',
         required: true,
+        inputProps: { min: 1 },
     },
     {
         label: 'Width',
         name: 'width',
         type: 'number',
         required: true,
+        inputProps: { min: 1 },
     },
     // {
     //     label: 'Height',
