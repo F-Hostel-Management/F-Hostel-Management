@@ -4,11 +4,13 @@ import { ICommitment } from '../../../../interface/ICommitment'
 import { formatDate } from '../../../../utils/FormatDate'
 
 interface ICommitmentDetailsProps {
-    commitment: ICommitment
+    commitment?: ICommitment
+    children?: any
 }
 
 const CommitmentDetails: React.FunctionComponent<ICommitmentDetailsProps> = ({
     commitment,
+    children,
 }) => {
     return (
         <div
@@ -100,6 +102,7 @@ const CommitmentDetails: React.FunctionComponent<ICommitmentDetailsProps> = ({
                             }}
                         />
                     ))}
+                    {children}
                 </Box>
             </Paper>
         </div>
