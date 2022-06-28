@@ -15,19 +15,19 @@ export interface IInvoice {
     manager?: IUser
     tenantPaid?: IUser
     isDeleted?: boolean
+    [x: string | number | symbol]: any
 }
 
 export interface IInvoiceSchedule {
     id?: string
-    invoiceCode?: string
     price?: number
-    date?: string
+    cron?: string
+    createDate?: number
     paymentDate?: number
     invoiceType?: string
     content?: string
     room?: IRoom
     manager?: IUser
-    tenantPaid?: IUser
     isDeleted?: boolean
-    cron?: string
+    [x: string | number | symbol]: any
 }

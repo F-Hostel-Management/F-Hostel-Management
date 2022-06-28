@@ -15,7 +15,7 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 interface IBootstrapTooltipProps {
     title: string
-    children: any
+    children?: any
 }
 
 const BootstrapTooltip: FC<IBootstrapTooltipProps> = ({ title, children }) => {

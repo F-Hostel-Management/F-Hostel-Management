@@ -5,4 +5,6 @@ export const InvoiceType = [
     { name: 'House' },
 ]
 
+export const InvoiceScheduleType = [{ name: 'Service' }, { name: 'House' }]
+
 export const InvoiceCron = [{ name: 'Week' }, { name: 'Month' }]

@@ -35,6 +35,19 @@ const FacilityComboBox: FC<IFacilityComboBoxProps> = ({
     const facilities: IFacility[] = useAppSelector(
         ({ facility }) => facility.facilityList
     )
+    const roomDetails = useAppSelector(
+        ({ roomDetails }) => roomDetails.roomDetails
+    )
+
+    const facilityOptions = facilities.filter((facility) => {
+        for (const facilityManagements of roomDetails.facilityManagements ||
+            []) {
+            if (facilityManagements.facilityId === facility.id) return false
+        }
+        return true
+    })
+
+    console.log('Options: ', facilityOptions)
 
     useEffect(() => {
         const hostelId = getItem('currentHostelId')
@@ -45,7 +58,7 @@ const FacilityComboBox: FC<IFacilityComboBoxProps> = ({
         <Autocomplete
             multiple
             size="small"
-            options={facilities}
+            options={facilityOptions}
             disableCloseOnSelect
             value={value}
             onChange={(event, newValue, reason) => {

@@ -55,8 +55,7 @@ public class JoiningCodeServices : IJoiningCodeServices
     {
         JoiningCode jc =  await _joiningCodeRepository.FirstOrDefaultAsync(jc =>
         jc.SixDigitsCode == digits);
-        return jc ??
-            throw new NotFoundException("Joining code is not exists or expired");
+        return jc;
     }
 
     public void ValidateJoiningCode(JoiningCode joiningCode)
@@ -76,6 +75,6 @@ public class JoiningCodeServices : IJoiningCodeServices
 
     public async Task<CommitmentEntity> GetCommitment(JoiningCode joiningCode)
     {
-        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitmentId, "Tenant", "Owner", "Room", "Hostel", "RoomTenants");
+        return await _commitmentCodeRepository.FindByIdAsync(joiningCode.CommitmentId, "Owner", "Room", "Hostel", "RoomTenants", "Images");
     }
 }

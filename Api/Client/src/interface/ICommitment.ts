@@ -1,3 +1,4 @@
+import { ICommitmentImages } from './ICommitmentImages'
 import { IHostel } from './IHostel'
 import { IRoom } from './IRoom'
 import { IUser } from './IUser'
@@ -8,34 +9,28 @@ export interface ICommitment {
     createdDate?: string
     startDate?: string
     endDate?: string
-    dateOverdue?: number
-    compensation?: number
     status?: string
     commitmentStatus?: number
-    commitmentScaffoldingId?: string
-    commitmentScaffolding?: string
-    managerId?: string
     manager?: IUser
-    tenantId?: string
-    tenant?: IUser
-    ownerId?: string
     owner?: IUser
-    roomId?: string
     room?: IRoom
+    roomId?: string
     joiningCode?: string
+    sixDigitsCode?: string
     hostelId?: string
     hostel?: IHostel
-    isDeleted?: boolean
     price?: number
     paymentDate?: number
+    images?: ICommitmentImages[]
 }
 
 export interface ICommitmentValues {
-    startDate?: string
-    endDate?: string
-    roomId?: string
-    dateOverdue?: number
-    compensation?: number
-    price?: number
-    paymentDate?: number
+    startDate: string
+    endDate: string
+    roomId: string
+    price: number
+    paymentDate: number
+    images?: Array<File | null>
+    deletedImg?: string[]
+    [x: string | number | symbol]: unknown
 }

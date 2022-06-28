@@ -2,22 +2,25 @@ import React, { FC } from 'react'
 import CardWithImage from '../../../../../components/Card/CardWithImage'
 import { Typography, Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { ERole } from '../../../../../utils/enums'
 import CardOptions from '../CardOptions'
 import * as Styled from './styles'
 import { IHostel } from '../../../../../interface/IHostel'
 import { useDispatch } from 'react-redux'
 import { setCurrentHostel } from '../../../../../slices/homeSlice'
 import { setItem } from '../../../../../utils/LocalStorageUtils'
+import { useAppSelector } from '../../../../../hooks/reduxHook'
+import { ERole } from '../../../../../utils/enums'
 const urlImage = import.meta.env.PUBLIC_FIREBASE_STORAGE_IMAGE
 
 interface IHostelCardProps {
     hostelInfo: IHostel
 }
-const role: ERole = 2
+
 const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
     let navigate = useNavigate()
     const dispatch = useDispatch()
+
+    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
 
     const handleClickDetail = () => {
         dispatch(setCurrentHostel(hostelInfo))
@@ -37,38 +40,41 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
                     <Typography variant="h4" mb={1}>
                         <strong>{hostelInfo.name}</strong>
                     </Typography>
-                    <Typography variant="subtitle1" mb={1}>
+                    <Typography variant="subtitle2" mb={1}>
                         <span
                             style={{
-                                width: '100px',
+                                paddingRight: '8px',
                                 display: 'inline-block',
                             }}
                         >
-                            Adress:
+                            Address:
                         </span>
                         {hostelInfo.address}
                     </Typography>
-                    <Typography variant="body2" mb={1}>
+                    <Typography variant="subtitle2" mb={1}>
                         <span
                             style={{
-                                width: '100px',
+                                paddingRight: '8px',
                                 display: 'inline-block',
                             }}
                         >
-                            {role == ERole.OWNER_ROLE ? ' Manager:' : 'Owner'}
+                            Number of room:
                         </span>
-                        Le Xuan Dai
+                        {hostelInfo.numOfRooms || 0}
                     </Typography>
-                    <Typography variant="body2" mb={1}>
+
+                    <Typography variant="subtitle2" mb={1}>
                         <span
                             style={{
-                                width: '150px',
+                                paddingRight: '8px',
                                 display: 'inline-block',
                             }}
                         >
-                            Number of rooms:
+                            {role === ERole.OWNER_ROLE
+                                ? 'Manager: '
+                                : 'Owner: '}
                         </span>
-                        {hostelInfo.numOfRooms}
+                        {hostelInfo.owner?.name}
                     </Typography>
                 </React.Fragment>
             }
@@ -84,7 +90,7 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
             }
         >
             <Styled.OptionWrapper>
-                <CardOptions />
+                <CardOptions hostelInfo={hostelInfo} />
             </Styled.OptionWrapper>
         </CardWithImage>
     )

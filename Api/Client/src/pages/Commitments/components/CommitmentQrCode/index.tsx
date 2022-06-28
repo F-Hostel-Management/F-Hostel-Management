@@ -1,6 +1,4 @@
-import { Button, InputAdornment } from '@mui/material'
-import React, { ChangeEvent, FC, Fragment, useState } from 'react'
-import InputField from '../../../../components/Input/InputField'
+import React, { FC, useEffect, useState } from 'react'
 import { getJoiningCode } from '../../../../services/CommitmentService'
 import QrCodeGenerate from '../QrCodeGenerate'
 interface ICommitmentQrCodeProps {
@@ -8,60 +6,17 @@ interface ICommitmentQrCodeProps {
 }
 
 const CommitmentQrCode: FC<ICommitmentQrCodeProps> = ({ commitmentId }) => {
-    const [timeSpan, setTimeSpan] = useState<number | null>(null)
     const [code, setCode] = useState<any>(null)
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setTimeSpan(Number(e.target.value))
-    }
-
     const handleClickCreateQr = async () => {
-        const response = await getJoiningCode({
-            commitmentId: commitmentId,
-            timeSpan: timeSpan,
-        })
+        const response = await getJoiningCode(commitmentId)
         setCode(response.result.sixDigitsCode)
     }
-    return (
-        <Fragment>
-            {!code ? (
-                <div
-                    style={{
-                        width: '80%',
-                        margin: '16px auto',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection: 'column',
-                        minHeight: '300px',
-                    }}
-                >
-                    <InputField
-                        label="Time Span"
-                        name="timeSpan"
-                        value={timeSpan || null}
-                        onChange={handleChange}
-                        type="number"
-                        required={true}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                minutes
-                            </InputAdornment>
-                        }
-                    />
-                    <Button
-                        variant="contained"
-                        color="orange"
-                        onClick={handleClickCreateQr}
-                    >
-                        Create QR Code
-                    </Button>
-                </div>
-            ) : (
-                <QrCodeGenerate code={code} />
-            )}
-        </Fragment>
-    )
+
+    useEffect(() => {
+        handleClickCreateQr()
+    }, [])
+    return <QrCodeGenerate code={code} />
 }
 
 export default CommitmentQrCode

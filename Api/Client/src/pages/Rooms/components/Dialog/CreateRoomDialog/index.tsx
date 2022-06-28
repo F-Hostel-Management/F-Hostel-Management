@@ -31,8 +31,8 @@ const CreateRoomDialog: FC<ICreateRoomDialogProps> = ({
         numOfWCs: 1,
         numOfBedRooms: 1,
         area: 0,
-        length: 0,
-        width: 0,
+        length: 1,
+        width: 1,
         height: 0,
         hostelId: '',
     }

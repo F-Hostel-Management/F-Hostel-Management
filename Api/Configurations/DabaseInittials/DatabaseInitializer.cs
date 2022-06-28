@@ -25,8 +25,6 @@ public static class DatabaseInitializer
 
         await dbContext.FeedRooms();
 
-        await dbContext.FeedCommitmentScaffolding();
-
         await dbContext.FeedTenantsToRoom();
 
     }
@@ -55,24 +53,6 @@ public static class DatabaseInitializer
                     Gender = (Gender)_rand.Next(3),
                     Role = (Role)_rand.Next(3),
                 });
-        }
-        await dbContext.SaveChangesAsync();
-        await dbContext.FeedOwnerToManagers();
-    }
-
-    public static async Task FeedOwnerToManagers(this ApplicationDbContext dbContext)
-    {
-        if (!dbContext.Users.Any()) return;
-        var managers = dbContext.Users.Where(user => user.RoleString == Role.Manager.ToString()).ToArray();
-        var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString()).ToArray();
-        if (!managers.Any() || !owners.Any())
-        {
-            return;
-        }
-
-        foreach (var manager in managers)
-        {
-            manager.Owner = owners[_rand.Next(owners.Length)];
         }
         await dbContext.SaveChangesAsync();
     }
@@ -188,7 +168,6 @@ public static class DatabaseInitializer
         var rooms = dbContext.Rooms.ToArray();
         var tenants = dbContext.Users.Where(user => user.RoleString == Role.Tenant.ToString()).ToArray();
         var owners = dbContext.Users.Where(user => user.RoleString == Role.Owner.ToString());
-        var scaffolding = dbContext.CommitmentScaffoldings.First();
         int code = 1;
         foreach (var tenant in tenants)
         {
@@ -198,7 +177,6 @@ public static class DatabaseInitializer
             CommitmentEntity com = new()
             {
                 Price = _rand.Next(3000, 4000),
-                Tenant = tenant,
                 Owner = owner,
                 Room = room,
                 HostelId = room.HostelId,
@@ -206,12 +184,8 @@ public static class DatabaseInitializer
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Parse("22 Jun 2023 14:20:00"),
                 CommitmentStatus = CommitmentStatus.Active,
-                CanModify = false,
-                DateOverdue = _rand.Next(1, 6),
-                Compensation = _rand.Next(3000, 4000),
                 PaymentDate = _rand.Next(32),
                 CommitmentCode = "DTN" + code++,
-                CommitmentScaffoldingId = scaffolding.Id,
             };
             await dbContext.Commitments.AddAsync(com);
 
@@ -229,16 +203,6 @@ public static class DatabaseInitializer
             room.RoomStatus = 0;
 
         }
-        await dbContext.SaveChangesAsync();
-    }
-
-    public static async Task FeedCommitmentScaffolding(this ApplicationDbContext dbContext)
-    {
-        if (dbContext.CommitmentScaffoldings.Any()) return;
-        await dbContext.AddAsync(new CommitmentScaffolding()
-        {
-            Content = SeedingServices.LoadFileToString("comitment.html").Trim(),
-        });
         await dbContext.SaveChangesAsync();
     }
 }

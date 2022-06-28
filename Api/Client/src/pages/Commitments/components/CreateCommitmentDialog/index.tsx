@@ -1,12 +1,15 @@
-import React, { ChangeEvent, FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import CommitmentStepper from '../CommitmentStepper'
 import { useForm } from '../../../../hooks/useForm'
-import { ICommitmentValues } from '../../../../interface/ICommitment'
+import {
+    ICommitment,
+    ICommitmentValues,
+} from '../../../../interface/ICommitment'
 import {
     createCommitment,
-    approveCommitment,
     getJoiningCode,
+    uploadCommitmentImages,
 } from '../../../../services/CommitmentService'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { getItem } from '../../../../utils/LocalStorageUtils'
@@ -28,48 +31,51 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         startDate: '',
         endDate: '',
         roomId: '',
-        dateOverdue: 0,
-        compensation: 0,
         price: 0,
         paymentDate: 1,
+        images: [],
     }
 
-    const [commitmentId, setCommitmentId] = useState<any>(null)
+    const [commitment, setCommitment] = useState<ICommitment>()
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
-    const [timeSpan, setTimeSpan] = useState<number | null>(0)
-    const [sixDigitsCode, setSixDigitsCode] = useState<any>(null)
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setTimeSpan(Number(e.target.value))
-    }
 
     // create commitment
-    const handleSubmitStep2 = async () => {
-        const response = await createCommitment(values)
-        if (!response.isError) {
-            setCommitmentId(response.result)
-            const currentHostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
-        }
-    }
-
-    const handleSubmitStep3 = async () => {
-        let response = await approveCommitment({
-            commitmentId: commitmentId,
-        })
-
-        if (!response.isError) {
-            response = await getJoiningCode({
-                commitmentId: commitmentId,
-                timeSpan,
-            })
-            if (!response.isError) {
-                setSixDigitsCode(response.result.sixDigitsCode)
-                const currentHostelId = getItem('currentHostelId')
-                dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+    const handleSubmit = async () => {
+        // append list image to form data
+        const formData = new FormData()
+        if (values.images?.length) {
+            for (let file of values?.images) {
+                if (file) {
+                    formData.append('ImgsFormFiles', file)
+                }
             }
         }
+        // create commitment and get commitmentId
+        let resCreate = await createCommitment(values)
+        if (!resCreate.isError) {
+            formData.append('HostelId', resCreate.result)
+            // if imageList is not empty, system will upload list image
+            if (values.images?.length) {
+                const resUpload = await uploadCommitmentImages(
+                    resCreate.result,
+                    formData
+                )
+                if (resUpload.isError) return false
+            }
+
+            // reload list commitment
+            const hostelId = getItem('currentHostelId')
+            dispatch(fetchCommitments({ hostelId, pageSize, page }))
+
+            // get code to create QR Code
+            const resCode = await getJoiningCode(resCreate.result)
+            if (!resCode.isError) {
+                setCommitment(resCode.result)
+                return true
+            } else return false
+        }
+        return false
     }
 
     return (
@@ -84,11 +90,8 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                 setValues={setValues}
                 handleInputChange={handleInputChange}
                 resetForm={resetForm}
-                handleSubmitStep2={handleSubmitStep2}
-                handleSubmitStep3={handleSubmitStep3}
-                timeSpan={timeSpan}
-                handleChange={handleChange}
-                sixDigitsCode={sixDigitsCode}
+                handleSubmit={handleSubmit}
+                commitment={commitment}
             />
         </DialogCustom>
     )

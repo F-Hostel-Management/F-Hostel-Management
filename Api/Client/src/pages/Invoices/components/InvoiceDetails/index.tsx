@@ -3,6 +3,7 @@ import moment from 'moment'
 import React, { FC } from 'react'
 import DialogCustom from '../../../../components/DialogCustom'
 import { useForm } from '../../../../hooks/useForm'
+import { IDialogOperator } from '../../../../interface/IDialogOperator'
 import { IInvoice } from '../../../../interface/IInvoice'
 import { getInvoiceStatus } from '../../../../services/InvoiceService'
 import { formatDate } from '../../../../utils/FormatDate'
@@ -12,10 +13,7 @@ import InvoiceStatus from '../InvoiceStatus'
 import { Payment } from '../Payment'
 import * as Styled from './styles'
 
-interface IInvoiceDetailsProps {
-    openDialog: boolean
-    handleOpenDialog: () => void
-    handleCloseDialog: () => void
+interface IInvoiceDetailsProps extends IDialogOperator {
     rowData: IInvoice
 }
 

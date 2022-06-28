@@ -1,17 +1,6 @@
 import * as React from 'react'
 
-import {
-    CalendarMonthTwoTone,
-    ChatBubbleTwoTone,
-    DashboardTwoTone,
-    DescriptionTwoTone,
-    FaceTwoTone,
-    GroupTwoTone,
-    MeetingRoomTwoTone,
-    NotificationsNoneTwoTone,
-    ReceiptTwoTone,
-    TableRestaurantTwoTone,
-} from '@mui/icons-material'
+import Icon from '../Icon'
 
 export interface ISidebarItem {
     icon: React.ReactElement
@@ -38,52 +27,52 @@ export const sidebarItemList: {
             groupLabel: '--MAIN',
             items: [
                 {
-                    icon: <DashboardTwoTone />,
+                    icon: <Icon name="dashboard" />,
                     label: 'Dashboard',
                     path: '/home/dashboard',
                 },
                 {
-                    icon: <MeetingRoomTwoTone />,
+                    icon: <Icon name="room" />,
                     label: 'Rooms',
                     path: '/home/rooms',
                 },
                 {
-                    icon: <FaceTwoTone />,
+                    icon: <Icon name="tenant" />,
                     label: 'Tenants',
                     path: '/home/tenants',
                 },
                 {
-                    icon: <GroupTwoTone />,
+                    icon: <Icon name="manager" />,
                     label: 'Managers',
                     path: '/home/managers',
                 },
                 {
-                    icon: <NotificationsNoneTwoTone />,
+                    icon: <Icon name="notification" />,
                     label: 'Notifications',
                     path: '/home/notifications',
                 },
                 {
-                    icon: <ChatBubbleTwoTone />,
+                    icon: <Icon name="ticket" />,
                     label: 'Tickets',
                     path: '/home/tickets',
                 },
                 {
-                    icon: <CalendarMonthTwoTone />,
+                    icon: <Icon name="schedulingInvoice" />,
                     label: 'Scheduling Invoices',
                     path: '/home/schedulingInvoices',
                 },
                 {
-                    icon: <ReceiptTwoTone />,
+                    icon: <Icon name="invoice" />,
                     label: 'Invoices',
                     path: '/home/invoices',
                 },
                 {
-                    icon: <DescriptionTwoTone />,
+                    icon: <Icon name="commitment" />,
                     label: 'Commitments',
                     path: '/home/commitments',
                 },
                 {
-                    icon: <TableRestaurantTwoTone />,
+                    icon: <Icon name="facility" />,
                     label: 'Facilities',
                     path: '/home/facilities',
                 },
@@ -101,9 +90,14 @@ export const sidebarItemList: {
             groupLabel: '--MAIN',
             items: [
                 {
-                    icon: <ReceiptTwoTone />,
+                    icon: <Icon name="invoice" />,
                     label: 'Invoices',
                     path: '/home/invoices',
+                },
+                {
+                    icon: <Icon name="room" />,
+                    label: 'Rooms',
+                    path: '/home/rooms',
                 },
             ],
         },

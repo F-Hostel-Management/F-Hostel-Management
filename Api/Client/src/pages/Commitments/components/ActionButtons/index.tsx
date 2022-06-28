@@ -1,6 +1,6 @@
 import React, { FC, Fragment } from 'react'
 import IconButtonCustom from '../../../../components/Button/IconButtonCustom'
-import { Edit, Delete, Description, QrCode } from '@mui/icons-material'
+import { Edit, Delete, QrCode } from '@mui/icons-material'
 import { ECommitmentStatus as Status } from '../../../../utils/enums'
 import { ERole } from '../../../../utils/enums'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
@@ -11,6 +11,7 @@ import DialogCustom from '../../../../components/DialogCustom'
 import UpdateCommitmentDialog from '../UpdateCommitmentDialog'
 import CommitmentQrCode from '../CommitmentQrCode'
 import { ICommitment } from '../../../../interface/ICommitment'
+import Icon from '../../../../components/Icon'
 interface IActionButtonsProps {
     rowData: ICommitment
 }
@@ -38,7 +39,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     sx={{ width: '2.8rem', height: '2.8rem' }}
                     onClick={handleOpenView}
                 >
-                    <Description sx={{ fontSize: '1.6rem' }} />
+                    <Icon name="description" sx={{ fontSize: '1.6rem' }} />
                 </IconButtonCustom>
                 {role !== ERole.TENANT_ROLE && (
                     <>
@@ -46,7 +47,6 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             textColor="#fff"
                             bgrColor="#495057"
                             sx={{ width: '2.8rem', height: '2.8rem' }}
-                            disabled={rowData.status !== Status.Pending}
                             onClick={handleOpenUpdate}
                         >
                             <Edit sx={{ fontSize: '1.3rem' }} />
@@ -90,7 +90,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                             margin: 'auto',
                         }}
                     >
-                        <CommitmentDetails />
+                        <CommitmentDetails commitment={rowData} />
                     </div>
                 </DialogCustom>
             )}
@@ -101,6 +101,7 @@ const ActionButtons: FC<IActionButtonsProps> = ({ rowData }) => {
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
+                    handleConfirm={() => {}}
                 >
                     <div style={{ minHeight: '100px' }}>
                         <Typography variant="h3" mb={1}>
