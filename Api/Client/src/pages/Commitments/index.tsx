@@ -52,14 +52,9 @@ const Commitments: FC<ICommitmentsProps> = () => {
             <DataGridCustom
                 loading={loading}
                 title="All Commitments"
+                iconName="commitment"
                 rows={rows}
                 columns={columns}
-                // pageSize={pageSize}
-                // setPageSize={(pageSize: number) =>
-                //     dispatch(setPageSize(pageSize))
-                // }
-                // page={page}
-                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfCommitment}
                 toolbarChildren={
                     role !== ERole.TENANT_ROLE ? (

@@ -3,4 +3,5 @@ export interface IStepper {
     component: any
     handleNext: () => void
     action: string
+    [x: string | number | symbol]: any
 }

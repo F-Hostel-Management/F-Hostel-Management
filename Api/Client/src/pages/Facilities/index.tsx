@@ -50,12 +50,9 @@ const Facilities: FC<IFacilitiesProps> = () => {
             <DataGridCustom
                 loading={loading}
                 title="All Facilities"
+                iconName="facility"
                 rows={rows}
                 columns={columns}
-                // pageSize={pageSize}
-                // setPageSize={setPageSize}
-                // page={page}
-                // setPage={setPage}
                 rowsCount={27}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (

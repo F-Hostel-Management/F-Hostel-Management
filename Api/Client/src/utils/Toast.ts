@@ -14,3 +14,18 @@ export const showSuccess = (msg: string) => {
 export const showError = (msg: string) => {
     toast.error(msg, config)
 }
+
+export const setToastConfig = (successMessage: string) => ({
+    loading: {
+        show: true,
+        message: 'Progressing...',
+    },
+    success: {
+        show: true,
+        message: successMessage,
+    },
+    error: {
+        show: true,
+        message: 'Failed! Please, try again.',
+    },
+})

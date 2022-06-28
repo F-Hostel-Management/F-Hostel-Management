@@ -28,6 +28,7 @@ export interface ICommitment {
     isDeleted?: boolean
     price?: number
     paymentDate?: number
+    [x: string | number | symbol]: any
 }
 
 export interface ICommitmentValues {

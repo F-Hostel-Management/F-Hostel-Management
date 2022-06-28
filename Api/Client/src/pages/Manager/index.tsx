@@ -61,6 +61,7 @@ export const ManagerPage = (props: Props) => {
             <DataGridCustom
                 loading={gridData.loading}
                 title="All Managers"
+                iconName="manager"
                 rows={gridData.rows}
                 columns={columns}
                 rowsCount={gridData.totalRows}

@@ -16,10 +16,12 @@ export interface IUser {
     address?: string
     frontIdentification?: string
     backIdentification?: string
+    [x: string | number | symbol]: any
 }
 
 export interface IUserForm {
     name: string
     email: string
     phone: string
+    [x: string | number | symbol]: any
 }

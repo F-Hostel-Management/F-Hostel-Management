@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material'
 import React, { FC, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
@@ -6,10 +7,11 @@ import { ERole } from '../../utils/enums'
 import { getItem } from '../../utils/LocalStorageUtils'
 import Details from './components/Details'
 import FacilitiesTable from './components/FacilitiesTable'
+import TenantList from './components/TenantList'
 import * as Styled from './styles'
 interface IRoomDetailsProps {}
 
-const RoomDetails: FC<IRoomDetailsProps> = (props) => {
+const RoomDetails: FC<IRoomDetailsProps> = () => {
     const role = useAppSelector(({ auth }) => auth.currentUser?.role)
     const roomDetails = useAppSelector(
         ({ roomDetails }) => roomDetails.roomDetails
@@ -34,6 +36,14 @@ const RoomDetails: FC<IRoomDetailsProps> = (props) => {
                     rows={roomDetails?.facilityManagements}
                     numOfFacilities={roomDetails?.facilityManagements?.length}
                 />
+            </Styled.Wrapper>
+            <Styled.Wrapper>
+                <Grid container>
+                    <Grid item xs={4}>
+                        <TenantList />
+                    </Grid>
+                    <Grid item xs={8}></Grid>
+                </Grid>
             </Styled.Wrapper>
         </Styled.Container>
     )

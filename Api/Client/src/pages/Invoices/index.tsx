@@ -75,14 +75,9 @@ const Invoices: FC<IInvoicesProps> = () => {
             <DataGridCustom
                 loading={loading}
                 title="All Invoice"
+                iconName="invoice"
                 rows={rows}
                 columns={columns}
-                // pageSize={currentPageSize}
-                // setPageSize={(pageSize: number) =>
-                //     dispatch(setPageSize(pageSize))
-                // }
-                // page={currentPage}
-                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfInvoice}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (

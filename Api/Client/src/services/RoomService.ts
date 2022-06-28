@@ -2,22 +2,8 @@ import { IHostel } from '../interface/IHostel'
 import { IRoom } from '../interface/IRoom'
 import { ODataCaller } from '../utils/ODataCaller'
 import { RestCaller } from '../utils/RestCaller'
+import { setToastConfig } from '../utils/Toast'
 const { createBuilder, get } = ODataCaller
-
-const setToastConfig = (successMessage: string) => ({
-    loading: {
-        show: true,
-        message: 'Progressing...',
-    },
-    success: {
-        show: true,
-        message: successMessage,
-    },
-    error: {
-        show: true,
-        message: 'Failed! Please, try again.',
-    },
-})
 
 // Tenant views all rooms which is being rented.
 const getAllRoomOfTenant = async () => {
@@ -190,6 +176,7 @@ const deleteFacilities = async (id = '') => {
 const checkoutRoom = async (id = '') => {
     const result = await RestCaller.post(
         `Rooms/${id}/checkout`,
+        '',
         setToastConfig('Checkout successfully.')
     )
     console.log('checkoutRoom: ', result)

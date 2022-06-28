@@ -39,14 +39,9 @@ const FacilitiesTable: FC<IFacilitiesTableProps> = ({
             <DataGridCustom
                 loading={isFetchingDetails}
                 title="Room Facilities"
+                iconName="facility"
                 rows={rows}
                 columns={columns}
-                // pageSize={pageSize}
-                // setPageSize={(pageSize: number) =>
-                //     dispatch(setPageSize(pageSize))
-                // }
-                // page={page}
-                // setPage={(page: number) => dispatch(setPage(page))}
                 rowsCount={numOfFacilities}
                 toolbarChildren={
                     role !== ERole.TENANT_ROLE ? (

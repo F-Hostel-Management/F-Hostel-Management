@@ -17,7 +17,7 @@ public class CommitmentJob : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         var commitments = await _commitmentRepository.WhereAsync(com =>
-                          com.EndDate < DateTime.Now);
+                          com.EndDate <= DateTime.Now);
         foreach (var commitment in commitments)
         {
             commitment.CommitmentStatus = CommitmentStatus.Expired;
