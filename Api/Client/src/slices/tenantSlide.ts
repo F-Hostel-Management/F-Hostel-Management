@@ -23,7 +23,6 @@ export const fetchTenantList = createAsyncThunk(
     'tenant/fetchTenantList',
     async (params: IParamsFetch) => {
         const { hostelId, pageSize, page } = params
-        console.log('Hello: ', await countTenantsOfHostel(hostelId))
         return {
             tenants: await getAllTenants(hostelId, pageSize, page),
             numOfTenants: await countTenantsOfHostel(hostelId),

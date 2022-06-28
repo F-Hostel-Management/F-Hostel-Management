@@ -19,6 +19,8 @@ import {
     ExitToApp as ExitToAppIcon,
     Key as KeyIcon,
     Language as LanguageIcon,
+    UploadFile as UploadFileIcon,
+    Close as CloseIcon,
 } from '@mui/icons-material'
 
 export type IconName =
@@ -41,6 +43,8 @@ export type IconName =
     | 'logout'
     | 'key'
     | 'language'
+    | 'upload'
+    | 'close'
 
 const icon: Record<IconName, ElementType> = {
     // page icons
@@ -62,6 +66,8 @@ const icon: Record<IconName, ElementType> = {
     description: DescriptionIcon,
     qrCode: QrCodeIcon,
     logout: ExitToAppIcon,
+    upload: UploadFileIcon,
+    close: CloseIcon,
     // others icons
     key: KeyIcon,
     language: LanguageIcon,
