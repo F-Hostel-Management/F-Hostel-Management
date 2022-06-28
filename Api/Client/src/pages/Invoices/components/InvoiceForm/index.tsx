@@ -11,6 +11,7 @@ import { compareDateInvoiceFunction } from '../../actions/compareDateInvoiceFunc
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import _ from 'lodash'
 import * as Styled from './styles'
+import { formatPrice } from '../../../../utils/FormatPrice'
 
 interface IInvoiceFormProps<T> {
     id?: string
@@ -31,6 +32,13 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
     review = false,
 }) => {
     const [roomList, setRoomList] = React.useState<IRoom[]>([])
+    const format = {
+        unitPrice: '0',
+        price: '',
+    }
+    const [unitPriceFormat, setUnitPriceFormat] = React.useState<string>('0')
+    const [priceFormat, setPriceFormat] = React.useState<string>()
+    const valueFormat = [{ name: unitPriceFormat }, { name: priceFormat }]
 
     React.useEffect(() => {
         ;(async () => {
@@ -90,8 +98,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
         {
             label: 'Unit Price',
-            name: 'unitPrice',
-            type: 'number',
+            name: 'unitPriceFormat',
+            type: 'string',
             disabled: false,
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
@@ -99,8 +107,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
         {
             label: 'Amount',
-            name: 'price',
-            type: 'number',
+            name: 'priceFormat',
+            type: 'string',
             disabled: true,
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
@@ -115,7 +123,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
     ]
 
-    console.log('price: ' + price)
+    // console.log('price: ' + formatPrice(price))
     return (
         <Styled.FormContainer>
             <Grid container>
@@ -249,7 +257,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                 key={index}
                                 label={field.label}
                                 name={field.name}
-                                value={values[field.name] as any}
+                                value={
+                                    field.name === 'unitPriceFormat' ||
+                                    field.name === 'priceFormat'
+                                        ? formatPrice(values[field.name]) //string
+                                        : (values[field.name] as any)
+                                }
                                 type={field.type}
                                 required={field.required}
                                 disabled={field.disabled}

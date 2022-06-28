@@ -15,6 +15,7 @@ import { IInvoice } from '../../interface/IInvoice'
 import { formatDate } from '../../utils/FormatDate'
 import { getItem } from '../../utils/LocalStorageUtils'
 import { getUserRole } from '../../slices/authSlice'
+import { formatPrice } from '../../utils/FormatPrice'
 
 interface IInvoicesProps {}
 
@@ -41,7 +42,9 @@ const Invoices: FC<IInvoicesProps> = () => {
         renderValueGetter('dueData', 'Due date', 150, (params) =>
             formatDate(new Date(params.dueDate ?? ''))
         ),
-        createColumn('price', 'Price', 120),
+        renderValueGetter('price', 'Price', 120, (params) =>
+            formatPrice(params.price as number)
+        ),
         renderCell('status', 'Status', 130, InvoiceStatus),
         renderCell('actions', 'Actions', 150, ActionButtons),
     ]
