@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Security.Claims;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -30,7 +31,7 @@ var configuration = builder.Configuration;
     services.AddOData();
     services.AddCronService();
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+    services.AddBackgroundService();
 
     services.AddJwtService();
     services.AddAuthorization(options =>
@@ -89,7 +90,8 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.AddControllerMapper();
-
+    var backgroundJobs = app.Services.GetService<IBackgroundJobClient>();
+    backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
     var ENV_PORT = Environment.GetEnvironmentVariable("PORT");
     if (ENV_PORT is not null) app.Urls.Add($"http://0.0.0.0:{ENV_PORT}");
 
