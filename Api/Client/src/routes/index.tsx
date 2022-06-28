@@ -98,10 +98,10 @@ const privateRoutes: IRoute[] = [
     {
         path: '/home/managers',
         component: ManagerPage,
-        name: 'Invoices',
+        name: 'Managers',
         layout: DefaultLayout,
         props: {
-            title: 'Invoices',
+            title: 'Managers',
         },
     },
     {
