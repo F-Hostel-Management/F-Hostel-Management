@@ -85,6 +85,41 @@ const createHostel = async (data = {}) => {
     })
 }
 
+const updateHostel = async (id = '', data = {}) => {
+    return await RestCaller.patch(`Hostels/${id}`, data, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'Hostel is updated.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
+}
+
+const deleteHostel = async (id = '') => {
+    const result = await RestCaller.delete(`Hostels/${id}`, {
+        loading: {
+            show: true,
+            message: 'Progressing...',
+        },
+        success: {
+            show: true,
+            message: 'Hostel is deleted.',
+        },
+        error: {
+            show: true,
+            message: 'Failed! Please, try again.',
+        },
+    })
+    return result
+}
+
 const uploadImage = async (data: FormData) => {
     return await RestCaller.upload('Hostels/upload-hostel-image', data)
 }
@@ -101,6 +136,8 @@ export {
     getListHostel,
     getHostelById,
     createHostel,
+    updateHostel,
+    deleteHostel,
     uploadImage,
     getRoomOfHostel,
     getOwnerOfHostel,
