@@ -10,6 +10,7 @@ import {
 import moment from 'moment'
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import {
+    deleteCommitmentImage,
     getJoiningCode,
     updateCommitment,
     uploadCommitmentImages,
@@ -31,6 +32,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
     const page = useAppSelector(({ table }) => table.page)
     const pageSize = useAppSelector(({ table }) => table.pageSize)
 
+    // initialValues are current commitment which is selected
     const initialValues: ICommitmentValues = {
         startDate: moment(new Date(commitment.startDate || ''))
             .format('YYYY-MM-DD')
@@ -49,32 +51,54 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
         useForm<ICommitmentValues>(initialValues)
     const [sixDigitsCode, setSixDigitsCode] = useState<any>(null)
 
-    // create commitment
+    // update commitment
+    // if return false, system can't pass the step
     const handleSubmit = async () => {
-        // append list image to form data
+        const { startDate, endDate, paymentDate, price, ...others } = values
+        let count = 0
+
+        // append list image to form data to add new images
         const formData = new FormData()
         if (values.images?.length) {
             for (let file of values?.images) {
                 if (file) {
+                    count++
                     formData.append('ImgsFormFiles', file)
                 }
             }
         }
-        // create commitment and get commitmentId
-        let resCreate = await updateCommitment(commitment.id, values)
+        // update commitment fields
+        let resCreate = await updateCommitment(commitment.id, {
+            startDate,
+            endDate,
+            paymentDate,
+            price,
+        })
         if (!resCreate.isError) {
             formData.append('HostelId', commitment.id || '')
-            // if imageList is not empty, system will upload list image
-            if (values.images?.length) {
+            // if imageList is not empty, system will upload list new images
+            if (count) {
                 const resUpload = await uploadCommitmentImages(
                     commitment.id,
                     formData
                 )
+                if (resUpload.isError) return false
             }
 
-            // Delete image
+            // delete images
+            if (values?.deletedImg) {
+                for (let imgUrl of values?.deletedImg) {
+                    const resDelete = await deleteCommitmentImage(
+                        commitment.id,
+                        imgUrl
+                    )
+                    if (resDelete.isError) {
+                        return false
+                    }
+                }
+            }
 
-            // Reload list commitment
+            // reload list commitments
             const hostelId = getItem('currentHostelId')
             dispatch(fetchCommitments({ hostelId, pageSize, page }))
 
@@ -83,7 +107,7 @@ const UpdateCommitmentDialog: FC<IUpdateCommitmentDialogProps> = ({
             if (!resCode.isError) {
                 setSixDigitsCode(resCode.result.sixDigitsCode)
                 return true
-            }
+            } else return false
         }
         return false
     }

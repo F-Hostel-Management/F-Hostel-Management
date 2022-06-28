@@ -30,8 +30,9 @@ const getAllCommitmentOfHostel = async (
         )
         .expand('manager', (e) => e.select('id', 'name'))
         .expand('owner', (e) => e.select('id', 'name'))
-        .expand('room', (e) => e.select('id', 'roomName'))
+        .expand('room', (e) => e.select())
         .expand('images', (q) => q.select('id', 'imgUrl'))
+        .expand('hostel', (e) => e.select())
         .paginate(pageSize, page)
     const result = await get(`Hostels/${hostelId}/get-all-commitments`, builder)
     console.log('getAllCommitmentOfHostel: ', result)
@@ -77,7 +78,11 @@ const uploadCommitmentImages = async (id = '', data: FormData) => {
     )
 }
 
-const deleteCommitmentImage = async (id: string) => {}
+const deleteCommitmentImage = async (hostelId = '', imgId = '') => {
+    return await RestCaller.delete(
+        `Commitments/${hostelId}/delete-commitment-image/${imgId}`
+    )
+}
 
 const updateCommitment = async (id = '', data = {}) => {
     const result = await RestCaller.patch(`Commitments/${id}`, data, {
@@ -171,6 +176,7 @@ export {
     getCommitmentDetails,
     createCommitment,
     uploadCommitmentImages,
+    deleteCommitmentImage,
     updateCommitment,
     approveCommitment,
     getJoiningCode,

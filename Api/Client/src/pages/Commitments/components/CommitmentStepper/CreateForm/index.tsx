@@ -2,67 +2,11 @@ import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import * as Styled from './styles'
 import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
-import { IField } from '../../../../../interface/IField'
-import {
-    Box,
-    Button,
-    CardMedia,
-    InputAdornment,
-    styled,
-    Typography,
-} from '@mui/material'
+import { Box, Button, CardMedia, Typography } from '@mui/material'
 import { getItem } from '../../../../../utils/LocalStorageUtils'
-import { IRoom } from '../../../../../interface/IRoom'
-import { IHostel } from '../../../../../interface/IHostel'
-import { ICommitmentValues } from '../../../../../interface/ICommitment'
 import Icon from '../../../../../components/Icon'
 import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
-
-const fields: IField[] = [
-    {
-        label: 'Start Date',
-        name: 'startDate',
-        type: 'date',
-        required: true,
-    },
-    {
-        label: 'End Date',
-        name: 'endDate',
-        type: 'date',
-        required: true,
-    },
-    {
-        label: 'Payment Day',
-        name: 'paymentDate',
-        type: 'number',
-        required: false,
-        endAdornment: (
-            <InputAdornment position="end">day of month</InputAdornment>
-        ),
-        inputProps: { min: 1, max: 31 },
-    },
-    {
-        label: 'Price',
-        name: 'price',
-        type: 'number',
-        required: true,
-        endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
-    },
-]
-
-const Input = styled('input')({
-    display: 'none',
-})
-
-function returnFileSize(number: number) {
-    if (number < 1024) {
-        return number + 'bytes'
-    } else if (number >= 1024 && number < 1048576) {
-        return (number / 1024).toFixed(1) + 'KB'
-    } else if (number >= 1048576) {
-        return (number / 1048576).toFixed(1) + 'MB'
-    }
-}
+import { fields, Input, returnFileSize, IFormProps } from '../Form'
 
 interface ImageProperties {
     url: string
@@ -70,21 +14,7 @@ interface ImageProperties {
     size: string
 }
 
-interface ICreateFormProps {
-    values: ICommitmentValues
-    setValues: (values: ICommitmentValues) => void
-    handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
-
-    roomInfo: IRoom
-    setRoomInfo: (roomInfo: IRoom) => void
-    roomOptions: IRoom[]
-
-    hostelInfo: IHostel
-    setHostelInfo: (hostelInfo: IHostel) => void
-    hostelOptions: IHostel[]
-}
-
-const CreateForm: FC<ICreateFormProps> = ({
+const CreateForm: FC<IFormProps> = ({
     values,
     setValues,
     handleInputChange,
@@ -95,6 +25,8 @@ const CreateForm: FC<ICreateFormProps> = ({
     setHostelInfo,
     hostelOptions,
 }) => {
+    // images state to handle file image change when creating
+    // imageUrls state to handle url of image change when creating
     const [images, setImages] = useState<FileList | null>(null)
     const [imageUrls, setImageUrls] = useState<ImageProperties[]>()
 
@@ -106,6 +38,7 @@ const CreateForm: FC<ICreateFormProps> = ({
         setImages(files)
     }
 
+    // add new image to list
     useEffect(() => {
         if (!images || images.length < 1) return
         const newImageUrls: ImageProperties[] = imageUrls ? [...imageUrls] : []
@@ -124,6 +57,7 @@ const CreateForm: FC<ICreateFormProps> = ({
         setValues({ ...values, images: newImages })
     }, [images])
 
+    // delete image from list
     const handleRemoveImage = (index: number) => {
         const newImageUrls: ImageProperties[] = imageUrls ? [...imageUrls] : []
         newImageUrls.splice(index, 1)

@@ -39,7 +39,6 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
     const [commitment, setCommitment] = useState<ICommitment>()
     const { values, setValues, handleInputChange, resetForm } =
         useForm<ICommitmentValues>(initialValues)
-    const [sixDigitsCode, setSixDigitsCode] = useState<string | number>('')
 
     // create commitment
     const handleSubmit = async () => {
@@ -62,8 +61,10 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                     resCreate.result,
                     formData
                 )
+                if (resUpload.isError) return false
             }
-            // Reload list commitment
+
+            // reload list commitment
             const hostelId = getItem('currentHostelId')
             dispatch(fetchCommitments({ hostelId, pageSize, page }))
 
@@ -72,7 +73,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
             if (!resCode.isError) {
                 setCommitment(resCode.result)
                 return true
-            }
+            } else return false
         }
         return false
     }

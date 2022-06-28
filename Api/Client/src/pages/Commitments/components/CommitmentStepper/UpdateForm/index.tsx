@@ -2,79 +2,19 @@ import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import * as Styled from './styles'
 import ComboBox from '../../../../../components/ComboBox'
 import InputField from '../../../../../components/Input/InputField'
-import { IField } from '../../../../../interface/IField'
-import {
-    Box,
-    Button,
-    CardMedia,
-    InputAdornment,
-    styled,
-    Typography,
-} from '@mui/material'
+import { Box, Button, CardMedia, Typography } from '@mui/material'
 import { getItem } from '../../../../../utils/LocalStorageUtils'
-import { IRoom } from '../../../../../interface/IRoom'
-import { IHostel } from '../../../../../interface/IHostel'
-import {
-    ICommitment,
-    ICommitmentValues,
-} from '../../../../../interface/ICommitment'
+import { ICommitment } from '../../../../../interface/ICommitment'
 import Icon from '../../../../../components/Icon'
 import IconButtonCustom from '../../../../../components/Button/IconButtonCustom'
-
-const fields: IField[] = [
-    {
-        label: 'Start Date',
-        name: 'startDate',
-        type: 'date',
-        required: true,
-    },
-    {
-        label: 'End Date',
-        name: 'endDate',
-        type: 'date',
-        required: true,
-    },
-    {
-        label: 'Payment Day',
-        name: 'paymentDate',
-        type: 'number',
-        required: false,
-        endAdornment: (
-            <InputAdornment position="end">day of month</InputAdornment>
-        ),
-        inputProps: { min: 1, max: 31 },
-    },
-    {
-        label: 'Price',
-        name: 'price',
-        type: 'number',
-        required: true,
-        endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
-    },
-]
-
-const Input = styled('input')({
-    display: 'none',
-})
+import { fields, Input, IFormProps } from '../Form'
 
 interface ImageProperties {
     id?: string
     imgUrl: string
 }
 
-interface IUpdateFormProps {
-    values: ICommitmentValues
-    setValues: (values: ICommitmentValues) => void
-    handleInputChange: (event: ChangeEvent<HTMLInputElement>) => void
-
-    roomInfo: IRoom
-    setRoomInfo: (roomInfo: IRoom) => void
-    roomOptions: IRoom[]
-
-    hostelInfo: IHostel
-    setHostelInfo: (hostelInfo: IHostel) => void
-    hostelOptions: IHostel[]
-
+interface IUpdateFormProps extends IFormProps {
     commitment: ICommitment
 }
 
@@ -90,6 +30,8 @@ const UpdateForm: FC<IUpdateFormProps> = ({
     hostelOptions,
     commitment,
 }) => {
+    // images state to handle file image change when updating
+    // imageUrls state to handle url of image change when updating
     const [images, setImages] = useState<FileList | null>()
     const [imageUrls, setImageUrls] = useState<ImageProperties[]>(
         commitment.images || []
@@ -101,6 +43,9 @@ const UpdateForm: FC<IUpdateFormProps> = ({
         setImages(files)
     }
 
+    // when a image is added, system will do:
+    // 1. create urlImg and push to urlImg list for display
+    // 2. add new file image to values.images for call upload service
     useEffect(() => {
         if (!images || images.length < 1) return
         const newImageUrls: ImageProperties[] = imageUrls ? [...imageUrls] : []
@@ -117,6 +62,10 @@ const UpdateForm: FC<IUpdateFormProps> = ({
         setValues({ ...values, images: newImages })
     }, [images])
 
+    // when a image is deleted, system will do
+    // 1. add url of deleted image to values.deletedImgs to call delete image service
+    // 2. delete urlImg by index for display
+    // 3. delete image file by index
     const handleRemoveImage = (index: number) => {
         // Update id of image is deleted
         const newDeletedImg: string[] = values.deletedImg
