@@ -2,7 +2,7 @@ import { Box, Button, CardMedia, Paper, Typography } from '@mui/material'
 import React, { FC, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DialogCustom from '../../../../../components/DialogCustom'
-import { useAppDispatch, useAppSelector } from '../../../../../hooks/reduxHook'
+import { useAppDispatch } from '../../../../../hooks/reduxHook'
 import { ICommitment } from '../../../../../interface/ICommitment'
 import {
     activateCommitment,
@@ -17,7 +17,6 @@ const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     let { sixDigitsCode } = useParams()
-    const currentUser = useAppSelector(({ auth }) => auth.currentUser)
 
     const [commitment, setCommitment] = useState<ICommitment>()
     const [openDialog, setOpenDialog] = useState<boolean>(true)
