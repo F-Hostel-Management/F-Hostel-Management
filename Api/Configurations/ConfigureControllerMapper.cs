@@ -1,6 +1,7 @@
 ﻿using Application.AppConfig;
 using Microsoft.Extensions.Options;
 using System.Reflection;
+using Hangfire;
 
 namespace Api.Configurations
 {
@@ -45,6 +46,10 @@ namespace Api.Configurations
                         config.UseEndpoints(endpoints =>
                         {
                             endpoints.MapControllers();
+                            if (app.Environment.IsDevelopment())
+                            {
+                                endpoints.MapHangfireDashboard();
+                            }
                         });
                     });
         }
