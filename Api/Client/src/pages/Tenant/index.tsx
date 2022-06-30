@@ -36,6 +36,7 @@ const Tenant: FC<ITenantProps> = (props) => {
             <DataGridCustom
                 loading={loading}
                 title="All Tenants"
+                iconName="tenant"
                 rows={rows}
                 columns={columns}
                 rowsCount={numOfTenant}

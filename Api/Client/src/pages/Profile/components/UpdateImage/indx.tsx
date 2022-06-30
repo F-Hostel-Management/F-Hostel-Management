@@ -14,6 +14,8 @@ import { getImageUrl } from '../../../../utils/ImageUtils'
 interface IUpdateImage {
     values: IUser
     setValues: Dispatch<SetStateAction<IUser>>
+    frontImg: File | undefined
+    backImg: File | undefined
     setFrontImg: Dispatch<SetStateAction<File | undefined>>
     setBackImg: Dispatch<SetStateAction<File | undefined>>
     disabled: boolean
@@ -22,16 +24,16 @@ interface IUpdateImage {
 const UpdateImage: FC<IUpdateImage> = ({
     values,
     setValues,
+    frontImg,
+    backImg,
     setFrontImg,
     setBackImg,
     disabled,
 }) => {
     const theme = useTheme()
     const [activeStep, setActiveStep] = React.useState(0)
-    const preview = [
-        getImageUrl(values.frontIdentification),
-        getImageUrl(values.backIdentification),
-    ]
+    const preview = [values.frontIdentification, values.backIdentification]
+    const imgID = [frontImg, backImg]
     const maxSteps = 2
     const { frontIdentification } = values
     const handleNext = () => {
@@ -154,7 +156,13 @@ const UpdateImage: FC<IUpdateImage> = ({
                                 <div>
                                     <Styled.Img>
                                         <img
-                                            src={preview[activeStep]}
+                                            src={
+                                                imgID[activeStep] === undefined
+                                                    ? getImageUrl(
+                                                          preview[activeStep]
+                                                      )
+                                                    : preview[activeStep]
+                                            }
                                             alt="Identity card"
                                             height="auto"
                                             width="100%"

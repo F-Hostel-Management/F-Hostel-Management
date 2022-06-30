@@ -43,8 +43,8 @@ const Commitments: FC<ICommitmentsProps> = () => {
 
     // Check currentHostelId in localStorage
     useEffect(() => {
-        const currentHostelId = getItem('currentHostelId')
-        dispatch(fetchCommitments({ currentHostelId, pageSize, page }))
+        const hostelId = getItem('currentHostelId')
+        dispatch(fetchCommitments({ hostelId, pageSize, page }))
     }, [dispatch, page, pageSize])
 
     return (
@@ -52,6 +52,7 @@ const Commitments: FC<ICommitmentsProps> = () => {
             <DataGridCustom
                 loading={loading}
                 title="All Commitments"
+                iconName="commitment"
                 rows={rows}
                 columns={columns}
                 rowsCount={numOfCommitment}

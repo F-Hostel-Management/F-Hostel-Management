@@ -5,6 +5,7 @@ import { ROLES } from '../../../FillInformation/constants'
 import * as Styled from './styles'
 import { CameraAlt, PersonOutlineOutlined } from '@mui/icons-material'
 import { RestCaller } from '../../../../utils/RestCaller'
+import { getImageUrl } from '../../../../utils/ImageUtils'
 interface IAvatarProps {
     values: Record<string, any>
     setValues: Dispatch<SetStateAction<any>>
@@ -66,7 +67,11 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                                 </Styled.IconAvatar>
                             ) : (
                                 <img
-                                    src={avatar}
+                                    src={
+                                        avt === undefined
+                                            ? getImageUrl(avatar)
+                                            : avatar
+                                    }
                                     height="auto"
                                     width="100%"
                                     alt="avatar"

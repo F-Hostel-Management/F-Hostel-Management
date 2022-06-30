@@ -4,7 +4,6 @@ import InputField from '../../../../components/Input/InputField'
 import { IDialogOperator } from '../../../../interface/IDialogOperator'
 import * as Styled from '../../style'
 import { RestCaller } from '../../../../utils/RestCaller'
-import { showError, showSuccess } from '../../../../utils/Toast'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 interface IAssignmentDialogProps extends IDialogOperator {}
 
@@ -14,13 +13,19 @@ export const AssignmentDialog = ({
 }: IAssignmentDialogProps) => {
     const [value, setState] = useState('')
     const hostelId = getItem('currentHostelId')
+    // const [loading, setLoading] = useState(false)
     const handleSubmitAssignment = async () => {
-        const result = await RestCaller.post('HostelManagements/assign', {
-            hostelId: hostelId,
-            email: value,
-        })
-        if (result.isError) showError(result.result)
-        showSuccess('Oke')
+        // setLoading(true)
+        const result = await RestCaller.post(
+            'HostelManagements/assign',
+            {
+                hostelId: hostelId,
+                email: value,
+            },
+            { loading: { show: true }, success: { show: true } }
+        )
+        // setLoading(false)
+        // if (result.isError) showError(result.result)
     }
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState(event.currentTarget.value)
