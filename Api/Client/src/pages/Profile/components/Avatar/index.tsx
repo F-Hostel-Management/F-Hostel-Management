@@ -67,7 +67,11 @@ const Avatar: React.FC<IAvatarProps> = ({ values, setValues }) => {
                                 </Styled.IconAvatar>
                             ) : (
                                 <img
-                                    src={getImageUrl(avatar)}
+                                    src={
+                                        avt === undefined
+                                            ? getImageUrl(avatar)
+                                            : avatar
+                                    }
                                     height="auto"
                                     width="100%"
                                     alt="avatar"

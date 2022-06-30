@@ -157,6 +157,8 @@ const ProfileInfo: React.FC<IFormInfoProps> = ({
                             <UpdateImage
                                 values={values}
                                 setValues={setValues}
+                                frontImg={frontImg}
+                                backImg={backImg}
                                 setFrontImg={setFrontImg}
                                 setBackImg={setBackImg}
                                 disabled={readonly}
