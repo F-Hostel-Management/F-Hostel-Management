@@ -3,6 +3,7 @@ import * as React from 'react'
 import InputField from '../../../../components/Input/InputField'
 import { FacilityCategory } from '../../../../constants/FacilityCategory'
 import { IField } from '../../../../interface/IField'
+import { formatPrice } from '../../../../utils/FormatPrice'
 import * as Styled from './styles'
 
 interface IFacilityFormProps {
@@ -32,7 +33,7 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
         {
             label: 'Price',
             name: 'price',
-            type: 'number',
+            type: 'string',
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
         },
@@ -64,7 +65,11 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
                         key={index}
                         label={field.label}
                         name={field.name}
-                        value={values[field.name]}
+                        value={
+                            field.name === 'unitPrice' || field.name === 'price'
+                                ? formatPrice(values[field.name]) //string
+                                : (values[field.name] as any)
+                        }
                         type={field.type}
                         required={field.required}
                         disabled={field.disabled}

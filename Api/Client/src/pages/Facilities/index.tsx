@@ -7,6 +7,7 @@ import { useGridData } from '../../hooks/useGridData'
 import { IFacility } from '../../interface/IFacility'
 import { fetchFacility } from '../../slices/facilitySlice'
 import { ERole } from '../../utils/enums'
+import { formatPrice } from '../../utils/FormatPrice'
 import { getItem } from '../../utils/LocalStorageUtils'
 import { ODataCaller } from '../../utils/ODataCaller'
 import ActionButtons from './components/ActionButtons'
@@ -23,7 +24,7 @@ const getListFacility = async (hostelId: string) => {
 }
 const Facilities: FC<IFacilitiesProps> = () => {
     const role: ERole = 1
-    const { renderCell, createColumn } = useGridData()
+    const { renderCell, createColumn, renderValueGetter } = useGridData()
     const hostelId = getItem('currentHostelId')
     const dispatch = useAppDispatch()
     const [pageSize, setPageSize] = useState<number>(5)
@@ -38,7 +39,9 @@ const Facilities: FC<IFacilitiesProps> = () => {
         createColumn('name', 'Facility Name', 400),
         createColumn('type', 'Category', 200),
         createColumn('quantity', 'Quantity', 200),
-        createColumn('price', 'Price', 150),
+        renderValueGetter('price', 'Price', 120, (params) =>
+            formatPrice(params.price as number)
+        ),
         renderCell('actions', 'Actions', 130, ActionButtons),
     ]
 

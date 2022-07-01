@@ -32,13 +32,6 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
     review = false,
 }) => {
     const [roomList, setRoomList] = React.useState<IRoom[]>([])
-    const format = {
-        unitPrice: '0',
-        price: '',
-    }
-    const [unitPriceFormat, setUnitPriceFormat] = React.useState<string>('0')
-    const [priceFormat, setPriceFormat] = React.useState<string>()
-    const valueFormat = [{ name: unitPriceFormat }, { name: priceFormat }]
 
     React.useEffect(() => {
         ;(async () => {
