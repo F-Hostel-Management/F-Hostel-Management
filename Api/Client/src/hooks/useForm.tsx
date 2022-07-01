@@ -12,7 +12,10 @@ export function useForm<Type>(initialValue: Type) {
         setValues({
             ...values,
             [name]:
-                value && type == 'number' && !isForce ? Number(value) : value,
+                (value && type == 'number' && !isForce) ||
+                (value && (name == 'unitPrice' || name == 'price'))
+                    ? Number(value.replace(/,/g, ''))
+                    : value,
         })
         // if (validateOnChange) {
 

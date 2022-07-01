@@ -98,7 +98,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
         {
             label: 'Unit Price',
-            name: 'unitPriceFormat',
+            name: 'unitPrice',
             type: 'string',
             disabled: false,
             required: true,
@@ -107,7 +107,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
         {
             label: 'Amount',
-            name: 'priceFormat',
+            name: 'price',
             type: 'string',
             disabled: true,
             required: true,
@@ -258,15 +258,17 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                 label={field.label}
                                 name={field.name}
                                 value={
-                                    field.name === 'unitPriceFormat' ||
-                                    field.name === 'priceFormat'
+                                    field.name === 'unitPrice' ||
+                                    field.name === 'price'
                                         ? formatPrice(values[field.name]) //string
                                         : (values[field.name] as any)
                                 }
                                 type={field.type}
                                 required={field.required}
                                 disabled={field.disabled}
-                                onChange={handleInputChange}
+                                onChange={(e) => {
+                                    handleInputChange(e)
+                                }}
                                 endAdornment={field.endAdornment}
                                 multiline={field.multiline}
                                 rows={field.multiline ? 4 : 1}
