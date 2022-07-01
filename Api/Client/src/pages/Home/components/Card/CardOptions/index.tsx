@@ -12,6 +12,9 @@ import ConfirmDialog from '../../../../../components/DialogCustom/ConfirmDialog'
 import { useDialog } from '../../../../../hooks/useDialog'
 import UpdateHostelDialog from '../../Dialog/UpdateHostelDialog'
 import { IHostel } from '../../../../../interface/IHostel'
+import { deleteHostel } from '../../../../../services/HostelService'
+import { fetchHostelList } from '../../../../../slices/homeSlice'
+import { useAppDispatch } from '../../../../../hooks/reduxHook'
 
 interface ICardOptionsProps {
     hostelInfo: IHostel
@@ -23,11 +26,23 @@ const CardOptions: FC<ICardOptionsProps> = ({ hostelInfo }) => {
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
     const [openUpdate, handleOpenUpdate, handleCloseUpdate] = useDialog()
 
+    const dispatch = useAppDispatch()
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
     }
     const handleClose = () => {
         setAnchorEl(null)
+    }
+
+    const handleConfirm = () => {
+        ;(async () => {
+            const response = await deleteHostel(hostelInfo.id)
+            if (!response.isError) {
+                dispatch(fetchHostelList())
+                handleCloseDelete()
+            }
+        })()
     }
 
     return (
@@ -105,7 +120,7 @@ const CardOptions: FC<ICardOptionsProps> = ({ hostelInfo }) => {
                     openDialog={openDelete}
                     handleOpenDialog={handleOpenDelete}
                     handleCloseDialog={handleCloseDelete}
-                    handleConfirm={() => {}}
+                    handleConfirm={handleConfirm}
                 >
                     <div style={{ minHeight: '100px' }}>
                         <Typography variant="h3" mb={1}>
