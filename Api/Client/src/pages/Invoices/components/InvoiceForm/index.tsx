@@ -11,6 +11,7 @@ import { compareDateInvoiceFunction } from '../../actions/compareDateInvoiceFunc
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import _ from 'lodash'
 import * as Styled from './styles'
+import { formatPrice } from '../../../../utils/FormatPrice'
 
 interface IInvoiceFormProps<T> {
     id?: string
@@ -91,7 +92,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         {
             label: 'Unit Price',
             name: 'unitPrice',
-            type: 'number',
+            type: 'string',
             disabled: false,
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
@@ -100,7 +101,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         {
             label: 'Amount',
             name: 'price',
-            type: 'number',
+            type: 'string',
             disabled: true,
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
@@ -115,7 +116,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
         },
     ]
 
-    console.log('price: ' + price)
+    // console.log('price: ' + formatPrice(price))
     return (
         <Styled.FormContainer>
             <Grid container>
@@ -249,11 +250,18 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                 key={index}
                                 label={field.label}
                                 name={field.name}
-                                value={values[field.name] as any}
+                                value={
+                                    field.name === 'unitPrice' ||
+                                    field.name === 'price'
+                                        ? formatPrice(values[field.name]) //string
+                                        : (values[field.name] as any)
+                                }
                                 type={field.type}
                                 required={field.required}
                                 disabled={field.disabled}
-                                onChange={handleInputChange}
+                                onChange={(e) => {
+                                    handleInputChange(e)
+                                }}
                                 endAdornment={field.endAdornment}
                                 multiline={field.multiline}
                                 rows={field.multiline ? 4 : 1}

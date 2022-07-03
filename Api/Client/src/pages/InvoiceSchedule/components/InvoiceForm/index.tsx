@@ -7,6 +7,7 @@ import { InvoiceCron, InvoiceScheduleType } from '../../../../constants/Invoice'
 import { IField } from '../../../../interface/IField'
 import { IRoom } from '../../../../interface/IRoom'
 import { getRoomNamesByHostelId } from '../../../../services/HostelService'
+import { formatPrice } from '../../../../utils/FormatPrice'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import * as Styled from './styles'
@@ -54,7 +55,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
         {
             label: 'Amount',
             name: 'price',
-            type: 'number',
+            type: 'string',
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
             multiline: false,
@@ -176,7 +177,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                                 key={index}
                                 label={field.label}
                                 name={field.name}
-                                value={values[field.name]}
+                                value={
+                                    field.name === 'unitPrice' ||
+                                    field.name === 'price'
+                                        ? formatPrice(values[field.name]) //string
+                                        : (values[field.name] as any)
+                                }
                                 type={field.type}
                                 required={field.required}
                                 disabled={field.disabled}
