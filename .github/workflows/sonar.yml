@@ -6,9 +6,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  analyze-frontend:
-    name: Analyze frontend
+  analyze-backend:
+    name: Analyze backend
     runs-on: windows-latest
+    environment: development
     steps:
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -45,9 +46,10 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"F-Hostel-Management_F-Hostel-Management" /o:"f-hostel-management" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build -c Release
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-  analyze-backend:
-    name: Analyze backend
+  analyze-frontend:
+    name: Analyze frontend
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - uses: actions/checkout@v2
         with:
