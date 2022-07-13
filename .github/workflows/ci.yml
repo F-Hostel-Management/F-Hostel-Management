@@ -49,7 +49,6 @@ jobs:
       - name: Build
         run: dotnet build -c Release
   analyze:
-    name: Analyze
     runs-on: windows-latest
     environment: development
     steps:
@@ -85,6 +84,7 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ""
         shell: powershell
         run: |
           dotnet sonarscanner begin /k:"F-Hostel-Management" /o:"f-hostel-management" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
