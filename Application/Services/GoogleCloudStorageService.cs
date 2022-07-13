@@ -4,13 +4,6 @@ using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -43,7 +36,7 @@ namespace Application.Services
             {
             }
         }
-      
+
         private string ConvertCloudStorageUrlToFirebase(string fileName)
         {
             return $"{FIREBASE_STORAGE}/{appSetting.GoogleCloudStorageBucket}/o/{fileName}";
