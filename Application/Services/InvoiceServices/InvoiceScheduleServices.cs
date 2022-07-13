@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.IRepository;
+﻿using Application.Interfaces;
+using Application.Interfaces.IRepository;
 using Domain.Entities.InvoiceSchedule;
 
 namespace Application.Services.InvoiceScheduleServices;
