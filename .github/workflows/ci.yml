@@ -92,3 +92,15 @@ jobs:
           dotnet sonarscanner begin /k:"F-Hostel-Management" /o:"f-hostel-management" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.branch.name="dev"
           dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+      - name: SonarCloud analysis report
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+            [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+            [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+            [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+            [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+            [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=bugs)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+            [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=F-Hostel-Management&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=F-Hostel-Management)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
