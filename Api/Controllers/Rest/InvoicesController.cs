@@ -62,7 +62,7 @@ public class InvoicesController : BaseRestController
         invoice.ManagerId = CurrentUserID;
         invoice.TenantPaid = null;
         await _invoiceRepository.CreateAsync(invoice);
-
+        await _invoiceService.SendNotifyInvoice(invoice.Id);
         return Ok();
     }
 
@@ -85,7 +85,7 @@ public class InvoicesController : BaseRestController
 
         Mapper.Map(request, invoice);
         await _invoiceRepository.UpdateAsync(invoice);
-
+       
         return Ok();
     }
 
