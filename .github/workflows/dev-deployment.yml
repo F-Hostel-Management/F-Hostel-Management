@@ -29,6 +29,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Change yarn version
+        run: yarn policies set-version 1.22.15
       - name: Install packages
         working-directory: Api/Client
         run: yarn
