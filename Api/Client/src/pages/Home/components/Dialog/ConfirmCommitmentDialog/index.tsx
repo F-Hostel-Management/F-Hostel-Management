@@ -13,7 +13,7 @@ import CommitmentDetails from '../../../../Commitments/components/CommitmentDeta
 
 interface IConfirmCommitmentDialogProps {}
 
-const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = ({}) => {
+const ConfirmCommitmentDialog: FC<IConfirmCommitmentDialogProps> = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     let { sixDigitsCode } = useParams()
