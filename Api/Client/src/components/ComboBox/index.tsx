@@ -32,7 +32,7 @@ const ComboBox = <T extends Record<string, any>>({
             value={valueAutocomplete}
             onChange={(
                 event: React.SyntheticEvent<Element, Event>,
-                newValue: T
+                newValue: T | null
             ) => {
                 setValueAutocomplete(newValue)
             }}
