@@ -7,19 +7,19 @@ import { IRoom } from '../../../../../interface/IRoom'
 
 export const fields: IField[] = [
     {
-        label: 'Start Date',
+        label: 'Start Date of Commitment',
         name: 'startDate',
         type: 'date',
         required: true,
     },
     {
-        label: 'End Date',
+        label: 'End Date Of Commitment',
         name: 'endDate',
         type: 'date',
         required: true,
     },
     {
-        label: 'Payment Day',
+        label: 'Payment Day Of Invoice',
         name: 'paymentDate',
         type: 'number',
         required: false,
@@ -29,11 +29,31 @@ export const fields: IField[] = [
         inputProps: { min: 1, max: 31 },
     },
     {
-        label: 'Price',
+        label: `Room's Price`,
         name: 'price',
         type: 'number',
         required: true,
         endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+    },
+    {
+        label: 'Initial Electric Value',
+        name: 'electric',
+        type: 'number',
+        required: true,
+        endAdornment: <InputAdornment position="end">(kw)</InputAdornment>,
+    },
+    {
+        label: 'Initial Water Value',
+        name: 'electric',
+        type: 'number',
+        required: true,
+        endAdornment: (
+            <InputAdornment position="end">
+                <span style={{ fontSize: '1.3rem' }}>
+                    m<sup>3</sup>
+                </span>
+            </InputAdornment>
+        ),
     },
 ]
 

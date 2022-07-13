@@ -34,6 +34,8 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         price: 0,
         paymentDate: 1,
         images: [],
+        electric: 0,
+        water: 0,
     }
 
     const [commitment, setCommitment] = useState<ICommitment>()
