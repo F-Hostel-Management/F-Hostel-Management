@@ -34,6 +34,7 @@ export const fields: IField[] = [
         type: 'number',
         required: true,
         endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+        inputProps: { min: 0, max: 1000000000 },
     },
 ]
 

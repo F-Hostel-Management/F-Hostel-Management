@@ -23,19 +23,22 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
             name: 'name',
             type: 'text',
             required: true,
+            inputProps: { maxlength: 50 },
         },
         {
             label: 'Quantity',
             name: 'quantity',
-            type: 'text',
+            type: 'number',
             required: true,
+            inputProps: { min: 0, max: 100 },
         },
         {
             label: 'Price',
             name: 'price',
-            type: 'string',
+            type: 'number',
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+            inputProps: { min: 0, max: 100000000 },
         },
     ]
     const { type } = values
@@ -75,6 +78,7 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
                         disabled={field.disabled}
                         onChange={handleInputChange}
                         endAdornment={field.endAdornment}
+                        inputProps={field.inputProps}
                     />
                 ))}
             </div>
