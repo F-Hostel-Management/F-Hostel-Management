@@ -191,28 +191,7 @@ public class VnPayService : IPaymentService
         AddRequestData("vnp_ExpireDate", "20230924083000");
         //Billing
         AddRequestData("vnp_Bill_Email", "huybui479@gmail.com");
-        // var fullName = txt_billing_fullname.Text.Trim();
-        // if (!String.IsNullOrEmpty(fullName))
-        // {
-        //     var indexof = fullName.IndexOf(' ');
-        //     vnpay.AddRequestData("vnp_Bill_FirstName", fullName.Substring(0, indexof));
-        //     vnpay.AddRequestData("vnp_Bill_LastName", fullName.Substring(indexof + 1, fullName.Length - indexof - 1));
-        // }
-
-        // vnpay.AddRequestData("vnp_Bill_Address", txt_inv_addr1.Text.Trim());
-        // vnpay.AddRequestData("vnp_Bill_City", txt_bill_city.Text.Trim());
-        // vnpay.AddRequestData("vnp_Bill_Country", txt_bill_country.Text.Trim());
-        // vnpay.AddRequestData("vnp_Bill_State", "");
-
-        // Invoice
-
-        // vnpay.AddRequestData("vnp_Inv_Phone", txt_inv_mobile.Text.Trim());
-        // vnpay.AddRequestData("vnp_Inv_Email", txt_inv_email.Text.Trim());
-        // vnpay.AddRequestData("vnp_Inv_Customer", txt_inv_customer.Text.Trim());
-        // vnpay.AddRequestData("vnp_Inv_Address", txt_inv_addr1.Text.Trim());
-        // vnpay.AddRequestData("vnp_Inv_Company", txt_inv_company.Text);
-        // vnpay.AddRequestData("vnp_Inv_Taxcode", txt_inv_taxcode.Text);
-        // vnpay.AddRequestData("vnp_Inv_Type", cbo_inv_type.SelectedItem.Value);
+  
         string paymentUrl = CreateRequestUrl(vnp_Url, vnp_HashSecret);
         return paymentUrl;
     }

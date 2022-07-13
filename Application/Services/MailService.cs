@@ -20,7 +20,7 @@ public class MailService : IMailService
         _appSettings = appSettings.Value;
     }
 
-    public async Task SendMailAsync(MailRequest mailRequest)
+    public void SendMailSync(MailRequest mailRequest)
     {
         _backgroundJob.Enqueue(() =>  SendMail(mailRequest));
     }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.IRepository;
+﻿using Application.Interfaces;
+using Application.Interfaces.IRepository;
 using Application.Utilities;
 using Domain.Entities.Invoice;
 using Domain.Entities.InvoiceSchedule;
@@ -10,11 +11,14 @@ public class InvoiceScheduleJob : IJob
 {
     private readonly IGenericRepository<InvoiceEntity> _invoiceRepository;
     private readonly IGenericRepository<InvoiceScheduleEntity> _invoiceScheduleRepository;
+    private readonly IInvoiceService _invoiceService;
+    private readonly IMailService _mailService;
 
-    public InvoiceScheduleJob(IGenericRepository<InvoiceEntity> invoiceRepository, IGenericRepository<InvoiceScheduleEntity> invoiceScheduleRepository)
+    public InvoiceScheduleJob(IGenericRepository<InvoiceEntity> invoiceRepository, IGenericRepository<InvoiceScheduleEntity> invoiceScheduleRepository, IInvoiceService invoiceService)
     {
         _invoiceRepository = invoiceRepository;
         _invoiceScheduleRepository = invoiceScheduleRepository;
+        _invoiceService = invoiceService;
     }
 
     public async Task Execute(IJobExecutionContext context)
@@ -61,6 +65,7 @@ public class InvoiceScheduleJob : IJob
             };
 
             await _invoiceRepository.CreateAsync(newInvoice);
+            await _invoiceService.SendNotifyInvoice(newInvoice.Id);
         }
         catch { }
     }
