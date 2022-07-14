@@ -60,7 +60,7 @@ const CommitmentStepper: FC<ICommitmentStepperProps> = ({
     }, [currentHostel])
     useEffect(() => {
         const currentHostelId = localStorage.getItem('currentHostelId')
-        if (!hostelInfo && !currentHostelId) return
+        if (!hostelInfo.id && !currentHostelId) return
         ;(async () => {
             let roomList = await getRoomOfHostel(
                 currentHostelId || hostelInfo?.id || ''
