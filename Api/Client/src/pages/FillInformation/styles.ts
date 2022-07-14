@@ -98,3 +98,21 @@ export const GridCard = styled(Grid)`
     align-items: center;
     justify-content: center;
 `
+
+export const Image = styled(Paper)`
+    height: 250px;
+    max-width: 400px;
+    width: 100%;
+    padding: 2;
+    cursor: pointer;
+    border-top: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    position: relative;
+`
