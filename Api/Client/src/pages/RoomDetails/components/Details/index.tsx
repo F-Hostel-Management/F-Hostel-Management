@@ -32,6 +32,7 @@ const Details: FC<IDetailsProps> = (props) => {
         await checkoutRoom(roomDetails.id)
         handleCloseCheckout()
     }
+
     return (
         <Paper elevation={3}>
             <Styled.Container>
