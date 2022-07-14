@@ -64,7 +64,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                 content: `initial electric of Commitment ${resCreate.result}`,
                 dueDate: new Date(),
                 price: 0,
-                quantity: values.electric,
+                quantity: values.electric ?? 0,
                 unitPrice: 0,
             })
             createInvoice({
@@ -73,7 +73,7 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
                 content: `initial electric of Commitment ${resCreate.result}`,
                 dueDate: new Date(),
                 price: 0,
-                quantity: values.water,
+                quantity: values.water ?? 0,
                 unitPrice: 0,
             })
 

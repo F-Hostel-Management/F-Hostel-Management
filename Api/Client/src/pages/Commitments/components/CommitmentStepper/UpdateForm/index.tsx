@@ -132,7 +132,7 @@ const UpdateForm: FC<IUpdateFormProps> = ({
                         disabled
                         defaultValue={roomOptions?.[0]}
                     />
-                    {fields.slice(3, 6).map((field) => (
+                    {fields.slice(3, 4).map((field) => (
                         <InputField
                             key={field.name}
                             label={field.label}
