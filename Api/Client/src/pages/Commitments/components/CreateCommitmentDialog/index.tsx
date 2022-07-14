@@ -14,6 +14,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 import { fetchCommitments } from '../../../../slices/commitmentSlice'
+import { createInvoice } from '../../../../services/InvoiceService'
 interface ICreateCommitmentDialogProps {
     openDialog: boolean
     handleCloseDialog: () => void
@@ -56,6 +57,26 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
         // create commitment and get commitmentId
         let resCreate = await createCommitment(values)
         if (!resCreate.isError) {
+            // initial electric and water
+            createInvoice({
+                roomId: values.roomId,
+                invoiceType: 'Electric',
+                content: `initial electric of Commitment ${resCreate.result}`,
+                dueDate: new Date(),
+                price: 0,
+                quantity: values.electric ?? 0,
+                unitPrice: 0,
+            })
+            createInvoice({
+                roomId: values.roomId,
+                invoiceType: 'Water',
+                content: `initial electric of Commitment ${resCreate.result}`,
+                dueDate: new Date(),
+                price: 0,
+                quantity: values.water ?? 0,
+                unitPrice: 0,
+            })
+
             formData.append('HostelId', resCreate.result)
             // if imageList is not empty, system will upload list image
             if (values.images?.length) {

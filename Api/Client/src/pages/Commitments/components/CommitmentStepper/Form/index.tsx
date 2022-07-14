@@ -44,7 +44,7 @@ export const fields: IField[] = [
     },
     {
         label: 'Initial Water Value',
-        name: 'electric',
+        name: 'water',
         type: 'number',
         required: true,
         endAdornment: (

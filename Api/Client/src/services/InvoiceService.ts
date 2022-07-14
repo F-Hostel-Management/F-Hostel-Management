@@ -62,6 +62,22 @@ export const createInvoice = async ({
     content,
     dueDate,
 }: ICreateInvoiceParams) => {
+    if (price === 0) {
+        await RestCaller.post(
+            `Invoices/${roomId}`,
+            {
+                invoiceType,
+                quantity,
+                unitPrice,
+                price,
+                content,
+                dueDate,
+            },
+            { error: { show: false } }
+        )
+        return
+    }
+
     await RestCaller.post(
         `Invoices/${roomId}`,
         {
