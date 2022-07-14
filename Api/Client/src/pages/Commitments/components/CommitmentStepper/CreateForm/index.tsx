@@ -30,8 +30,6 @@ const CreateForm: FC<IFormProps> = ({
     const [images, setImages] = useState<FileList | null>(null)
     const [imageUrls, setImageUrls] = useState<ImageProperties[]>()
 
-    useEffect(() => {}, [])
-
     const onImagesChange = (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files
         if (!files) return
@@ -117,7 +115,7 @@ const CreateForm: FC<IFormProps> = ({
                         defaultValue={roomOptions?.[0]}
                         required={true}
                     />
-                    {fields.slice(3, 4).map((field) => (
+                    {fields.slice(3, 6).map((field) => (
                         <InputField
                             key={field.name}
                             label={field.label}

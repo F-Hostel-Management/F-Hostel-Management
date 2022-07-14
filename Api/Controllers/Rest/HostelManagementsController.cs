@@ -51,7 +51,7 @@ public class HostelManagementsController:BaseRestController
         if (string.IsNullOrEmpty(origin))
             origin = MyHttpContext.AppBaseUrl;
         var mail = await _assignmentService.CreateInvitationMail(target, invitor, hostel, origin);
-        await _mailService.SendMailAsync(mail);
+        _mailService.SendMailSync(mail);
         return Ok("Send invitation mail successfully!");
     }
 

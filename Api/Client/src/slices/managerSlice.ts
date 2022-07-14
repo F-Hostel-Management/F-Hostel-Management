@@ -44,7 +44,7 @@ const managerSlice = createSlice({
     },
 })
 
-export const {} = managerSlice.actions
+// export const {} = managerSlice.actions
 export const getGridData = (state: AppState) => state.manager.gridData
 interface IFetchParams {
     currentPageSize: number

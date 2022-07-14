@@ -29,12 +29,32 @@ export const fields: IField[] = [
         inputProps: { min: 1, max: 31 },
     },
     {
-        label: 'Price',
+        label: `Room's Price`,
         name: 'price',
         type: 'number',
         required: true,
         endAdornment: <InputAdornment position="end">($)</InputAdornment>,
         inputProps: { min: 0, max: 1000000000 },
+    },
+    {
+        label: 'Initial Electric Value',
+        name: 'electric',
+        type: 'number',
+        required: true,
+        endAdornment: <InputAdornment position="end">(kw)</InputAdornment>,
+    },
+    {
+        label: 'Initial Water Value',
+        name: 'water',
+        type: 'number',
+        required: true,
+        endAdornment: (
+            <InputAdornment position="end">
+                <span style={{ fontSize: '1.3rem' }}>
+                    m<sup>3</sup>
+                </span>
+            </InputAdornment>
+        ),
     },
 ]
 
