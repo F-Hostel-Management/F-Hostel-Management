@@ -12,6 +12,7 @@ import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import _ from 'lodash'
 import * as Styled from './styles'
 import { formatPrice } from '../../../../utils/FormatPrice'
+import { showError } from '../../../../utils/Toast'
 
 interface IInvoiceFormProps<T> {
     id?: string
@@ -32,6 +33,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
     review = false,
 }) => {
     const [roomList, setRoomList] = React.useState<IRoom[]>([])
+    const [errQuantity, setErrQuantity] = React.useState<boolean>(false)
+    const [errUnitPrice, setErrUnitPrice] = React.useState<boolean>(false)
 
     React.useEffect(() => {
         ;(async () => {
@@ -43,6 +46,22 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
 
     const { invoiceType, roomId, quantity, lastQuantity, unitPrice, price } =
         values
+
+    const handleOnBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.name === 'quantity' && quantity <= lastQuantity) {
+            setErrQuantity(true)
+            showError('Quantity must be greater than Last Quantity')
+        } else {
+            setErrQuantity(false)
+        }
+        if (e.target.name === 'unitPrice' && unitPrice <= 0) {
+            setErrUnitPrice(true)
+            showError('Unit Price must be greater than 0')
+        } else {
+            setErrUnitPrice(false)
+        }
+    }
+
     const invoices = useAppSelector(({ invoice }) => {
         if (id)
             return invoice.invoiceList.filter(
@@ -59,7 +78,10 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
     React.useEffect(() => {
         const sortedDateInvoices = invoices.sort(compareDateInvoiceFunction)
         const _lastQuantity = _.first(sortedDateInvoices)?.quantity ?? 0
-        setValues({ ...values, lastQuantity: _lastQuantity })
+        setValues({
+            ...values,
+            lastQuantity: _lastQuantity,
+        })
     }, [invoices])
 
     React.useEffect(() => {
@@ -93,6 +115,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
             label: 'Unit Price',
             name: 'unitPrice',
             type: 'string',
+            error: errUnitPrice,
             disabled: false,
             required: true,
             endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
@@ -192,6 +215,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                             : false
                                     }
                                     onChange={handleInputChange}
+                                    error={errQuantity}
+                                    onBlur={handleOnBlur}
                                     sx={{
                                         width: 140,
                                         ml: 2,
@@ -262,6 +287,8 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                                 onChange={(e) => {
                                     handleInputChange(e)
                                 }}
+                                error={field.error}
+                                onBlur={handleOnBlur}
                                 endAdornment={field.endAdornment}
                                 multiline={field.multiline}
                                 rows={field.multiline ? 4 : 1}
