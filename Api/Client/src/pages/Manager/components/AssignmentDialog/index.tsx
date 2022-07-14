@@ -41,7 +41,7 @@ export const AssignmentDialog = ({
         >
             <Styled.AssignmentContainer>
                 <InputField
-                    label="Email"
+                    label="Email of manager"
                     name="email"
                     type="text"
                     required

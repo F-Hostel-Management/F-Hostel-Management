@@ -28,6 +28,7 @@ const HostelForm: FC<IHostelFormProps> = ({
                         disabled={field.disabled}
                         endAdornment={field.endAdornment}
                         onChange={handleInputChange}
+                        inputProps={field.inputProps}
                     />
                 ))}
             </Styled.Side>

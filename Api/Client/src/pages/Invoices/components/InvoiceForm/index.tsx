@@ -83,14 +83,14 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
 
     const fields: IField[] = [
         {
-            label: 'Due Date',
+            label: 'Due date',
             name: 'dueDate',
             type: 'date',
             required: true,
             multiline: false,
         },
         {
-            label: 'Unit Price',
+            label: 'Unit price',
             name: 'unitPrice',
             type: 'string',
             disabled: false,
@@ -123,7 +123,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                 <Styled.GridForm item xs={12} md={6}>
                     <div style={{ width: '350px' }}>
                         <InputField
-                            label="Room Name"
+                            label="Room name"
                             name="roomId"
                             value={roomId}
                             required={true}
@@ -140,7 +140,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceProps>> = ({
                             ))}
                         </InputField>
                         <InputField
-                            label="Type"
+                            label="Type of invoice"
                             name="invoiceType"
                             value={invoiceType}
                             required={true}
