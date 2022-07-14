@@ -8,6 +8,7 @@ interface IComboBoxProps<T> {
     options: T[]
     valueAutocomplete: T
     setValueAutocomplete: (valueAutocomplete: T) => void
+    required?: boolean
     [x: string | number | symbol]: unknown
 }
 
@@ -17,6 +18,7 @@ const ComboBox = <T extends Record<string, any>>({
     options,
     valueAutocomplete,
     setValueAutocomplete,
+    required,
     ...others
 }: IComboBoxProps<T>) => {
     const [inputValue, setInputValue] = React.useState('')
@@ -56,6 +58,7 @@ const ComboBox = <T extends Record<string, any>>({
                     label={label}
                     variant="outlined"
                     sx={{ margin: '16px 0' }}
+                    required={required}
                 />
             )}
             size="small"

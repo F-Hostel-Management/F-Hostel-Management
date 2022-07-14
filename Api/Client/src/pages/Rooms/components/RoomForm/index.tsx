@@ -4,26 +4,23 @@ import InputField from '../../../../components/Input/InputField'
 import { fields } from './fields'
 
 interface IRoomFormProps {
+    action: 'Create' | 'Update'
     values: Record<string, any>
     handleInputChange: Dispatch<SetStateAction<any>>
 }
 
-const RoomForm: FC<IRoomFormProps> = ({ values, handleInputChange }) => {
+const RoomForm: FC<IRoomFormProps> = ({
+    action,
+    values,
+    handleInputChange,
+}) => {
+    // if action = update, system will hide "quantity" field
+    const indexStart = action === 'Create' ? 0 : 1
+
     return (
         <Styled.Wrapper>
             <Styled.Side>
-                {values.quantity && (
-                    <InputField
-                        label="Quantity"
-                        name="quantity"
-                        value={values.quantity}
-                        type="number"
-                        required={true}
-                        inputProps={{ min: 1 }}
-                        onChange={handleInputChange}
-                    />
-                )}
-                {fields.slice(1, 5).map((field) => (
+                {fields.slice(indexStart, 5).map((field) => (
                     <InputField
                         key={field.name}
                         label={field.label}

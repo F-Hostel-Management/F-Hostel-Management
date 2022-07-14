@@ -60,7 +60,11 @@ const CreateRoomDialog: FC<ICreateRoomDialogProps> = ({
             handleSubmit={handleCreateRoom}
             maxWidth="md"
         >
-            <RoomForm values={values} handleInputChange={handleInputChange} />
+            <RoomForm
+                action="Create"
+                values={values}
+                handleInputChange={handleInputChange}
+            />
         </FormDialog>
     )
 }

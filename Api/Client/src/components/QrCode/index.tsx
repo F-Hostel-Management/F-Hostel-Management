@@ -26,6 +26,7 @@ const QrCode: FunctionComponent<IProps> = ({ size, link }: IProps) => {
                 style={{
                     padding: '10px',
                     background: '#FFFFFF',
+                    cursor: 'pointer',
                 }}
                 onClick={onClick}
             />

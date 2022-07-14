@@ -115,6 +115,7 @@ const CreateForm: FC<IFormProps> = ({
                             !hostelInfo || !Object.keys(hostelInfo).length
                         }
                         defaultValue={roomOptions?.[0]}
+                        required={true}
                     />
                     {fields.slice(3, 4).map((field) => (
                         <InputField

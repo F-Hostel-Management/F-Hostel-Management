@@ -46,16 +46,16 @@ export const sidebarItemList: {
                     label: 'Managers',
                     path: '/home/managers',
                 },
-                {
-                    icon: <Icon name="notification" />,
-                    label: 'Notifications',
-                    path: '/home/notifications',
-                },
-                {
-                    icon: <Icon name="ticket" />,
-                    label: 'Tickets',
-                    path: '/home/tickets',
-                },
+                // {
+                //     icon: <Icon name="notification" />,
+                //     label: 'Notifications',
+                //     path: '/home/notifications',
+                // },
+                // {
+                //     icon: <Icon name="ticket" />,
+                //     label: 'Tickets',
+                //     path: '/home/tickets',
+                // },
                 {
                     icon: <Icon name="schedulingInvoice" />,
                     label: 'Scheduling Invoices',

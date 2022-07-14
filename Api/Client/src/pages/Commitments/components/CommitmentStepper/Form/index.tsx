@@ -7,24 +7,24 @@ import { IRoom } from '../../../../../interface/IRoom'
 
 export const fields: IField[] = [
     {
-        label: 'Start Date',
+        label: 'Start date',
         name: 'startDate',
         type: 'date',
         required: true,
     },
     {
-        label: 'End Date',
+        label: 'End date',
         name: 'endDate',
         type: 'date',
         required: true,
     },
     {
-        label: 'Payment Day',
+        label: 'Payment day',
         name: 'paymentDate',
         type: 'number',
         required: false,
         endAdornment: (
-            <InputAdornment position="end">day of month</InputAdornment>
+            <InputAdornment position="end">(day of month)</InputAdornment>
         ),
         inputProps: { min: 1, max: 31 },
     },
@@ -33,7 +33,7 @@ export const fields: IField[] = [
         name: 'price',
         type: 'number',
         required: true,
-        endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+        endAdornment: <InputAdornment position="end">($)</InputAdornment>,
         inputProps: { min: 0, max: 1000000000 },
     },
 ]

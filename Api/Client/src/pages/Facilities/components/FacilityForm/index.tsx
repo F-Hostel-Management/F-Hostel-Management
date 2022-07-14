@@ -23,7 +23,7 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
             name: 'name',
             type: 'text',
             required: true,
-            inputProps: { maxlength: 50 },
+            inputProps: { maxlength: 25 },
         },
         {
             label: 'Quantity',
@@ -35,10 +35,10 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
         {
             label: 'Price',
             name: 'price',
-            type: 'number',
+            type: 'string',
             required: true,
-            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
-            inputProps: { min: 0, max: 100000000 },
+            endAdornment: <InputAdornment position="end">($)</InputAdornment>,
+            inputProps: { maxlength: 10 },
         },
     ]
     const { type } = values
@@ -50,7 +50,7 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
         <Styled.FormContainer>
             <div style={{ width: '350px' }}>
                 <InputField
-                    label="Facility Category"
+                    label="Facility category"
                     name="type"
                     value={type}
                     required={true}

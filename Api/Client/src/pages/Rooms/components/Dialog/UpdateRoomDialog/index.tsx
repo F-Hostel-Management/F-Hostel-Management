@@ -60,7 +60,11 @@ const UpdateRoomDialog: FC<IUpdateRoomDialogProps> = ({
             handleSubmit={handleUpdateRoom}
             maxWidth="md"
         >
-            <RoomForm values={values} handleInputChange={handleInputChange} />
+            <RoomForm
+                action="Update"
+                values={values}
+                handleInputChange={handleInputChange}
+            />
         </FormDialog>
     )
 }
