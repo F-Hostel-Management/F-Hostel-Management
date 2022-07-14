@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
 import { useForm } from '../../../../hooks/useForm'
 import { createInvoice } from '../../../../services/InvoiceService'
+import { showError } from '../../../../utils/Toast'
 import { IInvoiceProps } from '../../interfaces/IInvoiceProps'
 import InvoiceForm from '../InvoiceForm'
 interface ICreateInvoiceDialogProps {
@@ -30,6 +31,18 @@ const CreateInvoiceDialog: FC<ICreateInvoiceDialogProps> = ({
         useForm<IInvoiceProps>(initialValues)
 
     const handleCreateSubmit = async () => {
+        if (
+            (values.invoiceType === 'Water' ||
+                values.invoiceType === 'Electric') &&
+            values.quantity <= values.lastQuantity
+        ) {
+            showError('Quantity must be greater than Last Quantity')
+            return
+        }
+        if (values.unitPrice <= 0) {
+            showError('Unit Price must be greater than 0')
+            return
+        }
         await createInvoice({
             roomId: values.roomId,
             content: values.content,
