@@ -23,6 +23,7 @@ import {
 import { IRoomTenant } from '../../../../interface/IRoomTenant'
 import { useDialog } from '../../../../hooks/useDialog'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
+import { useParams } from 'react-router-dom'
 interface ITenantListProps {}
 
 const TenantList: FC<ITenantListProps> = (props) => {
@@ -31,8 +32,10 @@ const TenantList: FC<ITenantListProps> = (props) => {
     )
 
     const [currentTenant, setCurrentTenant] = useState<IRoomTenant>()
-    const [tenantList, setTenantList] = useState<IRoomTenant[]>()
+    const [tenantList, setTenantList] = useState<IRoomTenant[]>([])
     const [openDelete, handleOpenDelete, handleCloseDelete] = useDialog()
+
+    const params = useParams()
 
     const handleKickTenant = async () => {
         ;(async () => {
@@ -50,11 +53,11 @@ const TenantList: FC<ITenantListProps> = (props) => {
         ;(async () => {
             const tenants: IRoomTenant[] = await getAllTenantsOfRoom(
                 roomDetails.hostelId,
-                roomDetails.id
+                params.roomId
             )
             setTenantList(tenants)
         })()
-    }, [roomDetails])
+    }, [roomDetails.id])
 
     return (
         <>
@@ -83,7 +86,7 @@ const TenantList: FC<ITenantListProps> = (props) => {
                     />
                     <CardContent sx={{ padding: 0 }}>
                         <List>
-                            {tenantList &&
+                            {tenantList?.length ? (
                                 tenantList.map((item) => (
                                     <>
                                         <Divider
@@ -132,7 +135,13 @@ const TenantList: FC<ITenantListProps> = (props) => {
                                             </IconButton>
                                         </ListItem>
                                     </>
-                                ))}
+                                ))
+                            ) : (
+                                <Typography
+                                    style={{ textAlign: 'center' }}
+                                    variant="body2"
+                                >{`<<Empty room>>`}</Typography>
+                            )}
                         </List>
                     </CardContent>
                 </Card>

@@ -31,10 +31,10 @@ const getAllTenantsOfRoom = async (hostelId = '', roomId = '') => {
 
     const result: IRoomTenant[] = await get('RoomTenants', builder)
     console.log(
-        'getAllTenants: ',
+        'getAllTenantsOfRoom: ',
         result.filter((roomTenant) => roomTenant.room.id === roomId)
     )
-    return result.filter((roomTenant) => roomTenant.room.hostelId === hostelId)
+    return result.filter((roomTenant) => roomTenant.room.id === roomId)
 }
 
 const countTenantsOfHostel = async (hostelId: string) => {

@@ -41,4 +41,3 @@ export const SidebarActionWrapper = styled.div`
         margin: 0 12px;
     }
 `
-
