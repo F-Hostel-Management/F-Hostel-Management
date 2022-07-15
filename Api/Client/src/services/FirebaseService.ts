@@ -42,7 +42,7 @@ export default class FirebaseService {
         provider.setCustomParameters({
             display: 'popup',
         })
-
+        provider.addScope('openid email')
         const result = await signInWithPopup(this.auth, provider)
         return result.user.getIdToken()
     }
@@ -52,7 +52,7 @@ export default class FirebaseService {
         provider.setCustomParameters({
             prompt: 'consent',
         })
-        provider.addScope('openid email')
+        provider.addScope('openid email profile')
 
         const result = await signInWithPopup(this.auth, provider)
         return result.user.getIdToken()

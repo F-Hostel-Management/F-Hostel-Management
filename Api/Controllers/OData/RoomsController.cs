@@ -58,7 +58,8 @@ public class RoomsController : BaseODataController<RoomEntity>
     }
     
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    //[Authorize(Policy = PolicyName.ONWER_AND_MANAGER)]
+    [Authorize]
     [HttpGet("{roomId}/detail")]
     public async Task<IQueryable> GetRoomDetailById
         (ODataQueryOptions<RoomEntity> options, [FromRoute] Guid roomId)
