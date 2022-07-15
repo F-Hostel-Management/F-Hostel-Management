@@ -62,8 +62,14 @@ export const HttpToast = {
 
         switch (status) {
             case 400:
-                const error = head(detail?.responseException?.validationErrors)
-                exceptionMessage = error ? error.reason : 'Bad Request'
+                const validationError = head(
+                    detail?.responseException?.validationErrors
+                )
+                if (validationError) {
+                    exceptionMessage = validationError.reason
+                } else {
+                    exceptionMessage ??= 'Bad Request'
+                }
                 break
             case 401:
                 exceptionMessage ??= 'Unauthorized'
