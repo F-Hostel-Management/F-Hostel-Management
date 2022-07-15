@@ -42,10 +42,22 @@ const getAllCommitmentOfHostel = async (
 const getCommitmentDetails = async (commitmentId = '') => {
     const builder = createBuilder<ICommitment>()
         .filter('id', (e) => e.equals(commitmentId))
-        .select('owner', 'room', 'hostel')
-        .expand('owner', (owner) => owner.select())
-        .expand('room', (room) => room.select())
-        .expand('hostel', (hostel) => hostel.select())
+        .select(
+            'id',
+            'commitmentCode',
+            'createdDate',
+            'startDate',
+            'endDate',
+            'status',
+            'joiningCode',
+            'paymentDate',
+            'price'
+        )
+        .expand('manager', (e) => e.select('id', 'name'))
+        .expand('owner', (e) => e.select('id', 'name'))
+        .expand('room', (e) => e.select())
+        .expand('images', (q) => q.select('id', 'imgUrl'))
+        .expand('hostel', (e) => e.select())
     const result = await get('Hostels', builder)
     console.log('getTenantOfCommitment: ', result?.[0])
     return result?.[0]

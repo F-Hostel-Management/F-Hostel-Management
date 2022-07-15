@@ -1,4 +1,5 @@
 import { ERoomStatus } from '../utils/enums'
+import { ICommitment } from './ICommitment'
 import { IFacilityManagement } from './IFacility'
 import { IHostel } from './IHostel'
 
@@ -20,6 +21,7 @@ export interface IRoom {
     maximumPeople?: number
     isDeleted?: boolean
     facilityManagements?: IFacilityManagement[]
+    commitments?: ICommitment[]
     [x: string | number | symbol]: any
 }
 

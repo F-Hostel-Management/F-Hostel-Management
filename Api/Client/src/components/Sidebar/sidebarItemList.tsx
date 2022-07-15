@@ -90,14 +90,14 @@ export const sidebarItemList: {
             groupLabel: '--MAIN',
             items: [
                 {
-                    icon: <Icon name="invoice" />,
-                    label: 'Invoices',
-                    path: '/home/invoices',
-                },
-                {
                     icon: <Icon name="room" />,
                     label: 'Rooms',
                     path: '/home/rooms',
+                },
+                {
+                    icon: <Icon name="invoice" />,
+                    label: 'Invoices',
+                    path: '/home/invoices',
                 },
             ],
         },

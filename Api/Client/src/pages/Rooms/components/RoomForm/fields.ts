@@ -20,14 +20,14 @@ export const fields: IField[] = [
         name: 'length',
         type: 'number',
         required: true,
-        inputProps: { min: 1, max: 20 },
+        inputProps: { min: 1, max: 20, step: 0.1 },
     },
     {
         label: 'Width of room',
         name: 'width',
         type: 'number',
         required: true,
-        inputProps: { min: 1, max: 20 },
+        inputProps: { min: 1, max: 20, step: 0.1 },
     },
     {
         label: 'Maximum of people',

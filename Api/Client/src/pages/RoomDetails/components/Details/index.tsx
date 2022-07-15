@@ -12,6 +12,8 @@ import { useAppSelector } from '../../../../hooks/reduxHook'
 import { useDialog } from '../../../../hooks/useDialog'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
 import { checkoutRoom } from '../../../../services/RoomService'
+import DialogCustom from '../../../../components/DialogCustom'
+import CommitmentDetails from '../../../Commitments/components/CommitmentDetails'
 
 interface IDetailsProps {}
 
@@ -20,11 +22,17 @@ const Details: FC<IDetailsProps> = (props) => {
         ({ roomDetails }) => roomDetails.roomDetails
     )
     const [openCheckout, handleOpenCheckout, handleCloseCheckout] = useDialog()
+    const [
+        openViewCommitment,
+        handleOpenViewCommitment,
+        handleCloseViewCommitment,
+    ] = useDialog()
+
     const handleCheckout = async () => {
         await checkoutRoom(roomDetails.id)
         handleCloseCheckout()
     }
-    console.log(roomDetails)
+
     return (
         <Paper elevation={3}>
             <Styled.Container>
@@ -76,6 +84,8 @@ const Details: FC<IDetailsProps> = (props) => {
                         variant="outlined"
                         color="primary"
                         sx={{ marginRight: 4 }}
+                        onClick={handleOpenViewCommitment}
+                        disabled={!roomDetails?.commitments?.length}
                     >
                         View Commitment
                     </Button>
@@ -110,6 +120,26 @@ const Details: FC<IDetailsProps> = (props) => {
                             </Typography>
                         </div>
                     </ConfirmDialog>
+                )}
+                {openViewCommitment && roomDetails?.commitments?.length && (
+                    <DialogCustom
+                        title="Commitment Details"
+                        openDialog={openViewCommitment}
+                        handleCloseDialog={handleCloseViewCommitment}
+                        maxWidth="xl"
+                    >
+                        <div
+                            style={{
+                                minHeight: '100px',
+                                width: '80%',
+                                margin: 'auto',
+                            }}
+                        >
+                            <CommitmentDetails
+                                commitment={roomDetails.commitments[0]}
+                            />
+                        </div>
+                    </DialogCustom>
                 )}
             </Styled.Container>
         </Paper>
