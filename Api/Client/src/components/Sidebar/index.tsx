@@ -76,7 +76,6 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
             {isShownSidebar && (
                 <React.Fragment>
                     <Styled.ProfileWrapper>
-                        https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png
                         <Styled.ProfileImage
                             url={
                                 currentUser?.avatar
