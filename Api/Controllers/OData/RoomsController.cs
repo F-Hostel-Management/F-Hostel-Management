@@ -64,8 +64,8 @@ public class RoomsController : BaseODataController<RoomEntity>
     public async Task<IQueryable> GetRoomDetailById
         (ODataQueryOptions<RoomEntity> options, [FromRoute] Guid roomId)
     {
-        if (!await _authorizationServices.IsRoomManageByCurrentUser(roomId, CurrentUserId))
-            throw new ForbiddenException("");
+        //if (!await _authorizationServices.IsRoomManageByCurrentUser(roomId, CurrentUserId))
+        //    throw new ForbiddenException("");
         var query = db.Rooms.Where(e => e.Id.Equals(roomId));
         return ApplyQuery(options, query);
     }
