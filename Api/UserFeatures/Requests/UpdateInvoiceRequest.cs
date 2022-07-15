@@ -15,7 +15,6 @@ namespace Api.UserFeatures.Requests
         [Required]
         public double Price { get; set; }
 
-        [Required]
         public string Content { get; set; }
 
         [Required]
