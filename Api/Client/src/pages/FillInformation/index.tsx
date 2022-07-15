@@ -313,57 +313,48 @@ const PersonalInformation: React.FC<IPersonInformationProps> = ({
                                 </Paper>
 
                                 {!preview[activeStep] ? (
-                                    <CardActionArea
-                                        sx={{
-                                            height: 255,
-                                            maxWidth: 400,
-                                            width: '100%',
-                                            p: 2,
-                                            borderTop: '1px solid #dadada',
-                                        }}
-                                    >
-                                        <label>
-                                            <input
-                                                type="file"
-                                                id="avatar"
-                                                accept="image/png, image/jpeg"
-                                                style={{ display: 'none' }}
-                                                onChange={(e) => {
-                                                    const files = e.target.files
-                                                    if (!files) return
+                                    <label>
+                                        <input
+                                            type="file"
+                                            id="avatar"
+                                            accept="image/png, image/jpeg"
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => {
+                                                const files = e.target.files
+                                                if (!files) return
 
-                                                    const { imgCard } = state
-                                                    imgCard?.set(
-                                                        activeStep,
-                                                        files[0]
-                                                    )
-                                                    onChangeState({
-                                                        ...state,
-                                                        imgCard: new Map(
-                                                            imgCard
-                                                        ),
-                                                    })
-                                                }}
-                                            ></input>
-
-                                            <FileUpload
-                                                htmlColor="#a7a7a7"
-                                                sx={{
-                                                    width: '20%',
-                                                    height: 'auto',
-                                                }}
-                                            />
-                                        </label>
-
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                color: 'grey.600',
+                                                const { imgCard } = state
+                                                imgCard?.set(
+                                                    activeStep,
+                                                    files[0]
+                                                )
+                                                onChangeState({
+                                                    ...state,
+                                                    imgCard: new Map(imgCard),
+                                                })
                                             }}
-                                        >
-                                            Upload image
-                                        </Typography>
-                                    </CardActionArea>
+                                        ></input>
+                                        <Styled.Image elevation={0} square>
+                                            <div>
+                                                <FileUpload
+                                                    htmlColor="#a7a7a7"
+                                                    sx={{
+                                                        width: '20%',
+                                                        height: 'auto',
+                                                    }}
+                                                />
+
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
+                                                        color: 'grey.600',
+                                                    }}
+                                                >
+                                                    Upload image
+                                                </Typography>
+                                            </div>
+                                        </Styled.Image>
+                                    </label>
                                 ) : (
                                     <CardActionArea>
                                         <CardMedia
@@ -662,6 +653,18 @@ const FillInformation: React.FunctionComponent<IFillInformationProps> = () => {
     }
 
     const doFirstTimeLogin = async (): Promise<boolean> => {
+        if (
+            information.fullName == '' ||
+            information.address == '' ||
+            information.cardNumber == '' ||
+            information.birthDate == '' ||
+            information.gender == '' ||
+            information.phoneNo == '' ||
+            (role == 'Owner' && information.taxCode == '')
+        ) {
+            showError('Please input all fields in the information form')
+            return false
+        }
         if (firstTimeLoginCheck) return true
         const firebaseToken =
             await FirebaseService.getInstance().getFirebaseToken()
