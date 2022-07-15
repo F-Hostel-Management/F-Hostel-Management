@@ -71,6 +71,19 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
             { icon: <ExitToApp />, path: '', onClick: handleLogout },
         ],
     }
+
+    let roleLabel
+    switch (role) {
+        case ERole.MANAGER_ROLE:
+            roleLabel = 'Manager'
+            break
+        case ERole.OWNER_ROLE:
+            roleLabel = 'ADMIN'
+            break
+        case ERole.TENANT_ROLE:
+            roleLabel = 'Tenant'
+            break
+    }
     return (
         <Styled.SidebarContainer isShownSidebar={isShownSidebar}>
             {isShownSidebar && (
@@ -87,7 +100,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
                         <Typography variant="subtitle1">
                             {currentUser?.name}
                         </Typography>
-                        <Typography variant="subtitle2">Owner</Typography>
+                        <Typography variant="subtitle2">{roleLabel}</Typography>
                     </Styled.ProfileWrapper>
                     <Styled.SidebarActionWrapper>
                         {IconButtonList.items.map((item, index) => (

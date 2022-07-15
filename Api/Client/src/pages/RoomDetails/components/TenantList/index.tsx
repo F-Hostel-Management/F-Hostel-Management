@@ -24,9 +24,12 @@ import { IRoomTenant } from '../../../../interface/IRoomTenant'
 import { useDialog } from '../../../../hooks/useDialog'
 import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
 import { useParams } from 'react-router-dom'
+import { ERole } from '../../../../utils/enums'
+import { getItem } from '../../../../utils/LocalStorageUtils'
 interface ITenantListProps {}
 
 const TenantList: FC<ITenantListProps> = (props) => {
+    const role = useAppSelector(({ auth }) => auth.currentUser?.role)
     const roomDetails = useAppSelector(
         ({ roomDetails }) => roomDetails.roomDetails
     )
@@ -53,7 +56,9 @@ const TenantList: FC<ITenantListProps> = (props) => {
         ;(async () => {
             const tenants: IRoomTenant[] = await getAllTenantsOfRoom(
                 roomDetails.hostelId,
-                params.roomId
+                role === ERole.TENANT_ROLE
+                    ? getItem('currentRoomId')
+                    : params.roomId
             )
             setTenantList(tenants)
         })()
@@ -121,18 +126,22 @@ const TenantList: FC<ITenantListProps> = (props) => {
                                                     </Typography>
                                                 }
                                             />
-                                            <IconButton
-                                                aria-label="delete"
-                                                color="orange"
-                                                size="large"
-                                                onClick={() =>
-                                                    handleClickDelete(item)
-                                                }
-                                            >
-                                                <DeleteICon
-                                                    sx={{ fontSize: '2rem' }}
-                                                />
-                                            </IconButton>
+                                            {role !== ERole.TENANT_ROLE && (
+                                                <IconButton
+                                                    aria-label="delete"
+                                                    color="orange"
+                                                    size="large"
+                                                    onClick={() =>
+                                                        handleClickDelete(item)
+                                                    }
+                                                >
+                                                    <DeleteICon
+                                                        sx={{
+                                                            fontSize: '2rem',
+                                                        }}
+                                                    />
+                                                </IconButton>
+                                            )}
                                         </ListItem>
                                     </>
                                 ))
