@@ -7,6 +7,7 @@ import { InvoiceCron, InvoiceScheduleType } from '../../../../constants/Invoice'
 import { IField } from '../../../../interface/IField'
 import { IRoom } from '../../../../interface/IRoom'
 import { getRoomNamesByHostelId } from '../../../../services/HostelService'
+import { formatPrice } from '../../../../utils/FormatPrice'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 import { IInvoiceScheduleProps } from '../../interfaces/IInvoiceScheduleProps'
 import * as Styled from './styles'
@@ -54,9 +55,9 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
         {
             label: 'Amount',
             name: 'price',
-            type: 'number',
+            type: 'string',
             required: true,
-            endAdornment: <InputAdornment position="end">vnd</InputAdornment>,
+            endAdornment: <InputAdornment position="end">($)</InputAdornment>,
             multiline: false,
         },
         {
@@ -74,7 +75,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                 <Styled.GridForm item xs={12} md={6}>
                     <div style={{ width: '350px' }}>
                         <InputField
-                            label="Room Name"
+                            label="Room name"
                             name="roomId"
                             value={roomId}
                             required={true}
@@ -91,7 +92,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                             ))}
                         </InputField>
                         <InputField
-                            label="Type"
+                            label="Type of invoice"
                             name="invoiceType"
                             value={invoiceType}
                             required={true}
@@ -125,7 +126,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                             ))}
                         </InputField>
                         <InputField
-                            label="Date Created"
+                            label="Date created"
                             name="createDate"
                             value={createDate}
                             type={cron === 'Month' ? 'number' : 'text'}
@@ -135,14 +136,11 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                             inputProps={{ min: 1, max: 31 }}
                             InputProps={{
                                 readOnly: review,
-                                endAdornment:
-                                    cron === 'Month' ? (
-                                        <InputAdornment position="end">
-                                            day of every month
-                                        </InputAdornment>
-                                    ) : (
-                                        ''
-                                    ),
+                                endAdornment: cron === 'Month' && (
+                                    <InputAdornment position="end">
+                                        (day of every month)
+                                    </InputAdornment>
+                                ),
                             }}
                         >
                             {DaysOfTheWeek.map((option, index) => (
@@ -156,7 +154,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                 <Styled.GridForm item xs={12} md={6}>
                     <div style={{ width: '350px' }}>
                         <InputField
-                            label="Payment Date"
+                            label="Payment date"
                             name="paymentDate"
                             value={paymentDate}
                             type="number"
@@ -166,7 +164,7 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                                 readOnly: review,
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        days
+                                        (date)
                                     </InputAdornment>
                                 ),
                             }}
@@ -176,7 +174,12 @@ const InvoiceForm: React.FC<IInvoiceFormProps<IInvoiceScheduleProps>> = ({
                                 key={index}
                                 label={field.label}
                                 name={field.name}
-                                value={values[field.name]}
+                                value={
+                                    field.name === 'unitPrice' ||
+                                    field.name === 'price'
+                                        ? formatPrice(values[field.name]) //string
+                                        : (values[field.name] as any)
+                                }
                                 type={field.type}
                                 required={field.required}
                                 disabled={field.disabled}

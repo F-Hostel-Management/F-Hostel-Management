@@ -7,7 +7,6 @@ export interface IFacility {
     quantity: number
     numberSelected?: number
     description?: string
-    [x: string | number | symbol]: any
 }
 
 export interface IFacilityValues {

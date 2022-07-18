@@ -12,7 +12,7 @@ import { Divider, Typography } from '@mui/material'
 
 interface IProfileProps {}
 
-const Profile: React.FunctionComponent<IProfileProps> = ({}) => {
+const Profile: React.FunctionComponent<IProfileProps> = () => {
     const currentUser = useSelector((state: AppState) => state.auth.currentUser)
 
     const initialValues: IUser = {

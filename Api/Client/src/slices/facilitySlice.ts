@@ -40,6 +40,6 @@ const facilitySlice = createSlice({
     },
 })
 
-export const {} = facilitySlice.actions
+// export const {} = facilitySlice.actions
 
 export default facilitySlice.reducer

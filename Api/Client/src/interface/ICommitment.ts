@@ -32,5 +32,7 @@ export interface ICommitmentValues {
     paymentDate: number
     images?: Array<File | null>
     deletedImg?: string[]
+    electric?: number
+    water?: number
     [x: string | number | symbol]: unknown
 }

@@ -27,7 +27,7 @@ const RoomCard: FC<IRoomCardProps> = ({ room }) => {
 
     const handleClickDetail = () => {
         setItem('currentRoomId', room?.id)
-        navigate('dashboard')
+        navigate('rooms')
     }
 
     return (

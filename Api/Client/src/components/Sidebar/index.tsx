@@ -1,7 +1,7 @@
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react'
 
 import { Link, useLocation } from 'react-router-dom'
-
+import { getImageUrl } from '../../utils/ImageUtils'
 import {
     ArrowRight,
     PermIdentity,
@@ -71,16 +71,35 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
             { icon: <ExitToApp />, path: '', onClick: handleLogout },
         ],
     }
+
+    let roleLabel
+    switch (role) {
+        case ERole.MANAGER_ROLE:
+            roleLabel = 'Manager'
+            break
+        case ERole.OWNER_ROLE:
+            roleLabel = 'ADMIN'
+            break
+        case ERole.TENANT_ROLE:
+            roleLabel = 'Tenant'
+            break
+    }
     return (
         <Styled.SidebarContainer isShownSidebar={isShownSidebar}>
             {isShownSidebar && (
                 <React.Fragment>
                     <Styled.ProfileWrapper>
-                        <Styled.ProfileImage url="https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-1/83445388_2423230741323586_2331765335868309504_n.jpg?stp=dst-jpg_s200x200&_nc_cat=107&ccb=1-7&_nc_sid=7206a8&_nc_ohc=9ZMrP7BsC5IAX-gabWu&tn=Vo_L4bz-6If-eYJC&_nc_ht=scontent-hkg4-1.xx&oh=00_AT8zFM6uCR2q2bs2by-uM84jGSSxGbfyQQkHh48dTWY-hw&oe=62B171F5" />
+                        <Styled.ProfileImage
+                            url={
+                                currentUser?.avatar
+                                    ? getImageUrl(currentUser?.avatar)
+                                    : 'https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png'
+                            }
+                        />
                         <Typography variant="subtitle1">
                             {currentUser?.name}
                         </Typography>
-                        <Typography variant="subtitle2">Owner</Typography>
+                        <Typography variant="subtitle2">{roleLabel}</Typography>
                     </Styled.ProfileWrapper>
                     <Styled.SidebarActionWrapper>
                         {IconButtonList.items.map((item, index) => (

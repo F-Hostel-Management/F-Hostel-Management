@@ -17,6 +17,7 @@ import {
 } from '../../slices/invoiceScheduleSlice'
 import { getItem } from '../../utils/LocalStorageUtils'
 import { DaysOfTheWeek } from '../../constants/Date'
+import { formatPrice } from '../../utils/FormatPrice'
 
 interface IInvoiceScheduleProps {}
 
@@ -60,8 +61,10 @@ const InvoiceSchedule: FC<IInvoiceScheduleProps> = () => {
                 return '1'
             }
         ),
-        createColumn('paymentDate', 'Payment Date', 150),
-        createColumn('price', 'Price', 100),
+        createColumn('paymentDate', 'Payment Date', 110),
+        renderValueGetter('price', 'Price', 120, (params) =>
+            formatPrice(params.price as number)
+        ),
         renderValueGetter(
             'creator',
             'Creator',

@@ -33,6 +33,7 @@ const OwnerHome: React.FunctionComponent<IOwnerHomeProps> = ({ hostels }) => {
                         color="primary"
                         startIcon={<Description />}
                         onClick={handleOpenCreateCommit}
+                        disabled={hostels.length ? false : true}
                     >
                         CREATE COMMITMENT
                     </Button>

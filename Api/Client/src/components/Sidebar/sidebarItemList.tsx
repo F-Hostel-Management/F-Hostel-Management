@@ -46,16 +46,16 @@ export const sidebarItemList: {
                     label: 'Managers',
                     path: '/home/managers',
                 },
-                {
-                    icon: <Icon name="notification" />,
-                    label: 'Notifications',
-                    path: '/home/notifications',
-                },
-                {
-                    icon: <Icon name="ticket" />,
-                    label: 'Tickets',
-                    path: '/home/tickets',
-                },
+                // {
+                //     icon: <Icon name="notification" />,
+                //     label: 'Notifications',
+                //     path: '/home/notifications',
+                // },
+                // {
+                //     icon: <Icon name="ticket" />,
+                //     label: 'Tickets',
+                //     path: '/home/tickets',
+                // },
                 {
                     icon: <Icon name="schedulingInvoice" />,
                     label: 'Scheduling Invoices',
@@ -90,14 +90,14 @@ export const sidebarItemList: {
             groupLabel: '--MAIN',
             items: [
                 {
-                    icon: <Icon name="invoice" />,
-                    label: 'Invoices',
-                    path: '/home/invoices',
-                },
-                {
                     icon: <Icon name="room" />,
                     label: 'Rooms',
                     path: '/home/rooms',
+                },
+                {
+                    icon: <Icon name="invoice" />,
+                    label: 'Invoices',
+                    path: '/home/invoices',
                 },
             ],
         },

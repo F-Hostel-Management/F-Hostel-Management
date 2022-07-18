@@ -3,11 +3,6 @@ using Application.Interfaces.IRepository;
 using Application.Utilities;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -33,12 +28,12 @@ namespace Application.Services
             var uploadedUrl = await _cloudStorage.UploadFileAsync(formFile, fileNameForStorage);
             return fileNameForStorage;
         }
-        
+
 
         public async Task<UserEntity> SignUpUserAsync(UserEntity userEntity)
         {
             await _userRepository.CreateAsync(userEntity);
-            return userEntity;  
+            return userEntity;
         }
 
         public async Task<IList<string>> UploadIdentification(UserEntity userEntity, IList<IFormFile> formFile)

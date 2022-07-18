@@ -77,6 +77,25 @@ const getRoomById = async (roomId = '') => {
     const builder = createBuilder<IRoom>()
         .filter('id', (e) => e.equals(roomId))
         .select()
+        .expand('commitments', (e) =>
+            e
+                .select(
+                    'id',
+                    'commitmentCode',
+                    'createdDate',
+                    'startDate',
+                    'endDate',
+                    'status',
+                    'joiningCode',
+                    'paymentDate',
+                    'price'
+                )
+                .expand('manager', (e) => e.select('id', 'name'))
+                .expand('owner', (e) => e.select('id', 'name'))
+                .expand('room', (e) => e.select())
+                .expand('images', (q) => q.select('id', 'imgUrl'))
+                .expand('hostel', (e) => e.select())
+        )
         .expand('facilityManagements', (e) =>
             e
                 .select()

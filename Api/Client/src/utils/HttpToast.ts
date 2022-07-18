@@ -1,5 +1,6 @@
 import { toast, ToastOptions } from 'react-toastify'
 import { IFailureResponse } from '../interface/serviceResponse'
+import { head } from 'lodash'
 
 const config: ToastOptions = {
     position: 'bottom-right',
@@ -58,9 +59,17 @@ export const HttpToast = {
     },
     error: (id: string, status: number, detail?: IFailureResponse) => {
         let exceptionMessage = detail?.responseException?.exceptionMessage
+
         switch (status) {
             case 400:
-                exceptionMessage ??= 'Bad Request'
+                const validationError = head(
+                    detail?.responseException?.validationErrors
+                )
+                if (validationError) {
+                    exceptionMessage = validationError.reason
+                } else {
+                    exceptionMessage ??= 'Bad Request'
+                }
                 break
             case 401:
                 exceptionMessage ??= 'Unauthorized'
