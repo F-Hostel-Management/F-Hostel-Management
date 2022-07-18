@@ -111,7 +111,7 @@ public class AuthorizationServices : IAuthorizationServices
 
     public async Task<HostelEntity> GetHostelThatManagedByCurrentUser(Guid hostelId, Guid userId)
     {
-        HostelEntity hostel = await _hostelRepository.FindByIdAsync(hostelId);
+        HostelEntity hostel = await _hostelRepository.FindByIdAsync(hostelId, new string[] { "Rooms", "Commitments" });
         if (hostel == null) throw new NotFoundException($"Hostel not found");
         bool isManaged = await IsHostelManagedByCurrentUser(hostel, userId);
         if (!isManaged)
