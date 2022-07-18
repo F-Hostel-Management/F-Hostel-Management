@@ -3,9 +3,12 @@ using Api.UserFeatures.Requests;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.IRepository;
+using Application.Services;
 using Domain.Constants;
 using Domain.Entities;
+using Domain.Entities.Invoice;
 using Domain.Entities.Room;
+using Domain.Entities.User;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +19,21 @@ namespace Api.Controllers.Rest;
 public class HostelsController : BaseRestController
 {
     private readonly IGenericRepository<HostelEntity> _hostelRepository;
-    private readonly IGenericRepository<RoomEntity> _roomRepository; 
+    private readonly IGenericRepository<RoomTenant> _roomtenantRepository;
+    private readonly IGenericRepository<InvoiceEntity> _invoiceRepository;
     private readonly IHostelServices _hostelService;
     private readonly IAuthorizationServices _authorServices;
+
     public HostelsController(
         IGenericRepository<HostelEntity> hostelRepository,
-        IGenericRepository<RoomEntity> roomRepository,
+        IGenericRepository<RoomTenant> roomtenantRepository,
+        IGenericRepository<InvoiceEntity> invoiceRepository,
         IHostelServices hostelServices,
         IAuthorizationServices authorServices)
     {
         _hostelRepository = hostelRepository;
-        _roomRepository = roomRepository;
+        _roomtenantRepository = roomtenantRepository;
+        _invoiceRepository = invoiceRepository;
         _hostelService = hostelServices;
         _authorServices = authorServices;
     }
@@ -61,10 +68,51 @@ public class HostelsController : BaseRestController
         return Ok(target.ImgPath);
     }
 
+    [HttpGet("{hostelId}/rooms")]
+    public async Task<IActionResult> GetAllRooms([FromRoute] Guid hostelId)
+    {
+        var hostel = await _authorServices.GetHostelThatManagedByCurrentUser(hostelId, CurrentUserID);
+        if (hostel is null)
+            throw new ForbiddenException("Forbidden");
+        return Ok(hostel.Rooms);
+    }
+
+    [HttpGet("{hostelId}/tenants")]
+    public async Task<IActionResult> GetAllTenants([FromRoute] Guid hostelId)
+    {
+        var hostel = await _authorServices.GetHostelThatManagedByCurrentUser(hostelId, CurrentUserID);
+        if (hostel is null)
+            throw new ForbiddenException("Forbidden");
+
+        var commitmentIds = hostel.Commitments
+                                  .Where(com => com.CommitmentStatus != CommitmentStatus.Expired)
+                                  .Select(com => com.Id);
+        var tenants = (await _roomtenantRepository
+                                  .WhereAsync(rt => commitmentIds.Contains(rt.CommitmentId), new string[] { "Tenant" }))
+                                  .Select(rt => rt.Tenant)
+                                  .DistinctBy(t => t.Id);
+                                  ;
+        return Ok(tenants);
+    }
+
+    [HttpGet("{hostelId}/revenue")]
+    public async Task<IActionResult> GetHostelRevenue([FromRoute] Guid hostelId)
+    {
+        var hostel = await _authorServices.GetHostelThatManagedByCurrentUser(hostelId, CurrentUserID);
+        if (hostel is null)
+            throw new ForbiddenException("Forbidden");
+
+        var roomIds = hostel.Rooms.Select(r => r.Id);
+        var paidInvoices = await _invoiceRepository.WhereAsync(invoice => 
+                                                    roomIds.Contains(invoice.RoomId) 
+                                                    && invoice.TenantPaid != null);
+        if (!paidInvoices.Any()) return Ok(0);
+        return Ok(paidInvoices.Sum(invoice => invoice.Price));
+    }
 
     [HttpPatch("{hostelId}")]
     public async Task<IActionResult> UpdateHostelAsync([FromRoute] Guid hostelId, CreateOrUpdateHostelRequest updateHostelRequest)
-    {
+    {   
         var hostel = await _authorServices.GetHostelThatManagedByCurrentUser(hostelId, CurrentUserID);
         if (hostel is null)
         {
@@ -73,8 +121,8 @@ public class HostelsController : BaseRestController
         Mapper.Map(updateHostelRequest, hostel);
         await _hostelRepository.UpdateAsync(hostel);
         return Ok();
-    } 
-    
+    }
+
     [Authorize(Roles = nameof(Role.Owner))]
     [HttpDelete("{hostelId}")]
     public async Task<IActionResult> DeleteHostelAsync([FromRoute] Guid hostelId)
