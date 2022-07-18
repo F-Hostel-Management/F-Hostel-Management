@@ -106,7 +106,6 @@ public class HostelsController : BaseRestController
         var paidInvoices = await _invoiceRepository.WhereAsync(invoice => 
                                                     roomIds.Contains(invoice.RoomId) 
                                                     && invoice.TenantPaid != null);
-        if (!paidInvoices.Any()) return Ok(0);
         return Ok(paidInvoices.Sum(invoice => invoice.Price));
     }
 
