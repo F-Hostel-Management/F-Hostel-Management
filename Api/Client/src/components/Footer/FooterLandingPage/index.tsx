@@ -28,10 +28,10 @@ export const FooterLandingPage: React.FunctionComponent<
                         </Typography>
                         <div>
                             <Typography variant="body2" color="#c5c5c5">
-                                Lorem ipsum is a dummy text used by a lot of
-                                typographers and by the web industry. Lorem
-                                ipsum is a dummy text used by a lot of
-                                typographers and by the web industry.
+                                Together with experienced IT experts, we
+                                research and design the optimal hotel management
+                                software suitable for many different management
+                                models, with many outstanding features.
                             </Typography>
                         </div>
                     </Grid>
@@ -53,10 +53,10 @@ export const FooterLandingPage: React.FunctionComponent<
                         </Typography>
                         <div>
                             <Typography variant="body2" color="#c5c5c5">
-                                Lorem ipsum is a dummy text used by a lot of
-                                typographers and by the web industry. Lorem
-                                ipsum is a dummy text used by a lot of
-                                typographers and by the web industry.
+                                Simple and intelligent interface, helping to
+                                manage the inn anytime, anywhere with absolutely
+                                secure data, control real-time sales and
+                                maximize operating costs.
                             </Typography>
                         </div>
                     </Grid>
