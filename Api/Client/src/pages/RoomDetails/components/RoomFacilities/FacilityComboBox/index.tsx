@@ -11,7 +11,7 @@ import {
     CheckBox as CheckBoxIcon,
 } from '@mui/icons-material'
 import { getItem } from '../../../../../utils/LocalStorageUtils'
-import { fetchFacility } from '../../../../../slices/facilitySlice'
+import { fetchAllFacility } from '../../../../../slices/facilitySlice'
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
 const checkedIcon = <CheckBoxIcon fontSize="small" />
@@ -51,7 +51,7 @@ const FacilityComboBox: FC<IFacilityComboBoxProps> = ({
 
     useEffect(() => {
         const hostelId = getItem('currentHostelId')
-        dispatch(fetchFacility(hostelId))
+        dispatch(fetchAllFacility(hostelId))
     }, [])
 
     return (
