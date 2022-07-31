@@ -7,7 +7,9 @@ import { RestCaller } from '../utils/RestCaller'
 const { createBuilder, get } = ODataCaller
 
 export const getNumberOfInvoice = async () => {
-    const builder = createBuilder<IInvoice>().select('id')
+    const builder = createBuilder<IInvoice>()
+        .select('id')
+        .filter((e) => e.price.notEquals(0))
     const result = await get('Invoices', builder)
     return result.length
 }
