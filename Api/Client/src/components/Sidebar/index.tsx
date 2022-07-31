@@ -78,7 +78,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
             roleLabel = 'Manager'
             break
         case ERole.OWNER_ROLE:
-            roleLabel = 'ADMIN'
+            roleLabel = 'Owner'
             break
         case ERole.TENANT_ROLE:
             roleLabel = 'Tenant'
