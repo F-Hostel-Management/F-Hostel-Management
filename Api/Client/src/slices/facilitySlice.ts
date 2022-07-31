@@ -17,6 +17,16 @@ interface IFetchFacilitiesParams {
     currentPage: number
     hostelId: string
 }
+export const fetchAllFacility = createAsyncThunk(
+    'facility/fetchAll',
+    async (hostelId: string) => {
+        const builder = createBuilder<IFacility>()
+            .select('id', 'name', 'type', 'quantity', 'price')
+            .filter((e) => e.hostelId.equals(hostelId))
+        const result = await get('Facility', builder)
+        return result
+    }
+)
 export const fetchFacility = createAsyncThunk(
     'facility/fetch',
     async ({
@@ -49,6 +59,10 @@ const facilitySlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchFacility.fulfilled, (state, action) => {
+                state.facilityList = action.payload
+                state.isFetchingList = false
+            })
+            .addCase(fetchAllFacility.fulfilled, (state, action) => {
                 state.facilityList = action.payload
                 state.isFetchingList = false
             })
