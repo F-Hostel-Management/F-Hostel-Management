@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux'
 import { setCurrentHostel } from '../../../../../slices/homeSlice'
 import { setItem } from '../../../../../utils/LocalStorageUtils'
 import { useAppSelector } from '../../../../../hooks/reduxHook'
-import { ERole } from '../../../../../utils/enums'
 import defaultImage from '../../../../../assets/images/default_hostel.jpg'
 const urlImage = import.meta.env.PUBLIC_FIREBASE_STORAGE_IMAGE
 
@@ -64,7 +63,7 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
                         {hostelInfo.numOfRooms || 0}
                     </Typography>
 
-                    <Typography variant="subtitle2" mb={1}>
+                    {/* <Typography variant="subtitle2" mb={1}>
                         <span
                             style={{
                                 paddingRight: '8px',
@@ -76,7 +75,7 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
                                 : 'Owner: '}
                         </span>
                         {hostelInfo.owner?.name}
-                    </Typography>
+                    </Typography> */}
                 </React.Fragment>
             }
             actions={
