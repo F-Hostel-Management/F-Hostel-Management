@@ -6,7 +6,7 @@ interface ITableState {
 }
 const initialState: ITableState = {
     page: 0,
-    pageSize: 5,
+    pageSize: 25,
 }
 
 export const tableSlice = createSlice({
