@@ -98,7 +98,6 @@ export const sidebarItemList: {
                     label: 'Tenants',
                     path: '/home/tenants',
                 },
-
                 // {
                 //     icon: <Icon name="notification" />,
                 //     label: 'Notifications',
