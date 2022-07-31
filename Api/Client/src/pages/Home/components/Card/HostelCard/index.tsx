@@ -10,6 +10,7 @@ import { setCurrentHostel } from '../../../../../slices/homeSlice'
 import { setItem } from '../../../../../utils/LocalStorageUtils'
 import { useAppSelector } from '../../../../../hooks/reduxHook'
 import { ERole } from '../../../../../utils/enums'
+import defaultImage from '../../../../../assets/images/default_hostel.jpg'
 const urlImage = import.meta.env.PUBLIC_FIREBASE_STORAGE_IMAGE
 
 interface IHostelCardProps {
@@ -32,7 +33,7 @@ const HostelCard: FC<IHostelCardProps> = ({ hostelInfo }) => {
             image={{
                 src: hostelInfo?.imgPath
                     ? urlImage + hostelInfo?.imgPath + '?alt=media'
-                    : '',
+                    : defaultImage,
                 alt: 'Hostel image',
             }}
             content={

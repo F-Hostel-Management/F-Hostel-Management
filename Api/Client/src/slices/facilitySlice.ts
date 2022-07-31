@@ -5,22 +5,43 @@ const { createBuilder, get } = ODataCaller
 interface FacilityState {
     facilityList: IFacility[]
     isFetchingList: boolean
+    numberOfFacility: number
 }
 const initialState: FacilityState = {
     facilityList: [],
     isFetchingList: true,
+    numberOfFacility: 0,
+}
+interface IFetchFacilitiesParams {
+    currentPageSize: number
+    currentPage: number
+    hostelId: string
 }
 export const fetchFacility = createAsyncThunk(
     'facility/fetch',
-    async (hostelId: string) => {
+    async ({
+        hostelId,
+        currentPage,
+        currentPageSize,
+    }: IFetchFacilitiesParams) => {
         const builder = createBuilder<IFacility>()
             .select('id', 'name', 'type', 'quantity', 'price')
             .filter((e) => e.hostelId.equals(hostelId))
+            .paginate(currentPageSize, currentPage)
         const result = await get('Facility', builder)
         return result
     }
 )
-
+export const fetNumFacility = createAsyncThunk(
+    'facilityNumber/fetch',
+    async (hostelId: string) => {
+        const builder = createBuilder<IFacility>()
+            .select('id')
+            .filter((e) => e.hostelId.equals(hostelId))
+        const result = await get('Facility', builder)
+        return result.length
+    }
+)
 const facilitySlice = createSlice({
     name: 'facility',
     initialState,
@@ -36,6 +57,9 @@ const facilitySlice = createSlice({
             })
             .addCase(fetchFacility.rejected, (state) => {
                 state.isFetchingList = false
+            })
+            .addCase(fetNumFacility.fulfilled, (state, action) => {
+                state.numberOfFacility = action.payload
             })
     },
 })
