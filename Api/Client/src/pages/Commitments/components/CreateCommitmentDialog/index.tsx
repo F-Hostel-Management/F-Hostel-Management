@@ -89,7 +89,9 @@ const CreateCommitmentDialog: FC<ICreateCommitmentDialogProps> = ({
 
             // reload list commitment
             const hostelId = getItem('currentHostelId')
-            dispatch(fetchCommitments({ hostelId, pageSize, page }))
+            if (hostelId) {
+                dispatch(fetchCommitments({ hostelId, pageSize, page }))
+            }
 
             // get code to create QR Code
             const resCode = await getJoiningCode(resCreate.result)
