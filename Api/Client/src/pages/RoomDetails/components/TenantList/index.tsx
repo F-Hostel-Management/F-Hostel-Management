@@ -26,6 +26,7 @@ import ConfirmDialog from '../../../../components/DialogCustom/ConfirmDialog'
 import { useParams } from 'react-router-dom'
 import { ERole } from '../../../../utils/enums'
 import { getItem } from '../../../../utils/LocalStorageUtils'
+import { formatDate } from '../../../../utils/FormatDate'
 interface ITenantListProps {}
 
 const TenantList: FC<ITenantListProps> = (props) => {
@@ -120,8 +121,25 @@ const TenantList: FC<ITenantListProps> = (props) => {
                                                         </strong>
                                                     </Typography>
                                                 }
+                                            />
+                                            <ListItemText
                                                 secondary={
                                                     <Typography variant="caption">
+                                                        Date of birth:{' '}
+                                                        {item.tenant
+                                                            ?.dateOfBirth &&
+                                                            formatDate(
+                                                                new Date(
+                                                                    item.tenant?.dateOfBirth
+                                                                )
+                                                            )}
+                                                    </Typography>
+                                                }
+                                            />
+                                            <ListItemText
+                                                secondary={
+                                                    <Typography variant="caption">
+                                                        Phone number:{' '}
                                                         {item.tenant?.phone}
                                                     </Typography>
                                                 }
