@@ -39,10 +39,9 @@ const RoomDetails: FC<IRoomDetailsProps> = () => {
             </Styled.Wrapper>
             <Styled.Wrapper>
                 <Grid container>
-                    <Grid item xs={4}>
+                    <Grid item xs={12}>
                         <TenantList />
                     </Grid>
-                    <Grid item xs={8}></Grid>
                 </Grid>
             </Styled.Wrapper>
         </Styled.Container>
