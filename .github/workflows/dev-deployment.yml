@@ -56,6 +56,17 @@ jobs:
           files: Api/appsettings.json
         env:
           AppSettings.ConnectionStrings.DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
+          AppSettings.VnPayConfig.ReturnUrl: /server/api/Invoices/callback-vnpay
+          AppSettings.VnPayConfig.Url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+          AppSettings.VnPayConfig.FrontendCallBack: /home/invoices/callback
+          AppSettings.VnPayConfig.TmnCode: ${{ secrets.VNPAY_TMN_CODE }}
+          AppSettings.VnPayConfig.HashSecret: ${{ secrets.VNPAY_HASH_SECRET }}
+          AppSettings.MailSettings.DisplayName: F-Hostel
+          AppSettings.MailSettings.Mail: ${{ secrets.MAIL }}
+          AppSettings.MailSettings.Host: ${{ secrets.MAIL_HOST}}
+          AppSettings.MailSettings.UserName: ${{ secrets.MAIL_USERNAME }}
+          AppSettings.MailSettings.Password: ${{ secrets.MAIL_PASSWORD }}
+          AppSettings.MailSettings.Port: ${{ secrets.MAIL_PORT }}
       - name: Add Firebase service key
         uses: jsdaniell/create-json@1.1.2
         with:
