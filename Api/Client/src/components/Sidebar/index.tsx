@@ -51,6 +51,8 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
         if (role == ERole.TENANT_ROLE) {
             setTarget(sidebarItemList['tenant'])
             // setTarget('tenant')
+        } else if (role == ERole.MANAGER_ROLE) {
+            setTarget(sidebarItemList['manager'])
         } else {
             setTarget(sidebarItemList['owner'])
             // setTarget('owner')
@@ -78,7 +80,7 @@ const Sidebar: FC<ISidebarProps> = ({ isShownSidebar = true }) => {
             roleLabel = 'Manager'
             break
         case ERole.OWNER_ROLE:
-            roleLabel = 'ADMIN'
+            roleLabel = 'Owner'
             break
         case ERole.TENANT_ROLE:
             roleLabel = 'Tenant'

@@ -100,7 +100,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                                 <MailOutline color="action" />
                             </Badge>
                         </li>
-                        <li>
+                        {/* <li>
                             <Styled.AvatarWrapper>
                                 <Avatar
                                     sx={{
@@ -113,7 +113,7 @@ const HeaderDefault: React.FunctionComponent<IHeaderDefaultProps> = ({
                                 </Avatar>
                                 <Typography variant="caption">HuyB</Typography>
                             </Styled.AvatarWrapper>
-                        </li>
+                        </li> */}
                         <li>
                             <IconButton color="gray">
                                 <Settings />

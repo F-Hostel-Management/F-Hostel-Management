@@ -1,11 +1,11 @@
 import { GridColDef } from '@mui/x-data-grid'
-import React, { FC, Fragment, useEffect, useState } from 'react'
+import React, { FC, Fragment, useEffect } from 'react'
 import DataGridCustom from '../../components/DataGridCustom'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHook'
 import { useDialog } from '../../hooks/useDialog'
 import { useGridData } from '../../hooks/useGridData'
 import { IFacility } from '../../interface/IFacility'
-import { fetchFacility } from '../../slices/facilitySlice'
+import { fetchFacility, fetNumFacility } from '../../slices/facilitySlice'
 import { ERole } from '../../utils/enums'
 import { formatPrice } from '../../utils/FormatPrice'
 import { getItem } from '../../utils/LocalStorageUtils'
@@ -27,8 +27,9 @@ const Facilities: FC<IFacilitiesProps> = () => {
     const { renderCell, createColumn, renderValueGetter } = useGridData()
     const hostelId = getItem('currentHostelId')
     const dispatch = useAppDispatch()
-    const [pageSize, setPageSize] = useState<number>(5)
-    const [page, setPage] = useState<number>(0)
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const totalRow = useAppSelector(({ facility }) => facility.numberOfFacility)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
     // const [rows, setRows] = useState<IFacility[]>([])
     // const [loading, setLoading] = useState<boolean>(true)
     const loading = useAppSelector((state) => state.facility.isFetchingList)
@@ -46,8 +47,9 @@ const Facilities: FC<IFacilitiesProps> = () => {
     ]
 
     useEffect(() => {
-        dispatch(fetchFacility(hostelId))
-    }, [page, pageSize, hostelId, dispatch])
+        dispatch(fetchFacility({ hostelId, currentPage, currentPageSize }))
+        dispatch(fetNumFacility(hostelId))
+    }, [currentPage, currentPageSize, hostelId, dispatch])
     return (
         <Fragment>
             <DataGridCustom
@@ -56,7 +58,7 @@ const Facilities: FC<IFacilitiesProps> = () => {
                 iconName="facility"
                 rows={rows}
                 columns={columns}
-                rowsCount={27}
+                rowsCount={totalRow}
                 toolbarChildren={
                     role != ERole.TENANT_ROLE ? (
                         <ToolbarChildren handleOpenCreate={handleOpenCreate} />

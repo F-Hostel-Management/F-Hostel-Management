@@ -21,33 +21,39 @@ interface ILandingPageProps {}
 const services = [
     {
         icon: serviceIcon1,
-        title: 'Facility',
+        title: 'Manage anytime, anywhere',
         description:
-            'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.',
+            'The innkeeper can manage the inn anytime, anywhere, the data is centrally managed, confidential, and absolutely safe.',
     },
     {
         icon: serviceIcon1,
-        title: 'Facility',
+        title: 'Simple & Easy to use',
         description:
-            'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.',
+            'The simple, friendly and smart interface helps landlords to deploy and manage the inn easily and quickly.',
     },
     {
         icon: serviceIcon1,
-        title: 'Facility',
+        title: 'Fit many models',
         description:
-            'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.',
+            'We research and design software suitable for many models of motels, mini-apartments, serviced apartments.',
     },
     {
         icon: serviceIcon1,
-        title: 'Facility',
+        title: 'Hostels, Facilities',
         description:
-            'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.',
+            'The function of managing room information by zone, room rate, equipment in the room of the inn management software.',
     },
     {
         icon: serviceIcon1,
-        title: 'Facility',
+        title: 'Report',
         description:
-            'Lorem ipsum is a dummy text used by a lot of typographers and by the web industry.',
+            'The function of configuring information related to motels, apartments, and synthesizing reports according to different criteria.',
+    },
+    {
+        icon: serviceIcon1,
+        title: 'Invoices',
+        description:
+            'The function of managing monthly bills, including expenses such as electricity, water, and services.',
     },
 ]
 
@@ -173,7 +179,7 @@ const LandingPage: React.FunctionComponent<ILandingPageProps> = () => {
                         {services.map((service, index) => (
                             <Grid key={index} item xs={12} sm={4} md={4}>
                                 <Card>
-                                    <CardActionArea>
+                                    <CardActionArea sx={{ height: '260px' }}>
                                         <CardContent>
                                             <img src={service.icon} />
                                             <Typography

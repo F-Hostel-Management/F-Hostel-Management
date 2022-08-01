@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import FormDialog from '../../../../components/DialogCustom/FormDialog'
-import { useAppDispatch } from '../../../../hooks/reduxHook'
+import { useAppDispatch, useAppSelector } from '../../../../hooks/reduxHook'
 import { useForm } from '../../../../hooks/useForm'
 import { IFacility } from '../../../../interface/IFacility'
-import { fetchFacility } from '../../../../slices/facilitySlice'
+import { fetchFacility, fetNumFacility } from '../../../../slices/facilitySlice'
 import { getItem } from '../../../../utils/LocalStorageUtils'
 import { RestCaller } from '../../../../utils/RestCaller'
 import FacilityForm from '../FacilityForm'
@@ -23,11 +23,14 @@ const UpdateFacilityDialog: FC<IUpdateFacilityDialogProps> = ({
     const dispatch = useAppDispatch()
     const { values, setValues, handleInputChange, resetForm } =
         useForm<IFacility>(rowData)
+    const currentPage = useAppSelector(({ table }) => table.page)
+    const currentPageSize = useAppSelector(({ table }) => table.pageSize)
     const handleSubmit = async () => {
         const hostelId = getItem('currentHostelId')
         const result = await RestCaller.patch('/Facility', values)
         if (result.isError) return
-        dispatch(fetchFacility(hostelId))
+        dispatch(fetchFacility({ hostelId, currentPage, currentPageSize }))
+        dispatch(fetNumFacility(hostelId))
         handleCloseDialog()
     }
     return (

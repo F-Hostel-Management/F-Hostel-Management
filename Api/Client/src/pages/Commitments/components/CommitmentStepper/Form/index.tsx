@@ -33,7 +33,7 @@ export const fields: IField[] = [
         name: 'price',
         type: 'number',
         required: true,
-        endAdornment: <InputAdornment position="end">($)</InputAdornment>,
+        endAdornment: <InputAdornment position="end">(vnd)</InputAdornment>,
         inputProps: { min: 0, max: 1000000000 },
     },
     {

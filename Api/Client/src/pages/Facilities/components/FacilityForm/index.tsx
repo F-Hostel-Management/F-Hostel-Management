@@ -37,7 +37,7 @@ const FacilityForm: React.FC<IFacilityFormProps> = ({
             name: 'price',
             type: 'string',
             required: true,
-            endAdornment: <InputAdornment position="end">($)</InputAdornment>,
+            endAdornment: <InputAdornment position="end">(vnd)</InputAdornment>,
             inputProps: { maxlength: 10 },
         },
     ]

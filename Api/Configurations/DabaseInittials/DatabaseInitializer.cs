@@ -15,17 +15,17 @@ public static class DatabaseInitializer
 
     public static async Task InitializeAsync(ApplicationDbContext dbContext)
     {
-        dbContext.Database.EnsureCreated();
+        //dbContext.Database.EnsureCreated();
 
-        await dbContext.FeedUsers();
+        //await dbContext.FeedUsers();
 
-        await dbContext.FeedHostels();
+        //await dbContext.FeedHostels();
 
-        //await dbContext.FeedRoomTypes();
+        ////await dbContext.FeedRoomTypes();
 
-        await dbContext.FeedRooms();
+        //await dbContext.FeedRooms();
 
-        await dbContext.FeedTenantsToRoom();
+        //await dbContext.FeedTenantsToRoom();
 
     }
 

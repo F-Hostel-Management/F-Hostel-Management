@@ -17,6 +17,8 @@ export const CardContainer = styled(Card)`
 
     ${down('md')} {
         flex-direction: column;
+        width: 100%;
+        height: fit-content;
     }
 `
 
